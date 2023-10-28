@@ -55,7 +55,7 @@
         };
 
     function render() {
-        var domElements = _parameter_Document.getElementsByClassName( "syntax-highlight" ),
+        var domElements = _parameter_Document.getElementsByTagName( "*" ),
             elements = [].slice.call( domElements ),
             elementsLength = elements.length;
 
@@ -72,6 +72,7 @@
                 var innerHTML = element.innerHTML.trim(),
                     innerHTMLCopy = element.innerHTML.trim();
 
+                element.className += " syntax-highlight";
                 element.innerHTML = _string.empty;
 
                 var code = createElement( "div", "code custom-scroll-bars" );
