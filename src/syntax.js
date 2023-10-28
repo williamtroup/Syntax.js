@@ -91,13 +91,15 @@
                 var syntax = createElement( "div", "syntax" );
                 code.appendChild( syntax );
 
-                var copyButton = createElement( "div", "copy-button" );
-                copyButton.innerHTML = "Copy";
-                syntax.appendChild( copyButton );
-
-                copyButton.onclick = function() {
-                    _parameter_Navigator.clipboard.writeText( innerHTMLCopy );
-                };
+                if ( _options.showCopyButton ) {
+                    var copyButton = createElement( "div", "copy-button" );
+                    copyButton.innerHTML = _options.copyButtonText;
+                    syntax.appendChild( copyButton );
+    
+                    copyButton.onclick = function() {
+                        _parameter_Navigator.clipboard.writeText( innerHTMLCopy );
+                    };
+                }
 
                 innerHTML = renderElementCommentVariables( innerHTML, syntaxLanguage );
                 innerHTML = renderElementMultiLineCommentVariables( innerHTML, syntaxLanguage );
@@ -247,6 +249,18 @@
         return value !== undefined && value !== _string.empty;
     }
 
+    function isDefinedObject( object ) {
+        return isDefined( object ) && typeof object === "object";
+    }
+
+    function isDefinedBoolean( object ) {
+        return isDefined( object ) && typeof object === "boolean";
+    }
+
+    function isDefinedString( object ) {
+        return isDefined( object ) && typeof object === "string";
+    }
+
 
     /*
      * ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -270,6 +284,85 @@
         }
 
         return result;
+    }
+
+
+    /*
+     * ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+     * Default Parameter/Option Handling
+     * ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+     */
+
+    function getDefaultString( value, defaultValue ) {
+        return isDefinedString( value ) ? value : defaultValue;
+    }
+
+    function getDefaultBoolean( value, defaultValue ) {
+        return isDefinedBoolean( value ) ? value : defaultValue;
+    }
+
+
+    /*
+     * ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+     * Public Functions:  Set Options
+     * ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+     */
+
+    /**
+     * setOptions().
+     * 
+     * Sets the specific options that should be used.
+     * 
+     * @public
+     * @fires       onOptionsUpdated
+     * 
+     * @param       {Options}   newOptions                                  All the options that should be set (refer to "Options" documentation for properties).
+     * @param       {boolean}   [triggerEvent]                              States if the "onOptionsUpdated" event should be triggered (defaults to true).
+     * 
+     * @returns     {Object}                                                The Syntax.js class instance.
+     */
+    this.setOptions = function( newOptions, triggerEvent ) {
+        newOptions = getOptions( newOptions );
+
+        for ( var propertyName in newOptions ) {
+            if ( newOptions.hasOwnProperty( propertyName ) ) {
+                _options[ propertyName ] = newOptions[ propertyName ];
+            }
+        }
+
+        if ( _initialized ) {
+            triggerEvent = !isDefinedBoolean( triggerEvent ) ? true : triggerEvent;
+
+            if ( triggerEvent ) {
+                fireCustomTrigger( "onOptionsUpdated", _options );
+            }
+        }
+
+        return this;
+    };
+
+    function buildDefaultOptions( newOptions ) {
+        _options = getOptions( newOptions );
+        _options.showCopyButton = getDefaultBoolean( _options.showCopyButton, true );
+
+        setTranslationStringOptions();
+    }
+
+    function setTranslationStringOptions() {
+        _options.copyButtonText = getDefaultString( _options.copyButtonText, "Copy" );
+    }
+
+    function getOptions( newOptions, alternateOptions ) {
+        if ( !isDefinedObject( newOptions ) ) {
+
+            if ( !isDefinedObject( alternateOptions ) ) {
+                newOptions = {};
+            } else {
+                newOptions = alternateOptions;
+            }
+        }
+
+        return newOptions;
     }
 
 
@@ -302,6 +395,8 @@
     ( function ( documentObject, navigatorObject, windowObject ) {
         _parameter_Document = documentObject;
         _parameter_Navigator = navigatorObject;
+
+        buildDefaultOptions();
 
         _parameter_Document.addEventListener( "DOMContentLoaded", function() {
             render();
