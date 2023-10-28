@@ -1,0 +1,150 @@
+/*
+ * Syntax.js Library v0.1.0
+ *
+ * Copyright 2023 Bunoon
+ * Released under the MIT License
+ */
+
+
+/*
+    -------------------------------------------------------------------------
+    Syntax Highlight - Variables
+    -------------------------------------------------------------------------
+*/
+
+:root {
+    --color-variable: #A71500;
+    --color-comment: #78b13f;
+    --color-string: #484dd2;
+    --color-black: #3b3a3a;
+    --color-white: #F5F5F5;
+    --border-radius: 0.5rem;
+    --scroll-bar-border-style: inset 0 0 6px gray;
+}
+
+
+/*
+    -------------------------------------------------------------------------
+    Syntax Highlight - Code
+    -------------------------------------------------------------------------
+*/
+
+div.syntax-highlight div.code {
+    display: flex;
+    background-color: #e8e6e6;
+    border-radius: var(--border-radius);
+    padding: 15px;
+    overflow-x: auto;
+    overflow-y: hidden;
+    position: relative;
+}
+
+
+/*
+    -------------------------------------------------------------------------
+    Syntax Highlight - Code - Numbers
+    -------------------------------------------------------------------------
+*/
+
+div.syntax-highlight div.code div.number {
+    margin-right: 15px;
+    background-color: #dddddd;
+    padding: 10px;
+    padding-left: 15px;
+    padding-right: 15px;
+    border-radius: var(--border-radius);
+    text-align: right;
+    font-weight: 800 !important;
+}
+
+div.syntax-highlight div.code div.number p {
+    margin: 0;
+    text-wrap: nowrap;
+}
+
+
+/*
+    -------------------------------------------------------------------------
+    Syntax Highlight - Code - Syntax
+    -------------------------------------------------------------------------
+*/
+
+div.syntax-highlight div.code div.syntax {
+    flex-grow: 1;
+    padding: 10px;
+}
+
+div.syntax-highlight div.code div.syntax p {
+    margin: 0;
+    text-wrap: nowrap;
+}
+
+div.syntax-highlight div.code div.syntax p span.keyword {
+    font-weight: 700;
+    color: var(--color-variable);
+}
+
+div.syntax-highlight div.code div.syntax p span.comment {
+    color: var(--color-comment);
+}
+
+div.syntax-highlight div.code div.syntax p q.string {
+    color: var(--color-string);
+}
+
+
+/*
+    -------------------------------------------------------------------------
+    Syntax Highlight - Code - Copy Button
+    -------------------------------------------------------------------------
+*/
+
+div.syntax-highlight div.code div.syntax div.copy-button {
+    position: absolute;
+    right: 15px;
+    top: 15px;
+    background-color: var(--color-black);
+    color: var(--color-white);
+    font-size: small;
+    padding: 5px;
+    padding-left: 10px;
+    padding-right: 10px;
+    border-radius: var(--border-radius);
+    font-weight: 700;
+}
+
+div.syntax-highlight div.code div.syntax div.copy-button:hover {
+    cursor: pointer;
+    opacity: 0.7;
+    transition: all .3s;
+}
+
+
+/*
+    -------------------------------------------------------------------------
+    Syntax Highlight - Custom Scroll Bar
+    -------------------------------------------------------------------------
+*/
+
+.custom-scroll-bars::-webkit-scrollbar {
+    width: 12px;
+}
+
+.custom-scroll-bars::-webkit-scrollbar-track {
+    -webkit-box-shadow: var(--scroll-bar-border-style);
+    box-shadow: var(--scroll-bar-border-style);
+}
+
+.custom-scroll-bars::-webkit-scrollbar-thumb {
+    -webkit-box-shadow: var(--scroll-bar-border-style);
+    box-shadow: var(--scroll-bar-border-style);
+    background: var(--color-white);
+}
+
+.custom-scroll-bars::-webkit-scrollbar-thumb:hover {
+    background-color: var(--color-white);
+}
+
+.custom-scroll-bars::-webkit-scrollbar-thumb:active {
+    background-color: #C0C0C0;
+}
