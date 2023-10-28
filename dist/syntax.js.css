@@ -16,7 +16,8 @@
   --color-black: #3b3a3a;
   --color-white: #F5F5F5;
   --border-radius: 0.5rem;
-  --scroll-bar-border-style: inset 0 0 6px gray;
+  --border-style-scrollbar: inset 0 0 6px gray;
+  --border-size: 0.5px;
 }
 
 /*
@@ -32,6 +33,7 @@ div.syntax-highlight div.code {
   overflow-x: auto;
   overflow-y: hidden;
   position: relative;
+  border: var(--border-size) solid var(--color-black);
 }
 div.syntax-highlight div.code div.number {
   margin-right: 15px;
@@ -93,12 +95,12 @@ div.syntax-highlight div.code div.copy-button:hover {
   width: 12px;
 }
 .custom-scroll-bars::-webkit-scrollbar-track {
-  -webkit-box-shadow: var(--scroll-bar-border-style);
-  box-shadow: var(--scroll-bar-border-style);
+  -webkit-box-shadow: var(--border-style-scrollbar);
+  box-shadow: var(--border-style-scrollbar);
 }
 .custom-scroll-bars::-webkit-scrollbar-thumb {
-  -webkit-box-shadow: var(--scroll-bar-border-style);
-  box-shadow: var(--scroll-bar-border-style);
+  -webkit-box-shadow: var(--border-style-scrollbar);
+  box-shadow: var(--border-style-scrollbar);
   background: var(--color-white);
 }
 .custom-scroll-bars::-webkit-scrollbar-thumb:hover {
