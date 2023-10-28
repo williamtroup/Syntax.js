@@ -1,0 +1,25 @@
+{
+    "name": "syntax.js",
+    "title": "Syntax.js",
+    "description": "A javascript syntax highlighter.",
+    "version": "0.1.0",
+    "main": "dist/syntax.js",
+    "homepage": "https://williamtroup.github.io/Syntax.js/",
+    "author": {
+      "name": "Bunoon"
+    },
+    "repository": {
+      "type": "git",
+      "url": "https://github.com/williamtroup/Syntax.js"
+    },
+    "keywords": [
+      "javascript",
+      "Syntax",
+      "highlighter",
+      "Syntax.js"
+    ],
+    "bugs": {
+      "url": "https://github.com/williamtroup/Syntax.js/issues"
+    },
+    "license": "MIT"
+  }
