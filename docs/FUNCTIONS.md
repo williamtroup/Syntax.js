@@ -4,6 +4,18 @@ Below is a list of all the public functions that can be called from the Syntax.j
 <br>
 <br>
 
+
+<h1>Building:</h1>
+
+### **buildNewSyntaxElements()**:
+Finds all new code elements and renders them.
+<br>
+***Fires***:  onRender
+<br>
+***Returns***: '*Object*' - The Syntax.js class instance.
+
+
+<br>
 <h1>Setting Options:</h1>
 
 ### **setOptions( *newOptions*, *[triggerEvent]* )**:
