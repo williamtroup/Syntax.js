@@ -74,7 +74,7 @@ div.syntax-highlight div.code div.copy-button {
   background-color: var(--color-black);
   color: var(--color-white);
   font-size: small;
-  padding: 5px;
+  padding: 7px;
   padding-left: 10px;
   padding-right: 10px;
   border-radius: var(--border-radius);
