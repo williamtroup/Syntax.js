@@ -24,34 +24,37 @@
         _strings_Cached_Count = 0,
         _comments_Cached = {},
         _comments_Cached_Count = 0,
-        _language_Keywords = {
-            javascript: [
-                "function",
-                "var",
-                "new",
-                "if",
-                "while",
-                "do",
-                "switch",
-                "case",
-                "else",
-                "null",
-                "eval",
-                "for",
-                "in",
-                "break",
-                "debugger",
-                "delete",
-                "true",
-                "false",
-                "catch",
-                "continue",
-                "this",
-                "yield",
-                "default",
-                "typeof",
-                "try"
-            ]
+        _languages = {
+            javascript: {
+                keywords: [
+                    "function",
+                    "var",
+                    "new",
+                    "if",
+                    "while",
+                    "do",
+                    "switch",
+                    "case",
+                    "else",
+                    "null",
+                    "eval",
+                    "for",
+                    "in",
+                    "break",
+                    "debugger",
+                    "delete",
+                    "true",
+                    "false",
+                    "catch",
+                    "continue",
+                    "this",
+                    "yield",
+                    "default",
+                    "typeof",
+                    "try"
+                ],
+                comment: "//"
+            }
         };
 
     function render() {
@@ -68,7 +71,7 @@
         if ( isDefined( element ) ) {
             var syntaxLanguage = element.getAttribute( "data-syntax-language" );
 
-            if ( isDefined( syntaxLanguage ) && _language_Keywords.hasOwnProperty( syntaxLanguage ) ) {
+            if ( isDefined( syntaxLanguage ) && _languages.hasOwnProperty( syntaxLanguage ) ) {
                 var innerHTML = element.innerHTML.trim(),
                     innerHTMLCopy = element.innerHTML.trim();
 
@@ -92,7 +95,7 @@
                     _parameter_Navigator.clipboard.writeText( innerHTMLCopy );
                 };
 
-                innerHTML = renderElementCommentPatternVariables( innerHTML, innerHTML.match( new RegExp( "//.*", "g" ) ) );
+                innerHTML = renderElementCommentPatternVariables( innerHTML, syntaxLanguage );
                 innerHTML = renderElementStringQuotesPatternVariables( innerHTML, innerHTML.match( /".*?"/g ) );
                 innerHTML = renderElementStringQuotesPatternVariables( innerHTML, innerHTML.match( /'.*?'/g ) );
                 innerHTML = renderElementKeywords( innerHTML, syntaxLanguage );
@@ -104,7 +107,10 @@
         }
     }
 
-    function renderElementCommentPatternVariables( innerHTML, patternItems ) {
+    function renderElementCommentPatternVariables( innerHTML, syntaxLanguage ) {
+        var comment = _languages[ syntaxLanguage ].comment,
+            patternItems = innerHTML.match( new RegExp( comment + ".*", "g" ) );
+
         if ( patternItems !== null ) {
             var patternItemsLength = patternItems.length;
         
@@ -143,7 +149,7 @@
     }
 
     function renderElementKeywords( innerHTML, syntaxLanguage ) {
-        var keywords = _language_Keywords[ syntaxLanguage ],
+        var keywords = _languages[ syntaxLanguage ].keywords,
             keywordsLength = keywords.length;
 
         for ( var keywordIndex = 0; keywordIndex < keywordsLength; keywordIndex++ ) {
