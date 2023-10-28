@@ -52,6 +52,8 @@ div.syntax-highlight div.code div.number p {
 div.syntax-highlight div.code div.syntax {
   flex-grow: 1;
   padding: 10px;
+  border-radius: var(--border-radius);
+  background-color: #EEEEEE;
 }
 div.syntax-highlight div.code div.syntax p {
   margin: 0;
@@ -69,8 +71,8 @@ div.syntax-highlight div.code div.syntax p q.string {
 }
 div.syntax-highlight div.code div.copy-button {
   position: absolute;
-  right: 15px;
-  top: 15px;
+  right: 30px;
+  top: 30px;
   background-color: var(--color-black);
   color: var(--color-white);
   font-size: small;

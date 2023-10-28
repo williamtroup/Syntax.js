@@ -63,6 +63,8 @@ div.syntax-highlight {
         div.syntax {
             flex-grow: 1;
             padding: 10px;
+            border-radius: var(--border-radius);
+            background-color: #EEEEEE;
 
             p {
                 margin: 0;
@@ -85,8 +87,8 @@ div.syntax-highlight {
 
         div.copy-button {
             position: absolute;
-            right: 15px;
-            top: 15px;
+            right: 30px;
+            top: 30px;
             background-color: var(--color-black);
             color: var(--color-white);
             font-size: small;
