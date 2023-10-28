@@ -322,7 +322,7 @@
      * @returns     {Object}                                                The Syntax.js class instance.
      */
     this.setOptions = function( newOptions, triggerEvent ) {
-        newOptions = getOptions( newOptions );
+        _options = !isDefinedObject( newOptions ) ? {} : newOptions;
 
         for ( var propertyName in newOptions ) {
             if ( newOptions.hasOwnProperty( propertyName ) ) {
@@ -342,7 +342,7 @@
     };
 
     function buildDefaultOptions( newOptions ) {
-        _options = getOptions( newOptions );
+        _options = !isDefinedObject( newOptions ) ? {} : newOptions;
         _options.showCopyButton = getDefaultBoolean( _options.showCopyButton, true );
 
         setTranslationStringOptions();
@@ -350,19 +350,6 @@
 
     function setTranslationStringOptions() {
         _options.copyButtonText = getDefaultString( _options.copyButtonText, "Copy" );
-    }
-
-    function getOptions( newOptions, alternateOptions ) {
-        if ( !isDefinedObject( newOptions ) ) {
-
-            if ( !isDefinedObject( alternateOptions ) ) {
-                newOptions = {};
-            } else {
-                newOptions = alternateOptions;
-            }
-        }
-
-        return newOptions;
     }
 
 
