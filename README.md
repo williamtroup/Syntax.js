@@ -4,7 +4,7 @@ Syntax.js
 [![Tweet](https://img.shields.io/twitter/url/http/shields.io.svg?style=social)](https://twitter.com/intent/tweet?text=Syntax.js%2C%20a%20free%20JavaScript%20syntax%20highlighter&url=https://github.com/williamtroup/Syntax.js&hashtags=javascript,syntax,highlighter)
 </h1>
 <p align="center">An easy to use JavaScript syntax highlighter!</p>
-<p align="center">v0.1.0</p>
+<p align="center">v0.2.0</p>
 <br />
 
 ![Syntax.js](docs/images/main.png)
