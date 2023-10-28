@@ -53,7 +53,11 @@
                     "typeof",
                     "try"
                 ],
-                comment: "//"
+                comment: "//",
+                multiLineComment: [
+                    "/*",
+                    "*/"
+                ]
             }
         };
 
@@ -95,7 +99,8 @@
                     _parameter_Navigator.clipboard.writeText( innerHTMLCopy );
                 };
 
-                innerHTML = renderElementCommentPatternVariables( innerHTML, syntaxLanguage );
+                innerHTML = renderElementCommentVariables( innerHTML, syntaxLanguage );
+                innerHTML = renderElementMultiLineCommentVariables( innerHTML, syntaxLanguage );
                 innerHTML = renderElementStringQuotesPatternVariables( innerHTML, innerHTML.match( /".*?"/g ) );
                 innerHTML = renderElementStringQuotesPatternVariables( innerHTML, innerHTML.match( /'.*?'/g ) );
                 innerHTML = renderElementKeywords( innerHTML, syntaxLanguage );
@@ -107,22 +112,54 @@
         }
     }
 
-    function renderElementCommentPatternVariables( innerHTML, syntaxLanguage ) {
-        var comment = _languages[ syntaxLanguage ].comment,
-            patternItems = innerHTML.match( new RegExp( comment + ".*", "g" ) );
+    function renderElementCommentVariables( innerHTML, syntaxLanguage ) {
+        var lookup = _languages[ syntaxLanguage ].comment,
+            patternItems = innerHTML.match( new RegExp( lookup + ".*", "g" ) );
 
         if ( patternItems !== null ) {
             var patternItemsLength = patternItems.length;
         
             for ( var patternItemsIndex = 0; patternItemsIndex < patternItemsLength; patternItemsIndex++ ) {
                 var comment = patternItems[ patternItemsIndex ],
-                    commentReplacement = comment.replaceAll( '"', _string.empty ).replaceAll( "'", _string.empty ),
                     commentVariable = "$C{" + _comments_Cached_Count.toString() + "}";
 
-                _comments_Cached[ commentVariable ] = "<span class=\"comment\">" + commentReplacement + "</span>";
+                _comments_Cached[ commentVariable ] = "<span class=\"comment\">" + comment + "</span>";
                 _comments_Cached_Count++;
     
                 innerHTML = innerHTML.replace( comment, commentVariable );
+            }
+        }
+
+        return innerHTML;
+    }
+
+    function renderElementMultiLineCommentVariables( innerHTML, syntaxLanguage ) {
+        var lookup = _languages[ syntaxLanguage ].multiLineComment,
+            startIndex = 0,
+            endIndex = 0;
+
+        while ( startIndex >= 0 && endIndex >= 0 ) {
+            startIndex = innerHTML.indexOf( lookup[ 0 ], endIndex );
+
+            if ( startIndex > -1 ) {
+                endIndex = innerHTML.indexOf( lookup[ 1 ], startIndex + lookup[ 0 ].length );
+
+                if ( endIndex > -1 ) {
+                    var comment = innerHTML.substring( startIndex, endIndex + lookup[ 1 ].length ),
+                        commentLines = comment.split( _string.newLine ),
+                        commentLinesLength = commentLines.length;
+                    
+                    for ( var commentLineIndex = 0; commentLineIndex < commentLinesLength; commentLineIndex++ ) {
+                        var commentVariable = "$C{" + _comments_Cached_Count.toString() + "}",
+                            commentLine = commentLines[ commentLineIndex ];
+                        
+                        _comments_Cached[ commentVariable ] = "<span class=\"comment\">" + commentLine + "</span>";
+                        _comments_Cached_Count++;
+            
+                        innerHTML = innerHTML.replace( commentLine, commentVariable );
+
+                    }
+                }
             }
         }
 
