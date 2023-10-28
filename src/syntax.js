@@ -12,19 +12,30 @@
 
 
 ( function() {
-    var _parameter_Document = null,
+    var // Variables: Constructor Parameters
+        _parameter_Document = null,
         _parameter_Navigator = null,
+
+        // Variables: Strings
         _string = {
             empty: "",
             space: " ",
             newLine: "\n"
         },
+
+        // Variables: Options
         _options = {},
+
+        // Variables: Elements
         _elements_Type = {},
+
+        // Variables: Temporary String Variables
         _strings_Cached = {},
         _strings_Cached_Count = 0,
         _comments_Cached = {},
         _comments_Cached_Count = 0,
+        
+        // Variables: Languages
         _languages = {
             javascript: {
                 keywords: [
@@ -61,6 +72,13 @@
                 ]
             }
         };
+
+    
+    /*
+     * ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+     * Rendering
+     * ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+     */
 
     function render() {
         var domElements = _parameter_Document.getElementsByTagName( "*" ),
