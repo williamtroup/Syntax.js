@@ -79,6 +79,7 @@
                 var innerHTML = element.innerHTML.trim(),
                     innerHTMLCopy = element.innerHTML.trim();
 
+                element.removeAttribute( "data-syntax-language" );
                 element.className += " syntax-highlight";
                 element.innerHTML = _string.empty;
 
