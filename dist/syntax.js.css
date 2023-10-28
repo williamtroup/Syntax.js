@@ -33,12 +33,6 @@ div.syntax-highlight div.code {
   overflow-y: hidden;
   position: relative;
 }
-
-/*
-    -------------------------------------------------------------------------
-    Syntax Highlight - Code - Numbers
-    -------------------------------------------------------------------------
-*/
 div.syntax-highlight div.code div.number {
   margin-right: 15px;
   background-color: #dddddd;
@@ -49,46 +43,29 @@ div.syntax-highlight div.code div.number {
   text-align: right;
   font-weight: 800 !important;
 }
-
 div.syntax-highlight div.code div.number p {
   margin: 0;
   text-wrap: nowrap;
 }
-
-/*
-    -------------------------------------------------------------------------
-    Syntax Highlight - Code - Syntax
-    -------------------------------------------------------------------------
-*/
 div.syntax-highlight div.code div.syntax {
   flex-grow: 1;
   padding: 10px;
 }
-
 div.syntax-highlight div.code div.syntax p {
   margin: 0;
   text-wrap: nowrap;
 }
-
 div.syntax-highlight div.code div.syntax p span.keyword {
   font-weight: 700;
   color: var(--color-variable);
 }
-
 div.syntax-highlight div.code div.syntax p span.comment {
   color: var(--color-comment);
 }
-
 div.syntax-highlight div.code div.syntax p q.string {
   color: var(--color-string);
 }
-
-/*
-    -------------------------------------------------------------------------
-    Syntax Highlight - Code - Copy Button
-    -------------------------------------------------------------------------
-*/
-div.syntax-highlight div.code div.syntax div.copy-button {
+div.syntax-highlight div.code div.copy-button {
   position: absolute;
   right: 15px;
   top: 15px;
@@ -101,8 +78,7 @@ div.syntax-highlight div.code div.syntax div.copy-button {
   border-radius: var(--border-radius);
   font-weight: 700;
 }
-
-div.syntax-highlight div.code div.syntax div.copy-button:hover {
+div.syntax-highlight div.code div.copy-button:hover {
   cursor: pointer;
   opacity: 0.7;
   transition: all 0.3s;
@@ -116,22 +92,18 @@ div.syntax-highlight div.code div.syntax div.copy-button:hover {
 .custom-scroll-bars::-webkit-scrollbar {
   width: 12px;
 }
-
 .custom-scroll-bars::-webkit-scrollbar-track {
   -webkit-box-shadow: var(--scroll-bar-border-style);
   box-shadow: var(--scroll-bar-border-style);
 }
-
 .custom-scroll-bars::-webkit-scrollbar-thumb {
   -webkit-box-shadow: var(--scroll-bar-border-style);
   box-shadow: var(--scroll-bar-border-style);
   background: var(--color-white);
 }
-
 .custom-scroll-bars::-webkit-scrollbar-thumb:hover {
   background-color: var(--color-white);
 }
-
 .custom-scroll-bars::-webkit-scrollbar-thumb:active {
   background-color: #C0C0C0;
 }/*# sourceMappingURL=syntax.js.css.map */
