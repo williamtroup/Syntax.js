@@ -216,6 +216,18 @@
     render();
     return this;
   };
+  this.addLanguage = function(name, languageDetails, triggerRender) {
+    var added = false;
+    if (!_languages.hasOwnProperty(name.toLowerCase())) {
+      triggerRender = !isDefinedBoolean(triggerRender) ? true : triggerRender;
+      _languages[name.toLowerCase()] = languageDetails;
+      added = true;
+      if (triggerRender) {
+        render();
+      }
+    }
+    return added;
+  };
   this.setOptions = function(newOptions, triggerEvent) {
     _options = !isDefinedObject(newOptions) ? {} : newOptions;
     triggerEvent = !isDefinedBoolean(triggerEvent) ? true : triggerEvent;

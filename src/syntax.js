@@ -382,6 +382,44 @@
 
     /*
      * ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+     * Public Functions:  Languages
+     * ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+     */
+
+    /**
+     * addLanguage().
+     * 
+     * Adds a new language that can be rendered.
+     * 
+     * @public
+     * @fires       onRender
+     * 
+     * @param       {string}    name                                        The name of the language.
+     * @param       {boolean}   languageDetails                             The language details (refer to "Language" documentation for properties).
+     * @param       {boolean}   [triggerRender]                             States if new language DOM elements available should be rendered.
+     * 
+     * @returns     {boolean}                                               States if the language has been added.
+     */
+    this.addLanguage = function( name, languageDetails, triggerRender ) {
+        var added = false;
+
+        if ( !_languages.hasOwnProperty( name.toLowerCase() ) ) {
+            triggerRender = !isDefinedBoolean( triggerRender ) ? true : triggerRender;
+
+            _languages[ name.toLowerCase() ] = languageDetails;
+            added = true;
+
+            if ( triggerRender ) {
+                render();
+            }
+        }
+
+        return added;
+    };
+
+
+    /*
+     * ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
      * Public Functions:  Set Options
      * ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
      */
@@ -394,7 +432,7 @@
      * @public
      * @fires       onOptionsUpdated
      * 
-     * @param       {Options}   newOptions                                  All the options that should be set (refer to "Options" documentation for properties).
+     * @param       {Object}    newOptions                                  All the options that should be set (refer to "Options" documentation for properties).
      * @param       {boolean}   [triggerEvent]                              States if the "onOptionsUpdated" event should be triggered (defaults to true).
      * 
      * @returns     {Object}                                                The Syntax.js class instance.
