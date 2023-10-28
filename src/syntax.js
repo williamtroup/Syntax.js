@@ -11,8 +11,10 @@
  */
 
 
-( function( documentElement, navigatorElement ) {
-    var _string = {
+( function() {
+    var _parameter_Document = null,
+        _parameter_Navigator = null,
+        _string = {
             empty: "",
             space: " ",
             newLine: "\n"
@@ -53,7 +55,7 @@
         };
 
     function render() {
-        var domElements = documentElement.getElementsByClassName( "syntax-highlight" ),
+        var domElements = _parameter_Document.getElementsByClassName( "syntax-highlight" ),
             elements = [].slice.call( domElements ),
             elementsLength = elements.length;
 
@@ -86,7 +88,7 @@
                 syntax.appendChild( copyButton );
 
                 copyButton.onclick = function() {
-                    navigatorElement.clipboard.writeText( innerHTMLCopy );
+                    _parameter_Navigator.clipboard.writeText( innerHTMLCopy );
                 };
 
                 innerHTML = renderElementCommentPatternVariables( innerHTML, innerHTML.match( new RegExp( "//.*", "g" ) ) );
@@ -190,9 +192,23 @@
         }
     }
 
+
+    /*
+     * ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+     * Validation
+     * ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+     */
+
     function isDefined( value ) {
         return value !== undefined && value !== _string.empty;
     }
+
+
+    /*
+     * ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+     * Element Handling
+     * ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+     */
 
     function createElement( type, className ) {
         var result = null,
@@ -200,7 +216,7 @@
             isText = nodeType === "text";
 
         if ( !_elements_Type.hasOwnProperty( nodeType ) ) {
-            _elements_Type[ nodeType ] = isText ? documentElement.createTextNode( _string.empty ) : documentElement.createElement( nodeType );
+            _elements_Type[ nodeType ] = isText ? _parameter_Document.createTextNode( _string.empty ) : _parameter_Document.createElement( nodeType );
         }
 
         result = _elements_Type[ nodeType ].cloneNode( false );
@@ -212,8 +228,44 @@
         return result;
     }
 
-    documentElement.addEventListener( "DOMContentLoaded", function() {
-        render();
-    } );
 
-} )( document, navigator );
+    /*
+     * ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+     * Public Functions:  Additional Data
+     * ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+     */
+
+    /**
+     * getVersion().
+     * 
+     * Returns the version of Syntax.js.
+     * 
+     * @public
+     * 
+     * @returns     {string}                                                The version number.
+     */
+    this.getVersion = function() {
+        return "0.1.0";
+    };
+
+
+    /*
+     * ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+     * Initialize Syntax.js
+     * ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+     */
+
+    ( function ( documentObject, navigatorObject, windowObject ) {
+        _parameter_Document = documentObject;
+        _parameter_Navigator = navigatorObject;
+
+        _parameter_Document.addEventListener( "DOMContentLoaded", function() {
+            render();
+        } );
+
+        if ( !isDefined( windowObject.$syntax ) ) {
+            windowObject.$syntax = this;
+        }
+
+    } ) ( document, navigator, window );
+} )();
