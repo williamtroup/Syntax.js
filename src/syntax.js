@@ -19,6 +19,7 @@
             space: " ",
             newLine: "\n"
         },
+        _options = {},
         _elements_Type = {},
         _strings_Cached = {},
         _strings_Cached_Count = 0,
@@ -267,6 +268,10 @@
         return isDefined( object ) && isFunction( object );
     }
 
+    function isFunction( object ) {
+        return typeof object === "function";
+    }
+
 
     /*
      * ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -378,6 +383,7 @@
      */
     this.setOptions = function( newOptions, triggerEvent ) {
         _options = !isDefinedObject( newOptions ) ? {} : newOptions;
+        triggerEvent = !isDefinedBoolean( triggerEvent ) ? true : triggerEvent;
 
         for ( var propertyName in newOptions ) {
             if ( newOptions.hasOwnProperty( propertyName ) ) {
@@ -385,12 +391,8 @@
             }
         }
 
-        if ( _initialized ) {
-            triggerEvent = !isDefinedBoolean( triggerEvent ) ? true : triggerEvent;
-
-            if ( triggerEvent ) {
-                fireCustomTrigger( "onOptionsUpdated", _options );
-            }
+        if ( triggerEvent ) {
+            fireCustomTrigger( "onOptionsUpdated", _options );
         }
 
         return this;
