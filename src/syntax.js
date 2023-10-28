@@ -111,6 +111,7 @@
                 innerHTML = renderElementStringQuotesFromVariables( innerHTML );
 
                 renderElementCompletedHTML( number, syntax, innerHTML );
+                fireCustomTrigger( "onRender", element );
             }
         }
     }
@@ -262,6 +263,10 @@
         return isDefined( object ) && typeof object === "string";
     }
 
+    function isDefinedFunction( object ) {
+        return isDefined( object ) && isFunction( object );
+    }
+
 
     /*
      * ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -282,6 +287,32 @@
 
         if ( isDefined( className ) ) {
             result.className = className;
+        }
+
+        return result;
+    }
+
+
+    /*
+     * ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+     * Triggering Custom Events
+     * ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+     */
+
+    function isCustomTriggerSet( name ) {
+        return isDefinedFunction( _options[ name ] );
+    }
+
+    function fireCustomTrigger( name ) {
+        var result = null,
+            newArguments = [].slice.call( arguments, 1 );
+
+        if ( newArguments.length > 0 ) {
+            result = false;
+        }
+        
+        if ( _options !== null && isCustomTriggerSet( name ) ) {
+            result = _options[ name ].apply( null, newArguments );
         }
 
         return result;
