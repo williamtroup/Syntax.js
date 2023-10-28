@@ -1,3 +1,4 @@
+/*! Syntax.js v0.1.0 | (c) Bunoon | MIT License */
 (function() {
   function render() {
     var domElements = _parameter_Document.getElementsByTagName("*");
