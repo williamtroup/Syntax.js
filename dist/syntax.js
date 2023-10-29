@@ -14,6 +14,8 @@
       var syntaxLanguage = element.getAttribute("data-syntax-language");
       if (isDefined(syntaxLanguage) && _languages.hasOwnProperty(syntaxLanguage)) {
         var innerHTML = element.innerHTML;
+        var syntaxOptions = getObjectFromString(element.getAttribute("data-syntax-options"));
+        syntaxOptions = buildDefaultOptions(syntaxOptions);
         if (element.children.length > 0) {
           innerHTML = element.children[0].innerHTML;
         }
@@ -28,9 +30,9 @@
         code.appendChild(number);
         var syntax = createElement("div", "syntax");
         code.appendChild(syntax);
-        if (_options.showCopyButton) {
+        if (syntaxOptions.showCopyButton) {
           var copyButton = createElement("div", "copy-button");
-          copyButton.innerHTML = _options.copyButtonText;
+          copyButton.innerHTML = syntaxOptions.copyButtonText;
           syntax.appendChild(copyButton);
           copyButton.onclick = function() {
             _parameter_Navigator.clipboard.writeText(innerHTMLCopy);
@@ -148,7 +150,7 @@
     }
   }
   function isDefined(value) {
-    return value !== undefined && value !== _string.empty;
+    return value !== null && value !== undefined && value !== _string.empty;
   }
   function isDefinedObject(object) {
     return isDefined(object) && typeof object === "object";
@@ -198,13 +200,30 @@
   function getDefaultBoolean(value, defaultValue) {
     return isDefinedBoolean(value) ? value : defaultValue;
   }
-  function buildDefaultOptions(newOptions) {
-    _options = !isDefinedObject(newOptions) ? {} : newOptions;
-    _options.showCopyButton = getDefaultBoolean(_options.showCopyButton, true);
-    setTranslationStringOptions();
+  function getObjectFromString(objectString) {
+    var result = null;
+    try {
+      if (isDefinedString(objectString)) {
+        result = JSON.parse(objectString);
+      }
+    } catch (e1) {
+      try {
+        result = eval("(" + objectString + ")");
+      } catch (e2) {
+        console.error("Errors in object: " + e1.message + ", " + e2.message);
+        result = null;
+      }
+    }
+    return result;
   }
-  function setTranslationStringOptions() {
-    _options.copyButtonText = getDefaultString(_options.copyButtonText, "Copy");
+  function buildDefaultOptions(newOptions) {
+    var options = !isDefinedObject(newOptions) ? {} : newOptions;
+    options.showCopyButton = getDefaultBoolean(options.showCopyButton, true);
+    return setTranslationStringOptions(options);
+  }
+  function setTranslationStringOptions(newOptions) {
+    newOptions.copyButtonText = getDefaultString(newOptions.copyButtonText, "Copy");
+    return newOptions;
   }
   var _parameter_Document = null;
   var _parameter_Navigator = null;
@@ -253,7 +272,7 @@
   (function(documentObject, navigatorObject, windowObject) {
     _parameter_Document = documentObject;
     _parameter_Navigator = navigatorObject;
-    buildDefaultOptions();
+    _options = buildDefaultOptions();
     _parameter_Document.addEventListener("DOMContentLoaded", function() {
       render();
     });

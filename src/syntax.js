@@ -134,14 +134,18 @@
             var syntaxLanguage = element.getAttribute( "data-syntax-language" );
 
             if ( isDefined( syntaxLanguage ) && _languages.hasOwnProperty( syntaxLanguage ) ) {
-                var innerHTML = element.innerHTML;
+                var innerHTML = element.innerHTML,
+                    syntaxOptions = getObjectFromString( element.getAttribute( "data-syntax-options" ) );
+                
+                syntaxOptions = buildDefaultOptions( syntaxOptions );
 
                 if ( element.children.length > 0 ) {
                     innerHTML = element.children[ 0 ].innerHTML;
                 }
 
-                var innerHTML = innerHTML.trim(),
-                    innerHTMLCopy = innerHTML.trim();
+                innerHTML = innerHTML.trim();
+                
+                var innerHTMLCopy = innerHTML.trim();
 
                 element.removeAttribute( "data-syntax-language" );
                 element.className += " syntax-highlight";
@@ -156,9 +160,9 @@
                 var syntax = createElement( "div", "syntax" );
                 code.appendChild( syntax );
 
-                if ( _options.showCopyButton ) {
+                if ( syntaxOptions.showCopyButton ) {
                     var copyButton = createElement( "div", "copy-button" );
-                    copyButton.innerHTML = _options.copyButtonText;
+                    copyButton.innerHTML = syntaxOptions.copyButtonText;
                     syntax.appendChild( copyButton );
     
                     copyButton.onclick = function() {
@@ -312,7 +316,7 @@
      */
 
     function isDefined( value ) {
-        return value !== undefined && value !== _string.empty;
+        return value !== null && value !== undefined && value !== _string.empty;
     }
 
     function isDefinedObject( object ) {
@@ -399,6 +403,27 @@
 
     function getDefaultBoolean( value, defaultValue ) {
         return isDefinedBoolean( value ) ? value : defaultValue;
+    }
+
+    function getObjectFromString( objectString ) {
+        var result = null;
+
+        try {
+            if ( isDefinedString( objectString ) ) {
+                result = JSON.parse( objectString );
+            }
+
+        } catch ( e1 ) {
+
+            try {
+                result = eval( "(" + objectString + ")" );
+            } catch ( e2 ) {
+                console.error( "Errors in object: " + e1.message + ", " + e2.message );
+                result = null;
+            }
+        }
+
+        return result;
     }
 
 
@@ -500,14 +525,16 @@
     };
 
     function buildDefaultOptions( newOptions ) {
-        _options = !isDefinedObject( newOptions ) ? {} : newOptions;
-        _options.showCopyButton = getDefaultBoolean( _options.showCopyButton, true );
+        var options = !isDefinedObject( newOptions ) ? {} : newOptions;
+        options.showCopyButton = getDefaultBoolean( options.showCopyButton, true );
 
-        setTranslationStringOptions();
+        return setTranslationStringOptions( options );
     }
 
-    function setTranslationStringOptions() {
-        _options.copyButtonText = getDefaultString( _options.copyButtonText, "Copy" );
+    function setTranslationStringOptions( newOptions ) {
+        newOptions.copyButtonText = getDefaultString( newOptions.copyButtonText, "Copy" );
+        
+        return newOptions;
     }
 
 
@@ -541,7 +568,7 @@
         _parameter_Document = documentObject;
         _parameter_Navigator = navigatorObject;
 
-        buildDefaultOptions();
+        _options = buildDefaultOptions();
 
         _parameter_Document.addEventListener( "DOMContentLoaded", function() {
             render();

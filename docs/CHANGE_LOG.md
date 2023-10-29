@@ -2,6 +2,7 @@
 
 ## Version 0.3.0:
 - Added Code/Pre element rendering support.
+- Added options attribute "data-syntax-options" support, which will override the default options per code element rendered.
 - 
 
 <br>
