@@ -1,5 +1,10 @@
 # Syntax.js - Change Log:
 
+## Version 0.3.0:
+- 
+
+<br>
+
 ## Version 0.2.0:
 - Added a border around the code container (uses root variables for easy changing).
 - Increased the padding slightly for the "Copy" button.
