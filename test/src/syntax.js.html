@@ -27,9 +27,22 @@
         </div>
         <br />
 
+        <div class="contents" data-syntax-language="c-sharp">
+            bool something = true;
+
+            if ( something ) {
+                Console.WriteLine( "Output is written." ); // Comment
+            }
+        </div>
+        <br />
+
         <div class="contents">
             <h2>Building:</h2>
             <button onclick="$syntax.buildNewSyntaxElements();">Build New Syntax Elements</button>
+            <br />
+
+            <h2>Language:</h2>
+            <button onclick="addNewLanguage();">Add Language</button>
             <br />
 
             <h2>Set Options:</h2>
@@ -43,5 +56,18 @@
 
     <script>
         document.title += " v" + $syntax.getVersion();
+
+        function addNewLanguage() {
+            $syntax.addLanguage( "c-sharp", {
+                keywords: [
+                    "if",
+                    "var",
+                    "true",
+                    "bool"
+                ],
+                comment: "//",
+                multiLineComment: [ "/*", "*/" ]
+            } );
+        }
     </script>
 </html>

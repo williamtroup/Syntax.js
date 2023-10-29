@@ -1,4 +1,4 @@
-/*! Syntax.js v0.1.0 | (c) Bunoon | MIT License */
+/*! Syntax.js v0.2.0 | (c) Bunoon | MIT License */
 (function() {
   function render() {
     var domElements = _parameter_Document.getElementsByTagName("*");
@@ -211,10 +211,23 @@
   var _strings_Cached_Count = 0;
   var _comments_Cached = {};
   var _comments_Cached_Count = 0;
-  var _languages = {javascript:{keywords:["function", "var", "new", "if", "while", "do", "switch", "case", "else", "null", "eval", "for", "in", "break", "debugger", "delete", "true", "false", "catch", "continue", "this", "yield", "default", "typeof", "try"], comment:"//", multiLineComment:["/*", "*/"]}};
+  var _languages = {javascript:{keywords:["abstract", "arguments", "await*", "boolean", "break", "byte", "case", "catch", "char", "class*", "const", "continue", "debugger", "default", "delete", "do", "double", "else", "enum*", "eval", "export*", "extends*", "false", "final", "finally", "float", "for", "function", "goto", "if", "implements", "import*", "in", "instanceof", "int", "interface", "let*", "long", "native", "new", "null", "package", "private", "protected", "public", "return", "short", "static", 
+  "super*", "switch", "synchronized", "this", "throw", "throws", "transient", "true", "try", "typeof", "var", "void", "volatile", "while", "with", "yield"], comment:"//", multiLineComment:["/*", "*/"]}};
   this.buildNewSyntaxElements = function() {
     render();
     return this;
+  };
+  this.addLanguage = function(name, languageDetails, triggerRender) {
+    var added = false;
+    if (!_languages.hasOwnProperty(name.toLowerCase())) {
+      triggerRender = !isDefinedBoolean(triggerRender) ? true : triggerRender;
+      _languages[name.toLowerCase()] = languageDetails;
+      added = true;
+      if (triggerRender) {
+        render();
+      }
+    }
+    return added;
   };
   this.setOptions = function(newOptions, triggerEvent) {
     _options = !isDefinedObject(newOptions) ? {} : newOptions;
@@ -231,7 +244,7 @@
     return this;
   };
   this.getVersion = function() {
-    return "0.1.0";
+    return "0.2.0";
   };
   (function(documentObject, navigatorObject, windowObject) {
     _parameter_Document = documentObject;

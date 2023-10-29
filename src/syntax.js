@@ -4,7 +4,7 @@
  * A javascript code syntax highlighter.
  * 
  * @file        syntax.js
- * @version     v0.1.0
+ * @version     v0.2.0
  * @author      Bunoon
  * @license     MIT License
  * @copyright   Bunoon 2023
@@ -39,31 +39,70 @@
         _languages = {
             javascript: {
                 keywords: [
-                    "function",
-                    "var",
-                    "new",
-                    "if",
-                    "while",
-                    "do",
-                    "switch",
-                    "case",
-                    "else",
-                    "null",
-                    "eval",
-                    "for",
-                    "in",
+                    "abstract",
+                    "arguments",
+                    "await*",
+                    "boolean",
                     "break",
-                    "debugger",
-                    "delete",
-                    "true",
-                    "false",
+                    "byte",
+                    "case",
                     "catch",
+                    "char",
+                    "class*",
+                    "const",
                     "continue",
-                    "this",
-                    "yield",
+                    "debugger",
                     "default",
+                    "delete",
+                    "do",
+                    "double",
+                    "else",
+                    "enum*",
+                    "eval",
+                    "export*",
+                    "extends*",
+                    "false",
+                    "final",
+                    "finally",
+                    "float",
+                    "for",
+                    "function",
+                    "goto",
+                    "if",
+                    "implements",
+                    "import*",
+                    "in",
+                    "instanceof",
+                    "int",
+                    "interface",
+                    "let*",
+                    "long",
+                    "native",
+                    "new",
+                    "null",
+                    "package",
+                    "private",
+                    "protected",
+                    "public",
+                    "return",
+                    "short",
+                    "static",
+                    "super*",
+                    "switch",
+                    "synchronized",
+                    "this",
+                    "throw",
+                    "throws",
+                    "transient",
+                    "true",
+                    "try",
                     "typeof",
-                    "try"
+                    "var",
+                    "void",
+                    "volatile",
+                    "while",
+                    "with",
+                    "yield"
                 ],
                 comment: "//",
                 multiLineComment: [
@@ -382,6 +421,44 @@
 
     /*
      * ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+     * Public Functions:  Languages
+     * ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+     */
+
+    /**
+     * addLanguage().
+     * 
+     * Adds a new language that can be rendered.
+     * 
+     * @public
+     * @fires       onRender
+     * 
+     * @param       {string}    name                                        The name of the language.
+     * @param       {boolean}   languageDetails                             The language details (refer to "Language" documentation for properties).
+     * @param       {boolean}   [triggerRender]                             States if new language DOM elements available should be rendered.
+     * 
+     * @returns     {boolean}                                               States if the language has been added.
+     */
+    this.addLanguage = function( name, languageDetails, triggerRender ) {
+        var added = false;
+
+        if ( !_languages.hasOwnProperty( name.toLowerCase() ) ) {
+            triggerRender = !isDefinedBoolean( triggerRender ) ? true : triggerRender;
+
+            _languages[ name.toLowerCase() ] = languageDetails;
+            added = true;
+
+            if ( triggerRender ) {
+                render();
+            }
+        }
+
+        return added;
+    };
+
+
+    /*
+     * ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
      * Public Functions:  Set Options
      * ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
      */
@@ -394,7 +471,7 @@
      * @public
      * @fires       onOptionsUpdated
      * 
-     * @param       {Options}   newOptions                                  All the options that should be set (refer to "Options" documentation for properties).
+     * @param       {Object}    newOptions                                  All the options that should be set (refer to "Options" documentation for properties).
      * @param       {boolean}   [triggerEvent]                              States if the "onOptionsUpdated" event should be triggered (defaults to true).
      * 
      * @returns     {Object}                                                The Syntax.js class instance.
@@ -444,7 +521,7 @@
      * @returns     {string}                                                The version number.
      */
     this.getVersion = function() {
-        return "0.1.0";
+        return "0.2.0";
     };
 
 

@@ -1,5 +1,5 @@
 /*
- * Syntax.js Library v0.1.0
+ * Syntax.js Library v0.2.0
  *
  * Copyright 2023 Bunoon
  * Released under the MIT License
@@ -16,7 +16,8 @@
   --color-black: #3b3a3a;
   --color-white: #F5F5F5;
   --border-radius: 0.5rem;
-  --scroll-bar-border-style: inset 0 0 6px gray;
+  --border-style-scrollbar: inset 0 0 6px gray;
+  --border-size: 0.5px;
 }
 
 /*
@@ -32,6 +33,7 @@ div.syntax-highlight div.code {
   overflow-x: auto;
   overflow-y: hidden;
   position: relative;
+  border: var(--border-size) solid var(--color-black);
 }
 div.syntax-highlight div.code div.number {
   margin-right: 15px;
@@ -50,6 +52,8 @@ div.syntax-highlight div.code div.number p {
 div.syntax-highlight div.code div.syntax {
   flex-grow: 1;
   padding: 10px;
+  border-radius: var(--border-radius);
+  background-color: #EEEEEE;
 }
 div.syntax-highlight div.code div.syntax p {
   margin: 0;
@@ -67,12 +71,12 @@ div.syntax-highlight div.code div.syntax p q.string {
 }
 div.syntax-highlight div.code div.copy-button {
   position: absolute;
-  right: 15px;
-  top: 15px;
+  right: 30px;
+  top: 30px;
   background-color: var(--color-black);
   color: var(--color-white);
   font-size: small;
-  padding: 5px;
+  padding: 7px;
   padding-left: 10px;
   padding-right: 10px;
   border-radius: var(--border-radius);
@@ -93,12 +97,12 @@ div.syntax-highlight div.code div.copy-button:hover {
   width: 12px;
 }
 .custom-scroll-bars::-webkit-scrollbar-track {
-  -webkit-box-shadow: var(--scroll-bar-border-style);
-  box-shadow: var(--scroll-bar-border-style);
+  -webkit-box-shadow: var(--border-style-scrollbar);
+  box-shadow: var(--border-style-scrollbar);
 }
 .custom-scroll-bars::-webkit-scrollbar-thumb {
-  -webkit-box-shadow: var(--scroll-bar-border-style);
-  box-shadow: var(--scroll-bar-border-style);
+  -webkit-box-shadow: var(--border-style-scrollbar);
+  box-shadow: var(--border-style-scrollbar);
   background: var(--color-white);
 }
 .custom-scroll-bars::-webkit-scrollbar-thumb:hover {
