@@ -6,6 +6,7 @@
 - Added a background color the code syntax container (next to the numbers) and added a border radius.
 - Added new public function "addLanguage()", which will add a new language to the library and will auto-render DOM elements found for that language.
 - Added all missing keywords for the built-in language "JavaScript".
+- Added C# language support via an importable file.
 - 
 
 <br>
