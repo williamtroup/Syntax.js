@@ -148,7 +148,8 @@
                 var innerHTMLCopy = innerHTML.trim();
 
                 element.removeAttribute( "data-syntax-language" );
-                element.className += " syntax-highlight";
+                element.removeAttribute( "data-syntax-options" );
+                element.className = element.className === "" ? "syntax-highlight" : element.className + " syntax-highlight";
                 element.innerHTML = _string.empty;
 
                 var code = createElement( "div", "code custom-scroll-bars" );
