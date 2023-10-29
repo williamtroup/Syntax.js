@@ -70,6 +70,19 @@ Make sure you include the "DOCTYPE html" tag at the top of your email, as follow
         comment */
     }
 </div>
+
+<code data-syntax-language="javascript">
+    <pre>
+        var something = true;
+
+        if ( something ) {
+            console.log( "Output is written." ); // Comment
+            
+            /* Multi-line
+            comment */
+        }
+    </pre>
+</code>
 ```
 <br>
 

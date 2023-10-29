@@ -1,6 +1,7 @@
 # Syntax.js - Change Log:
 
 ## Version 0.3.0:
+- Added Code/Pre element rendering support.
 - 
 
 <br>

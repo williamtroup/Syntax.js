@@ -134,8 +134,14 @@
             var syntaxLanguage = element.getAttribute( "data-syntax-language" );
 
             if ( isDefined( syntaxLanguage ) && _languages.hasOwnProperty( syntaxLanguage ) ) {
-                var innerHTML = element.innerHTML.trim(),
-                    innerHTMLCopy = element.innerHTML.trim();
+                var innerHTML = element.innerHTML;
+
+                if ( element.children.length > 0 ) {
+                    innerHTML = element.children[ 0 ].innerHTML;
+                }
+
+                var innerHTML = innerHTML.trim(),
+                    innerHTMLCopy = innerHTML.trim();
 
                 element.removeAttribute( "data-syntax-language" );
                 element.className += " syntax-highlight";
@@ -286,14 +292,14 @@
             linesLength = lines.length;
 
         for ( var lineIndex = 0; lineIndex < linesLength; lineIndex++ ) {
-            var line = lines[ lineIndex ].trim();
+            var line = lines[ lineIndex ];
 
             var numberCode = createElement( "p" );
             numberCode.innerHTML = ( lineIndex + 1 ).toString();
             number.appendChild( numberCode );
 
             var syntaxCode = createElement( "p" );
-            syntaxCode.innerHTML = line === _string.empty ? "<br>" : line;
+            syntaxCode.innerHTML = line.trim() === _string.empty ? "<br>" : line;
             syntax.appendChild( syntaxCode );
         }
     }
