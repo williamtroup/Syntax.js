@@ -1,4 +1,4 @@
-/*! Syntax.js v0.2.0 | (c) Bunoon | MIT License */
+/*! Syntax.js v0.3.0 | (c) Bunoon | MIT License */
 (function() {
   function render() {
     var domElements = _parameter_Document.getElementsByTagName("*");
@@ -13,10 +13,17 @@
     if (isDefined(element)) {
       var syntaxLanguage = element.getAttribute("data-syntax-language");
       if (isDefined(syntaxLanguage) && _languages.hasOwnProperty(syntaxLanguage)) {
-        var innerHTML = element.innerHTML.trim();
-        var innerHTMLCopy = element.innerHTML.trim();
+        var innerHTML = element.innerHTML;
+        var syntaxOptions = getObjectFromString(element.getAttribute("data-syntax-options"));
+        syntaxOptions = buildDefaultOptions(syntaxOptions);
+        if (element.children.length > 0) {
+          innerHTML = element.children[0].innerHTML;
+        }
+        innerHTML = innerHTML.trim();
+        var innerHTMLCopy = innerHTML.trim();
         element.removeAttribute("data-syntax-language");
-        element.className += " syntax-highlight";
+        element.removeAttribute("data-syntax-options");
+        element.className = element.className === "" ? "syntax-highlight" : element.className + " syntax-highlight";
         element.innerHTML = _string.empty;
         var code = createElement("div", "code custom-scroll-bars");
         element.appendChild(code);
@@ -24,12 +31,13 @@
         code.appendChild(number);
         var syntax = createElement("div", "syntax");
         code.appendChild(syntax);
-        if (_options.showCopyButton) {
+        if (syntaxOptions.showCopyButton) {
           var copyButton = createElement("div", "copy-button");
-          copyButton.innerHTML = _options.copyButtonText;
+          copyButton.innerHTML = syntaxOptions.copyButtonText;
           syntax.appendChild(copyButton);
           copyButton.onclick = function() {
             _parameter_Navigator.clipboard.writeText(innerHTMLCopy);
+            fireCustomTrigger("onCopy", innerHTMLCopy);
           };
         }
         innerHTML = renderElementCommentVariables(innerHTML, syntaxLanguage);
@@ -134,17 +142,17 @@
     var linesLength = lines.length;
     var lineIndex = 0;
     for (; lineIndex < linesLength; lineIndex++) {
-      var line = lines[lineIndex].trim();
+      var line = lines[lineIndex];
       var numberCode = createElement("p");
       numberCode.innerHTML = (lineIndex + 1).toString();
       number.appendChild(numberCode);
       var syntaxCode = createElement("p");
-      syntaxCode.innerHTML = line === _string.empty ? "<br>" : line;
+      syntaxCode.innerHTML = line.trim() === _string.empty ? "<br>" : line;
       syntax.appendChild(syntaxCode);
     }
   }
   function isDefined(value) {
-    return value !== undefined && value !== _string.empty;
+    return value !== null && value !== undefined && value !== _string.empty;
   }
   function isDefinedObject(object) {
     return isDefined(object) && typeof object === "object";
@@ -194,13 +202,30 @@
   function getDefaultBoolean(value, defaultValue) {
     return isDefinedBoolean(value) ? value : defaultValue;
   }
-  function buildDefaultOptions(newOptions) {
-    _options = !isDefinedObject(newOptions) ? {} : newOptions;
-    _options.showCopyButton = getDefaultBoolean(_options.showCopyButton, true);
-    setTranslationStringOptions();
+  function getObjectFromString(objectString) {
+    var result = null;
+    try {
+      if (isDefinedString(objectString)) {
+        result = JSON.parse(objectString);
+      }
+    } catch (e1) {
+      try {
+        result = eval("(" + objectString + ")");
+      } catch (e2) {
+        console.error("Errors in object: " + e1.message + ", " + e2.message);
+        result = null;
+      }
+    }
+    return result;
   }
-  function setTranslationStringOptions() {
-    _options.copyButtonText = getDefaultString(_options.copyButtonText, "Copy");
+  function buildDefaultOptions(newOptions) {
+    var options = !isDefinedObject(newOptions) ? {} : newOptions;
+    options.showCopyButton = getDefaultBoolean(options.showCopyButton, true);
+    return setTranslationStringOptions(options);
+  }
+  function setTranslationStringOptions(newOptions) {
+    newOptions.copyButtonText = getDefaultString(newOptions.copyButtonText, "Copy");
+    return newOptions;
   }
   var _parameter_Document = null;
   var _parameter_Navigator = null;
@@ -244,12 +269,12 @@
     return this;
   };
   this.getVersion = function() {
-    return "0.2.0";
+    return "0.3.0";
   };
   (function(documentObject, navigatorObject, windowObject) {
     _parameter_Document = documentObject;
     _parameter_Navigator = navigatorObject;
-    buildDefaultOptions();
+    _options = buildDefaultOptions();
     _parameter_Document.addEventListener("DOMContentLoaded", function() {
       render();
     });

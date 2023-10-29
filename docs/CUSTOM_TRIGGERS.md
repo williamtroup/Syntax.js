@@ -13,6 +13,15 @@ Fires when the syntax for an element is rendered.
 
 
 <br>
+<h1>For Code:</h1>
+
+### options.onCopy( *code* ):
+Fires when the "Copy" button is pressed
+<br>
+***Parameter:*** code: '*string*' - The string that was copied to the clipboard.
+
+
+<br>
 <h1>For Options:</h1>
 
 ### options.onOptionsUpdated( *options* ):

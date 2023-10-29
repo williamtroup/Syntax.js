@@ -1,5 +1,5 @@
 /*
- * Syntax.js Library v0.2.0
+ * Syntax.js Library v0.3.0
  *
  * Copyright 2023 Bunoon
  * Released under the MIT License
@@ -25,6 +25,7 @@
     Syntax Highlight - Code
     -------------------------------------------------------------------------
 */
+code.syntax-highlight div.code,
 div.syntax-highlight div.code {
   display: flex;
   background-color: #e8e6e6;
@@ -35,6 +36,7 @@ div.syntax-highlight div.code {
   position: relative;
   border: var(--border-size) solid var(--color-black);
 }
+code.syntax-highlight div.code div.number,
 div.syntax-highlight div.code div.number {
   margin-right: 15px;
   background-color: #dddddd;
@@ -45,30 +47,37 @@ div.syntax-highlight div.code div.number {
   text-align: right;
   font-weight: 800 !important;
 }
+code.syntax-highlight div.code div.number p,
 div.syntax-highlight div.code div.number p {
   margin: 0;
   text-wrap: nowrap;
 }
+code.syntax-highlight div.code div.syntax,
 div.syntax-highlight div.code div.syntax {
   flex-grow: 1;
   padding: 10px;
   border-radius: var(--border-radius);
   background-color: #EEEEEE;
 }
+code.syntax-highlight div.code div.syntax p,
 div.syntax-highlight div.code div.syntax p {
   margin: 0;
   text-wrap: nowrap;
 }
+code.syntax-highlight div.code div.syntax p span.keyword,
 div.syntax-highlight div.code div.syntax p span.keyword {
   font-weight: 700;
   color: var(--color-variable);
 }
+code.syntax-highlight div.code div.syntax p span.comment,
 div.syntax-highlight div.code div.syntax p span.comment {
   color: var(--color-comment);
 }
+code.syntax-highlight div.code div.syntax p q.string,
 div.syntax-highlight div.code div.syntax p q.string {
   color: var(--color-string);
 }
+code.syntax-highlight div.code div.copy-button,
 div.syntax-highlight div.code div.copy-button {
   position: absolute;
   right: 30px;
@@ -82,6 +91,7 @@ div.syntax-highlight div.code div.copy-button {
   border-radius: var(--border-radius);
   font-weight: 700;
 }
+code.syntax-highlight div.code div.copy-button:hover,
 div.syntax-highlight div.code div.copy-button:hover {
   cursor: pointer;
   opacity: 0.7;

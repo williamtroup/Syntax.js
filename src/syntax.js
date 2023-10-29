@@ -4,7 +4,7 @@
  * A javascript code syntax highlighter.
  * 
  * @file        syntax.js
- * @version     v0.2.0
+ * @version     v0.3.0
  * @author      Bunoon
  * @license     MIT License
  * @copyright   Bunoon 2023
@@ -134,11 +134,22 @@
             var syntaxLanguage = element.getAttribute( "data-syntax-language" );
 
             if ( isDefined( syntaxLanguage ) && _languages.hasOwnProperty( syntaxLanguage ) ) {
-                var innerHTML = element.innerHTML.trim(),
-                    innerHTMLCopy = element.innerHTML.trim();
+                var innerHTML = element.innerHTML,
+                    syntaxOptions = getObjectFromString( element.getAttribute( "data-syntax-options" ) );
+                
+                syntaxOptions = buildDefaultOptions( syntaxOptions );
+
+                if ( element.children.length > 0 ) {
+                    innerHTML = element.children[ 0 ].innerHTML;
+                }
+
+                innerHTML = innerHTML.trim();
+                
+                var innerHTMLCopy = innerHTML.trim();
 
                 element.removeAttribute( "data-syntax-language" );
-                element.className += " syntax-highlight";
+                element.removeAttribute( "data-syntax-options" );
+                element.className = element.className === "" ? "syntax-highlight" : element.className + " syntax-highlight";
                 element.innerHTML = _string.empty;
 
                 var code = createElement( "div", "code custom-scroll-bars" );
@@ -150,13 +161,15 @@
                 var syntax = createElement( "div", "syntax" );
                 code.appendChild( syntax );
 
-                if ( _options.showCopyButton ) {
+                if ( syntaxOptions.showCopyButton ) {
                     var copyButton = createElement( "div", "copy-button" );
-                    copyButton.innerHTML = _options.copyButtonText;
+                    copyButton.innerHTML = syntaxOptions.copyButtonText;
                     syntax.appendChild( copyButton );
     
                     copyButton.onclick = function() {
                         _parameter_Navigator.clipboard.writeText( innerHTMLCopy );
+
+                        fireCustomTrigger( "onCopy", innerHTMLCopy );
                     };
                 }
 
@@ -286,14 +299,14 @@
             linesLength = lines.length;
 
         for ( var lineIndex = 0; lineIndex < linesLength; lineIndex++ ) {
-            var line = lines[ lineIndex ].trim();
+            var line = lines[ lineIndex ];
 
             var numberCode = createElement( "p" );
             numberCode.innerHTML = ( lineIndex + 1 ).toString();
             number.appendChild( numberCode );
 
             var syntaxCode = createElement( "p" );
-            syntaxCode.innerHTML = line === _string.empty ? "<br>" : line;
+            syntaxCode.innerHTML = line.trim() === _string.empty ? "<br>" : line;
             syntax.appendChild( syntaxCode );
         }
     }
@@ -306,7 +319,7 @@
      */
 
     function isDefined( value ) {
-        return value !== undefined && value !== _string.empty;
+        return value !== null && value !== undefined && value !== _string.empty;
     }
 
     function isDefinedObject( object ) {
@@ -393,6 +406,27 @@
 
     function getDefaultBoolean( value, defaultValue ) {
         return isDefinedBoolean( value ) ? value : defaultValue;
+    }
+
+    function getObjectFromString( objectString ) {
+        var result = null;
+
+        try {
+            if ( isDefinedString( objectString ) ) {
+                result = JSON.parse( objectString );
+            }
+
+        } catch ( e1 ) {
+
+            try {
+                result = eval( "(" + objectString + ")" );
+            } catch ( e2 ) {
+                console.error( "Errors in object: " + e1.message + ", " + e2.message );
+                result = null;
+            }
+        }
+
+        return result;
     }
 
 
@@ -494,14 +528,16 @@
     };
 
     function buildDefaultOptions( newOptions ) {
-        _options = !isDefinedObject( newOptions ) ? {} : newOptions;
-        _options.showCopyButton = getDefaultBoolean( _options.showCopyButton, true );
+        var options = !isDefinedObject( newOptions ) ? {} : newOptions;
+        options.showCopyButton = getDefaultBoolean( options.showCopyButton, true );
 
-        setTranslationStringOptions();
+        return setTranslationStringOptions( options );
     }
 
-    function setTranslationStringOptions() {
-        _options.copyButtonText = getDefaultString( _options.copyButtonText, "Copy" );
+    function setTranslationStringOptions( newOptions ) {
+        newOptions.copyButtonText = getDefaultString( newOptions.copyButtonText, "Copy" );
+        
+        return newOptions;
     }
 
 
@@ -521,7 +557,7 @@
      * @returns     {string}                                                The version number.
      */
     this.getVersion = function() {
-        return "0.2.0";
+        return "0.3.0";
     };
 
 
@@ -535,7 +571,7 @@
         _parameter_Document = documentObject;
         _parameter_Navigator = navigatorObject;
 
-        buildDefaultOptions();
+        _options = buildDefaultOptions();
 
         _parameter_Document.addEventListener( "DOMContentLoaded", function() {
             render();
