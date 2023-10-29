@@ -37,6 +37,7 @@
           syntax.appendChild(copyButton);
           copyButton.onclick = function() {
             _parameter_Navigator.clipboard.writeText(innerHTMLCopy);
+            fireCustomTrigger("onCopy", innerHTMLCopy);
           };
         }
         innerHTML = renderElementCommentVariables(innerHTML, syntaxLanguage);

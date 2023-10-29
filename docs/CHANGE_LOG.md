@@ -4,6 +4,7 @@
 - Added Code/Pre element rendering support.
 - Added options attribute "data-syntax-options" support, which will override the default options per code element rendered.
 - Fixed a class name setting issue that caused a random space to appear.
+- Added new custom trigger "onCopy", which is fired when the "Copy" button for a syntax element is pressed.
 - 
 
 <br>
