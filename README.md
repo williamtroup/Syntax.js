@@ -71,7 +71,7 @@ Make sure you include the "DOCTYPE html" tag at the top of your email, as follow
     }
 </div>
 
-<code data-syntax-language="javascript">
+<code data-syntax-language="javascript" data-syntax-options="{ 'showCopyButton': false }">
     <pre>
         var something = true;
 
