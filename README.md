@@ -89,6 +89,9 @@ Make sure you include the "DOCTYPE html" tag at the top of your email, as follow
     </pre>
 </code>
 ```
+
+To see a list of all the available options you can use for "data-syntax-options", click [here](docs/OPTIONS.md).
+
 <br>
 
 ### 4. Finishing Up:
@@ -103,25 +106,7 @@ To customize, and get more out of Syntax.js, please read through the following d
 <br>
 <br>
 
-### 1. Options:
-
-Options (which can be set when initializing, or afterwards) allow you to customize how Syntax.js will look and function.  The options are also used to set the custom triggers you want to fire when specific actions occur.  You can set them manually as follows:
-
-```markdown
-<script> 
-  $syntax.setOptions( {
-      showCopyButton: false
-  } );
-</script>
-```
-
-To see a list of all the available options you can use, click [here](docs/OPTIONS.md).
-
-To see a list of all the available custom triggers you can use, click [here](docs/CUSTOM_TRIGGERS.md).
-<br>
-<br>
-
-### 2. Public Functions:
+### 1. Public Functions:
 
 To see a list of all the public functions available, click [here](docs/FUNCTIONS.md).
 <br>
