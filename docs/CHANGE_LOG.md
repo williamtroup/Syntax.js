@@ -4,6 +4,7 @@
 - Removed public function "setOptions()", as its not needed due to the options attribute.
 - Removed the custom trigger "onOptionsUpdated", as it's not needed anymore.
 - Added support to set the custom triggers via the "data-syntax-options" attribute options.
+- Added support to leave out the language property "multiLineComment", as some languages don't require special characters outside the standard comment.
 - 
 
 ## Version 0.3.0:

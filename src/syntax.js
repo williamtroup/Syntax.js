@@ -206,30 +206,33 @@
     }
 
     function renderElementMultiLineCommentVariables( innerHTML, syntaxLanguage ) {
-        var lookup = _languages[ syntaxLanguage ].multiLineComment,
-            startIndex = 0,
-            endIndex = 0;
+        var lookup = _languages[ syntaxLanguage ].multiLineComment;
 
-        while ( startIndex >= 0 && endIndex >= 0 ) {
-            startIndex = innerHTML.indexOf( lookup[ 0 ], endIndex );
+        if ( isDefinedArray( lookup ) && lookup.length === 2 ) {
+            var startIndex = 0,
+                endIndex = 0;
 
-            if ( startIndex > -1 ) {
-                endIndex = innerHTML.indexOf( lookup[ 1 ], startIndex + lookup[ 0 ].length );
-
-                if ( endIndex > -1 ) {
-                    var comment = innerHTML.substring( startIndex, endIndex + lookup[ 1 ].length ),
-                        commentLines = comment.split( _string.newLine ),
-                        commentLinesLength = commentLines.length;
-                    
-                    for ( var commentLineIndex = 0; commentLineIndex < commentLinesLength; commentLineIndex++ ) {
-                        var commentVariable = "$C{" + _comments_Cached_Count.toString() + "}",
-                            commentLine = commentLines[ commentLineIndex ];
+            while ( startIndex >= 0 && endIndex >= 0 ) {
+                startIndex = innerHTML.indexOf( lookup[ 0 ], endIndex );
+    
+                if ( startIndex > -1 ) {
+                    endIndex = innerHTML.indexOf( lookup[ 1 ], startIndex + lookup[ 0 ].length );
+    
+                    if ( endIndex > -1 ) {
+                        var comment = innerHTML.substring( startIndex, endIndex + lookup[ 1 ].length ),
+                            commentLines = comment.split( _string.newLine ),
+                            commentLinesLength = commentLines.length;
                         
-                        _comments_Cached[ commentVariable ] = "<span class=\"comment\">" + commentLine + "</span>";
-                        _comments_Cached_Count++;
-            
-                        innerHTML = innerHTML.replace( commentLine, commentVariable );
-
+                        for ( var commentLineIndex = 0; commentLineIndex < commentLinesLength; commentLineIndex++ ) {
+                            var commentVariable = "$C{" + _comments_Cached_Count.toString() + "}",
+                                commentLine = commentLines[ commentLineIndex ];
+                            
+                            _comments_Cached[ commentVariable ] = "<span class=\"comment\">" + commentLine + "</span>";
+                            _comments_Cached_Count++;
+                
+                            innerHTML = innerHTML.replace( commentLine, commentVariable );
+    
+                        }
                     }
                 }
             }
@@ -348,6 +351,10 @@
 
     function isDefinedFunction( object ) {
         return isDefined( object ) && isFunction( object );
+    }
+
+    function isDefinedArray( object ) {
+        return isDefinedObject( object ) && object instanceof Array;
     }
 
     function isFunction( object ) {
