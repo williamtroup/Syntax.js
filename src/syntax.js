@@ -23,9 +23,6 @@
             newLine: "\n"
         },
 
-        // Variables: Options
-        _options = {},
-
         // Variables: Elements
         _elements_Type = {},
 
@@ -137,7 +134,7 @@
                 var innerHTML = element.innerHTML,
                     syntaxOptions = getObjectFromString( element.getAttribute( "data-syntax-options" ) );
                 
-                syntaxOptions = buildDefaultOptions( syntaxOptions );
+                syntaxOptions = buildAttributeOptions( syntaxOptions );
 
                 if ( element.children.length > 0 ) {
                     innerHTML = element.children[ 0 ].innerHTML;
@@ -169,7 +166,7 @@
                     copyButton.onclick = function() {
                         _parameter_Navigator.clipboard.writeText( innerHTMLCopy );
 
-                        fireCustomTrigger( "onCopy", innerHTMLCopy );
+                        fireCustomTrigger( syntaxOptions, "onCopy", innerHTMLCopy );
                     };
                 }
 
@@ -182,7 +179,7 @@
                 innerHTML = renderElementStringQuotesFromVariables( innerHTML );
 
                 renderElementCompletedHTML( number, syntax, innerHTML );
-                fireCustomTrigger( "onRender", element );
+                fireCustomTrigger( syntaxOptions, "onRender", element );
             }
         }
     }
@@ -314,6 +311,21 @@
 
     /*
      * ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+     * Options
+     * ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+     */
+
+    function buildAttributeOptions( newOptions ) {
+        var options = !isDefinedObject( newOptions ) ? {} : newOptions;
+        options.showCopyButton = getDefaultBoolean( options.showCopyButton, true );
+        options.copyButtonText = getDefaultString( options.copyButtonText, "Copy" );
+
+        return options;
+    }
+
+
+    /*
+     * ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
      * Validation
      * ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
      */
@@ -374,20 +386,16 @@
      * ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
      */
 
-    function isCustomTriggerSet( name ) {
-        return isDefinedFunction( _options[ name ] );
-    }
-
-    function fireCustomTrigger( name ) {
+    function fireCustomTrigger( options, name ) {
         var result = null,
-            newArguments = [].slice.call( arguments, 1 );
+            newArguments = [].slice.call( arguments, 2 );
 
         if ( newArguments.length > 0 ) {
             result = false;
         }
         
-        if ( _options !== null && isCustomTriggerSet( name ) ) {
-            result = _options[ name ].apply( null, newArguments );
+        if ( options !== null && isDefinedFunction( options[ name ] ) ) {
+            result = options[ name ].apply( null, newArguments );
         }
 
         return result;
@@ -493,56 +501,6 @@
 
     /*
      * ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-     * Public Functions:  Set Options
-     * ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-     */
-
-    /**
-     * setOptions().
-     * 
-     * Sets the specific options that should be used.
-     * 
-     * @public
-     * @fires       onOptionsUpdated
-     * 
-     * @param       {Object}    newOptions                                  All the options that should be set (refer to "Options" documentation for properties).
-     * @param       {boolean}   [triggerEvent]                              States if the "onOptionsUpdated" event should be triggered (defaults to true).
-     * 
-     * @returns     {Object}                                                The Syntax.js class instance.
-     */
-    this.setOptions = function( newOptions, triggerEvent ) {
-        _options = !isDefinedObject( newOptions ) ? {} : newOptions;
-        triggerEvent = !isDefinedBoolean( triggerEvent ) ? true : triggerEvent;
-
-        for ( var propertyName in newOptions ) {
-            if ( newOptions.hasOwnProperty( propertyName ) ) {
-                _options[ propertyName ] = newOptions[ propertyName ];
-            }
-        }
-
-        if ( triggerEvent ) {
-            fireCustomTrigger( "onOptionsUpdated", _options );
-        }
-
-        return this;
-    };
-
-    function buildDefaultOptions( newOptions ) {
-        var options = !isDefinedObject( newOptions ) ? {} : newOptions;
-        options.showCopyButton = getDefaultBoolean( options.showCopyButton, true );
-
-        return setTranslationStringOptions( options );
-    }
-
-    function setTranslationStringOptions( newOptions ) {
-        newOptions.copyButtonText = getDefaultString( newOptions.copyButtonText, "Copy" );
-        
-        return newOptions;
-    }
-
-
-    /*
-     * ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
      * Public Functions:  Additional Data
      * ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
      */
@@ -570,8 +528,6 @@
     ( function ( documentObject, navigatorObject, windowObject ) {
         _parameter_Document = documentObject;
         _parameter_Navigator = navigatorObject;
-
-        _options = buildDefaultOptions();
 
         _parameter_Document.addEventListener( "DOMContentLoaded", function() {
             render();

@@ -15,7 +15,7 @@
       if (isDefined(syntaxLanguage) && _languages.hasOwnProperty(syntaxLanguage)) {
         var innerHTML = element.innerHTML;
         var syntaxOptions = getObjectFromString(element.getAttribute("data-syntax-options"));
-        syntaxOptions = buildDefaultOptions(syntaxOptions);
+        syntaxOptions = buildAttributeOptions(syntaxOptions);
         if (element.children.length > 0) {
           innerHTML = element.children[0].innerHTML;
         }
@@ -37,7 +37,7 @@
           syntax.appendChild(copyButton);
           copyButton.onclick = function() {
             _parameter_Navigator.clipboard.writeText(innerHTMLCopy);
-            fireCustomTrigger("onCopy", innerHTMLCopy);
+            fireCustomTrigger(syntaxOptions, "onCopy", innerHTMLCopy);
           };
         }
         innerHTML = renderElementCommentVariables(innerHTML, syntaxLanguage);
@@ -48,7 +48,7 @@
         innerHTML = renderElementCommentsFromVariables(innerHTML);
         innerHTML = renderElementStringQuotesFromVariables(innerHTML);
         renderElementCompletedHTML(number, syntax, innerHTML);
-        fireCustomTrigger("onRender", element);
+        fireCustomTrigger(syntaxOptions, "onRender", element);
       }
     }
   }
@@ -151,6 +151,12 @@
       syntax.appendChild(syntaxCode);
     }
   }
+  function buildAttributeOptions(newOptions) {
+    var options = !isDefinedObject(newOptions) ? {} : newOptions;
+    options.showCopyButton = getDefaultBoolean(options.showCopyButton, true);
+    options.copyButtonText = getDefaultString(options.copyButtonText, "Copy");
+    return options;
+  }
   function isDefined(value) {
     return value !== null && value !== undefined && value !== _string.empty;
   }
@@ -182,17 +188,14 @@
     }
     return result;
   }
-  function isCustomTriggerSet(name) {
-    return isDefinedFunction(_options[name]);
-  }
-  function fireCustomTrigger(name) {
+  function fireCustomTrigger(options, name) {
     var result = null;
-    var newArguments = [].slice.call(arguments, 1);
+    var newArguments = [].slice.call(arguments, 2);
     if (newArguments.length > 0) {
       result = false;
     }
-    if (_options !== null && isCustomTriggerSet(name)) {
-      result = _options[name].apply(null, newArguments);
+    if (options !== null && isDefinedFunction(options[name])) {
+      result = options[name].apply(null, newArguments);
     }
     return result;
   }
@@ -218,19 +221,9 @@
     }
     return result;
   }
-  function buildDefaultOptions(newOptions) {
-    var options = !isDefinedObject(newOptions) ? {} : newOptions;
-    options.showCopyButton = getDefaultBoolean(options.showCopyButton, true);
-    return setTranslationStringOptions(options);
-  }
-  function setTranslationStringOptions(newOptions) {
-    newOptions.copyButtonText = getDefaultString(newOptions.copyButtonText, "Copy");
-    return newOptions;
-  }
   var _parameter_Document = null;
   var _parameter_Navigator = null;
   var _string = {empty:"", space:" ", newLine:"\n"};
-  var _options = {};
   var _elements_Type = {};
   var _strings_Cached = {};
   var _strings_Cached_Count = 0;
@@ -254,27 +247,12 @@
     }
     return added;
   };
-  this.setOptions = function(newOptions, triggerEvent) {
-    _options = !isDefinedObject(newOptions) ? {} : newOptions;
-    triggerEvent = !isDefinedBoolean(triggerEvent) ? true : triggerEvent;
-    var propertyName;
-    for (propertyName in newOptions) {
-      if (newOptions.hasOwnProperty(propertyName)) {
-        _options[propertyName] = newOptions[propertyName];
-      }
-    }
-    if (triggerEvent) {
-      fireCustomTrigger("onOptionsUpdated", _options);
-    }
-    return this;
-  };
   this.getVersion = function() {
     return "0.3.0";
   };
   (function(documentObject, navigatorObject, windowObject) {
     _parameter_Document = documentObject;
     _parameter_Navigator = navigatorObject;
-    _options = buildDefaultOptions();
     _parameter_Document.addEventListener("DOMContentLoaded", function() {
       render();
     });
