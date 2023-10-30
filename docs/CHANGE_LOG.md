@@ -5,7 +5,7 @@
 - Removed the custom trigger "onOptionsUpdated", as it's not needed anymore.
 - Added support to set the custom triggers via the "data-syntax-options" attribute options.
 - Added support to leave out the language property "multiLineComment", as some languages don't require special characters outside the standard comment.
-- Added the Python and Go programming languages support (importable files).
+- Added support for the Python, Go, and Ruby programming languages (importable files).
 - 
 
 ## Version 0.3.0:
