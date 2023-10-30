@@ -1,4 +1,4 @@
-/*! Syntax.js v0.3.0 | (c) Bunoon | MIT License */
+/*! Syntax.js v0.4.0 | (c) Bunoon | MIT License */
 (function() {
   function render() {
     var domElements = _parameter_Document.getElementsByTagName("*");
@@ -15,7 +15,7 @@
       if (isDefined(syntaxLanguage) && _languages.hasOwnProperty(syntaxLanguage)) {
         var innerHTML = element.innerHTML;
         var syntaxOptions = getObjectFromString(element.getAttribute("data-syntax-options"));
-        syntaxOptions = buildDefaultOptions(syntaxOptions);
+        syntaxOptions = buildAttributeOptions(syntaxOptions);
         if (element.children.length > 0) {
           innerHTML = element.children[0].innerHTML;
         }
@@ -37,7 +37,7 @@
           syntax.appendChild(copyButton);
           copyButton.onclick = function() {
             _parameter_Navigator.clipboard.writeText(innerHTMLCopy);
-            fireCustomTrigger("onCopy", innerHTMLCopy);
+            fireCustomTrigger(syntaxOptions, "onCopy", innerHTMLCopy);
           };
         }
         innerHTML = renderElementCommentVariables(innerHTML, syntaxLanguage);
@@ -48,7 +48,7 @@
         innerHTML = renderElementCommentsFromVariables(innerHTML);
         innerHTML = renderElementStringQuotesFromVariables(innerHTML);
         renderElementCompletedHTML(number, syntax, innerHTML);
-        fireCustomTrigger("onRender", element);
+        fireCustomTrigger(syntaxOptions, "onRender", element);
       }
     }
   }
@@ -70,23 +70,25 @@
   }
   function renderElementMultiLineCommentVariables(innerHTML, syntaxLanguage) {
     var lookup = _languages[syntaxLanguage].multiLineComment;
-    var startIndex = 0;
-    var endIndex = 0;
-    for (; startIndex >= 0 && endIndex >= 0;) {
-      startIndex = innerHTML.indexOf(lookup[0], endIndex);
-      if (startIndex > -1) {
-        endIndex = innerHTML.indexOf(lookup[1], startIndex + lookup[0].length);
-        if (endIndex > -1) {
-          var comment = innerHTML.substring(startIndex, endIndex + lookup[1].length);
-          var commentLines = comment.split(_string.newLine);
-          var commentLinesLength = commentLines.length;
-          var commentLineIndex = 0;
-          for (; commentLineIndex < commentLinesLength; commentLineIndex++) {
-            var commentVariable = "$C{" + _comments_Cached_Count.toString() + "}";
-            var commentLine = commentLines[commentLineIndex];
-            _comments_Cached[commentVariable] = '<span class="comment">' + commentLine + "</span>";
-            _comments_Cached_Count++;
-            innerHTML = innerHTML.replace(commentLine, commentVariable);
+    if (isDefinedArray(lookup) && lookup.length === 2) {
+      var startIndex = 0;
+      var endIndex = 0;
+      for (; startIndex >= 0 && endIndex >= 0;) {
+        startIndex = innerHTML.indexOf(lookup[0], endIndex);
+        if (startIndex > -1) {
+          endIndex = innerHTML.indexOf(lookup[1], startIndex + lookup[0].length);
+          if (endIndex > -1) {
+            var comment = innerHTML.substring(startIndex, endIndex + lookup[1].length);
+            var commentLines = comment.split(_string.newLine);
+            var commentLinesLength = commentLines.length;
+            var commentLineIndex = 0;
+            for (; commentLineIndex < commentLinesLength; commentLineIndex++) {
+              var commentVariable = "$C{" + _comments_Cached_Count.toString() + "}";
+              var commentLine = commentLines[commentLineIndex];
+              _comments_Cached[commentVariable] = '<span class="comment">' + commentLine + "</span>";
+              _comments_Cached_Count++;
+              innerHTML = innerHTML.replace(commentLine, commentVariable);
+            }
           }
         }
       }
@@ -151,6 +153,12 @@
       syntax.appendChild(syntaxCode);
     }
   }
+  function buildAttributeOptions(newOptions) {
+    var options = !isDefinedObject(newOptions) ? {} : newOptions;
+    options.showCopyButton = getDefaultBoolean(options.showCopyButton, true);
+    options.copyButtonText = getDefaultString(options.copyButtonText, "Copy");
+    return options;
+  }
   function isDefined(value) {
     return value !== null && value !== undefined && value !== _string.empty;
   }
@@ -165,6 +173,9 @@
   }
   function isDefinedFunction(object) {
     return isDefined(object) && isFunction(object);
+  }
+  function isDefinedArray(object) {
+    return isDefinedObject(object) && object instanceof Array;
   }
   function isFunction(object) {
     return typeof object === "function";
@@ -182,17 +193,14 @@
     }
     return result;
   }
-  function isCustomTriggerSet(name) {
-    return isDefinedFunction(_options[name]);
-  }
-  function fireCustomTrigger(name) {
+  function fireCustomTrigger(options, name) {
     var result = null;
-    var newArguments = [].slice.call(arguments, 1);
+    var newArguments = [].slice.call(arguments, 2);
     if (newArguments.length > 0) {
       result = false;
     }
-    if (_options !== null && isCustomTriggerSet(name)) {
-      result = _options[name].apply(null, newArguments);
+    if (options !== null && isDefinedFunction(options[name])) {
+      result = options[name].apply(null, newArguments);
     }
     return result;
   }
@@ -218,19 +226,9 @@
     }
     return result;
   }
-  function buildDefaultOptions(newOptions) {
-    var options = !isDefinedObject(newOptions) ? {} : newOptions;
-    options.showCopyButton = getDefaultBoolean(options.showCopyButton, true);
-    return setTranslationStringOptions(options);
-  }
-  function setTranslationStringOptions(newOptions) {
-    newOptions.copyButtonText = getDefaultString(newOptions.copyButtonText, "Copy");
-    return newOptions;
-  }
   var _parameter_Document = null;
   var _parameter_Navigator = null;
   var _string = {empty:"", space:" ", newLine:"\n"};
-  var _options = {};
   var _elements_Type = {};
   var _strings_Cached = {};
   var _strings_Cached_Count = 0;
@@ -254,27 +252,12 @@
     }
     return added;
   };
-  this.setOptions = function(newOptions, triggerEvent) {
-    _options = !isDefinedObject(newOptions) ? {} : newOptions;
-    triggerEvent = !isDefinedBoolean(triggerEvent) ? true : triggerEvent;
-    var propertyName;
-    for (propertyName in newOptions) {
-      if (newOptions.hasOwnProperty(propertyName)) {
-        _options[propertyName] = newOptions[propertyName];
-      }
-    }
-    if (triggerEvent) {
-      fireCustomTrigger("onOptionsUpdated", _options);
-    }
-    return this;
-  };
   this.getVersion = function() {
-    return "0.3.0";
+    return "0.4.0";
   };
   (function(documentObject, navigatorObject, windowObject) {
     _parameter_Document = documentObject;
     _parameter_Navigator = navigatorObject;
-    _options = buildDefaultOptions();
     _parameter_Document.addEventListener("DOMContentLoaded", function() {
       render();
     });

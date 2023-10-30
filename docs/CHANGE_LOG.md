@@ -1,5 +1,12 @@
 # Syntax.js - Change Log:
 
+## Version 0.4.0:
+- Removed public function "setOptions()", as it's not needed due to the options attribute.
+- Removed the custom trigger "onOptionsUpdated", as it's not needed anymore.
+- Added support to set the custom triggers via the "data-syntax-options" attribute options.
+- The language property "multiLineComment" is now optional, as some languages don't require special characters for multi-line comments.
+- Added support for the Python, Go, and Ruby programming languages (importable files).
+
 ## Version 0.3.0:
 - Added Code/Pre element rendering support.
 - Added options attribute "data-syntax-options" support, which will override the default options per code element rendered.

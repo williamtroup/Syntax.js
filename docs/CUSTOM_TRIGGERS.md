@@ -19,12 +19,3 @@ Fires when the syntax for an element is rendered.
 Fires when the "Copy" button is pressed
 <br>
 ***Parameter:*** code: '*string*' - The string that was copied to the clipboard.
-
-
-<br>
-<h1>For Options:</h1>
-
-### options.onOptionsUpdated( *options* ):
-Fires when the configurable options are updated.
-<br>
-***Parameter:*** options: '*Options*' - The options.

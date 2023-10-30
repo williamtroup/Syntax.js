@@ -4,7 +4,7 @@
  * A javascript code syntax highlighter.
  * 
  * @file        syntax.js
- * @version     v0.3.0
+ * @version     v0.4.0
  * @author      Bunoon
  * @license     MIT License
  * @copyright   Bunoon 2023
@@ -22,9 +22,6 @@
             space: " ",
             newLine: "\n"
         },
-
-        // Variables: Options
-        _options = {},
 
         // Variables: Elements
         _elements_Type = {},
@@ -137,7 +134,7 @@
                 var innerHTML = element.innerHTML,
                     syntaxOptions = getObjectFromString( element.getAttribute( "data-syntax-options" ) );
                 
-                syntaxOptions = buildDefaultOptions( syntaxOptions );
+                syntaxOptions = buildAttributeOptions( syntaxOptions );
 
                 if ( element.children.length > 0 ) {
                     innerHTML = element.children[ 0 ].innerHTML;
@@ -169,7 +166,7 @@
                     copyButton.onclick = function() {
                         _parameter_Navigator.clipboard.writeText( innerHTMLCopy );
 
-                        fireCustomTrigger( "onCopy", innerHTMLCopy );
+                        fireCustomTrigger( syntaxOptions, "onCopy", innerHTMLCopy );
                     };
                 }
 
@@ -182,7 +179,7 @@
                 innerHTML = renderElementStringQuotesFromVariables( innerHTML );
 
                 renderElementCompletedHTML( number, syntax, innerHTML );
-                fireCustomTrigger( "onRender", element );
+                fireCustomTrigger( syntaxOptions, "onRender", element );
             }
         }
     }
@@ -209,30 +206,33 @@
     }
 
     function renderElementMultiLineCommentVariables( innerHTML, syntaxLanguage ) {
-        var lookup = _languages[ syntaxLanguage ].multiLineComment,
-            startIndex = 0,
-            endIndex = 0;
+        var lookup = _languages[ syntaxLanguage ].multiLineComment;
 
-        while ( startIndex >= 0 && endIndex >= 0 ) {
-            startIndex = innerHTML.indexOf( lookup[ 0 ], endIndex );
+        if ( isDefinedArray( lookup ) && lookup.length === 2 ) {
+            var startIndex = 0,
+                endIndex = 0;
 
-            if ( startIndex > -1 ) {
-                endIndex = innerHTML.indexOf( lookup[ 1 ], startIndex + lookup[ 0 ].length );
-
-                if ( endIndex > -1 ) {
-                    var comment = innerHTML.substring( startIndex, endIndex + lookup[ 1 ].length ),
-                        commentLines = comment.split( _string.newLine ),
-                        commentLinesLength = commentLines.length;
-                    
-                    for ( var commentLineIndex = 0; commentLineIndex < commentLinesLength; commentLineIndex++ ) {
-                        var commentVariable = "$C{" + _comments_Cached_Count.toString() + "}",
-                            commentLine = commentLines[ commentLineIndex ];
+            while ( startIndex >= 0 && endIndex >= 0 ) {
+                startIndex = innerHTML.indexOf( lookup[ 0 ], endIndex );
+    
+                if ( startIndex > -1 ) {
+                    endIndex = innerHTML.indexOf( lookup[ 1 ], startIndex + lookup[ 0 ].length );
+    
+                    if ( endIndex > -1 ) {
+                        var comment = innerHTML.substring( startIndex, endIndex + lookup[ 1 ].length ),
+                            commentLines = comment.split( _string.newLine ),
+                            commentLinesLength = commentLines.length;
                         
-                        _comments_Cached[ commentVariable ] = "<span class=\"comment\">" + commentLine + "</span>";
-                        _comments_Cached_Count++;
-            
-                        innerHTML = innerHTML.replace( commentLine, commentVariable );
-
+                        for ( var commentLineIndex = 0; commentLineIndex < commentLinesLength; commentLineIndex++ ) {
+                            var commentVariable = "$C{" + _comments_Cached_Count.toString() + "}",
+                                commentLine = commentLines[ commentLineIndex ];
+                            
+                            _comments_Cached[ commentVariable ] = "<span class=\"comment\">" + commentLine + "</span>";
+                            _comments_Cached_Count++;
+                
+                            innerHTML = innerHTML.replace( commentLine, commentVariable );
+    
+                        }
                     }
                 }
             }
@@ -314,6 +314,21 @@
 
     /*
      * ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+     * Options
+     * ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+     */
+
+    function buildAttributeOptions( newOptions ) {
+        var options = !isDefinedObject( newOptions ) ? {} : newOptions;
+        options.showCopyButton = getDefaultBoolean( options.showCopyButton, true );
+        options.copyButtonText = getDefaultString( options.copyButtonText, "Copy" );
+
+        return options;
+    }
+
+
+    /*
+     * ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
      * Validation
      * ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
      */
@@ -336,6 +351,10 @@
 
     function isDefinedFunction( object ) {
         return isDefined( object ) && isFunction( object );
+    }
+
+    function isDefinedArray( object ) {
+        return isDefinedObject( object ) && object instanceof Array;
     }
 
     function isFunction( object ) {
@@ -374,20 +393,16 @@
      * ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
      */
 
-    function isCustomTriggerSet( name ) {
-        return isDefinedFunction( _options[ name ] );
-    }
-
-    function fireCustomTrigger( name ) {
+    function fireCustomTrigger( options, name ) {
         var result = null,
-            newArguments = [].slice.call( arguments, 1 );
+            newArguments = [].slice.call( arguments, 2 );
 
         if ( newArguments.length > 0 ) {
             result = false;
         }
         
-        if ( _options !== null && isCustomTriggerSet( name ) ) {
-            result = _options[ name ].apply( null, newArguments );
+        if ( options !== null && isDefinedFunction( options[ name ] ) ) {
+            result = options[ name ].apply( null, newArguments );
         }
 
         return result;
@@ -493,56 +508,6 @@
 
     /*
      * ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-     * Public Functions:  Set Options
-     * ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-     */
-
-    /**
-     * setOptions().
-     * 
-     * Sets the specific options that should be used.
-     * 
-     * @public
-     * @fires       onOptionsUpdated
-     * 
-     * @param       {Object}    newOptions                                  All the options that should be set (refer to "Options" documentation for properties).
-     * @param       {boolean}   [triggerEvent]                              States if the "onOptionsUpdated" event should be triggered (defaults to true).
-     * 
-     * @returns     {Object}                                                The Syntax.js class instance.
-     */
-    this.setOptions = function( newOptions, triggerEvent ) {
-        _options = !isDefinedObject( newOptions ) ? {} : newOptions;
-        triggerEvent = !isDefinedBoolean( triggerEvent ) ? true : triggerEvent;
-
-        for ( var propertyName in newOptions ) {
-            if ( newOptions.hasOwnProperty( propertyName ) ) {
-                _options[ propertyName ] = newOptions[ propertyName ];
-            }
-        }
-
-        if ( triggerEvent ) {
-            fireCustomTrigger( "onOptionsUpdated", _options );
-        }
-
-        return this;
-    };
-
-    function buildDefaultOptions( newOptions ) {
-        var options = !isDefinedObject( newOptions ) ? {} : newOptions;
-        options.showCopyButton = getDefaultBoolean( options.showCopyButton, true );
-
-        return setTranslationStringOptions( options );
-    }
-
-    function setTranslationStringOptions( newOptions ) {
-        newOptions.copyButtonText = getDefaultString( newOptions.copyButtonText, "Copy" );
-        
-        return newOptions;
-    }
-
-
-    /*
-     * ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
      * Public Functions:  Additional Data
      * ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
      */
@@ -557,7 +522,7 @@
      * @returns     {string}                                                The version number.
      */
     this.getVersion = function() {
-        return "0.3.0";
+        return "0.4.0";
     };
 
 
@@ -570,8 +535,6 @@
     ( function ( documentObject, navigatorObject, windowObject ) {
         _parameter_Document = documentObject;
         _parameter_Navigator = navigatorObject;
-
-        _options = buildDefaultOptions();
 
         _parameter_Document.addEventListener( "DOMContentLoaded", function() {
             render();
