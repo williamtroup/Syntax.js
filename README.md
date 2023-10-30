@@ -9,7 +9,7 @@ Syntax.js
 </h1>
 
 > <p align="center">An easy to use JavaScript syntax highlighter!</p>
-> <p align="center">v0.3.0</p>
+> <p align="center">v0.4.0</p>
 <br />
 
 ![Syntax.js](docs/images/main.png)

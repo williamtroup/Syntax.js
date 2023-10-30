@@ -1,4 +1,4 @@
-/*! Syntax.js v0.3.0 | (c) Bunoon | MIT License */
+/*! Syntax.js v0.4.0 | (c) Bunoon | MIT License */
 $syntax.addLanguage( "c-sharp", {
     keywords: [
         "abstract",
