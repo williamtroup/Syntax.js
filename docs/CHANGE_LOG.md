@@ -7,6 +7,9 @@
 - The language property "multiLineComment" is now optional, as some languages don't require special characters for multi-line comments.
 - Added support for the Python, Go, and Ruby programming languages (importable files).
 
+<br>
+
+
 ## Version 0.3.0:
 - Added Code/Pre element rendering support.
 - Added options attribute "data-syntax-options" support, which will override the default options per code element rendered.
@@ -14,6 +17,7 @@
 - Added a new custom trigger "onCopy", which is fired when the "Copy" button for a syntax element is pressed.
 
 <br>
+
 
 ## Version 0.2.0:
 - Added a border around the code container (uses root variables for easy changing).
