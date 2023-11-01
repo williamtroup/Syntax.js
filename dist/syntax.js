@@ -37,7 +37,7 @@
           syntax.appendChild(copyButton);
           copyButton.onclick = function() {
             _parameter_Navigator.clipboard.writeText(innerHTMLCopy);
-            fireCustomTrigger(syntaxOptions, "onCopy", innerHTMLCopy);
+            fireCustomTrigger(syntaxOptions.onCopy, innerHTMLCopy);
           };
         }
         innerHTML = renderElementCommentVariables(innerHTML, syntaxLanguage);
@@ -48,7 +48,7 @@
         innerHTML = renderElementCommentsFromVariables(innerHTML);
         innerHTML = renderElementStringQuotesFromVariables(innerHTML);
         renderElementCompletedHTML(number, syntax, innerHTML);
-        fireCustomTrigger(syntaxOptions, "onRender", element);
+        fireCustomTrigger(syntaxOptions.onRender, element);
       }
     }
   }
@@ -157,6 +157,8 @@
     var options = !isDefinedObject(newOptions) ? {} : newOptions;
     options.showCopyButton = getDefaultBoolean(options.showCopyButton, true);
     options.copyButtonText = getDefaultString(options.copyButtonText, "Copy");
+    options.onCopy = getDefaultFunction(options.onCopy, null);
+    options.onRender = getDefaultFunction(options.onRender, null);
     return options;
   }
   function isDefined(value) {
@@ -193,22 +195,19 @@
     }
     return result;
   }
-  function fireCustomTrigger(options, name) {
-    var result = null;
-    var newArguments = [].slice.call(arguments, 2);
-    if (newArguments.length > 0) {
-      result = false;
+  function fireCustomTrigger(triggerFunction) {
+    if (isDefinedFunction(triggerFunction)) {
+      triggerFunction.apply(null, [].slice.call(arguments, 1));
     }
-    if (options !== null && isDefinedFunction(options[name])) {
-      result = options[name].apply(null, newArguments);
-    }
-    return result;
   }
   function getDefaultString(value, defaultValue) {
     return isDefinedString(value) ? value : defaultValue;
   }
   function getDefaultBoolean(value, defaultValue) {
     return isDefinedBoolean(value) ? value : defaultValue;
+  }
+  function getDefaultFunction(value, defaultValue) {
+    return isDefinedFunction(value) ? value : defaultValue;
   }
   function getObjectFromString(objectString) {
     var result = null;
