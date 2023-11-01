@@ -3,6 +3,7 @@
 ## Version 0.5.0:
 - Added support for the C++ and Java programming languages (importable files).
 - Fixed a fault that caused parameters to be parsed for custom triggers when they are not actually set.
+- Fixed the default language containing the "*" symbol in the keywords.
 - 
 
 <br>
