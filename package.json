@@ -4,7 +4,6 @@
     "description": "A javascript syntax highlighter.",
     "version": "0.5.0",
     "main": "dist/syntax.js",
-    "homepage": "https://williamtroup.github.io/Syntax.js/",
     "author": {
       "name": "Bunoon"
     },
