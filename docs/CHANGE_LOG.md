@@ -1,5 +1,11 @@
 # Syntax.js - Change Log:
 
+## Version 0.5.0:
+- 
+
+<br>
+
+
 ## Version 0.4.0:
 - Removed public function "setOptions()", as it's not needed due to the options attribute.
 - Removed the custom trigger "onOptionsUpdated", as it's not needed anymore.
