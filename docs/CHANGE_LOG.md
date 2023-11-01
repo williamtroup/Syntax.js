@@ -4,6 +4,8 @@
 - Added support for the C++ and Java programming languages (importable files).
 - Fixed a fault that caused parameters to be parsed for custom triggers when they are not actually set.
 - Fixed the default language containing the "*" symbol in the keywords.
+- Renamed the root variable "--color-variable" to "--color-keyword".
+- Added new custom trigger "onKeywordClicked", which is fired when a keyword is clicked.
 - 
 
 <br>

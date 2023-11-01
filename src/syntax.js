@@ -174,11 +174,11 @@
                 innerHTML = renderElementMultiLineCommentVariables( innerHTML, syntaxLanguage );
                 innerHTML = renderElementStringQuotesPatternVariables( innerHTML, innerHTML.match( /".*?"/g ) );
                 innerHTML = renderElementStringQuotesPatternVariables( innerHTML, innerHTML.match( /'.*?'/g ) );
-                innerHTML = renderElementKeywords( innerHTML, syntaxLanguage );
+                innerHTML = renderElementKeywords( innerHTML, syntaxLanguage, syntaxOptions );
                 innerHTML = renderElementCommentsFromVariables( innerHTML );
                 innerHTML = renderElementStringQuotesFromVariables( innerHTML );
 
-                renderElementCompletedHTML( number, syntax, innerHTML );
+                renderElementCompletedHTML( element, number, syntax, innerHTML, syntaxOptions );
                 fireCustomTrigger( syntaxOptions.onRender, element );
             }
         }
@@ -260,7 +260,7 @@
         return innerHTML;
     }
 
-    function renderElementKeywords( innerHTML, syntaxLanguage ) {
+    function renderElementKeywords( innerHTML, syntaxLanguage, syntaxOptions ) {
         var keywords = _languages[ syntaxLanguage ].keywords,
             keywordsLength = keywords.length;
 
@@ -268,7 +268,11 @@
             var keyword = keywords[ keywordIndex ],
                 regEx = new RegExp( "\\b" + keyword + "\\b", "g" );
 
-            innerHTML = innerHTML.replace( regEx, "<span class=\"keyword\">" + keyword + "</span>" );
+            if ( isDefinedFunction( syntaxOptions.onKeywordClicked ) ) {
+                innerHTML = innerHTML.replace( regEx, "<span class=\"keyword-clickable\">" + keyword + "</span>" );
+            } else {
+                innerHTML = innerHTML.replace( regEx, "<span class=\"keyword\">" + keyword + "</span>" );
+            }
         }
 
         return innerHTML;
@@ -294,7 +298,7 @@
         return innerHTML;
     }
 
-    function renderElementCompletedHTML( number, syntax, innerHTML ) {
+    function renderElementCompletedHTML( element, number, syntax, innerHTML, syntaxOptions ) {
         var lines = innerHTML.split( _string.newLine ),
             linesLength = lines.length;
 
@@ -309,6 +313,23 @@
             syntaxCode.innerHTML = line.trim() === _string.empty ? "<br>" : line;
             syntax.appendChild( syntaxCode );
         }
+
+        if ( isDefinedFunction( syntaxOptions.onKeywordClicked ) ) {
+            var keywords = element.getElementsByClassName( "keyword-clickable" ),
+                keywordsLength = keywords.length;
+
+            for ( var keywordIndex = 0; keywordIndex < keywordsLength; keywordIndex++ ) {
+                renderElementClickableKeyword( keywords[ keywordIndex ], syntaxOptions.onKeywordClicked );
+            }
+        }
+    }
+
+    function renderElementClickableKeyword( element, customTrigger ) {
+        var text = element.innerText;
+
+        element.onclick = function() {
+            customTrigger( text );
+        };
     }
 
 
@@ -324,6 +345,7 @@
         options.copyButtonText = getDefaultString( options.copyButtonText, "Copy" );
         options.onCopy = getDefaultFunction( options.onCopy, null );
         options.onRender = getDefaultFunction( options.onRender, null );
+        options.onKeywordClicked = getDefaultFunction( options.onKeywordClicked, null );
 
         return options;
     }

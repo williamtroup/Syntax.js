@@ -10,7 +10,8 @@
     -------------------------------------------------------------------------
 */
 :root {
-  --color-variable: #A71500;
+  --color-keyword: #A71500;
+  --color-keyword-hover: #FF0000;
   --color-comment: #78b13f;
   --color-string: #484dd2;
   --color-black: #3b3a3a;
@@ -65,9 +66,17 @@ div.syntax-highlight div.code div.syntax p {
   text-wrap: nowrap;
 }
 code.syntax-highlight div.code div.syntax p span.keyword,
-div.syntax-highlight div.code div.syntax p span.keyword {
+code.syntax-highlight div.code div.syntax p span.keyword-clickable,
+div.syntax-highlight div.code div.syntax p span.keyword,
+div.syntax-highlight div.code div.syntax p span.keyword-clickable {
   font-weight: 700;
-  color: var(--color-variable);
+  color: var(--color-keyword);
+}
+code.syntax-highlight div.code div.syntax p span.keyword-clickable:hover,
+div.syntax-highlight div.code div.syntax p span.keyword-clickable:hover {
+  color: var(--color-keyword-hover);
+  transition: all 0.3s;
+  cursor: pointer;
 }
 code.syntax-highlight div.code div.syntax p span.comment,
 div.syntax-highlight div.code div.syntax p span.comment {

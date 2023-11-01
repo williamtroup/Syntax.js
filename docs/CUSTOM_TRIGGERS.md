@@ -16,6 +16,11 @@ Fires when the syntax for an element is rendered.
 <h1>For Code:</h1>
 
 ### options.onCopy( *code* ):
-Fires when the "Copy" button is pressed
+Fires when the "Copy" button is pressed.
 <br>
 ***Parameter:*** code: '*string*' - The string that was copied to the clipboard.
+
+### options.onKeywordClicked( *keyword* ):
+Fires when a keyword is clicked in the code syntax.
+<br>
+***Parameter:*** code: '*keyword*' - The keyword that was clicked.

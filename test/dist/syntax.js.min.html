@@ -30,7 +30,7 @@
             </code>
             <br />
     
-            <code data-syntax-language="c-sharp" data-syntax-options="{ 'copyButtonText': 'Copy Code' }">
+            <code data-syntax-language="c-sharp" data-syntax-options="{ 'copyButtonText': 'Copy Code', 'onCopy': onCopyCustomTrigger, 'onKeywordClicked': onKeywordClickedCustomTrigger }">
                 <pre>
                     bool something = true;
     
@@ -84,6 +84,14 @@
                 comment: "//",
                 multiLineComment: [ "/*", "*/" ]
             } );
+        }
+
+        function onCopyCustomTrigger( copiedCode ) {
+            console.log( "Copied code: " + copiedCode );
+        }
+
+        function onKeywordClickedCustomTrigger( keyword ) {
+            console.log( "Keyword clicked: " + keyword );
         }
     </script>
 </html>
