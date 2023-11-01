@@ -1,5 +1,5 @@
 /*
- * Syntax.js Library v0.4.0
+ * Syntax.js Library v0.5.0
  *
  * Copyright 2023 Bunoon
  * Released under the MIT License
@@ -14,7 +14,8 @@
 
 :root {
     // Colors
-    --color-variable: #A71500;
+    --color-keyword: #A71500;
+    --color-keyword-hover: #FF0000;
     --color-comment: #78b13f;
     --color-string: #484dd2;
     --color-black: #3b3a3a;
@@ -71,9 +72,16 @@ div.syntax-highlight {
                 margin: 0;
                 text-wrap: nowrap;
 
-                span.keyword {
+                span.keyword,
+                span.keyword-clickable {
                     font-weight: 700;
-                    color: var(--color-variable);
+                    color: var(--color-keyword);
+                }
+
+                span.keyword-clickable:hover {
+                    color: var(--color-keyword-hover);
+                    transition: all .3s;
+                    cursor: pointer;
                 }
 
                 span.comment {

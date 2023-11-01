@@ -1,4 +1,4 @@
-/*! Syntax.js v0.4.0 | (c) Bunoon | MIT License */
+/*! Syntax.js v0.5.0 | (c) Bunoon | MIT License */
 (function() {
   function render() {
     var domElements = _parameter_Document.getElementsByTagName("*");
@@ -37,18 +37,18 @@
           syntax.appendChild(copyButton);
           copyButton.onclick = function() {
             _parameter_Navigator.clipboard.writeText(innerHTMLCopy);
-            fireCustomTrigger(syntaxOptions, "onCopy", innerHTMLCopy);
+            fireCustomTrigger(syntaxOptions.onCopy, innerHTMLCopy);
           };
         }
         innerHTML = renderElementCommentVariables(innerHTML, syntaxLanguage);
         innerHTML = renderElementMultiLineCommentVariables(innerHTML, syntaxLanguage);
         innerHTML = renderElementStringQuotesPatternVariables(innerHTML, innerHTML.match(/".*?"/g));
         innerHTML = renderElementStringQuotesPatternVariables(innerHTML, innerHTML.match(/'.*?'/g));
-        innerHTML = renderElementKeywords(innerHTML, syntaxLanguage);
+        innerHTML = renderElementKeywords(innerHTML, syntaxLanguage, syntaxOptions);
         innerHTML = renderElementCommentsFromVariables(innerHTML);
         innerHTML = renderElementStringQuotesFromVariables(innerHTML);
-        renderElementCompletedHTML(number, syntax, innerHTML);
-        fireCustomTrigger(syntaxOptions, "onRender", element);
+        renderElementCompletedHTML(element, number, syntax, innerHTML, syntaxOptions);
+        fireCustomTrigger(syntaxOptions.onRender, element);
       }
     }
   }
@@ -110,14 +110,18 @@
     }
     return innerHTML;
   }
-  function renderElementKeywords(innerHTML, syntaxLanguage) {
+  function renderElementKeywords(innerHTML, syntaxLanguage, syntaxOptions) {
     var keywords = _languages[syntaxLanguage].keywords;
     var keywordsLength = keywords.length;
     var keywordIndex = 0;
     for (; keywordIndex < keywordsLength; keywordIndex++) {
       var keyword = keywords[keywordIndex];
       var regEx = new RegExp("\\b" + keyword + "\\b", "g");
-      innerHTML = innerHTML.replace(regEx, '<span class="keyword">' + keyword + "</span>");
+      if (isDefinedFunction(syntaxOptions.onKeywordClicked)) {
+        innerHTML = innerHTML.replace(regEx, '<span class="keyword-clickable">' + keyword + "</span>");
+      } else {
+        innerHTML = innerHTML.replace(regEx, '<span class="keyword">' + keyword + "</span>");
+      }
     }
     return innerHTML;
   }
@@ -139,7 +143,7 @@
     }
     return innerHTML;
   }
-  function renderElementCompletedHTML(number, syntax, innerHTML) {
+  function renderElementCompletedHTML(element, number, syntax, innerHTML, syntaxOptions) {
     var lines = innerHTML.split(_string.newLine);
     var linesLength = lines.length;
     var lineIndex = 0;
@@ -152,11 +156,28 @@
       syntaxCode.innerHTML = line.trim() === _string.empty ? "<br>" : line;
       syntax.appendChild(syntaxCode);
     }
+    if (isDefinedFunction(syntaxOptions.onKeywordClicked)) {
+      var keywords = element.getElementsByClassName("keyword-clickable");
+      var keywordsLength = keywords.length;
+      var keywordIndex = 0;
+      for (; keywordIndex < keywordsLength; keywordIndex++) {
+        renderElementClickableKeyword(keywords[keywordIndex], syntaxOptions.onKeywordClicked);
+      }
+    }
+  }
+  function renderElementClickableKeyword(element, customTrigger) {
+    var text = element.innerText;
+    element.onclick = function() {
+      customTrigger(text);
+    };
   }
   function buildAttributeOptions(newOptions) {
     var options = !isDefinedObject(newOptions) ? {} : newOptions;
     options.showCopyButton = getDefaultBoolean(options.showCopyButton, true);
     options.copyButtonText = getDefaultString(options.copyButtonText, "Copy");
+    options.onCopy = getDefaultFunction(options.onCopy, null);
+    options.onRender = getDefaultFunction(options.onRender, null);
+    options.onKeywordClicked = getDefaultFunction(options.onKeywordClicked, null);
     return options;
   }
   function isDefined(value) {
@@ -193,22 +214,19 @@
     }
     return result;
   }
-  function fireCustomTrigger(options, name) {
-    var result = null;
-    var newArguments = [].slice.call(arguments, 2);
-    if (newArguments.length > 0) {
-      result = false;
+  function fireCustomTrigger(triggerFunction) {
+    if (isDefinedFunction(triggerFunction)) {
+      triggerFunction.apply(null, [].slice.call(arguments, 1));
     }
-    if (options !== null && isDefinedFunction(options[name])) {
-      result = options[name].apply(null, newArguments);
-    }
-    return result;
   }
   function getDefaultString(value, defaultValue) {
     return isDefinedString(value) ? value : defaultValue;
   }
   function getDefaultBoolean(value, defaultValue) {
     return isDefinedBoolean(value) ? value : defaultValue;
+  }
+  function getDefaultFunction(value, defaultValue) {
+    return isDefinedFunction(value) ? value : defaultValue;
   }
   function getObjectFromString(objectString) {
     var result = null;
@@ -234,8 +252,8 @@
   var _strings_Cached_Count = 0;
   var _comments_Cached = {};
   var _comments_Cached_Count = 0;
-  var _languages = {javascript:{keywords:["abstract", "arguments", "await*", "boolean", "break", "byte", "case", "catch", "char", "class*", "const", "continue", "debugger", "default", "delete", "do", "double", "else", "enum*", "eval", "export*", "extends*", "false", "final", "finally", "float", "for", "function", "goto", "if", "implements", "import*", "in", "instanceof", "int", "interface", "let*", "long", "native", "new", "null", "package", "private", "protected", "public", "return", "short", "static", 
-  "super*", "switch", "synchronized", "this", "throw", "throws", "transient", "true", "try", "typeof", "var", "void", "volatile", "while", "with", "yield"], comment:"//", multiLineComment:["/*", "*/"]}};
+  var _languages = {javascript:{keywords:["abstract", "arguments", "await", "boolean", "break", "byte", "case", "catch", "char", "class", "const", "continue", "debugger", "default", "delete", "do", "double", "else", "enum", "eval", "export", "extends", "false", "final", "finally", "float", "for", "function", "goto", "if", "implements", "import", "in", "instanceof", "int", "interface", "let", "long", "native", "new", "null", "package", "private", "protected", "public", "return", "short", "static", 
+  "super", "switch", "synchronized", "this", "throw", "throws", "transient", "true", "try", "typeof", "var", "void", "volatile", "while", "with", "yield"], comment:"//", multiLineComment:["/*", "*/"]}};
   this.buildNewSyntaxElements = function() {
     render();
     return this;
@@ -253,7 +271,7 @@
     return added;
   };
   this.getVersion = function() {
-    return "0.4.0";
+    return "0.5.0";
   };
   (function(documentObject, navigatorObject, windowObject) {
     _parameter_Document = documentObject;

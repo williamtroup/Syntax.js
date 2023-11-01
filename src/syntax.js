@@ -4,7 +4,7 @@
  * A javascript code syntax highlighter.
  * 
  * @file        syntax.js
- * @version     v0.4.0
+ * @version     v0.5.0
  * @author      Bunoon
  * @license     MIT License
  * @copyright   Bunoon 2023
@@ -38,14 +38,14 @@
                 keywords: [
                     "abstract",
                     "arguments",
-                    "await*",
+                    "await",
                     "boolean",
                     "break",
                     "byte",
                     "case",
                     "catch",
                     "char",
-                    "class*",
+                    "class",
                     "const",
                     "continue",
                     "debugger",
@@ -54,10 +54,10 @@
                     "do",
                     "double",
                     "else",
-                    "enum*",
+                    "enum",
                     "eval",
-                    "export*",
-                    "extends*",
+                    "export",
+                    "extends",
                     "false",
                     "final",
                     "finally",
@@ -67,12 +67,12 @@
                     "goto",
                     "if",
                     "implements",
-                    "import*",
+                    "import",
                     "in",
                     "instanceof",
                     "int",
                     "interface",
-                    "let*",
+                    "let",
                     "long",
                     "native",
                     "new",
@@ -84,7 +84,7 @@
                     "return",
                     "short",
                     "static",
-                    "super*",
+                    "super",
                     "switch",
                     "synchronized",
                     "this",
@@ -166,7 +166,7 @@
                     copyButton.onclick = function() {
                         _parameter_Navigator.clipboard.writeText( innerHTMLCopy );
 
-                        fireCustomTrigger( syntaxOptions, "onCopy", innerHTMLCopy );
+                        fireCustomTrigger( syntaxOptions.onCopy, innerHTMLCopy );
                     };
                 }
 
@@ -174,12 +174,12 @@
                 innerHTML = renderElementMultiLineCommentVariables( innerHTML, syntaxLanguage );
                 innerHTML = renderElementStringQuotesPatternVariables( innerHTML, innerHTML.match( /".*?"/g ) );
                 innerHTML = renderElementStringQuotesPatternVariables( innerHTML, innerHTML.match( /'.*?'/g ) );
-                innerHTML = renderElementKeywords( innerHTML, syntaxLanguage );
+                innerHTML = renderElementKeywords( innerHTML, syntaxLanguage, syntaxOptions );
                 innerHTML = renderElementCommentsFromVariables( innerHTML );
                 innerHTML = renderElementStringQuotesFromVariables( innerHTML );
 
-                renderElementCompletedHTML( number, syntax, innerHTML );
-                fireCustomTrigger( syntaxOptions, "onRender", element );
+                renderElementCompletedHTML( element, number, syntax, innerHTML, syntaxOptions );
+                fireCustomTrigger( syntaxOptions.onRender, element );
             }
         }
     }
@@ -260,7 +260,7 @@
         return innerHTML;
     }
 
-    function renderElementKeywords( innerHTML, syntaxLanguage ) {
+    function renderElementKeywords( innerHTML, syntaxLanguage, syntaxOptions ) {
         var keywords = _languages[ syntaxLanguage ].keywords,
             keywordsLength = keywords.length;
 
@@ -268,7 +268,11 @@
             var keyword = keywords[ keywordIndex ],
                 regEx = new RegExp( "\\b" + keyword + "\\b", "g" );
 
-            innerHTML = innerHTML.replace( regEx, "<span class=\"keyword\">" + keyword + "</span>" );
+            if ( isDefinedFunction( syntaxOptions.onKeywordClicked ) ) {
+                innerHTML = innerHTML.replace( regEx, "<span class=\"keyword-clickable\">" + keyword + "</span>" );
+            } else {
+                innerHTML = innerHTML.replace( regEx, "<span class=\"keyword\">" + keyword + "</span>" );
+            }
         }
 
         return innerHTML;
@@ -294,7 +298,7 @@
         return innerHTML;
     }
 
-    function renderElementCompletedHTML( number, syntax, innerHTML ) {
+    function renderElementCompletedHTML( element, number, syntax, innerHTML, syntaxOptions ) {
         var lines = innerHTML.split( _string.newLine ),
             linesLength = lines.length;
 
@@ -309,6 +313,23 @@
             syntaxCode.innerHTML = line.trim() === _string.empty ? "<br>" : line;
             syntax.appendChild( syntaxCode );
         }
+
+        if ( isDefinedFunction( syntaxOptions.onKeywordClicked ) ) {
+            var keywords = element.getElementsByClassName( "keyword-clickable" ),
+                keywordsLength = keywords.length;
+
+            for ( var keywordIndex = 0; keywordIndex < keywordsLength; keywordIndex++ ) {
+                renderElementClickableKeyword( keywords[ keywordIndex ], syntaxOptions.onKeywordClicked );
+            }
+        }
+    }
+
+    function renderElementClickableKeyword( element, customTrigger ) {
+        var text = element.innerText;
+
+        element.onclick = function() {
+            customTrigger( text );
+        };
     }
 
 
@@ -322,6 +343,9 @@
         var options = !isDefinedObject( newOptions ) ? {} : newOptions;
         options.showCopyButton = getDefaultBoolean( options.showCopyButton, true );
         options.copyButtonText = getDefaultString( options.copyButtonText, "Copy" );
+        options.onCopy = getDefaultFunction( options.onCopy, null );
+        options.onRender = getDefaultFunction( options.onRender, null );
+        options.onKeywordClicked = getDefaultFunction( options.onKeywordClicked, null );
 
         return options;
     }
@@ -393,19 +417,10 @@
      * ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
      */
 
-    function fireCustomTrigger( options, name ) {
-        var result = null,
-            newArguments = [].slice.call( arguments, 2 );
-
-        if ( newArguments.length > 0 ) {
-            result = false;
+    function fireCustomTrigger( triggerFunction ) {
+        if ( isDefinedFunction( triggerFunction ) ) {
+            triggerFunction.apply( null, [].slice.call( arguments, 1 ) );
         }
-        
-        if ( options !== null && isDefinedFunction( options[ name ] ) ) {
-            result = options[ name ].apply( null, newArguments );
-        }
-
-        return result;
     }
 
 
@@ -421,6 +436,10 @@
 
     function getDefaultBoolean( value, defaultValue ) {
         return isDefinedBoolean( value ) ? value : defaultValue;
+    }
+
+    function getDefaultFunction( value, defaultValue ) {
+        return isDefinedFunction( value ) ? value : defaultValue;
     }
 
     function getObjectFromString( objectString ) {
@@ -522,7 +541,7 @@
      * @returns     {string}                                                The version number.
      */
     this.getVersion = function() {
-        return "0.4.0";
+        return "0.5.0";
     };
 
 
