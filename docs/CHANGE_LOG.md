@@ -1,7 +1,7 @@
 # Syntax.js - Change Log:
 
 ## Version 0.5.0:
-- Added support for the C++ programming language (importable files).
+- Added support for the C++ and Java programming languages (importable files).
 - 
 
 <br>
