@@ -25,6 +25,7 @@
 
         // Variables: Elements
         _elements_Type = {},
+        _elements = [],
 
         // Variables: Temporary String Variables
         _strings_Cached = {},
@@ -184,6 +185,8 @@
 
                 renderElementCompletedHTML( element, number, syntax, innerHTML, syntaxOptions );
                 fireCustomTrigger( syntaxOptions.onRender, element );
+
+                _elements.push( element );
             }
         }
     }
@@ -488,6 +491,20 @@
         render();
 
         return this;
+    };
+
+    /**
+     * getRenderedElements().
+     * 
+     * Returns all the elements that have been detected and rendered.
+     * 
+     * @public
+     * 
+     * @returns     {Object[]}                                              An array containing the rendered DOM elements.
+     */
+
+    this.getRenderedElements = function() {
+        return _elements;
     };
 
 

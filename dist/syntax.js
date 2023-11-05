@@ -51,6 +51,7 @@
         innerHTML = renderElementStringQuotesFromVariables(innerHTML);
         renderElementCompletedHTML(element, number, syntax, innerHTML, syntaxOptions);
         fireCustomTrigger(syntaxOptions.onRender, element);
+        _elements.push(element);
       }
     }
   }
@@ -250,6 +251,7 @@
   var _parameter_Navigator = null;
   var _string = {empty:"", space:" ", newLine:"\n"};
   var _elements_Type = {};
+  var _elements = [];
   var _strings_Cached = {};
   var _strings_Cached_Count = 0;
   var _comments_Cached = {};
@@ -259,6 +261,9 @@
   this.buildNewSyntaxElements = function() {
     render();
     return this;
+  };
+  this.getRenderedElements = function() {
+    return _elements;
   };
   this.addLanguage = function(name, languageDetails, triggerRender) {
     var added = false;
