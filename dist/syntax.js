@@ -43,7 +43,9 @@
         innerHTML = renderElementCommentVariables(innerHTML, syntaxLanguage);
         innerHTML = renderElementMultiLineCommentVariables(innerHTML, syntaxLanguage);
         innerHTML = renderElementStringQuotesPatternVariables(innerHTML, innerHTML.match(/".*?"/g));
-        innerHTML = renderElementStringQuotesPatternVariables(innerHTML, innerHTML.match(/'.*?'/g));
+        if (_languages[syntaxLanguage].comment !== "'") {
+          innerHTML = renderElementStringQuotesPatternVariables(innerHTML, innerHTML.match(/'.*?'/g));
+        }
         innerHTML = renderElementKeywords(innerHTML, syntaxLanguage, syntaxOptions);
         innerHTML = renderElementCommentsFromVariables(innerHTML);
         innerHTML = renderElementStringQuotesFromVariables(innerHTML);
