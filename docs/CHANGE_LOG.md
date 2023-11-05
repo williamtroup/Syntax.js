@@ -1,6 +1,7 @@
 # Syntax.js - Change Log:
 
 ## Version 0.6.0:
+- Added support for the Swift programming language (importable file).
 - 
 
 <br>
