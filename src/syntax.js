@@ -4,7 +4,7 @@
  * A javascript code syntax highlighter.
  * 
  * @file        syntax.js
- * @version     v0.5.0
+ * @version     v0.6.0
  * @author      Bunoon
  * @license     MIT License
  * @copyright   Bunoon 2023
@@ -541,7 +541,7 @@
      * @returns     {string}                                                The version number.
      */
     this.getVersion = function() {
-        return "0.5.0";
+        return "0.6.0";
     };
 
 
