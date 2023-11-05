@@ -33,9 +33,14 @@
             <code data-syntax-language="c-sharp" data-syntax-options="{ 'copyButtonText': 'Copy Code', 'onCopy': onCopyCustomTrigger, 'onKeywordClicked': onKeywordClickedCustomTrigger }">
                 <pre>
                     bool something = true;
+                    int something_else = 1;
     
                     if ( something ) {
                         Console.WriteLine( "Output is written." ); // Comment
+
+                        if ( something_else == 1 ) {
+                            Console.WriteLine( "Output is written again." ); // Another comment
+                        }
                     }
                 </pre>
             </code>

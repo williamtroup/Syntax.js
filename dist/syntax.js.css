@@ -37,6 +37,10 @@ div.syntax-highlight div.code {
   position: relative;
   border: var(--border-size) solid var(--color-black);
 }
+code.syntax-highlight div.code pre,
+div.syntax-highlight div.code pre {
+  margin: 0 !important;
+}
 code.syntax-highlight div.code div.number,
 div.syntax-highlight div.code div.number {
   margin-right: 15px;

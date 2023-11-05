@@ -133,15 +133,17 @@
 
             if ( isDefined( syntaxLanguage ) && _languages.hasOwnProperty( syntaxLanguage ) ) {
                 var innerHTML = element.innerHTML,
-                    syntaxOptions = getObjectFromString( element.getAttribute( "data-syntax-options" ) );
+                    syntaxOptions = getObjectFromString( element.getAttribute( "data-syntax-options" ) ),
+                    isPreFormatted = false;
                 
                 syntaxOptions = buildAttributeOptions( syntaxOptions );
 
-                if ( element.children.length > 0 ) {
+                if ( element.children.length > 0 && element.children[ 0 ].nodeName.toLowerCase() === "pre" ) {
                     innerHTML = element.children[ 0 ].innerHTML;
+                    isPreFormatted = true;
                 }
 
-                innerHTML = innerHTML.trim();
+                innerHTML = !isPreFormatted ? innerHTML.trim() : innerHTML;
                 
                 var innerHTMLCopy = innerHTML.trim();
 
@@ -183,7 +185,7 @@
                 innerHTML = renderElementCommentsFromVariables( innerHTML );
                 innerHTML = renderElementStringQuotesFromVariables( innerHTML );
 
-                renderElementCompletedHTML( element, number, syntax, innerHTML, syntaxOptions );
+                renderElementCompletedHTML( element, number, syntax, innerHTML, syntaxOptions, isPreFormatted );
                 fireCustomTrigger( syntaxOptions.onRender, element );
 
                 _elements.push( element );
@@ -305,20 +307,37 @@
         return innerHTML;
     }
 
-    function renderElementCompletedHTML( element, number, syntax, innerHTML, syntaxOptions ) {
+    function renderElementCompletedHTML( element, number, syntax, innerHTML, syntaxOptions, isPreFormatted ) {
         var lines = innerHTML.split( _string.newLine ),
-            linesLength = lines.length;
+            linesLength = lines.length,
+            codeContainer = syntax,
+            replaceWhitespace = null;
+
+        if ( isPreFormatted ) {
+            codeContainer = createElement( "pre" );
+            syntax.appendChild( codeContainer );
+
+            var whitespaceCount = lines[ 0 ].match( /^\s*/ )[ 0 ].length;
+
+            replaceWhitespace = lines[ 0 ].substring( 0, whitespaceCount );
+        }
 
         for ( var lineIndex = 0; lineIndex < linesLength; lineIndex++ ) {
             var line = lines[ lineIndex ];
 
-            var numberCode = createElement( "p" );
-            numberCode.innerHTML = ( lineIndex + 1 ).toString();
-            number.appendChild( numberCode );
-
-            var syntaxCode = createElement( "p" );
-            syntaxCode.innerHTML = line.trim() === _string.empty ? "<br>" : line;
-            syntax.appendChild( syntaxCode );
+            if ( ( lineIndex !== 0 && lineIndex !== linesLength - 1 ) || line.trim() !== _string.empty ) {
+                var numberCode = createElement( "p" );
+                numberCode.innerHTML = ( lineIndex + 1 ).toString();
+                number.appendChild( numberCode );
+    
+                if ( replaceWhitespace !== null ) {
+                    line = line.replace( replaceWhitespace, _string.empty );
+                }
+    
+                var syntaxCode = createElement( "p" );
+                syntaxCode.innerHTML = line.trim() === _string.empty ? "<br>" : line;
+                codeContainer.appendChild( syntaxCode );
+            }
         }
 
         if ( isDefinedFunction( syntaxOptions.onKeywordClicked ) ) {

@@ -46,6 +46,10 @@ div.syntax-highlight {
         position: relative;
         border: var(--border-size) solid var(--color-black);
 
+        pre {
+            margin: 0 !important;
+        }
+
         div.number {
             margin-right: 15px;
             background-color: #dddddd;
