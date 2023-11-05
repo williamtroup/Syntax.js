@@ -26,6 +26,11 @@
     Syntax Highlight - Code
     -------------------------------------------------------------------------
 */
+code.syntax-highlight,
+div.syntax-highlight {
+  font-family: "Montserrat", sans-serif;
+  font-size: 0.8rem;
+}
 code.syntax-highlight div.code,
 div.syntax-highlight div.code {
   display: flex;

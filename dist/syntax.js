@@ -151,11 +151,14 @@
   function renderElementCompletedHTML(element, number, syntax, innerHTML, syntaxOptions, isPreFormatted) {
     var lines = innerHTML.split(_string.newLine);
     var linesLength = lines.length;
+    var numberContainer = number;
     var codeContainer = syntax;
     var replaceWhitespace = null;
     if (isPreFormatted) {
       codeContainer = createElement("pre");
       syntax.appendChild(codeContainer);
+      numberContainer = createElement("pre");
+      number.appendChild(numberContainer);
       var whitespaceCount = lines[0].match(/^\s*/)[0].length;
       replaceWhitespace = lines[0].substring(0, whitespaceCount);
     }
@@ -166,7 +169,7 @@
         if (line.trim() !== _string.empty || !syntaxOptions.removeBlankLines) {
           var numberCode = createElement("p");
           numberCode.innerHTML = (lineIndex + 1).toString();
-          number.appendChild(numberCode);
+          numberContainer.appendChild(numberCode);
           if (replaceWhitespace !== null) {
             line = line.replace(replaceWhitespace, _string.empty);
           }
