@@ -9,6 +9,7 @@ Below are all the options that can be passed to the "setOptions()" public functi
 | Type: | Name: | Description: |
 | --- | --- | --- |
 | *boolean* | showCopyButton | States if the copy buttons should be added (defaults to true). |
+| *boolean* | removeBlankLines | States if all blank lines should be removed (defaults to false). |
 <br/>
 
 

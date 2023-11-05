@@ -5,6 +5,7 @@
 - Added new public function "getRenderedElements()", which returns all the elements that have been rendered.
 - Added "pre" indentation support!
 - Minor code correction for handling empty strings.
+- Added a new setting called "removeBlankLines", which states if all the blank lines should be removed (defaults to false).
 - 
 
 <br>

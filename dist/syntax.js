@@ -163,15 +163,17 @@
     for (; lineIndex < linesLength; lineIndex++) {
       var line = lines[lineIndex];
       if (lineIndex !== 0 && lineIndex !== linesLength - 1 || line.trim() !== _string.empty) {
-        var numberCode = createElement("p");
-        numberCode.innerHTML = (lineIndex + 1).toString();
-        number.appendChild(numberCode);
-        if (replaceWhitespace !== null) {
-          line = line.replace(replaceWhitespace, _string.empty);
+        if (line.trim() !== _string.empty || !syntaxOptions.removeBlankLines) {
+          var numberCode = createElement("p");
+          numberCode.innerHTML = (lineIndex + 1).toString();
+          number.appendChild(numberCode);
+          if (replaceWhitespace !== null) {
+            line = line.replace(replaceWhitespace, _string.empty);
+          }
+          var syntaxCode = createElement("p");
+          syntaxCode.innerHTML = line.trim() === _string.empty ? "<br>" : line;
+          codeContainer.appendChild(syntaxCode);
         }
-        var syntaxCode = createElement("p");
-        syntaxCode.innerHTML = line.trim() === _string.empty ? "<br>" : line;
-        codeContainer.appendChild(syntaxCode);
       }
     }
     if (isDefinedFunction(syntaxOptions.onKeywordClicked)) {
@@ -193,6 +195,7 @@
     var options = !isDefinedObject(newOptions) ? {} : newOptions;
     options.showCopyButton = getDefaultBoolean(options.showCopyButton, true);
     options.copyButtonText = getDefaultString(options.copyButtonText, "Copy");
+    options.removeBlankLines = getDefaultBoolean(options.removeBlankLines, false);
     options.onCopy = getDefaultFunction(options.onCopy, null);
     options.onRender = getDefaultFunction(options.onRender, null);
     options.onKeywordClicked = getDefaultFunction(options.onKeywordClicked, null);
