@@ -51,6 +51,7 @@ div.syntax-highlight div.code div.number {
   border-radius: var(--border-radius);
   text-align: right;
   font-weight: 800 !important;
+  border: var(--border-size) solid #BBBBBB;
 }
 code.syntax-highlight div.code div.number p,
 div.syntax-highlight div.code div.number p {
@@ -63,6 +64,7 @@ div.syntax-highlight div.code div.syntax {
   padding: 10px;
   border-radius: var(--border-radius);
   background-color: #EEEEEE;
+  border: var(--border-size) solid #CCCCCC;
 }
 code.syntax-highlight div.code div.syntax p,
 div.syntax-highlight div.code div.syntax p {

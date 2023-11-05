@@ -59,6 +59,7 @@ div.syntax-highlight {
             border-radius: var(--border-radius);
             text-align: right;
             font-weight: 800 !important;
+            border: var(--border-size) solid #BBBBBB;
 
             p {
                 margin: 0;
@@ -71,6 +72,7 @@ div.syntax-highlight {
             padding: 10px;
             border-radius: var(--border-radius);
             background-color: #EEEEEE;
+            border: var(--border-size) solid #CCCCCC;
 
             p {
                 margin: 0;
