@@ -18,7 +18,7 @@ Syntax.js
 
 <h1>What features does Syntax.js have?</h1>
 
-- Zero-dependencies!
+- Zero-dependencies and extremely lightweight!
 - Full API available via public functions.
 - Fully styled in CSS/SASS (including the buttons) and compatible with the Bootstrap library.
 - Full CSS theme support (using :root variables).
