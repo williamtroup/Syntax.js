@@ -142,8 +142,6 @@
                     innerHTML = element.children[ 0 ].innerHTML;
                     isPreFormatted = true;
                 }
-
-                innerHTML = !isPreFormatted ? innerHTML.trim() : innerHTML;
                 
                 var innerHTMLCopy = innerHTML.trim();
 
@@ -312,7 +310,8 @@
             linesLength = lines.length,
             numberContainer = number,
             codeContainer = syntax,
-            replaceWhitespace = null;
+            replaceWhitespace = null,
+            lineNumber = 1;
 
         if ( isPreFormatted ) {
             codeContainer = createElement( "pre" );
@@ -320,23 +319,33 @@
 
             numberContainer = createElement( "pre" );
             number.appendChild( numberContainer );
-
-            var whitespaceCount = lines[ 0 ].match( /^\s*/ )[ 0 ].length;
-
-            replaceWhitespace = lines[ 0 ].substring( 0, whitespaceCount );
         }
 
         for ( var lineIndex = 0; lineIndex < linesLength; lineIndex++ ) {
             var line = lines[ lineIndex ];
 
+            if ( line.trim() !== _string.empty && replaceWhitespace === null ) {
+                replaceWhitespace = line.substring( 0, line.match( /^\s*/ )[ 0 ].length );
+            }
+
             if ( ( lineIndex !== 0 && lineIndex !== linesLength - 1 ) || line.trim() !== _string.empty ) {
                 if ( line.trim() !== _string.empty || !syntaxOptions.removeBlankLines ) {
                     var numberCode = createElement( "p" );
-                    numberCode.innerHTML = ( lineIndex + 1 ).toString();
+                    numberCode.innerHTML = lineNumber.toString();
                     numberContainer.appendChild( numberCode );
+
+                    lineNumber++;
         
                     if ( replaceWhitespace !== null ) {
                         line = line.replace( replaceWhitespace, _string.empty );
+
+                        if ( !isPreFormatted ) {
+                            var remainingStartWhitespaceCount = line.match( /^\s*/ )[ 0 ].length,
+                                remainingStartWhitespace = line.substring( 0, remainingStartWhitespaceCount ),
+                                whitespaceReplacement = Array( remainingStartWhitespaceCount ).join( "&nbsp;" );
+
+                            line = line.replace( remainingStartWhitespace, whitespaceReplacement );
+                        }
                     }
         
                     var syntaxCode = createElement( "p" );
