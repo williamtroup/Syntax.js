@@ -8,7 +8,7 @@ Syntax.js
 [![coded by William Troup](https://img.shields.io/badge/coded_by-William_Troup-yellow)](https://github.com/williamtroup)
 </h1>
 
-> <p align="center">An easy to use JavaScript syntax highlighter!</p>
+> <p align="center">A lightweight, and easy to use, JavaScript syntax highlighter!</p>
 > <p align="center">v0.6.0</p>
 <br />
 
