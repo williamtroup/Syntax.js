@@ -7,8 +7,7 @@
 - Minor code correction for handling empty strings.
 - Added a new setting called "removeBlankLines", which states if all the blank lines should be removed (defaults to false).
 - Added some very light borders around the Numbers and Syntax DOM containers.
-- Added a default font and font-size via the SCSS/CSS.
-- 
+- Added a default font and font size via the SCSS/CSS.
 
 <br>
 
