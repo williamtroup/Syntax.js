@@ -1,5 +1,11 @@
 # Syntax.js - Change Log:
 
+## Version 0.7.0:
+- 
+
+<br>
+
+
 ## Version 0.6.0:
 - Added support for the Swift and Visual Basic programming languages (importable files).
 - Added new public function "getRenderedElements()", which returns all the elements that have been rendered.
