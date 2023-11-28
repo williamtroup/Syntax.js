@@ -4,6 +4,7 @@
 - Added NuGet.org Nuget package support via a new nuspec file.
 - The default language "JavaScript" is no longer built in, and must be imported like all other languages.
 - Updated the projects description.
+- Added support for the C and JavaScript programming languages (importable files).
 - 
 
 <br>
