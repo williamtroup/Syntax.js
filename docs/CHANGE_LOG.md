@@ -1,5 +1,14 @@
 # Syntax.js - Change Log:
 
+## Version 0.7.0:
+- Added NuGet.org Nuget package support via a new nuspec file.
+- The default language "JavaScript" is no longer built-in, and must be imported like all other languages.
+- Updated the project description.
+- Added support for the C, JavaScript, and MS-SQL programming languages (importable files).
+
+<br>
+
+
 ## Version 0.6.0:
 - Added support for the Swift and Visual Basic programming languages (importable files).
 - Added new public function "getRenderedElements()", which returns all the elements that have been rendered.

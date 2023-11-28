@@ -1,4 +1,4 @@
-/*! Syntax.js v0.6.0 | (c) Bunoon | MIT License */
+/*! Syntax.js v0.7.0 | (c) Bunoon | MIT License */
 $syntax.addLanguage( "c-plus-plus", {
     keywords: [
         "alignas",

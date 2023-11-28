@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
+    <metadata>
+        <id>jSyntax.js</id>
+        <version>0.7.0</version>
+        <description>A lightweight, and easy-to-use, JavaScript library for code syntax highlighting!</description>
+        <authors>William Troup</authors>
+        <projectUrl>https://github.com/williamtroup/Syntax.js</projectUrl>
+        <repository type="git" url="https://github.com/williamtroup/Syntax.js" branch="main" />
+        <readme>README_NUGET.md</readme>
+        <license type="expression">MIT</license>
+        <tags>javascript syntax-highlighting code syntax highlight css</tags>
+        <icon>docs\images\icon.png</icon>
+    </metadata>
+    <files>
+        <file src="**" target="/" exclude=".git\**;.vscode\**" />
+    </files>
+</package>

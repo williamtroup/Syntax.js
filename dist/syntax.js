@@ -1,4 +1,4 @@
-/*! Syntax.js v0.6.0 | (c) Bunoon | MIT License */
+/*! Syntax.js v0.7.0 | (c) Bunoon | MIT License */
 (function() {
   function render() {
     var domElements = _parameter_Document.getElementsByTagName("*");
@@ -285,8 +285,7 @@
   var _strings_Cached_Count = 0;
   var _comments_Cached = {};
   var _comments_Cached_Count = 0;
-  var _languages = {javascript:{keywords:["abstract", "arguments", "await", "boolean", "break", "byte", "case", "catch", "char", "class", "const", "continue", "debugger", "default", "delete", "do", "double", "else", "enum", "eval", "export", "extends", "false", "final", "finally", "float", "for", "function", "goto", "if", "implements", "import", "in", "instanceof", "int", "interface", "let", "long", "native", "new", "null", "package", "private", "protected", "public", "return", "short", "static", 
-  "super", "switch", "synchronized", "this", "throw", "throws", "transient", "true", "try", "typeof", "var", "void", "volatile", "while", "with", "yield"], comment:"//", multiLineComment:["/*", "*/"]}};
+  var _languages = {};
   this.buildNewSyntaxElements = function() {
     render();
     return this;
@@ -307,7 +306,7 @@
     return added;
   };
   this.getVersion = function() {
-    return "0.6.0";
+    return "0.7.0";
   };
   (function(documentObject, navigatorObject, windowObject) {
     _parameter_Document = documentObject;

@@ -1,10 +1,10 @@
 /**
  * Syntax.js
  * 
- * A lightweight, and easy to use, JavaScript syntax highlighter!
+ * A lightweight, and easy-to-use, JavaScript library for code syntax highlighting!
  * 
  * @file        syntax.js
- * @version     v0.6.0
+ * @version     v0.7.0
  * @author      Bunoon
  * @license     MIT License
  * @copyright   Bunoon 2023
@@ -34,81 +34,7 @@
         _comments_Cached_Count = 0,
         
         // Variables: Languages
-        _languages = {
-            javascript: {
-                keywords: [
-                    "abstract",
-                    "arguments",
-                    "await",
-                    "boolean",
-                    "break",
-                    "byte",
-                    "case",
-                    "catch",
-                    "char",
-                    "class",
-                    "const",
-                    "continue",
-                    "debugger",
-                    "default",
-                    "delete",
-                    "do",
-                    "double",
-                    "else",
-                    "enum",
-                    "eval",
-                    "export",
-                    "extends",
-                    "false",
-                    "final",
-                    "finally",
-                    "float",
-                    "for",
-                    "function",
-                    "goto",
-                    "if",
-                    "implements",
-                    "import",
-                    "in",
-                    "instanceof",
-                    "int",
-                    "interface",
-                    "let",
-                    "long",
-                    "native",
-                    "new",
-                    "null",
-                    "package",
-                    "private",
-                    "protected",
-                    "public",
-                    "return",
-                    "short",
-                    "static",
-                    "super",
-                    "switch",
-                    "synchronized",
-                    "this",
-                    "throw",
-                    "throws",
-                    "transient",
-                    "true",
-                    "try",
-                    "typeof",
-                    "var",
-                    "void",
-                    "volatile",
-                    "while",
-                    "with",
-                    "yield"
-                ],
-                comment: "//",
-                multiLineComment: [
-                    "/*",
-                    "*/"
-                ]
-            }
-        };
+        _languages = {};
 
     
     /*
@@ -597,7 +523,7 @@
      * @returns     {string}                                                The version number.
      */
     this.getVersion = function() {
-        return "0.6.0";
+        return "0.7.0";
     };
 
 
