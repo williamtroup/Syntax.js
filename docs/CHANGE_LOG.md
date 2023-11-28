@@ -2,10 +2,9 @@
 
 ## Version 0.7.0:
 - Added NuGet.org Nuget package support via a new nuspec file.
-- The default language "JavaScript" is no longer built in, and must be imported like all other languages.
-- Updated the projects description.
+- The default language "JavaScript" is no longer built-in, and must be imported like all other languages.
+- Updated the project description.
 - Added support for the C, JavaScript, and MS-SQL programming languages (importable files).
-- 
 
 <br>
 
