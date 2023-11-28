@@ -1,7 +1,7 @@
 /**
  * Syntax.js
  * 
- * A lightweight, and easy to use, JavaScript syntax highlighter!
+ * A lightweight, and easy-to-use, JavaScript library for code syntax highlighting!
  * 
  * @file        syntax.js
  * @version     v0.7.0
