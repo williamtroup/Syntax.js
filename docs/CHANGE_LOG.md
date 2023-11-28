@@ -1,6 +1,7 @@
 # Syntax.js - Change Log:
 
 ## Version 0.7.0:
+- Added NuGet.org Nuget package support via a new nuspec file.
 - 
 
 <br>
