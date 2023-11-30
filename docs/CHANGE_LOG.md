@@ -1,5 +1,11 @@
 # Syntax.js - Change Log:
 
+## Version 0.8.0:
+- 
+
+<br>
+
+
 ## Version 0.7.0:
 - Added NuGet.org Nuget package support via a new nuspec file.
 - The default language "JavaScript" is no longer built-in, and must be imported like all other languages.

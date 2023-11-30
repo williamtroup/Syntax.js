@@ -2,7 +2,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
     <metadata>
         <id>jSyntax.js</id>
-        <version>0.7.0</version>
+        <version>0.8.0</version>
         <description>A lightweight, and easy-to-use, JavaScript library for code syntax highlighting!</description>
         <authors>William Troup</authors>
         <projectUrl>https://github.com/williamtroup/Syntax.js</projectUrl>
