@@ -1,6 +1,7 @@
 # Syntax.js - Change Log:
 
 ## Version 0.8.0:
+- Added a new setting called "showLineNumbers", which states if the line numbers should be shown (defaults to true).
 - 
 
 <br>

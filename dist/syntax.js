@@ -22,14 +22,17 @@
           isPreFormatted = true;
         }
         var innerHTMLCopy = innerHTML.trim();
+        var number = null;
         element.removeAttribute("data-syntax-language");
         element.removeAttribute("data-syntax-options");
         element.className = element.className === _string.empty ? "syntax-highlight" : element.className + " syntax-highlight";
         element.innerHTML = _string.empty;
         var code = createElement("div", "code custom-scroll-bars");
         element.appendChild(code);
-        var number = createElement("div", "number");
-        code.appendChild(number);
+        if (syntaxOptions.showLineNumbers) {
+          number = createElement("div", "number");
+          code.appendChild(number);
+        }
         var syntax = createElement("div", "syntax");
         code.appendChild(syntax);
         if (syntaxOptions.showCopyButton) {
@@ -157,8 +160,10 @@
     if (isPreFormatted) {
       codeContainer = createElement("pre");
       syntax.appendChild(codeContainer);
-      numberContainer = createElement("pre");
-      number.appendChild(numberContainer);
+      if (isDefined(number)) {
+        numberContainer = createElement("pre");
+        number.appendChild(numberContainer);
+      }
     }
     var lineIndex = 0;
     for (; lineIndex < linesLength; lineIndex++) {
@@ -168,10 +173,12 @@
       }
       if (lineIndex !== 0 && lineIndex !== linesLength - 1 || line.trim() !== _string.empty) {
         if (line.trim() !== _string.empty || !syntaxOptions.removeBlankLines) {
-          var numberCode = createElement("p");
-          numberCode.innerHTML = lineNumber.toString();
-          numberContainer.appendChild(numberCode);
-          lineNumber++;
+          if (isDefined(numberContainer)) {
+            var numberCode = createElement("p");
+            numberCode.innerHTML = lineNumber.toString();
+            numberContainer.appendChild(numberCode);
+            lineNumber++;
+          }
           if (replaceWhitespace !== null) {
             line = line.replace(replaceWhitespace, _string.empty);
             if (!isPreFormatted) {
@@ -207,6 +214,7 @@
     options.showCopyButton = getDefaultBoolean(options.showCopyButton, true);
     options.copyButtonText = getDefaultString(options.copyButtonText, "Copy");
     options.removeBlankLines = getDefaultBoolean(options.removeBlankLines, false);
+    options.showLineNumbers = getDefaultBoolean(options.showLineNumbers, true);
     options.onCopy = getDefaultFunction(options.onCopy, null);
     options.onRender = getDefaultFunction(options.onRender, null);
     options.onKeywordClicked = getDefaultFunction(options.onKeywordClicked, null);

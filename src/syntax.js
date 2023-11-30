@@ -69,7 +69,8 @@
                     isPreFormatted = true;
                 }
                 
-                var innerHTMLCopy = innerHTML.trim();
+                var innerHTMLCopy = innerHTML.trim(),
+                    number = null;
 
                 element.removeAttribute( "data-syntax-language" );
                 element.removeAttribute( "data-syntax-options" );
@@ -79,8 +80,10 @@
                 var code = createElement( "div", "code custom-scroll-bars" );
                 element.appendChild( code );
 
-                var number = createElement( "div", "number" );
-                code.appendChild( number );
+                if ( syntaxOptions.showLineNumbers ) {
+                    number = createElement( "div", "number" );
+                    code.appendChild( number );
+                }
     
                 var syntax = createElement( "div", "syntax" );
                 code.appendChild( syntax );
@@ -243,8 +246,10 @@
             codeContainer = createElement( "pre" );
             syntax.appendChild( codeContainer );
 
-            numberContainer = createElement( "pre" );
-            number.appendChild( numberContainer );
+            if ( isDefined( number ) ) {
+                numberContainer = createElement( "pre" );
+                number.appendChild( numberContainer );
+            }
         }
 
         for ( var lineIndex = 0; lineIndex < linesLength; lineIndex++ ) {
@@ -256,11 +261,13 @@
 
             if ( ( lineIndex !== 0 && lineIndex !== linesLength - 1 ) || line.trim() !== _string.empty ) {
                 if ( line.trim() !== _string.empty || !syntaxOptions.removeBlankLines ) {
-                    var numberCode = createElement( "p" );
-                    numberCode.innerHTML = lineNumber.toString();
-                    numberContainer.appendChild( numberCode );
+                    if ( isDefined( numberContainer ) ) {
+                        var numberCode = createElement( "p" );
+                        numberCode.innerHTML = lineNumber.toString();
 
-                    lineNumber++;
+                        numberContainer.appendChild( numberCode );
+                        lineNumber++;
+                    }                    
         
                     if ( replaceWhitespace !== null ) {
                         line = line.replace( replaceWhitespace, _string.empty );
@@ -311,6 +318,7 @@
         options.showCopyButton = getDefaultBoolean( options.showCopyButton, true );
         options.copyButtonText = getDefaultString( options.copyButtonText, "Copy" );
         options.removeBlankLines = getDefaultBoolean( options.removeBlankLines, false );
+        options.showLineNumbers = getDefaultBoolean( options.showLineNumbers, true );
         options.onCopy = getDefaultFunction( options.onCopy, null );
         options.onRender = getDefaultFunction( options.onRender, null );
         options.onKeywordClicked = getDefaultFunction( options.onKeywordClicked, null );
