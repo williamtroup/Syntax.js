@@ -3,8 +3,7 @@
 ## Version 0.8.0:
 - Added a new setting called "showLineNumbers", which states if the line numbers should be shown (defaults to true).
 - Renamed the public function "buildNewSyntaxElements" to "findAndBuildNewElements()".
-- Added new public function "destroy()", which will revert all rendered elements back to their original HTML (minus the syntax attributes).
-- 
+- Added new public function "destroy()", which will revert all rendered elements to their original HTML (minus the syntax attributes).
 
 <br>
 
