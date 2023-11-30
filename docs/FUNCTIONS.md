@@ -7,7 +7,7 @@ Below is a list of all the public functions that can be called from the Syntax.j
 
 <h1>Building:</h1>
 
-### **buildNewSyntaxElements()**:
+### **findAndBuildNewElements()**:
 Finds all new code elements and renders them.
 <br>
 ***Fires***:  onRender
@@ -44,3 +44,12 @@ Adds a new language that can be rendered.
 Returns the version of Syntax.js.
 <br>
 ***Returns***: '*string*' - The version number.
+
+
+<br>
+<h1>Controls:</h1>
+
+### **destroy()**:
+Reverts all rendered Syntax elements back to their original state (without render attributes).
+<br>
+***Returns***: '*Object*' - The Syntax.js class instance.

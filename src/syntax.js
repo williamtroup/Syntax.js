@@ -4,7 +4,7 @@
  * A lightweight, and easy-to-use, JavaScript library for code syntax highlighting!
  * 
  * @file        syntax.js
- * @version     v0.7.0
+ * @version     v0.8.0
  * @author      Bunoon
  * @license     MIT License
  * @copyright   Bunoon 2023
@@ -26,6 +26,7 @@
         // Variables: Elements
         _elements_Type = {},
         _elements = [],
+        _elements_Original = {},
 
         // Variables: Temporary String Variables
         _strings_Cached = {},
@@ -69,18 +70,29 @@
                     isPreFormatted = true;
                 }
                 
-                var innerHTMLCopy = innerHTML.trim();
+                var innerHTMLCopy = innerHTML.trim(),
+                    number = null,
+                    elementId = element.id;
+
+                if ( !isDefinedString( elementId ) ) {
+                    elementId = newGuid();
+                }
+
+                _elements_Original[ elementId ] = element.innerHTML;
 
                 element.removeAttribute( "data-syntax-language" );
                 element.removeAttribute( "data-syntax-options" );
+                element.id = elementId;
                 element.className = element.className === _string.empty ? "syntax-highlight" : element.className + " syntax-highlight";
                 element.innerHTML = _string.empty;
 
                 var code = createElement( "div", "code custom-scroll-bars" );
                 element.appendChild( code );
 
-                var number = createElement( "div", "number" );
-                code.appendChild( number );
+                if ( syntaxOptions.showLineNumbers ) {
+                    number = createElement( "div", "number" );
+                    code.appendChild( number );
+                }
     
                 var syntax = createElement( "div", "syntax" );
                 code.appendChild( syntax );
@@ -243,8 +255,10 @@
             codeContainer = createElement( "pre" );
             syntax.appendChild( codeContainer );
 
-            numberContainer = createElement( "pre" );
-            number.appendChild( numberContainer );
+            if ( isDefined( number ) ) {
+                numberContainer = createElement( "pre" );
+                number.appendChild( numberContainer );
+            }
         }
 
         for ( var lineIndex = 0; lineIndex < linesLength; lineIndex++ ) {
@@ -256,11 +270,13 @@
 
             if ( ( lineIndex !== 0 && lineIndex !== linesLength - 1 ) || line.trim() !== _string.empty ) {
                 if ( line.trim() !== _string.empty || !syntaxOptions.removeBlankLines ) {
-                    var numberCode = createElement( "p" );
-                    numberCode.innerHTML = lineNumber.toString();
-                    numberContainer.appendChild( numberCode );
+                    if ( isDefined( numberContainer ) ) {
+                        var numberCode = createElement( "p" );
+                        numberCode.innerHTML = lineNumber.toString();
 
-                    lineNumber++;
+                        numberContainer.appendChild( numberCode );
+                        lineNumber++;
+                    }                    
         
                     if ( replaceWhitespace !== null ) {
                         line = line.replace( replaceWhitespace, _string.empty );
@@ -311,6 +327,7 @@
         options.showCopyButton = getDefaultBoolean( options.showCopyButton, true );
         options.copyButtonText = getDefaultString( options.copyButtonText, "Copy" );
         options.removeBlankLines = getDefaultBoolean( options.removeBlankLines, false );
+        options.showLineNumbers = getDefaultBoolean( options.showLineNumbers, true );
         options.onCopy = getDefaultFunction( options.onCopy, null );
         options.onRender = getDefaultFunction( options.onRender, null );
         options.onKeywordClicked = getDefaultFunction( options.onKeywordClicked, null );
@@ -434,12 +451,34 @@
 
     /*
      * ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+     * String Handling
+     * ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+     */
+
+    function newGuid() {
+        var result = [];
+
+        for ( var charIndex = 0; charIndex < 32; charIndex++ ) {
+            if ( charIndex === 8 || charIndex === 12 || charIndex === 16 || charIndex === 20 ) {
+                result.push( "-" );
+            }
+
+            var character = Math.floor( Math.random() * 16 ).toString( 16 );
+            result.push( character );
+        }
+
+        return result.join( _string.empty );
+    }
+
+
+    /*
+     * ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
      * Public Functions:  Building
      * ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
      */
 
     /**
-     * buildNewSyntaxElements().
+     * findAndBuildNewElements().
      * 
      * Finds all new code elements and renders them.
      * 
@@ -448,7 +487,7 @@
      * 
      * @returns     {Object}                                                The Syntax.js class instance.
      */
-    this.buildNewSyntaxElements = function() {
+    this.findAndBuildNewElements = function() {
         render();
 
         return this;
@@ -523,7 +562,37 @@
      * @returns     {string}                                                The version number.
      */
     this.getVersion = function() {
-        return "0.7.0";
+        return "0.8.0";
+    };
+
+
+    /*
+     * ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+     * Public Functions:  Controls
+     * ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+     */
+
+    /**
+     * destroy().
+     * 
+     * Reverts all rendered Syntax elements back to their original state (without render attributes).
+     * 
+     * @public
+     * 
+     * @returns     {Object}                                                The Syntax.js class instance.
+     */
+    this.destroy = function() {
+        for ( var elementId in _elements_Original ) {
+            if ( _elements_Original.hasOwnProperty( elementId ) ) {
+                var renderedElement = _parameter_Document.getElementById( elementId );
+
+                if ( isDefined( renderedElement ) ) {
+                    renderedElement.innerHTML = _elements_Original[ elementId ];
+                }
+            }
+        }
+
+        return this;
     };
 
 

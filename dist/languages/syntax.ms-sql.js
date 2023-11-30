@@ -1,4 +1,4 @@
-/*! Syntax.js v0.7.0 | (c) Bunoon | MIT License */
+/*! Syntax.js v0.8.0 | (c) Bunoon | MIT License */
 $syntax.addLanguage( "ms-sql", {
     keywords: [
         "ADD",

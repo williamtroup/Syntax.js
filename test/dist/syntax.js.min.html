@@ -47,7 +47,7 @@
             </code>
             <br />
     
-            <div data-syntax-language="c-sharp" data-syntax-options="{ 'showCopyButton': false, 'removeBlankLines': false }">
+            <div data-syntax-language="c-sharp" data-syntax-options="{ 'showCopyButton': false, 'removeBlankLines': false, 'showLineNumbers': false }">
                 int something = 1;
 
                 if ( something == 1 ) {
@@ -59,7 +59,7 @@
 
         <div class="contents">
             <h2>Building:</h2>
-            <button onclick="$syntax.buildNewSyntaxElements();">Build New Syntax Elements</button>
+            <button onclick="$syntax.findAndBuildNewElements();">Find And Build New Elements</button>
             <button onclick="console.log( $syntax.getRenderedElements() );">Get Rendered Elements</button>
             <br />
 
@@ -73,11 +73,16 @@
 
             <h2>Additional Data:</h2>
             <button onclick="console.log( $syntax.getVersion() );">Get Version</button>
+            <br />
+
+            <h2>Controls:</h2>
+            <button onclick="$syntax.destroy();">Destroy</button>
         </div>
     </body>
 
     <script>
         document.title += " v" + $syntax.getVersion();
+        document.getElementById( "header" ).innerText += " - v" + $syntax.getVersion();
 
         function addNewLanguage() {
             $syntax.addLanguage( "c-sharp", {
