@@ -23,8 +23,14 @@
         }
         var innerHTMLCopy = innerHTML.trim();
         var number = null;
+        var elementId = element.id;
+        if (!isDefinedString(elementId)) {
+          elementId = newGuid();
+        }
+        _elements_Original[elementId] = element.innerHTML;
         element.removeAttribute("data-syntax-language");
         element.removeAttribute("data-syntax-options");
+        element.id = elementId;
         element.className = element.className === _string.empty ? "syntax-highlight" : element.className + " syntax-highlight";
         element.innerHTML = _string.empty;
         var code = createElement("div", "code custom-scroll-bars");
@@ -284,11 +290,24 @@
     }
     return result;
   }
+  function newGuid() {
+    var result = [];
+    var charIndex = 0;
+    for (; charIndex < 32; charIndex++) {
+      if (charIndex === 8 || charIndex === 12 || charIndex === 16 || charIndex === 20) {
+        result.push("-");
+      }
+      var character = Math.floor(Math.random() * 16).toString(16);
+      result.push(character);
+    }
+    return result.join(_string.empty);
+  }
   var _parameter_Document = null;
   var _parameter_Navigator = null;
   var _string = {empty:"", space:" ", newLine:"\n"};
   var _elements_Type = {};
   var _elements = [];
+  var _elements_Original = {};
   var _strings_Cached = {};
   var _strings_Cached_Count = 0;
   var _comments_Cached = {};
@@ -315,6 +334,18 @@
   };
   this.getVersion = function() {
     return "0.8.0";
+  };
+  this.destroy = function() {
+    var elementId;
+    for (elementId in _elements_Original) {
+      if (_elements_Original.hasOwnProperty(elementId)) {
+        var renderedElement = _parameter_Document.getElementById(elementId);
+        if (isDefined(renderedElement)) {
+          renderedElement.innerHTML = _elements_Original[elementId];
+        }
+      }
+    }
+    return this;
   };
   (function(documentObject, navigatorObject, windowObject) {
     _parameter_Document = documentObject;

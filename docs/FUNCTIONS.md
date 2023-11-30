@@ -44,3 +44,12 @@ Adds a new language that can be rendered.
 Returns the version of Syntax.js.
 <br>
 ***Returns***: '*string*' - The version number.
+
+
+<br>
+<h1>Controls:</h1>
+
+### **destroy()**:
+Reverts all rendered Syntax elements back to their original state (without render attributes).
+<br>
+***Returns***: '*Object*' - The Syntax.js class instance.

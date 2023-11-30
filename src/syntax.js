@@ -26,6 +26,7 @@
         // Variables: Elements
         _elements_Type = {},
         _elements = [],
+        _elements_Original = {},
 
         // Variables: Temporary String Variables
         _strings_Cached = {},
@@ -70,10 +71,18 @@
                 }
                 
                 var innerHTMLCopy = innerHTML.trim(),
-                    number = null;
+                    number = null,
+                    elementId = element.id;
+
+                if ( !isDefinedString( elementId ) ) {
+                    elementId = newGuid();
+                }
+
+                _elements_Original[ elementId ] = element.innerHTML;
 
                 element.removeAttribute( "data-syntax-language" );
                 element.removeAttribute( "data-syntax-options" );
+                element.id = elementId;
                 element.className = element.className === _string.empty ? "syntax-highlight" : element.className + " syntax-highlight";
                 element.innerHTML = _string.empty;
 
@@ -442,6 +451,28 @@
 
     /*
      * ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+     * String Handling
+     * ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+     */
+
+    function newGuid() {
+        var result = [];
+
+        for ( var charIndex = 0; charIndex < 32; charIndex++ ) {
+            if ( charIndex === 8 || charIndex === 12 || charIndex === 16 || charIndex === 20 ) {
+                result.push( "-" );
+            }
+
+            var character = Math.floor( Math.random() * 16 ).toString( 16 );
+            result.push( character );
+        }
+
+        return result.join( _string.empty );
+    }
+
+
+    /*
+     * ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
      * Public Functions:  Building
      * ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
      */
@@ -532,6 +563,36 @@
      */
     this.getVersion = function() {
         return "0.8.0";
+    };
+
+
+    /*
+     * ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+     * Public Functions:  Controls
+     * ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+     */
+
+    /**
+     * destroy().
+     * 
+     * Reverts all rendered Syntax elements back to their original state (without render attributes).
+     * 
+     * @public
+     * 
+     * @returns     {Object}                                                The Syntax.js class instance.
+     */
+    this.destroy = function() {
+        for ( var elementId in _elements_Original ) {
+            if ( _elements_Original.hasOwnProperty( elementId ) ) {
+                var renderedElement = _parameter_Document.getElementById( elementId );
+
+                if ( isDefined( renderedElement ) ) {
+                    renderedElement.innerHTML = _elements_Original[ elementId ];
+                }
+            }
+        }
+
+        return this;
     };
 
 
