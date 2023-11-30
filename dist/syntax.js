@@ -294,7 +294,7 @@
   var _comments_Cached = {};
   var _comments_Cached_Count = 0;
   var _languages = {};
-  this.buildNewSyntaxElements = function() {
+  this.findAndBuildNewElements = function() {
     render();
     return this;
   };

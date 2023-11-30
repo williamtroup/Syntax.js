@@ -447,7 +447,7 @@
      */
 
     /**
-     * buildNewSyntaxElements().
+     * findAndBuildNewElements().
      * 
      * Finds all new code elements and renders them.
      * 
@@ -456,7 +456,7 @@
      * 
      * @returns     {Object}                                                The Syntax.js class instance.
      */
-    this.buildNewSyntaxElements = function() {
+    this.findAndBuildNewElements = function() {
         render();
 
         return this;
