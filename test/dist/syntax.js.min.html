@@ -78,6 +78,7 @@
 
     <script>
         document.title += " v" + $syntax.getVersion();
+        document.getElementById( "header" ).innerText += " - v" + $syntax.getVersion();
 
         function addNewLanguage() {
             $syntax.addLanguage( "c-sharp", {
