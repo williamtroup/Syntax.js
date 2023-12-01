@@ -17,6 +17,8 @@
 - Added new public function "getAllLanguages()", which will return the object that contains all the language details.
 - Added new public function "highlightElement()", which will render a specific DOM element (accepts either the element, or the elements ID).
 - Added new public function "getLanguage()", which will return the details for a specific language (by name).
+- Renamed the public function "destroy()" to "destroyAll()".
+- 
 
 #### **Custom Triggers:**
 - Renamed the custom trigger "onRender" to "onRenderComplete".

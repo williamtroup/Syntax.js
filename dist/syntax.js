@@ -378,7 +378,7 @@
   this.getVersion = function() {
     return "1.0.0";
   };
-  this.destroy = function() {
+  this.destroyAll = function() {
     var elementId;
     for (elementId in _elements_Original) {
       if (_elements_Original.hasOwnProperty(elementId)) {

@@ -675,7 +675,7 @@
      */
 
     /**
-     * destroy().
+     * destroyAll().
      * 
      * Reverts all rendered Syntax elements back to their original state (without render attributes).
      * 
@@ -683,7 +683,7 @@
      * 
      * @returns     {Object}                                                The Syntax.js class instance.
      */
-    this.destroy = function() {
+    this.destroyAll = function() {
         for ( var elementId in _elements_Original ) {
             if ( _elements_Original.hasOwnProperty( elementId ) ) {
                 var renderedElement = _parameter_Document.getElementById( elementId );

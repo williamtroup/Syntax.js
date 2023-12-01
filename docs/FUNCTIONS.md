@@ -77,7 +77,7 @@ Returns the version of Syntax.js.
 <br>
 <h1>Controls:</h1>
 
-### **destroy()**:
+### **destroyAll()**:
 Reverts all rendered Syntax elements back to their original state (without render attributes).
 <br>
 ***Returns***: '*Object*' - The Syntax.js class instance.
