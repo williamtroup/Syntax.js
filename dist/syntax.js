@@ -1,4 +1,4 @@
-/*! Syntax.js v0.8.0 | (c) Bunoon | MIT License */
+/*! Syntax.js v1.0.0 | (c) Bunoon | MIT License */
 (function() {
   function render() {
     var domElements = _parameter_Document.getElementsByTagName("*");
@@ -333,7 +333,7 @@
     return added;
   };
   this.getVersion = function() {
-    return "0.8.0";
+    return "1.0.0";
   };
   this.destroy = function() {
     var elementId;
