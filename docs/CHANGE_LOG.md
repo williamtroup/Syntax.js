@@ -23,6 +23,9 @@
 #### **Custom Triggers:**
 - Renamed the custom trigger "onRender" to "onRenderComplete".
 
+#### **UI Improvements:**
+- The numbers columns is now hidden by default on smaller screens (and the code line will now wrap).
+
 #### **Fixes:**
 - Fixed links to missing documentation in the main README.md and README_NUGET.md files.
 - Fixed some grammar mistakes.
