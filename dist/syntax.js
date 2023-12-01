@@ -346,38 +346,6 @@
   this.getAllElementsHighlighted = function() {
     return _elements;
   };
-  this.addLanguage = function(name, languageDetails, triggerRender) {
-    var added = false;
-    if (!_languages.hasOwnProperty(name.toLowerCase())) {
-      triggerRender = !isDefinedBoolean(triggerRender) ? true : triggerRender;
-      _languages[name.toLowerCase()] = languageDetails;
-      added = true;
-      if (triggerRender) {
-        render();
-      }
-    }
-    return added;
-  };
-  this.removeLanguage = function(name) {
-    var removed = false;
-    if (_languages.hasOwnProperty(name.toLowerCase())) {
-      delete _languages[name.toLowerCase()];
-    }
-    return removed;
-  };
-  this.getLanguage = function(name) {
-    var details = null;
-    if (_languages.hasOwnProperty(name.toLowerCase())) {
-      details = _languages[name.toLowerCase()];
-    }
-    return details;
-  };
-  this.getAllLanguages = function() {
-    return _languages;
-  };
-  this.getVersion = function() {
-    return "1.0.0";
-  };
   this.destroyAll = function() {
     var elementId;
     for (elementId in _elements_Original) {
@@ -409,6 +377,38 @@
       }
     }
     return this;
+  };
+  this.addLanguage = function(name, languageDetails, triggerRender) {
+    var added = false;
+    if (!_languages.hasOwnProperty(name.toLowerCase())) {
+      triggerRender = !isDefinedBoolean(triggerRender) ? true : triggerRender;
+      _languages[name.toLowerCase()] = languageDetails;
+      added = true;
+      if (triggerRender) {
+        render();
+      }
+    }
+    return added;
+  };
+  this.removeLanguage = function(name) {
+    var removed = false;
+    if (_languages.hasOwnProperty(name.toLowerCase())) {
+      delete _languages[name.toLowerCase()];
+    }
+    return removed;
+  };
+  this.getLanguage = function(name) {
+    var details = null;
+    if (_languages.hasOwnProperty(name.toLowerCase())) {
+      details = _languages[name.toLowerCase()];
+    }
+    return details;
+  };
+  this.getAllLanguages = function() {
+    return _languages;
+  };
+  this.getVersion = function() {
+    return "1.0.0";
   };
   (function(documentObject, navigatorObject, windowObject) {
     _parameter_Document = documentObject;

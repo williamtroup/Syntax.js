@@ -58,29 +58,25 @@
         </div>
 
         <div class="contents">
-            <h2>Building:</h2>
+            <h2>Highlighting:</h2>
             <button onclick="$syntax.highlightAll();">Highlight All</button>
             <button onclick="console.log( $syntax.getAllElementsHighlighted() );">Get All Elements Highlighted</button>
             <br />
 
-            <h2>Language:</h2>
+            <h2>Destroying:</h2>
+            <button onclick="$syntax.destroy( 'manual-destroy' );">Destroy</button>
+            <button onclick="$syntax.destroyAll();">Destroy All</button>
+            <br />
+
+            <h2>Languages:</h2>
             <button onclick="addNewLanguage();">Add Language</button>
             <button onclick="removeNewLanguage();">Remove Language</button>
             <button onclick="console.log( $syntax.getLanguage( 'c-sharp' ) );">Get Language</button>
             <button onclick="console.log( $syntax.getAllLanguages() );">Get All Languages</button>
             <br />
 
-            <h2>Set Options:</h2>
-            <button onclick="$syntax.getVersion();">Set Options</button>
-            <br />
-
             <h2>Additional Data:</h2>
             <button onclick="console.log( $syntax.getVersion() );">Get Version</button>
-            <br />
-
-            <h2>Controls:</h2>
-            <button onclick="$syntax.destroy( 'manual-destroy' );">Destroy</button>
-            <button onclick="$syntax.destroyAll();">Destroy All</button>
         </div>
     </body>
 
