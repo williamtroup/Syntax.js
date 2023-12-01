@@ -36,6 +36,13 @@ Adds a new language that can be rendered.
 <br>
 ***Returns***: '*boolean*' - States if the language has been added.
 
+### **removeLanguage( *name* )**:
+Removes new language that can be rendered.
+<br>
+***Parameter: name***: '*string*' - The name of the language.
+<br>
+***Returns***: '*boolean*' - States if the language has been removed.
+
 
 <br>
 <h1>Additional Data:</h1>

@@ -65,6 +65,7 @@
 
             <h2>Language:</h2>
             <button onclick="addNewLanguage();">Add Language</button>
+            <button onclick="removeNewLanguage();">Remove Language</button>
             <br />
 
             <h2>Set Options:</h2>
@@ -96,6 +97,10 @@
                 comment: "//",
                 multiLineComment: [ "/*", "*/" ]
             } );
+        }
+
+        function removeNewLanguage() {
+            $syntax.removeLanguage( "c-sharp" );
         }
 
         function onCopyCustomTrigger( copiedCode ) {

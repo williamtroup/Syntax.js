@@ -566,6 +566,27 @@
         return added;
     };
 
+    /**
+     * removeLanguage().
+     * 
+     * Removes new language that can be rendered.
+     * 
+     * @public
+     * 
+     * @param       {string}    name                                        The name of the language.
+     * 
+     * @returns     {boolean}                                               States if the language has been removed.
+     */
+    this.removeLanguage = function( name ) {
+        var removed = false;
+
+        if ( _languages.hasOwnProperty( name.toLowerCase() ) ) {
+            delete _languages[ name.toLowerCase() ];
+        }
+
+        return removed;
+    };
+
 
     /*
      * ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------

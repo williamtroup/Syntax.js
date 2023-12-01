@@ -348,6 +348,13 @@
     }
     return added;
   };
+  this.removeLanguage = function(name) {
+    var removed = false;
+    if (_languages.hasOwnProperty(name.toLowerCase())) {
+      delete _languages[name.toLowerCase()];
+    }
+    return removed;
+  };
   this.getVersion = function() {
     return "1.0.0";
   };

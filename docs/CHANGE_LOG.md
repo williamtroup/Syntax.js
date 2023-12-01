@@ -10,9 +10,12 @@
 - Added a new setting called "highlightStrings", which states if strings should be highlighted (defaults to true).
 - Added a new setting called "highlightKeywords", which states if keywords should be highlighted (defaults to true).
 
-#### **General Improvements:**
+#### **Public Functions:**
 - Renamed the public function "findAndBuildNewElements()" to "highlightAll()".
 - Renamed the public function "getRenderedElements()" to "getAllElementsHighlighted()".
+- Added new public function "removeLanguage()", which will remove a specific language that can be rendered by name.
+
+#### **Custom Triggers:**
 - Renamed the custom trigger "onRender" to "onRenderComplete".
 
 #### **Code Improvements:**
