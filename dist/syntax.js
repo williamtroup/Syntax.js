@@ -329,7 +329,7 @@
   var _comments_Cached = {};
   var _comments_Cached_Count = 0;
   var _languages = {};
-  this.findAndBuildNewElements = function() {
+  this.highlightAll = function() {
     render();
     return this;
   };

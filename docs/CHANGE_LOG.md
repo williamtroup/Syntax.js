@@ -11,7 +11,7 @@
 - Added a new setting called "highlightKeywords", which states if keywords should be highlighted (defaults to true).
 
 #### **General Improvements:**
-- 
+- Renamed the public function "findAndBuildNewElements()" to "highlightAll()".
 
 #### **Code Improvements:**
 - 

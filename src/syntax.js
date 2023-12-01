@@ -499,7 +499,7 @@
      */
 
     /**
-     * findAndBuildNewElements().
+     * highlightAll().
      * 
      * Finds all new code elements and renders them.
      * 
@@ -508,7 +508,7 @@
      * 
      * @returns     {Object}                                                The Syntax.js class instance.
      */
-    this.findAndBuildNewElements = function() {
+    this.highlightAll = function() {
         render();
 
         return this;

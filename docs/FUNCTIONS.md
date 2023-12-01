@@ -7,7 +7,7 @@ Below is a list of all the public functions that can be called from the Syntax.j
 
 <h1>Building:</h1>
 
-### **findAndBuildNewElements()**:
+### **highlightAll()**:
 Finds all new code elements and renders them.
 <br>
 ***Fires***:  onRender
