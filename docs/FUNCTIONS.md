@@ -52,6 +52,13 @@ Removes new language that can be rendered.
 <br>
 ***Returns***: '*boolean*' - States if the language has been removed.
 
+### **getLanguage( *name* )**:
+Returns the language details (by name) that can be rendered.
+<br>
+***Parameter: name***: '*string*' - The name of the language.
+<br>
+***Returns***: '*Object*' - The language details.
+
 ### **getAllLanguages()**:
 Returns all the languages that can be rendered.
 <br>

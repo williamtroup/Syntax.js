@@ -365,6 +365,13 @@
     }
     return removed;
   };
+  this.getLanguage = function(name) {
+    var details = null;
+    if (_languages.hasOwnProperty(name.toLowerCase())) {
+      details = _languages[name.toLowerCase()];
+    }
+    return details;
+  };
   this.getAllLanguages = function() {
     return _languages;
   };

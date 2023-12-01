@@ -614,6 +614,27 @@
     };
 
     /**
+     * getLanguage().
+     * 
+     * Returns the language details (by name) that can be rendered.
+     * 
+     * @public
+     * 
+     * @param       {string}    name                                        The name of the language.
+     * 
+     * @returns     {Object}                                                The language details.
+     */
+    this.getLanguage = function( name ) {
+        var details = null;
+
+        if ( _languages.hasOwnProperty( name.toLowerCase() ) ) {
+            details = _languages[ name.toLowerCase() ];
+        }
+
+        return details;
+    };
+
+    /**
      * getAllLanguages().
      * 
      * Returns all the languages that can be rendered.
