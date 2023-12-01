@@ -23,7 +23,7 @@ Syntax.js
 - Full API available via public functions.
 - Fully styled in CSS/SASS (including the buttons) and compatible with the Bootstrap library.
 - Full CSS theme support (using :root variables).
-- Custom triggers for actions (when elements are rendered, options are updated, etc, etc.).
+- Custom triggers for actions (when elements are rendered, options are updated, etc).
 - Fully configurable.
 <br />
 <br />
@@ -92,6 +92,8 @@ Make sure you include the "DOCTYPE html" tag at the top of your email, as follow
 ```
 
 To see a list of all the available options you can use for "data-syntax-options", click [here](docs/OPTIONS.md).
+
+To see a list of all the available custom triggers you can use for "data-syntax-options", click [here](docs/CUSTOM_TRIGGERS.md).
 
 <br>
 

@@ -23,7 +23,8 @@
 - 
 
 #### **Fixes:**
-- 
+- Fixed links to missing documentation in the main README.md and README_NUGET.md files.
+- Fixed some grammar mistakes.
 
 <br>
 
