@@ -333,6 +333,16 @@
     render();
     return this;
   };
+  this.highlightElement = function(elementOrId) {
+    var element = elementOrId;
+    if (isDefinedString(element)) {
+      element = _parameter_Document.getElementById(element);
+    }
+    if (isDefined(element)) {
+      renderElement(element);
+    }
+    return this;
+  };
   this.getAllElementsHighlighted = function() {
     return _elements;
   };

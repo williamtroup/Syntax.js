@@ -15,6 +15,7 @@
 - Renamed the public function "getRenderedElements()" to "getAllElementsHighlighted()".
 - Added new public function "removeLanguage()", which will remove a specific language that can be rendered by name.
 - Added new public function "getAllLanguages()", which will return the object that contains all the language details.
+- Added new public function "highlightElement()", which will render a specific DOM element (accepts either the element, or the elements ID).
 
 #### **Custom Triggers:**
 - Renamed the custom trigger "onRender" to "onRenderComplete".

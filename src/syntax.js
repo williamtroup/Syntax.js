@@ -515,6 +515,32 @@
     };
 
     /**
+     * highlightElement().
+     * 
+     * Renders a specific DOM element.
+     * 
+     * @public
+     * @fires       onRenderComplete
+     * 
+     * @param       {Object}    elementOrId                                 The element ID, or the element itself.
+     * 
+     * @returns     {Object}                                                The Syntax.js class instance.
+     */
+    this.highlightElement = function( elementOrId ) {
+        var element = elementOrId;
+
+        if ( isDefinedString( element ) ) {
+            element = _parameter_Document.getElementById( element );
+        }
+
+        if ( isDefined( element ) ) {
+            renderElement( element );
+        }
+
+        return this;
+    };
+
+    /**
      * getAllElementsHighlighted().
      * 
      * Returns all the elements that have been detected and rendered.

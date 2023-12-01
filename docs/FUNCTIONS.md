@@ -14,6 +14,15 @@ Finds all new code elements and renders them.
 <br>
 ***Returns***: '*Object*' - The Syntax.js class instance.
 
+### **highlightElement( *elementOrId* )**:
+Renders a specific DOM element.
+<br>
+***Fires***:  onRenderComplete
+<br>
+***Parameter: name***: '*Object*' - The element ID, or the element itself.
+<br>
+***Returns***: '*Object*' - The Syntax.js class instance.
+
 ### **getAllElementsHighlighted()**:
 Returns all the elements that have been detected and rendered.
 <br>
