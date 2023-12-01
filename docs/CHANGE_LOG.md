@@ -13,6 +13,7 @@
 #### **General Improvements:**
 - Renamed the public function "findAndBuildNewElements()" to "highlightAll()".
 - Renamed the public function "getRenderedElements()" to "getAllElementsHighlighted()".
+- Renamed the custom trigger "onRender" to "onRenderComplete".
 
 #### **Code Improvements:**
 - 

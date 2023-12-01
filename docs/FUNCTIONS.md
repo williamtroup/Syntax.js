@@ -10,7 +10,7 @@ Below is a list of all the public functions that can be called from the Syntax.j
 ### **highlightAll()**:
 Finds all new code elements and renders them.
 <br>
-***Fires***:  onRender
+***Fires***:  onRenderComplete
 <br>
 ***Returns***: '*Object*' - The Syntax.js class instance.
 
@@ -26,7 +26,7 @@ Returns all the elements that have been detected and rendered.
 ### **addLanguage( *name*, *languageDetails*, *[triggerRender]* )**:
 Adds a new language that can be rendered.
 <br>
-***Fires***:  onRender
+***Fires***:  onRenderComplete
 <br>
 ***Parameter: name***: '*string*' - The name of the language.
 <br>

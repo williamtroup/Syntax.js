@@ -135,7 +135,7 @@
                 }
 
                 renderElementCompletedHTML( element, number, syntax, innerHTML, syntaxOptions, isPreFormatted );
-                fireCustomTrigger( syntaxOptions.onRender, element );
+                fireCustomTrigger( syntaxOptions.onRenderComplete, element );
 
                 _elements.push( element );
             }
@@ -350,7 +350,7 @@
 
     function buildAttributeOptionCustomTriggers( options ) {
         options.onCopy = getDefaultFunction( options.onCopy, null );
-        options.onRender = getDefaultFunction( options.onRender, null );
+        options.onRenderComplete = getDefaultFunction( options.onRenderComplete, null );
         options.onKeywordClicked = getDefaultFunction( options.onKeywordClicked, null );
 
         return options;
@@ -504,7 +504,7 @@
      * Finds all new code elements and renders them.
      * 
      * @public
-     * @fires       onRender
+     * @fires       onRenderComplete
      * 
      * @returns     {Object}                                                The Syntax.js class instance.
      */
@@ -541,7 +541,7 @@
      * Adds a new language that can be rendered.
      * 
      * @public
-     * @fires       onRender
+     * @fires       onRenderComplete
      * 
      * @param       {string}    name                                        The name of the language.
      * @param       {boolean}   languageDetails                             The language details (refer to "Language" documentation for properties).

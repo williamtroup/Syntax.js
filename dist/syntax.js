@@ -70,7 +70,7 @@
           innerHTML = renderElementStringQuotesFromVariables(innerHTML);
         }
         renderElementCompletedHTML(element, number, syntax, innerHTML, syntaxOptions, isPreFormatted);
-        fireCustomTrigger(syntaxOptions.onRender, element);
+        fireCustomTrigger(syntaxOptions.onRenderComplete, element);
         _elements.push(element);
       }
     }
@@ -238,7 +238,7 @@
   }
   function buildAttributeOptionCustomTriggers(options) {
     options.onCopy = getDefaultFunction(options.onCopy, null);
-    options.onRender = getDefaultFunction(options.onRender, null);
+    options.onRenderComplete = getDefaultFunction(options.onRenderComplete, null);
     options.onKeywordClicked = getDefaultFunction(options.onKeywordClicked, null);
     return options;
   }
