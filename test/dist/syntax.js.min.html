@@ -6,7 +6,7 @@
         <title>Syntax.js - Basic - Minimized</title>
         <link rel="stylesheet" href="../css/styles.css" />
         <link rel="stylesheet" href="../../dist/syntax.js.min.css" />
-        <script src="../../dist/syntax.js"></script>
+        <script src="../../dist/syntax.min.js"></script>
         <script src="../../dist/languages/syntax.javascript.js"></script>
     </head>
 
@@ -16,7 +16,7 @@
             <p>This is a basic example of how to use Syntax.js to highlight code inside a DOM element.</p>
         </div>
 
-        <div class="contents">
+        <div id="manual-destroy" class="contents">
             <code data-syntax-language="javascript">
                 <pre>
                     var something = true;
@@ -58,25 +58,25 @@
         </div>
 
         <div class="contents">
-            <h2>Building:</h2>
-            <button onclick="$syntax.findAndBuildNewElements();">Find And Build New Elements</button>
-            <button onclick="console.log( $syntax.getRenderedElements() );">Get Rendered Elements</button>
+            <h2>Highlighting:</h2>
+            <button onclick="$syntax.highlightAll();">Highlight All</button>
+            <button onclick="console.log( $syntax.getAllElementsHighlighted() );">Get All Elements Highlighted</button>
             <br />
 
-            <h2>Language:</h2>
+            <h2>Destroying:</h2>
+            <button onclick="$syntax.destroy( 'manual-destroy' );">Destroy</button>
+            <button onclick="$syntax.destroyAll();">Destroy All</button>
+            <br />
+
+            <h2>Languages:</h2>
             <button onclick="addNewLanguage();">Add Language</button>
-            <br />
-
-            <h2>Set Options:</h2>
-            <button onclick="$syntax.getVersion();">Set Options</button>
+            <button onclick="removeNewLanguage();">Remove Language</button>
+            <button onclick="console.log( $syntax.getLanguage( 'c-sharp' ) );">Get Language</button>
+            <button onclick="console.log( $syntax.getAllLanguages() );">Get All Languages</button>
             <br />
 
             <h2>Additional Data:</h2>
             <button onclick="console.log( $syntax.getVersion() );">Get Version</button>
-            <br />
-
-            <h2>Controls:</h2>
-            <button onclick="$syntax.destroy();">Destroy</button>
         </div>
     </body>
 
@@ -96,6 +96,10 @@
                 comment: "//",
                 multiLineComment: [ "/*", "*/" ]
             } );
+        }
+
+        function removeNewLanguage() {
+            $syntax.removeLanguage( "c-sharp" );
         }
 
         function onCopyCustomTrigger( copiedCode ) {

@@ -1,5 +1,5 @@
 /*
- * Syntax.js Library v0.8.0
+ * Syntax.js Library v1.0.0
  *
  * Copyright 2023 Bunoon
  * Released under the MIT License
@@ -57,11 +57,18 @@ div.syntax-highlight div.code div.number {
   text-align: right;
   font-weight: 800 !important;
   border: var(--border-size) solid #BBBBBB;
+  display: none;
 }
 code.syntax-highlight div.code div.number p,
 div.syntax-highlight div.code div.number p {
   margin: 0;
   text-wrap: nowrap;
+}
+@media (min-width: 768px) {
+  code.syntax-highlight div.code div.number,
+  div.syntax-highlight div.code div.number {
+    display: block;
+  }
 }
 code.syntax-highlight div.code div.syntax,
 div.syntax-highlight div.code div.syntax {
@@ -74,7 +81,13 @@ div.syntax-highlight div.code div.syntax {
 code.syntax-highlight div.code div.syntax p,
 div.syntax-highlight div.code div.syntax p {
   margin: 0;
-  text-wrap: nowrap;
+  text-wrap: initial;
+}
+@media (min-width: 768px) {
+  code.syntax-highlight div.code div.syntax p,
+  div.syntax-highlight div.code div.syntax p {
+    text-wrap: nowrap;
+  }
 }
 code.syntax-highlight div.code div.syntax p span.keyword,
 code.syntax-highlight div.code div.syntax p span.keyword-clickable,

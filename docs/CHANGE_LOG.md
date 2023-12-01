@@ -1,5 +1,40 @@
 # Syntax.js - Change Log:
 
+## Version 1.0.0:
+
+#### **Languages:**
+- Case Sensitive: Added a new language property "caseSensitive" (defaults to true) which states if the keyword matching is case sensitive.
+- Added support for the TypeScript programming language (importable file).
+
+#### **Settings:**
+- Added a new setting called "highlightComments", which states if comments should be highlighted (defaults to true).
+- Added a new setting called "highlightStrings", which states if strings should be highlighted (defaults to true).
+- Added a new setting called "highlightKeywords", which states if keywords should be highlighted (defaults to true).
+
+#### **Public Functions:**
+- Renamed the public function "findAndBuildNewElements()" to "highlightAll()".
+- Renamed the public function "getRenderedElements()" to "getAllElementsHighlighted()".
+- Added new public function "removeLanguage()", which will remove a specific language that can be rendered by name.
+- Added new public function "getAllLanguages()", which will return the object that contains all the language details.
+- Added new public function "highlightElement()", which will render a specific DOM element (accepts either the element or the ID of the element).
+- Added new public function "getLanguage()", which will return the details for a specific language (by name).
+- Renamed the public function "destroy()" to "destroyAll()".
+- Added a new version of the public function "destroy()", which will revert a specific element to its original HTML (minus the syntax attributes).
+
+#### **Custom Triggers:**
+- Renamed the custom trigger "onRender" to "onRenderComplete".
+
+#### **UI Improvements:**
+- The numbers column is now hidden by default on smaller screens (and the code line will now wrap).
+
+#### **Fixes:**
+- Fixed links to missing documentation in the main README.md and README_NUGET.md files.
+- Fixed some grammar mistakes.
+- Fixed a fault that prevented the original destroy() public function (now destroyAll()) from clearing down the elements list.
+
+<br>
+
+
 ## Version 0.8.0:
 - Added a new setting called "showLineNumbers", which states if the line numbers should be shown (defaults to true).
 - Renamed the public function "buildNewSyntaxElements" to "findAndBuildNewElements()".

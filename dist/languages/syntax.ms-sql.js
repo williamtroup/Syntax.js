@@ -1,4 +1,4 @@
-/*! Syntax.js v0.8.0 | (c) Bunoon | MIT License */
+/*! Syntax.js v1.0.0 | (c) Bunoon | MIT License */
 $syntax.addLanguage( "ms-sql", {
     keywords: [
         "ADD",
@@ -188,5 +188,6 @@ $syntax.addLanguage( "ms-sql", {
         "PROC"    
     ],
     comment: "--",
-    multiLineComment: [ "/*", "*/" ]
+    multiLineComment: [ "/*", "*/" ],
+    caseSensitive: true
 } );

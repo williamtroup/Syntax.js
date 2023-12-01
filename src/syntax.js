@@ -4,7 +4,7 @@
  * A lightweight, and easy-to-use, JavaScript library for code syntax highlighting!
  * 
  * @file        syntax.js
- * @version     v0.8.0
+ * @version     v1.0.0
  * @author      Bunoon
  * @license     MIT License
  * @copyright   Bunoon 2023
@@ -109,20 +109,33 @@
                     };
                 }
 
-                innerHTML = renderElementCommentVariables( innerHTML, syntaxLanguage );
-                innerHTML = renderElementMultiLineCommentVariables( innerHTML, syntaxLanguage );
-                innerHTML = renderElementStringQuotesPatternVariables( innerHTML, innerHTML.match( /".*?"/g ) );
-
-                if ( _languages[ syntaxLanguage ].comment !== "'" ) {
-                    innerHTML = renderElementStringQuotesPatternVariables( innerHTML, innerHTML.match( /'.*?'/g ) );
+                if ( syntaxOptions.highlightComments ) {
+                    innerHTML = renderElementCommentVariables( innerHTML, syntaxLanguage );
+                    innerHTML = renderElementMultiLineCommentVariables( innerHTML, syntaxLanguage );
                 }
 
-                innerHTML = renderElementKeywords( innerHTML, syntaxLanguage, syntaxOptions );
-                innerHTML = renderElementCommentsFromVariables( innerHTML );
-                innerHTML = renderElementStringQuotesFromVariables( innerHTML );
+                if ( syntaxOptions.highlightStrings ) {
+                    innerHTML = renderElementStringQuotesPatternVariables( innerHTML, innerHTML.match( /".*?"/g ) );
+
+                    if ( _languages[ syntaxLanguage ].comment !== "'" ) {
+                        innerHTML = renderElementStringQuotesPatternVariables( innerHTML, innerHTML.match( /'.*?'/g ) );
+                    }
+                }
+
+                if ( syntaxOptions.highlightKeywords ) {
+                    innerHTML = renderElementKeywords( innerHTML, syntaxLanguage, syntaxOptions );
+                }
+
+                if ( syntaxOptions.highlightComments ) {
+                    innerHTML = renderElementCommentsFromVariables( innerHTML );
+                }
+                
+                if ( syntaxOptions.highlightStrings ) {
+                    innerHTML = renderElementStringQuotesFromVariables( innerHTML );
+                }
 
                 renderElementCompletedHTML( element, number, syntax, innerHTML, syntaxOptions, isPreFormatted );
-                fireCustomTrigger( syntaxOptions.onRender, element );
+                fireCustomTrigger( syntaxOptions.onRenderComplete, element );
 
                 _elements.push( element );
             }
@@ -207,11 +220,13 @@
 
     function renderElementKeywords( innerHTML, syntaxLanguage, syntaxOptions ) {
         var keywords = _languages[ syntaxLanguage ].keywords,
+            caseSensitive = _languages[ syntaxLanguage ].caseSensitive,
             keywordsLength = keywords.length;
 
         for ( var keywordIndex = 0; keywordIndex < keywordsLength; keywordIndex++ ) {
             var keyword = keywords[ keywordIndex ],
-                regEx = new RegExp( "\\b" + keyword + "\\b", "g" );
+                regExFlags = caseSensitive ? "g" : "gi",
+                regEx = new RegExp( "\\b" + keyword + "\\b", regExFlags );
 
             if ( isDefinedFunction( syntaxOptions.onKeywordClicked ) ) {
                 innerHTML = innerHTML.replace( regEx, "<span class=\"keyword-clickable\">" + keyword + "</span>" );
@@ -328,8 +343,16 @@
         options.copyButtonText = getDefaultString( options.copyButtonText, "Copy" );
         options.removeBlankLines = getDefaultBoolean( options.removeBlankLines, false );
         options.showLineNumbers = getDefaultBoolean( options.showLineNumbers, true );
+        options.highlightKeywords = getDefaultBoolean( options.highlightKeywords, true );
+        options.highlightStrings = getDefaultBoolean( options.highlightStrings, true );
+        options.highlightComments = getDefaultBoolean( options.highlightComments, true );
+
+        return buildAttributeOptionCustomTriggers( options );
+    }
+
+    function buildAttributeOptionCustomTriggers( options ) {
         options.onCopy = getDefaultFunction( options.onCopy, null );
-        options.onRender = getDefaultFunction( options.onRender, null );
+        options.onRenderComplete = getDefaultFunction( options.onRenderComplete, null );
         options.onKeywordClicked = getDefaultFunction( options.onKeywordClicked, null );
 
         return options;
@@ -473,28 +496,54 @@
 
     /*
      * ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-     * Public Functions:  Building
+     * Public Functions:  Highlighting
      * ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
      */
 
     /**
-     * findAndBuildNewElements().
+     * highlightAll().
      * 
      * Finds all new code elements and renders them.
      * 
      * @public
-     * @fires       onRender
+     * @fires       onRenderComplete
      * 
      * @returns     {Object}                                                The Syntax.js class instance.
      */
-    this.findAndBuildNewElements = function() {
+    this.highlightAll = function() {
         render();
 
         return this;
     };
 
     /**
-     * getRenderedElements().
+     * highlightElement().
+     * 
+     * Renders a specific DOM element.
+     * 
+     * @public
+     * @fires       onRenderComplete
+     * 
+     * @param       {Object}    elementOrId                                 The element ID, or the element itself.
+     * 
+     * @returns     {Object}                                                The Syntax.js class instance.
+     */
+    this.highlightElement = function( elementOrId ) {
+        var element = elementOrId;
+
+        if ( isDefinedString( element ) ) {
+            element = _parameter_Document.getElementById( element );
+        }
+
+        if ( isDefined( element ) ) {
+            renderElement( element );
+        }
+
+        return this;
+    };
+
+    /**
+     * getAllElementsHighlighted().
      * 
      * Returns all the elements that have been detected and rendered.
      * 
@@ -503,8 +552,75 @@
      * @returns     {Object[]}                                              An array containing the rendered DOM elements.
      */
 
-    this.getRenderedElements = function() {
+    this.getAllElementsHighlighted = function() {
         return _elements;
+    };
+
+
+    /*
+     * ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+     * Public Functions:  Destroying
+     * ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+     */
+
+    /**
+     * destroyAll().
+     * 
+     * Reverts all rendered Syntax elements back to their original state (without render attributes).
+     * 
+     * @public
+     * 
+     * @returns     {Object}                                                The Syntax.js class instance.
+     */
+    this.destroyAll = function() {
+        for ( var elementId in _elements_Original ) {
+            if ( _elements_Original.hasOwnProperty( elementId ) ) {
+                var renderedElement = _parameter_Document.getElementById( elementId );
+
+                if ( isDefined( renderedElement ) ) {
+                    renderedElement.innerHTML = _elements_Original[ elementId ];
+                }
+            }
+        }
+
+        _elements_Original = {};
+        _elements = {};
+
+        return this;
+    };
+
+    /**
+     * destroy().
+     * 
+     * Reverts a Syntax element back to its original state (without render attributes).
+     * 
+     * @public
+     * 
+     * @param       {string}    elementId                                   The ID of the DOM element to destroy.
+     * 
+     * @returns     {Object}                                                The Syntax.js class instance.
+     */
+    this.destroy = function( elementId ) {
+        if ( _elements_Original.hasOwnProperty( elementId.toLowerCase() ) ) {
+            var renderedElement = _parameter_Document.getElementById( elementId );
+
+            if ( isDefined( renderedElement ) ) {
+                renderedElement.innerHTML = _elements_Original[ elementId.toLowerCase() ];
+
+                delete _elements_Original[ elementId.toLowerCase() ];
+
+                var elementsLength = _elements.length;
+                
+                for ( var elementIndex = 0; elementIndex < elementsLength; elementIndex++ ) {
+                    if ( _elements[ elementIndex ].id === elementId ) {
+                        delete _elements[ elementIndex ];
+                        break;
+                    }
+                }
+            }
+        }
+
+        return this;
     };
 
 
@@ -520,7 +636,7 @@
      * Adds a new language that can be rendered.
      * 
      * @public
-     * @fires       onRender
+     * @fires       onRenderComplete
      * 
      * @param       {string}    name                                        The name of the language.
      * @param       {boolean}   languageDetails                             The language details (refer to "Language" documentation for properties).
@@ -545,6 +661,61 @@
         return added;
     };
 
+    /**
+     * removeLanguage().
+     * 
+     * Removes new language that can be rendered.
+     * 
+     * @public
+     * 
+     * @param       {string}    name                                        The name of the language.
+     * 
+     * @returns     {boolean}                                               States if the language has been removed.
+     */
+    this.removeLanguage = function( name ) {
+        var removed = false;
+
+        if ( _languages.hasOwnProperty( name.toLowerCase() ) ) {
+            delete _languages[ name.toLowerCase() ];
+        }
+
+        return removed;
+    };
+
+    /**
+     * getLanguage().
+     * 
+     * Returns the language details (by name) that can be rendered.
+     * 
+     * @public
+     * 
+     * @param       {string}    name                                        The name of the language.
+     * 
+     * @returns     {Object}                                                The language details.
+     */
+    this.getLanguage = function( name ) {
+        var details = null;
+
+        if ( _languages.hasOwnProperty( name.toLowerCase() ) ) {
+            details = _languages[ name.toLowerCase() ];
+        }
+
+        return details;
+    };
+
+    /**
+     * getAllLanguages().
+     * 
+     * Returns all the languages that can be rendered.
+     * 
+     * @public
+     * 
+     * @returns     {Object}                                                The object that contains the languages.
+     */
+    this.getAllLanguages = function() {
+        return _languages;
+    };
+
 
     /*
      * ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -562,37 +733,7 @@
      * @returns     {string}                                                The version number.
      */
     this.getVersion = function() {
-        return "0.8.0";
-    };
-
-
-    /*
-     * ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-     * Public Functions:  Controls
-     * ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-     */
-
-    /**
-     * destroy().
-     * 
-     * Reverts all rendered Syntax elements back to their original state (without render attributes).
-     * 
-     * @public
-     * 
-     * @returns     {Object}                                                The Syntax.js class instance.
-     */
-    this.destroy = function() {
-        for ( var elementId in _elements_Original ) {
-            if ( _elements_Original.hasOwnProperty( elementId ) ) {
-                var renderedElement = _parameter_Document.getElementById( elementId );
-
-                if ( isDefined( renderedElement ) ) {
-                    renderedElement.innerHTML = _elements_Original[ elementId ];
-                }
-            }
-        }
-
-        return this;
+        return "1.0.0";
     };
 
 

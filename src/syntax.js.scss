@@ -1,5 +1,5 @@
 /*
- * Syntax.js Library v0.8.0
+ * Syntax.js Library v1.0.0
  *
  * Copyright 2023 Bunoon
  * Released under the MIT License
@@ -63,10 +63,15 @@ div.syntax-highlight {
             text-align: right;
             font-weight: 800 !important;
             border: var(--border-size) solid #BBBBBB;
+            display: none;
 
             p {
                 margin: 0;
                 text-wrap: nowrap;
+            }
+
+            @media (min-width: 768px) { 
+                display: block;
             }
         }
 
@@ -79,7 +84,11 @@ div.syntax-highlight {
 
             p {
                 margin: 0;
-                text-wrap: nowrap;
+                text-wrap: initial;
+
+                @media (min-width: 768px) { 
+                    text-wrap: nowrap;
+                }
 
                 span.keyword,
                 span.keyword-clickable {

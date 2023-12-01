@@ -1,4 +1,4 @@
-/*! Syntax.js v0.8.0 | (c) Bunoon | MIT License */
+/*! Syntax.js v1.0.0 | (c) Bunoon | MIT License */
 (function() {
   function render() {
     var domElements = _parameter_Document.getElementsByTagName("*");
@@ -50,17 +50,27 @@
             fireCustomTrigger(syntaxOptions.onCopy, innerHTMLCopy);
           };
         }
-        innerHTML = renderElementCommentVariables(innerHTML, syntaxLanguage);
-        innerHTML = renderElementMultiLineCommentVariables(innerHTML, syntaxLanguage);
-        innerHTML = renderElementStringQuotesPatternVariables(innerHTML, innerHTML.match(/".*?"/g));
-        if (_languages[syntaxLanguage].comment !== "'") {
-          innerHTML = renderElementStringQuotesPatternVariables(innerHTML, innerHTML.match(/'.*?'/g));
+        if (syntaxOptions.highlightComments) {
+          innerHTML = renderElementCommentVariables(innerHTML, syntaxLanguage);
+          innerHTML = renderElementMultiLineCommentVariables(innerHTML, syntaxLanguage);
         }
-        innerHTML = renderElementKeywords(innerHTML, syntaxLanguage, syntaxOptions);
-        innerHTML = renderElementCommentsFromVariables(innerHTML);
-        innerHTML = renderElementStringQuotesFromVariables(innerHTML);
+        if (syntaxOptions.highlightStrings) {
+          innerHTML = renderElementStringQuotesPatternVariables(innerHTML, innerHTML.match(/".*?"/g));
+          if (_languages[syntaxLanguage].comment !== "'") {
+            innerHTML = renderElementStringQuotesPatternVariables(innerHTML, innerHTML.match(/'.*?'/g));
+          }
+        }
+        if (syntaxOptions.highlightKeywords) {
+          innerHTML = renderElementKeywords(innerHTML, syntaxLanguage, syntaxOptions);
+        }
+        if (syntaxOptions.highlightComments) {
+          innerHTML = renderElementCommentsFromVariables(innerHTML);
+        }
+        if (syntaxOptions.highlightStrings) {
+          innerHTML = renderElementStringQuotesFromVariables(innerHTML);
+        }
         renderElementCompletedHTML(element, number, syntax, innerHTML, syntaxOptions, isPreFormatted);
-        fireCustomTrigger(syntaxOptions.onRender, element);
+        fireCustomTrigger(syntaxOptions.onRenderComplete, element);
         _elements.push(element);
       }
     }
@@ -125,11 +135,13 @@
   }
   function renderElementKeywords(innerHTML, syntaxLanguage, syntaxOptions) {
     var keywords = _languages[syntaxLanguage].keywords;
+    var caseSensitive = _languages[syntaxLanguage].caseSensitive;
     var keywordsLength = keywords.length;
     var keywordIndex = 0;
     for (; keywordIndex < keywordsLength; keywordIndex++) {
       var keyword = keywords[keywordIndex];
-      var regEx = new RegExp("\\b" + keyword + "\\b", "g");
+      var regExFlags = caseSensitive ? "g" : "gi";
+      var regEx = new RegExp("\\b" + keyword + "\\b", regExFlags);
       if (isDefinedFunction(syntaxOptions.onKeywordClicked)) {
         innerHTML = innerHTML.replace(regEx, '<span class="keyword-clickable">' + keyword + "</span>");
       } else {
@@ -221,8 +233,14 @@
     options.copyButtonText = getDefaultString(options.copyButtonText, "Copy");
     options.removeBlankLines = getDefaultBoolean(options.removeBlankLines, false);
     options.showLineNumbers = getDefaultBoolean(options.showLineNumbers, true);
+    options.highlightKeywords = getDefaultBoolean(options.highlightKeywords, true);
+    options.highlightStrings = getDefaultBoolean(options.highlightStrings, true);
+    options.highlightComments = getDefaultBoolean(options.highlightComments, true);
+    return buildAttributeOptionCustomTriggers(options);
+  }
+  function buildAttributeOptionCustomTriggers(options) {
     options.onCopy = getDefaultFunction(options.onCopy, null);
-    options.onRender = getDefaultFunction(options.onRender, null);
+    options.onRenderComplete = getDefaultFunction(options.onRenderComplete, null);
     options.onKeywordClicked = getDefaultFunction(options.onKeywordClicked, null);
     return options;
   }
@@ -313,12 +331,54 @@
   var _comments_Cached = {};
   var _comments_Cached_Count = 0;
   var _languages = {};
-  this.findAndBuildNewElements = function() {
+  this.highlightAll = function() {
     render();
     return this;
   };
-  this.getRenderedElements = function() {
+  this.highlightElement = function(elementOrId) {
+    var element = elementOrId;
+    if (isDefinedString(element)) {
+      element = _parameter_Document.getElementById(element);
+    }
+    if (isDefined(element)) {
+      renderElement(element);
+    }
+    return this;
+  };
+  this.getAllElementsHighlighted = function() {
     return _elements;
+  };
+  this.destroyAll = function() {
+    var elementId;
+    for (elementId in _elements_Original) {
+      if (_elements_Original.hasOwnProperty(elementId)) {
+        var renderedElement = _parameter_Document.getElementById(elementId);
+        if (isDefined(renderedElement)) {
+          renderedElement.innerHTML = _elements_Original[elementId];
+        }
+      }
+    }
+    _elements_Original = {};
+    _elements = {};
+    return this;
+  };
+  this.destroy = function(elementId) {
+    if (_elements_Original.hasOwnProperty(elementId.toLowerCase())) {
+      var renderedElement = _parameter_Document.getElementById(elementId);
+      if (isDefined(renderedElement)) {
+        renderedElement.innerHTML = _elements_Original[elementId.toLowerCase()];
+        delete _elements_Original[elementId.toLowerCase()];
+        var elementsLength = _elements.length;
+        var elementIndex = 0;
+        for (; elementIndex < elementsLength; elementIndex++) {
+          if (_elements[elementIndex].id === elementId) {
+            delete _elements[elementIndex];
+            break;
+          }
+        }
+      }
+    }
+    return this;
   };
   this.addLanguage = function(name, languageDetails, triggerRender) {
     var added = false;
@@ -332,20 +392,25 @@
     }
     return added;
   };
-  this.getVersion = function() {
-    return "0.8.0";
-  };
-  this.destroy = function() {
-    var elementId;
-    for (elementId in _elements_Original) {
-      if (_elements_Original.hasOwnProperty(elementId)) {
-        var renderedElement = _parameter_Document.getElementById(elementId);
-        if (isDefined(renderedElement)) {
-          renderedElement.innerHTML = _elements_Original[elementId];
-        }
-      }
+  this.removeLanguage = function(name) {
+    var removed = false;
+    if (_languages.hasOwnProperty(name.toLowerCase())) {
+      delete _languages[name.toLowerCase()];
     }
-    return this;
+    return removed;
+  };
+  this.getLanguage = function(name) {
+    var details = null;
+    if (_languages.hasOwnProperty(name.toLowerCase())) {
+      details = _languages[name.toLowerCase()];
+    }
+    return details;
+  };
+  this.getAllLanguages = function() {
+    return _languages;
+  };
+  this.getVersion = function() {
+    return "1.0.0";
   };
   (function(documentObject, navigatorObject, windowObject) {
     _parameter_Document = documentObject;

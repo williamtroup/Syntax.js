@@ -5,19 +5,44 @@ Below is a list of all the public functions that can be called from the Syntax.j
 <br>
 
 
-<h1>Building:</h1>
+<h1>Highlighting:</h1>
 
-### **findAndBuildNewElements()**:
+### **highlightAll()**:
 Finds all new code elements and renders them.
 <br>
-***Fires***:  onRender
+***Fires***:  onRenderComplete
 <br>
 ***Returns***: '*Object*' - The Syntax.js class instance.
 
-### **getRenderedElements()**:
+### **highlightElement( *elementOrId* )**:
+Renders a specific DOM element.
+<br>
+***Fires***:  onRenderComplete
+<br>
+***Parameter: name***: '*Object*' - The element ID, or the element itself.
+<br>
+***Returns***: '*Object*' - The Syntax.js class instance.
+
+### **getAllElementsHighlighted()**:
 Returns all the elements that have been detected and rendered.
 <br>
 ***Returns***: '*Object[]*' - An array containing the rendered DOM elements.
+
+
+<br>
+<h1>Destroying:</h1>
+
+### **destroy( *elementId* )**:
+Reverts a Syntax element back to its original state (without render attributes).
+<br>
+***Parameter: elementId***: '*string*' - The ID of the DOM element to destroy.
+<br>
+***Returns***: '*Object*' - The Syntax.js class instance.
+
+### **destroyAll()**:
+Reverts all rendered Syntax elements back to their original state (without render attributes).
+<br>
+***Returns***: '*Object*' - The Syntax.js class instance.
 
 
 <br>
@@ -26,7 +51,7 @@ Returns all the elements that have been detected and rendered.
 ### **addLanguage( *name*, *languageDetails*, *[triggerRender]* )**:
 Adds a new language that can be rendered.
 <br>
-***Fires***:  onRender
+***Fires***:  onRenderComplete
 <br>
 ***Parameter: name***: '*string*' - The name of the language.
 <br>
@@ -36,6 +61,25 @@ Adds a new language that can be rendered.
 <br>
 ***Returns***: '*boolean*' - States if the language has been added.
 
+### **removeLanguage( *name* )**:
+Removes new language that can be rendered.
+<br>
+***Parameter: name***: '*string*' - The name of the language.
+<br>
+***Returns***: '*boolean*' - States if the language has been removed.
+
+### **getLanguage( *name* )**:
+Returns the language details (by name) that can be rendered.
+<br>
+***Parameter: name***: '*string*' - The name of the language.
+<br>
+***Returns***: '*Object*' - The language details.
+
+### **getAllLanguages()**:
+Returns all the languages that can be rendered.
+<br>
+***Returns***: '*Object*' - The object that contains the languages.
+
 
 <br>
 <h1>Additional Data:</h1>
@@ -44,12 +88,3 @@ Adds a new language that can be rendered.
 Returns the version of Syntax.js.
 <br>
 ***Returns***: '*string*' - The version number.
-
-
-<br>
-<h1>Controls:</h1>
-
-### **destroy()**:
-Reverts all rendered Syntax elements back to their original state (without render attributes).
-<br>
-***Returns***: '*Object*' - The Syntax.js class instance.
