@@ -43,6 +43,11 @@ Removes new language that can be rendered.
 <br>
 ***Returns***: '*boolean*' - States if the language has been removed.
 
+### **getAllLanguages()**:
+Returns all the languages that can be rendered.
+<br>
+***Returns***: '*Object*' - The object that contains the languages.
+
 
 <br>
 <h1>Additional Data:</h1>

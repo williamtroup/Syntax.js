@@ -587,6 +587,19 @@
         return removed;
     };
 
+    /**
+     * getAllLanguages().
+     * 
+     * Returns all the languages that can be rendered.
+     * 
+     * @public
+     * 
+     * @returns     {Object}                                                The object that contains the languages.
+     */
+    this.getAllLanguages = function() {
+        return _languages;
+    };
+
 
     /*
      * ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
