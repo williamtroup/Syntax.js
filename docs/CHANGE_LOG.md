@@ -12,6 +12,7 @@
 
 #### **General Improvements:**
 - Renamed the public function "findAndBuildNewElements()" to "highlightAll()".
+- Renamed the public function "getRenderedElements()" to "getAllElementsHighlighted()".
 
 #### **Code Improvements:**
 - 

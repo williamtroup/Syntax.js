@@ -14,7 +14,7 @@ Finds all new code elements and renders them.
 <br>
 ***Returns***: '*Object*' - The Syntax.js class instance.
 
-### **getRenderedElements()**:
+### **getAllElementsHighlighted()**:
 Returns all the elements that have been detected and rendered.
 <br>
 ***Returns***: '*Object[]*' - An array containing the rendered DOM elements.

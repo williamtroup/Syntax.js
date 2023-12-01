@@ -333,7 +333,7 @@
     render();
     return this;
   };
-  this.getRenderedElements = function() {
+  this.getAllElementsHighlighted = function() {
     return _elements;
   };
   this.addLanguage = function(name, languageDetails, triggerRender) {

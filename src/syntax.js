@@ -515,7 +515,7 @@
     };
 
     /**
-     * getRenderedElements().
+     * getAllElementsHighlighted().
      * 
      * Returns all the elements that have been detected and rendered.
      * 
@@ -524,7 +524,7 @@
      * @returns     {Object[]}                                              An array containing the rendered DOM elements.
      */
 
-    this.getRenderedElements = function() {
+    this.getAllElementsHighlighted = function() {
         return _elements;
     };
 
