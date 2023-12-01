@@ -109,17 +109,30 @@
                     };
                 }
 
-                innerHTML = renderElementCommentVariables( innerHTML, syntaxLanguage );
-                innerHTML = renderElementMultiLineCommentVariables( innerHTML, syntaxLanguage );
-                innerHTML = renderElementStringQuotesPatternVariables( innerHTML, innerHTML.match( /".*?"/g ) );
-
-                if ( _languages[ syntaxLanguage ].comment !== "'" ) {
-                    innerHTML = renderElementStringQuotesPatternVariables( innerHTML, innerHTML.match( /'.*?'/g ) );
+                if ( syntaxOptions.highlightComments ) {
+                    innerHTML = renderElementCommentVariables( innerHTML, syntaxLanguage );
+                    innerHTML = renderElementMultiLineCommentVariables( innerHTML, syntaxLanguage );
                 }
 
-                innerHTML = renderElementKeywords( innerHTML, syntaxLanguage, syntaxOptions );
-                innerHTML = renderElementCommentsFromVariables( innerHTML );
-                innerHTML = renderElementStringQuotesFromVariables( innerHTML );
+                if ( syntaxOptions.highlightStrings ) {
+                    innerHTML = renderElementStringQuotesPatternVariables( innerHTML, innerHTML.match( /".*?"/g ) );
+
+                    if ( _languages[ syntaxLanguage ].comment !== "'" ) {
+                        innerHTML = renderElementStringQuotesPatternVariables( innerHTML, innerHTML.match( /'.*?'/g ) );
+                    }
+                }
+
+                if ( syntaxOptions.highlightKeywords ) {
+                    innerHTML = renderElementKeywords( innerHTML, syntaxLanguage, syntaxOptions );
+                }
+
+                if ( syntaxOptions.highlightComments ) {
+                    innerHTML = renderElementCommentsFromVariables( innerHTML );
+                }
+                
+                if ( syntaxOptions.highlightStrings ) {
+                    innerHTML = renderElementStringQuotesFromVariables( innerHTML );
+                }
 
                 renderElementCompletedHTML( element, number, syntax, innerHTML, syntaxOptions, isPreFormatted );
                 fireCustomTrigger( syntaxOptions.onRender, element );
@@ -328,6 +341,14 @@
         options.copyButtonText = getDefaultString( options.copyButtonText, "Copy" );
         options.removeBlankLines = getDefaultBoolean( options.removeBlankLines, false );
         options.showLineNumbers = getDefaultBoolean( options.showLineNumbers, true );
+        options.highlightKeywords = getDefaultBoolean( options.highlightKeywords, true );
+        options.highlightStrings = getDefaultBoolean( options.highlightStrings, true );
+        options.highlightComments = getDefaultBoolean( options.highlightComments, true );
+
+        return buildAttributeOptionCustomTriggers( options );
+    }
+
+    function buildAttributeOptionCustomTriggers( options ) {
         options.onCopy = getDefaultFunction( options.onCopy, null );
         options.onRender = getDefaultFunction( options.onRender, null );
         options.onKeywordClicked = getDefaultFunction( options.onKeywordClicked, null );

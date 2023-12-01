@@ -6,7 +6,9 @@
 - 
 
 #### **Settings:**
-- 
+- Added a new setting called "highlightComments", which states if comments should be highlighted (defaults to true).
+- Added a new setting called "highlightStrings", which states if strings should be highlighted (defaults to true).
+- Added a new setting called "highlightKeywords", which states if keywords should be highlighted (defaults to true).
 
 #### **General Improvements:**
 - 
