@@ -36,5 +36,6 @@ $syntax.addLanguage( "c", {
         "double"
     ],
     comment: "//",
-    multiLineComment: [ "/*", "*/" ]
+    multiLineComment: [ "/*", "*/" ],
+    caseSensitive: true
 } );

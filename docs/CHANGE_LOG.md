@@ -3,7 +3,7 @@
 ## Version 1.0.0:
 
 #### **New Features:**
-- 
+- Case Sensitive: Added a new language property "caseSensitive" (defaults to true) which states if the keyword matching is case sensitive.
 
 #### **Settings:**
 - Added a new setting called "highlightComments", which states if comments should be highlighted (defaults to true).

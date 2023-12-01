@@ -37,5 +37,6 @@ $syntax.addLanguage( "python", {
         "or",
         "yield"      
     ],
-    comment: "#"
+    comment: "#",
+    caseSensitive: true
 } );

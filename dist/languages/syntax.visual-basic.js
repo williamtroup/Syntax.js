@@ -157,4 +157,5 @@ $syntax.addLanguage( "visual-basic", {
         "#Else"  
     ],
     comment: "'",
+    caseSensitive: true
 } );

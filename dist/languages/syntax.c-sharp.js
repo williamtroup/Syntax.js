@@ -81,5 +81,6 @@ $syntax.addLanguage( "c-sharp", {
         "while"        
     ],
     comment: "//",
-    multiLineComment: [ "/*", "*/" ]
+    multiLineComment: [ "/*", "*/" ],
+    caseSensitive: true
 } );

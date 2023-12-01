@@ -28,5 +28,6 @@ $syntax.addLanguage( "go", {
         "var"     
     ],
     comment: "//",
-    multiLineComment: [ "/*", "*/" ]
+    multiLineComment: [ "/*", "*/" ],
+    caseSensitive: true
 } );

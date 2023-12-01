@@ -188,5 +188,6 @@ $syntax.addLanguage( "ms-sql", {
         "PROC"    
     ],
     comment: "--",
-    multiLineComment: [ "/*", "*/" ]
+    multiLineComment: [ "/*", "*/" ],
+    caseSensitive: true
 } );

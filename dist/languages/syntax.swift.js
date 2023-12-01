@@ -73,5 +73,6 @@ $syntax.addLanguage( "swift", {
         "willSet"
     ],
     comment: "//",
-    multiLineComment: [ "/*", "*/" ]
+    multiLineComment: [ "/*", "*/" ],
+    caseSensitive: true
 } );

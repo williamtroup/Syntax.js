@@ -70,5 +70,6 @@ $syntax.addLanguage( "javascript", {
     multiLineComment: [
         "/*",
         "*/"
-    ]
+    ],
+    caseSensitive: true
 } );

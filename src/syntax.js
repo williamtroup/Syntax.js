@@ -220,11 +220,13 @@
 
     function renderElementKeywords( innerHTML, syntaxLanguage, syntaxOptions ) {
         var keywords = _languages[ syntaxLanguage ].keywords,
+            caseSensitive = _languages[ syntaxLanguage ].caseSensitive,
             keywordsLength = keywords.length;
 
         for ( var keywordIndex = 0; keywordIndex < keywordsLength; keywordIndex++ ) {
             var keyword = keywords[ keywordIndex ],
-                regEx = new RegExp( "\\b" + keyword + "\\b", "g" );
+                regExFlags = caseSensitive ? "g" : "gi",
+                regEx = new RegExp( "\\b" + keyword + "\\b", regExFlags );
 
             if ( isDefinedFunction( syntaxOptions.onKeywordClicked ) ) {
                 innerHTML = innerHTML.replace( regEx, "<span class=\"keyword-clickable\">" + keyword + "</span>" );

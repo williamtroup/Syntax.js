@@ -53,5 +53,6 @@ $syntax.addLanguage( "java", {
         "while"    
     ],
     comment: "//",
-    multiLineComment: [ "/*", "*/" ]
+    multiLineComment: [ "/*", "*/" ],
+    caseSensitive: true
 } );

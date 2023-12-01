@@ -98,5 +98,6 @@ $syntax.addLanguage( "c-plus-plus", {
         "xor_eq"     
     ],
     comment: "//",
-    multiLineComment: [ "/*", "*/" ]
+    multiLineComment: [ "/*", "*/" ],
+    caseSensitive: true
 } );
