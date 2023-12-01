@@ -16,16 +16,16 @@
 - Renamed the public function "getRenderedElements()" to "getAllElementsHighlighted()".
 - Added new public function "removeLanguage()", which will remove a specific language that can be rendered by name.
 - Added new public function "getAllLanguages()", which will return the object that contains all the language details.
-- Added new public function "highlightElement()", which will render a specific DOM element (accepts either the element, or the elements ID).
+- Added new public function "highlightElement()", which will render a specific DOM element (accepts either the element or the ID of the element).
 - Added new public function "getLanguage()", which will return the details for a specific language (by name).
 - Renamed the public function "destroy()" to "destroyAll()".
-- Added a new version of the public function "destroy()", which will revert a specific element back to its original HTML (minus the syntax attributes).
+- Added a new version of the public function "destroy()", which will revert a specific element to its original HTML (minus the syntax attributes).
 
 #### **Custom Triggers:**
 - Renamed the custom trigger "onRender" to "onRenderComplete".
 
 #### **UI Improvements:**
-- The numbers columns is now hidden by default on smaller screens (and the code line will now wrap).
+- The numbers column is now hidden by default on smaller screens (and the code line will now wrap).
 
 #### **Fixes:**
 - Fixed links to missing documentation in the main README.md and README_NUGET.md files.
