@@ -694,6 +694,43 @@
             }
         }
 
+        _elements_Original = {};
+        _elements = {};
+
+        return this;
+    };
+
+    /**
+     * destroy().
+     * 
+     * Reverts a Syntax element back to its original state (without render attributes).
+     * 
+     * @public
+     * 
+     * @param       {string}    elementId                                   The ID of the DOM element to destroy.
+     * 
+     * @returns     {Object}                                                The Syntax.js class instance.
+     */
+    this.destroy = function( elementId ) {
+        if ( _elements_Original.hasOwnProperty( elementId.toLowerCase() ) ) {
+            var renderedElement = _parameter_Document.getElementById( elementId );
+
+            if ( isDefined( renderedElement ) ) {
+                renderedElement.innerHTML = _elements_Original[ elementId.toLowerCase() ];
+
+                delete _elements_Original[ elementId.toLowerCase() ];
+
+                var elementsLength = _elements.length;
+                
+                for ( var elementIndex = 0; elementIndex < elementsLength; elementIndex++ ) {
+                    if ( _elements[ elementIndex ].id === elementId ) {
+                        delete _elements[ elementIndex ];
+                        break;
+                    }
+                }
+            }
+        }
+
         return this;
     };
 

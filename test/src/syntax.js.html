@@ -17,7 +17,7 @@
         </div>
 
         <div class="contents">
-            <code data-syntax-language="javascript">
+            <code id="manual-destroy" data-syntax-language="javascript">
                 <pre>
                     var something = true;
     
@@ -79,7 +79,8 @@
             <br />
 
             <h2>Controls:</h2>
-            <button onclick="$syntax.destroy();">Destroy</button>
+            <button onclick="$syntax.destroy( 'manual-destroy' );">Destroy</button>
+            <button onclick="$syntax.destroyAll();">Destroy All</button>
         </div>
     </body>
 

@@ -18,17 +18,15 @@
 - Added new public function "highlightElement()", which will render a specific DOM element (accepts either the element, or the elements ID).
 - Added new public function "getLanguage()", which will return the details for a specific language (by name).
 - Renamed the public function "destroy()" to "destroyAll()".
-- 
+- Added a new version of the public function "destroy()", which will revert a specific element back to its original HTML (minus the syntax attributes).
 
 #### **Custom Triggers:**
 - Renamed the custom trigger "onRender" to "onRenderComplete".
 
-#### **Code Improvements:**
-- 
-
 #### **Fixes:**
 - Fixed links to missing documentation in the main README.md and README_NUGET.md files.
 - Fixed some grammar mistakes.
+- Fixed a fault that prevented the original destroy() public function (now destroyAll()) from clearing down the elements list.
 
 <br>
 

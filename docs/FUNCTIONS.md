@@ -77,6 +77,13 @@ Returns the version of Syntax.js.
 <br>
 <h1>Controls:</h1>
 
+### **destroy( *elementId* )**:
+Reverts a Syntax element back to its original state (without render attributes).
+<br>
+***Parameter: elementId***: '*string*' - The ID of the DOM element to destroy.
+<br>
+***Returns***: '*Object*' - The Syntax.js class instance.
+
 ### **destroyAll()**:
 Reverts all rendered Syntax elements back to their original state (without render attributes).
 <br>
