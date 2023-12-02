@@ -2,6 +2,7 @@
 
 ## Version 1.0.1:
 - Fixed documentation missing references that prevented the library from working properly.
+- The render() method now only scans for "div" and "code" DOM element types (faster).
 - 
 
 <br>

@@ -1,12 +1,17 @@
 /*! Syntax.js v1.0.1 | (c) Bunoon | MIT License */
 (function() {
   function render() {
-    var domElements = _parameter_Document.getElementsByTagName("*");
-    var elements = [].slice.call(domElements);
-    var elementsLength = elements.length;
-    var elementIndex = 0;
-    for (; elementIndex < elementsLength; elementIndex++) {
-      renderElement(elements[elementIndex]);
+    var tagTypes = ["div", "code"];
+    var tagTypesLength = tagTypes.length;
+    var tagTypeIndex = 0;
+    for (; tagTypeIndex < tagTypesLength; tagTypeIndex++) {
+      var domElements = _parameter_Document.getElementsByTagName(tagTypes[tagTypeIndex]);
+      var elements = [].slice.call(domElements);
+      var elementsLength = elements.length;
+      var elementIndex = 0;
+      for (; elementIndex < elementsLength; elementIndex++) {
+        renderElement(elements[elementIndex]);
+      }
     }
   }
   function renderElement(element) {

@@ -45,12 +45,17 @@
      */
 
     function render() {
-        var domElements = _parameter_Document.getElementsByTagName( "*" ),
-            elements = [].slice.call( domElements ),
-            elementsLength = elements.length;
+        var tagTypes = [ "div", "code" ],
+            tagTypesLength = tagTypes.length;
 
-        for ( var elementIndex = 0; elementIndex < elementsLength; elementIndex++ ) {
-            renderElement( elements[ elementIndex ] );
+        for ( var tagTypeIndex = 0; tagTypeIndex < tagTypesLength; tagTypeIndex++ ) {
+            var domElements = _parameter_Document.getElementsByTagName( tagTypes[ tagTypeIndex ] ),
+                elements = [].slice.call( domElements ),
+                elementsLength = elements.length;
+
+            for ( var elementIndex = 0; elementIndex < elementsLength; elementIndex++ ) {
+                renderElement( elements[ elementIndex ] );
+            }
         }
     }
 
