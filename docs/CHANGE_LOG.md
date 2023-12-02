@@ -1,6 +1,7 @@
 # Syntax.js - Change Log:
 
 ## Version 1.0.1:
+- Fixed documentation missing references that prevented the library from working properly.
 - 
 
 <br>

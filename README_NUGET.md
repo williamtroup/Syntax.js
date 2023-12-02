@@ -47,6 +47,7 @@ Make sure you include the "DOCTYPE html" tag at the top of your email, as follow
 ```markdown
 <link rel="stylesheet" href="dist/syntax.js.css" />
 <script src="dist/syntax.js"></script>
+<script src="dist/languages/syntax.javascript.js"></script>
 ```
 
 ### 3. Create DOM Container:
