@@ -1,6 +1,6 @@
 # Syntax.js - Change Log:
 
-## Version 1.0.1:
+## Version 1.1.0:
 - Fixed documentation missing references that prevented the library from working properly.
 - The render() method now only scans for "div" and "code" DOM element types (faster).
 - Improved the README.md and README_NUGET.md documentation.
