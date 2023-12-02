@@ -11,6 +11,21 @@ Fires when the syntax for an element is rendered.
 <br>
 ***Parameter:*** syntax: '*object*' - The DOM element that was rendered.
 
+### options.onKeywordRender( *keyword* ):
+Fires when a keyword is rendered.
+<br>
+***Parameter:*** keyword: '*string*' - The keyword that was rendered.
+
+### options.onStringRender( *string* ):
+Fires when a string is rendered.
+<br>
+***Parameter:*** string: '*string*' - The string that was rendered.
+
+### options.onCommentRender( *comment* ):
+Fires when a comment is rendered.
+<br>
+***Parameter:*** comment: '*string*' - The comment that was rendered.
+
 
 <br>
 <h1>For Code:</h1>

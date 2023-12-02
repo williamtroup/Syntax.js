@@ -57,13 +57,13 @@
             };
           }
           if (syntaxOptions.highlightComments) {
-            innerHTML = renderElementCommentVariables(innerHTML, syntaxLanguage);
-            innerHTML = renderElementMultiLineCommentVariables(innerHTML, syntaxLanguage);
+            innerHTML = renderElementCommentVariables(innerHTML, syntaxLanguage, syntaxOptions);
+            innerHTML = renderElementMultiLineCommentVariables(innerHTML, syntaxLanguage, syntaxOptions);
           }
           if (syntaxOptions.highlightStrings) {
-            innerHTML = renderElementStringQuotesPatternVariables(innerHTML, innerHTML.match(/".*?"/g));
+            innerHTML = renderElementStringQuotesPatternVariables(innerHTML, innerHTML.match(/".*?"/g), syntaxOptions);
             if (_languages[syntaxLanguage].comment !== "'") {
-              innerHTML = renderElementStringQuotesPatternVariables(innerHTML, innerHTML.match(/'.*?'/g));
+              innerHTML = renderElementStringQuotesPatternVariables(innerHTML, innerHTML.match(/'.*?'/g), syntaxOptions);
             }
           }
           if (syntaxOptions.highlightKeywords) {
@@ -84,7 +84,7 @@
       }
     }
   }
-  function renderElementCommentVariables(innerHTML, syntaxLanguage) {
+  function renderElementCommentVariables(innerHTML, syntaxLanguage, syntaxOptions) {
     var lookup = _languages[syntaxLanguage].comment;
     var patternItems = innerHTML.match(new RegExp(lookup + ".*", "g"));
     if (patternItems !== null) {
@@ -96,11 +96,12 @@
         _comments_Cached[commentVariable] = '<span class="comment">' + comment + "</span>";
         _comments_Cached_Count++;
         innerHTML = innerHTML.replace(comment, commentVariable);
+        fireCustomTrigger(syntaxOptions.onCommentRender, comment);
       }
     }
     return innerHTML;
   }
-  function renderElementMultiLineCommentVariables(innerHTML, syntaxLanguage) {
+  function renderElementMultiLineCommentVariables(innerHTML, syntaxLanguage, syntaxOptions) {
     var lookup = _languages[syntaxLanguage].multiLineComment;
     if (isDefinedArray(lookup) && lookup.length === 2) {
       var startIndex = 0;
@@ -121,13 +122,14 @@
               _comments_Cached_Count++;
               innerHTML = innerHTML.replace(commentLine, commentVariable);
             }
+            fireCustomTrigger(syntaxOptions.onCommentRender, comment);
           }
         }
       }
     }
     return innerHTML;
   }
-  function renderElementStringQuotesPatternVariables(innerHTML, patternItems) {
+  function renderElementStringQuotesPatternVariables(innerHTML, patternItems, syntaxOptions) {
     if (patternItems !== null) {
       var patternItemsLength = patternItems.length;
       var patternItemsIndex = 0;
@@ -138,6 +140,7 @@
         _strings_Cached[quoteVariable] = '<q class="string">' + quoteReplacement + "</q>";
         _strings_Cached_Count++;
         innerHTML = innerHTML.replace(quote, quoteVariable);
+        fireCustomTrigger(syntaxOptions.onStringRender, quote);
       }
     }
     return innerHTML;
@@ -156,6 +159,7 @@
       } else {
         innerHTML = innerHTML.replace(regEx, '<span class="keyword">' + keyword + "</span>");
       }
+      fireCustomTrigger(syntaxOptions.onKeywordRender, keyword);
     }
     return innerHTML;
   }
@@ -251,6 +255,9 @@
     options.onCopy = getDefaultFunction(options.onCopy, null);
     options.onRenderComplete = getDefaultFunction(options.onRenderComplete, null);
     options.onKeywordClicked = getDefaultFunction(options.onKeywordClicked, null);
+    options.onKeywordRender = getDefaultFunction(options.onKeywordRender, null);
+    options.onStringRender = getDefaultFunction(options.onStringRender, null);
+    options.onCommentRender = getDefaultFunction(options.onCommentRender, null);
     return options;
   }
   function isDefined(value) {
