@@ -8,7 +8,6 @@
 - Added new custom trigger "onKeywordRender", which is called when a keyword is rendered (before main render completion).
 - Added new custom trigger "onStringRender", which is called when a string is rendered (before main render completion).
 - Added new custom trigger "onCommentRender", which is called when a comment is rendered (before main render completion).
-- 
 
 <br>
 
