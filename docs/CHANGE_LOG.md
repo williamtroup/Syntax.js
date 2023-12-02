@@ -4,6 +4,7 @@
 - Fixed documentation missing references that prevented the library from working properly.
 - The render() method now only scans for "div" and "code" DOM element types (faster).
 - Improved the README.md and README_NUGET.md documentation.
+- When a specific language is not supported, a new error log is shown in the console.
 - 
 
 <br>
