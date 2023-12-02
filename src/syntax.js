@@ -4,7 +4,7 @@
  * A lightweight, and easy-to-use, JavaScript library for code syntax highlighting!
  * 
  * @file        syntax.js
- * @version     v1.0.0
+ * @version     v1.1.0
  * @author      Bunoon
  * @license     MIT License
  * @copyright   Bunoon 2023
@@ -45,12 +45,17 @@
      */
 
     function render() {
-        var domElements = _parameter_Document.getElementsByTagName( "*" ),
-            elements = [].slice.call( domElements ),
-            elementsLength = elements.length;
+        var tagTypes = [ "div", "code" ],
+            tagTypesLength = tagTypes.length;
 
-        for ( var elementIndex = 0; elementIndex < elementsLength; elementIndex++ ) {
-            renderElement( elements[ elementIndex ] );
+        for ( var tagTypeIndex = 0; tagTypeIndex < tagTypesLength; tagTypeIndex++ ) {
+            var domElements = _parameter_Document.getElementsByTagName( tagTypes[ tagTypeIndex ] ),
+                elements = [].slice.call( domElements ),
+                elementsLength = elements.length;
+
+            for ( var elementIndex = 0; elementIndex < elementsLength; elementIndex++ ) {
+                renderElement( elements[ elementIndex ] );
+            }
         }
     }
 
@@ -58,91 +63,96 @@
         if ( isDefined( element ) ) {
             var syntaxLanguage = element.getAttribute( "data-syntax-language" );
 
-            if ( isDefined( syntaxLanguage ) && _languages.hasOwnProperty( syntaxLanguage ) ) {
-                var innerHTML = element.innerHTML,
-                    syntaxOptions = getObjectFromString( element.getAttribute( "data-syntax-options" ) ),
-                    isPreFormatted = false;
-                
-                syntaxOptions = buildAttributeOptions( syntaxOptions );
+            if ( isDefined( syntaxLanguage ) ) {
+                if ( _languages.hasOwnProperty( syntaxLanguage ) ) {
+                    var innerHTML = element.innerHTML,
+                        syntaxOptions = getObjectFromString( element.getAttribute( "data-syntax-options" ) ),
+                        isPreFormatted = false;
+                    
+                    syntaxOptions = buildAttributeOptions( syntaxOptions );
 
-                if ( element.children.length > 0 && element.children[ 0 ].nodeName.toLowerCase() === "pre" ) {
-                    innerHTML = element.children[ 0 ].innerHTML;
-                    isPreFormatted = true;
-                }
-                
-                var innerHTMLCopy = innerHTML.trim(),
-                    number = null,
-                    elementId = element.id;
-
-                if ( !isDefinedString( elementId ) ) {
-                    elementId = newGuid();
-                }
-
-                _elements_Original[ elementId ] = element.innerHTML;
-
-                element.removeAttribute( "data-syntax-language" );
-                element.removeAttribute( "data-syntax-options" );
-                element.id = elementId;
-                element.className = element.className === _string.empty ? "syntax-highlight" : element.className + " syntax-highlight";
-                element.innerHTML = _string.empty;
-
-                var code = createElement( "div", "code custom-scroll-bars" );
-                element.appendChild( code );
-
-                if ( syntaxOptions.showLineNumbers ) {
-                    number = createElement( "div", "number" );
-                    code.appendChild( number );
-                }
-    
-                var syntax = createElement( "div", "syntax" );
-                code.appendChild( syntax );
-
-                if ( syntaxOptions.showCopyButton ) {
-                    var copyButton = createElement( "div", "copy-button" );
-                    copyButton.innerHTML = syntaxOptions.copyButtonText;
-                    syntax.appendChild( copyButton );
-    
-                    copyButton.onclick = function() {
-                        _parameter_Navigator.clipboard.writeText( innerHTMLCopy );
-
-                        fireCustomTrigger( syntaxOptions.onCopy, innerHTMLCopy );
-                    };
-                }
-
-                if ( syntaxOptions.highlightComments ) {
-                    innerHTML = renderElementCommentVariables( innerHTML, syntaxLanguage );
-                    innerHTML = renderElementMultiLineCommentVariables( innerHTML, syntaxLanguage );
-                }
-
-                if ( syntaxOptions.highlightStrings ) {
-                    innerHTML = renderElementStringQuotesPatternVariables( innerHTML, innerHTML.match( /".*?"/g ) );
-
-                    if ( _languages[ syntaxLanguage ].comment !== "'" ) {
-                        innerHTML = renderElementStringQuotesPatternVariables( innerHTML, innerHTML.match( /'.*?'/g ) );
+                    if ( element.children.length > 0 && element.children[ 0 ].nodeName.toLowerCase() === "pre" ) {
+                        innerHTML = element.children[ 0 ].innerHTML;
+                        isPreFormatted = true;
                     }
-                }
+                    
+                    var innerHTMLCopy = innerHTML.trim(),
+                        number = null,
+                        elementId = element.id;
 
-                if ( syntaxOptions.highlightKeywords ) {
-                    innerHTML = renderElementKeywords( innerHTML, syntaxLanguage, syntaxOptions );
-                }
+                    if ( !isDefinedString( elementId ) ) {
+                        elementId = newGuid();
+                    }
 
-                if ( syntaxOptions.highlightComments ) {
-                    innerHTML = renderElementCommentsFromVariables( innerHTML );
-                }
-                
-                if ( syntaxOptions.highlightStrings ) {
-                    innerHTML = renderElementStringQuotesFromVariables( innerHTML );
-                }
+                    _elements_Original[ elementId ] = element.innerHTML;
 
-                renderElementCompletedHTML( element, number, syntax, innerHTML, syntaxOptions, isPreFormatted );
-                fireCustomTrigger( syntaxOptions.onRenderComplete, element );
+                    element.removeAttribute( "data-syntax-language" );
+                    element.removeAttribute( "data-syntax-options" );
+                    element.id = elementId;
+                    element.className = element.className === _string.empty ? "syntax-highlight" : element.className + " syntax-highlight";
+                    element.innerHTML = _string.empty;
 
-                _elements.push( element );
+                    var code = createElement( "div", "code custom-scroll-bars" );
+                    element.appendChild( code );
+
+                    if ( syntaxOptions.showLineNumbers ) {
+                        number = createElement( "div", "number" );
+                        code.appendChild( number );
+                    }
+        
+                    var syntax = createElement( "div", "syntax" );
+                    code.appendChild( syntax );
+
+                    if ( syntaxOptions.showCopyButton ) {
+                        var copyButton = createElement( "div", "copy-button" );
+                        copyButton.innerHTML = syntaxOptions.copyButtonText;
+                        syntax.appendChild( copyButton );
+        
+                        copyButton.onclick = function() {
+                            _parameter_Navigator.clipboard.writeText( innerHTMLCopy );
+
+                            fireCustomTrigger( syntaxOptions.onCopy, innerHTMLCopy );
+                        };
+                    }
+
+                    if ( syntaxOptions.highlightComments ) {
+                        innerHTML = renderElementCommentVariables( innerHTML, syntaxLanguage, syntaxOptions );
+                        innerHTML = renderElementMultiLineCommentVariables( innerHTML, syntaxLanguage, syntaxOptions );
+                    }
+
+                    if ( syntaxOptions.highlightStrings ) {
+                        innerHTML = renderElementStringQuotesPatternVariables( innerHTML, innerHTML.match( /".*?"/g ), syntaxOptions );
+
+                        if ( _languages[ syntaxLanguage ].comment !== "'" ) {
+                            innerHTML = renderElementStringQuotesPatternVariables( innerHTML, innerHTML.match( /'.*?'/g ), syntaxOptions );
+                        }
+                    }
+
+                    if ( syntaxOptions.highlightKeywords ) {
+                        innerHTML = renderElementKeywords( innerHTML, syntaxLanguage, syntaxOptions );
+                    }
+
+                    if ( syntaxOptions.highlightComments ) {
+                        innerHTML = renderElementCommentsFromVariables( innerHTML );
+                    }
+                    
+                    if ( syntaxOptions.highlightStrings ) {
+                        innerHTML = renderElementStringQuotesFromVariables( innerHTML );
+                    }
+
+                    renderElementCompletedHTML( element, number, syntax, innerHTML, syntaxOptions, isPreFormatted );
+                    fireCustomTrigger( syntaxOptions.onRenderComplete, element );
+
+                    _elements.push( element );
+
+                } else {
+                    console.error( "Language '" + syntaxLanguage + "' is not supported." );
+                }
             }
         }
     }
 
-    function renderElementCommentVariables( innerHTML, syntaxLanguage ) {
+    function renderElementCommentVariables( innerHTML, syntaxLanguage, syntaxOptions ) {
         var lookup = _languages[ syntaxLanguage ].comment,
             patternItems = innerHTML.match( new RegExp( lookup + ".*", "g" ) );
 
@@ -157,13 +167,15 @@
                 _comments_Cached_Count++;
     
                 innerHTML = innerHTML.replace( comment, commentVariable );
+
+                fireCustomTrigger( syntaxOptions.onCommentRender, comment );
             }
         }
 
         return innerHTML;
     }
 
-    function renderElementMultiLineCommentVariables( innerHTML, syntaxLanguage ) {
+    function renderElementMultiLineCommentVariables( innerHTML, syntaxLanguage, syntaxOptions ) {
         var lookup = _languages[ syntaxLanguage ].multiLineComment;
 
         if ( isDefinedArray( lookup ) && lookup.length === 2 ) {
@@ -189,8 +201,9 @@
                             _comments_Cached_Count++;
                 
                             innerHTML = innerHTML.replace( commentLine, commentVariable );
-    
                         }
+
+                        fireCustomTrigger( syntaxOptions.onCommentRender, comment );
                     }
                 }
             }
@@ -199,7 +212,7 @@
         return innerHTML;
     }
 
-    function renderElementStringQuotesPatternVariables( innerHTML, patternItems ) {
+    function renderElementStringQuotesPatternVariables( innerHTML, patternItems, syntaxOptions ) {
         if ( patternItems !== null ) {
             var patternItemsLength = patternItems.length;
         
@@ -212,6 +225,8 @@
                 _strings_Cached_Count++;
     
                 innerHTML = innerHTML.replace( quote, quoteVariable );
+
+                fireCustomTrigger( syntaxOptions.onStringRender, quote );
             }
         }
 
@@ -233,6 +248,8 @@
             } else {
                 innerHTML = innerHTML.replace( regEx, "<span class=\"keyword\">" + keyword + "</span>" );
             }
+
+            fireCustomTrigger( syntaxOptions.onKeywordRender, keyword );
         }
 
         return innerHTML;
@@ -354,6 +371,9 @@
         options.onCopy = getDefaultFunction( options.onCopy, null );
         options.onRenderComplete = getDefaultFunction( options.onRenderComplete, null );
         options.onKeywordClicked = getDefaultFunction( options.onKeywordClicked, null );
+        options.onKeywordRender = getDefaultFunction( options.onKeywordRender, null );
+        options.onStringRender = getDefaultFunction( options.onStringRender, null );
+        options.onCommentRender = getDefaultFunction( options.onCommentRender, null );
 
         return options;
     }
@@ -733,7 +753,7 @@
      * @returns     {string}                                                The version number.
      */
     this.getVersion = function() {
-        return "1.0.0";
+        return "1.1.0";
     };
 
 

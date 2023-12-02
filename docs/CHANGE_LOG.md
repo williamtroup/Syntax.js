@@ -1,5 +1,23 @@
 # Syntax.js - Change Log:
 
+## Version 1.1.0:
+
+#### **General Improvements:**
+- The render() method now only scans for "div" and "code" DOM element types (faster).
+- When a specific language is not supported, a new error log is shown in the console.
+
+#### **Custom Triggers:**
+- Added new custom trigger "onKeywordRender", which is called when a keyword is rendered (before main render completion).
+- Added new custom trigger "onStringRender", which is called when a string is rendered (before main render completion).
+- Added new custom trigger "onCommentRender", which is called when a comment is rendered (before main render completion).
+
+#### **Documentation:**
+- Fixed documentation missing references that prevented the library from working properly.
+- Improved the README.md and README_NUGET.md documentation.
+
+<br>
+
+
 ## Version 1.0.0:
 
 #### **Languages:**

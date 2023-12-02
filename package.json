@@ -2,7 +2,7 @@
     "name": "jsyntax.js",
     "title": "Syntax.js",
     "description": "A javascript syntax highlighter.",
-    "version": "1.0.0",
+    "version": "1.1.0",
     "main": "dist/syntax.js",
     "author": {
       "name": "Bunoon"

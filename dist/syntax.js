@@ -1,81 +1,90 @@
-/*! Syntax.js v1.0.0 | (c) Bunoon | MIT License */
+/*! Syntax.js v1.1.0 | (c) Bunoon | MIT License */
 (function() {
   function render() {
-    var domElements = _parameter_Document.getElementsByTagName("*");
-    var elements = [].slice.call(domElements);
-    var elementsLength = elements.length;
-    var elementIndex = 0;
-    for (; elementIndex < elementsLength; elementIndex++) {
-      renderElement(elements[elementIndex]);
+    var tagTypes = ["div", "code"];
+    var tagTypesLength = tagTypes.length;
+    var tagTypeIndex = 0;
+    for (; tagTypeIndex < tagTypesLength; tagTypeIndex++) {
+      var domElements = _parameter_Document.getElementsByTagName(tagTypes[tagTypeIndex]);
+      var elements = [].slice.call(domElements);
+      var elementsLength = elements.length;
+      var elementIndex = 0;
+      for (; elementIndex < elementsLength; elementIndex++) {
+        renderElement(elements[elementIndex]);
+      }
     }
   }
   function renderElement(element) {
     if (isDefined(element)) {
       var syntaxLanguage = element.getAttribute("data-syntax-language");
-      if (isDefined(syntaxLanguage) && _languages.hasOwnProperty(syntaxLanguage)) {
-        var innerHTML = element.innerHTML;
-        var syntaxOptions = getObjectFromString(element.getAttribute("data-syntax-options"));
-        var isPreFormatted = false;
-        syntaxOptions = buildAttributeOptions(syntaxOptions);
-        if (element.children.length > 0 && element.children[0].nodeName.toLowerCase() === "pre") {
-          innerHTML = element.children[0].innerHTML;
-          isPreFormatted = true;
-        }
-        var innerHTMLCopy = innerHTML.trim();
-        var number = null;
-        var elementId = element.id;
-        if (!isDefinedString(elementId)) {
-          elementId = newGuid();
-        }
-        _elements_Original[elementId] = element.innerHTML;
-        element.removeAttribute("data-syntax-language");
-        element.removeAttribute("data-syntax-options");
-        element.id = elementId;
-        element.className = element.className === _string.empty ? "syntax-highlight" : element.className + " syntax-highlight";
-        element.innerHTML = _string.empty;
-        var code = createElement("div", "code custom-scroll-bars");
-        element.appendChild(code);
-        if (syntaxOptions.showLineNumbers) {
-          number = createElement("div", "number");
-          code.appendChild(number);
-        }
-        var syntax = createElement("div", "syntax");
-        code.appendChild(syntax);
-        if (syntaxOptions.showCopyButton) {
-          var copyButton = createElement("div", "copy-button");
-          copyButton.innerHTML = syntaxOptions.copyButtonText;
-          syntax.appendChild(copyButton);
-          copyButton.onclick = function() {
-            _parameter_Navigator.clipboard.writeText(innerHTMLCopy);
-            fireCustomTrigger(syntaxOptions.onCopy, innerHTMLCopy);
-          };
-        }
-        if (syntaxOptions.highlightComments) {
-          innerHTML = renderElementCommentVariables(innerHTML, syntaxLanguage);
-          innerHTML = renderElementMultiLineCommentVariables(innerHTML, syntaxLanguage);
-        }
-        if (syntaxOptions.highlightStrings) {
-          innerHTML = renderElementStringQuotesPatternVariables(innerHTML, innerHTML.match(/".*?"/g));
-          if (_languages[syntaxLanguage].comment !== "'") {
-            innerHTML = renderElementStringQuotesPatternVariables(innerHTML, innerHTML.match(/'.*?'/g));
+      if (isDefined(syntaxLanguage)) {
+        if (_languages.hasOwnProperty(syntaxLanguage)) {
+          var innerHTML = element.innerHTML;
+          var syntaxOptions = getObjectFromString(element.getAttribute("data-syntax-options"));
+          var isPreFormatted = false;
+          syntaxOptions = buildAttributeOptions(syntaxOptions);
+          if (element.children.length > 0 && element.children[0].nodeName.toLowerCase() === "pre") {
+            innerHTML = element.children[0].innerHTML;
+            isPreFormatted = true;
           }
+          var innerHTMLCopy = innerHTML.trim();
+          var number = null;
+          var elementId = element.id;
+          if (!isDefinedString(elementId)) {
+            elementId = newGuid();
+          }
+          _elements_Original[elementId] = element.innerHTML;
+          element.removeAttribute("data-syntax-language");
+          element.removeAttribute("data-syntax-options");
+          element.id = elementId;
+          element.className = element.className === _string.empty ? "syntax-highlight" : element.className + " syntax-highlight";
+          element.innerHTML = _string.empty;
+          var code = createElement("div", "code custom-scroll-bars");
+          element.appendChild(code);
+          if (syntaxOptions.showLineNumbers) {
+            number = createElement("div", "number");
+            code.appendChild(number);
+          }
+          var syntax = createElement("div", "syntax");
+          code.appendChild(syntax);
+          if (syntaxOptions.showCopyButton) {
+            var copyButton = createElement("div", "copy-button");
+            copyButton.innerHTML = syntaxOptions.copyButtonText;
+            syntax.appendChild(copyButton);
+            copyButton.onclick = function() {
+              _parameter_Navigator.clipboard.writeText(innerHTMLCopy);
+              fireCustomTrigger(syntaxOptions.onCopy, innerHTMLCopy);
+            };
+          }
+          if (syntaxOptions.highlightComments) {
+            innerHTML = renderElementCommentVariables(innerHTML, syntaxLanguage, syntaxOptions);
+            innerHTML = renderElementMultiLineCommentVariables(innerHTML, syntaxLanguage, syntaxOptions);
+          }
+          if (syntaxOptions.highlightStrings) {
+            innerHTML = renderElementStringQuotesPatternVariables(innerHTML, innerHTML.match(/".*?"/g), syntaxOptions);
+            if (_languages[syntaxLanguage].comment !== "'") {
+              innerHTML = renderElementStringQuotesPatternVariables(innerHTML, innerHTML.match(/'.*?'/g), syntaxOptions);
+            }
+          }
+          if (syntaxOptions.highlightKeywords) {
+            innerHTML = renderElementKeywords(innerHTML, syntaxLanguage, syntaxOptions);
+          }
+          if (syntaxOptions.highlightComments) {
+            innerHTML = renderElementCommentsFromVariables(innerHTML);
+          }
+          if (syntaxOptions.highlightStrings) {
+            innerHTML = renderElementStringQuotesFromVariables(innerHTML);
+          }
+          renderElementCompletedHTML(element, number, syntax, innerHTML, syntaxOptions, isPreFormatted);
+          fireCustomTrigger(syntaxOptions.onRenderComplete, element);
+          _elements.push(element);
+        } else {
+          console.error("Language '" + syntaxLanguage + "' is not supported.");
         }
-        if (syntaxOptions.highlightKeywords) {
-          innerHTML = renderElementKeywords(innerHTML, syntaxLanguage, syntaxOptions);
-        }
-        if (syntaxOptions.highlightComments) {
-          innerHTML = renderElementCommentsFromVariables(innerHTML);
-        }
-        if (syntaxOptions.highlightStrings) {
-          innerHTML = renderElementStringQuotesFromVariables(innerHTML);
-        }
-        renderElementCompletedHTML(element, number, syntax, innerHTML, syntaxOptions, isPreFormatted);
-        fireCustomTrigger(syntaxOptions.onRenderComplete, element);
-        _elements.push(element);
       }
     }
   }
-  function renderElementCommentVariables(innerHTML, syntaxLanguage) {
+  function renderElementCommentVariables(innerHTML, syntaxLanguage, syntaxOptions) {
     var lookup = _languages[syntaxLanguage].comment;
     var patternItems = innerHTML.match(new RegExp(lookup + ".*", "g"));
     if (patternItems !== null) {
@@ -87,11 +96,12 @@
         _comments_Cached[commentVariable] = '<span class="comment">' + comment + "</span>";
         _comments_Cached_Count++;
         innerHTML = innerHTML.replace(comment, commentVariable);
+        fireCustomTrigger(syntaxOptions.onCommentRender, comment);
       }
     }
     return innerHTML;
   }
-  function renderElementMultiLineCommentVariables(innerHTML, syntaxLanguage) {
+  function renderElementMultiLineCommentVariables(innerHTML, syntaxLanguage, syntaxOptions) {
     var lookup = _languages[syntaxLanguage].multiLineComment;
     if (isDefinedArray(lookup) && lookup.length === 2) {
       var startIndex = 0;
@@ -112,13 +122,14 @@
               _comments_Cached_Count++;
               innerHTML = innerHTML.replace(commentLine, commentVariable);
             }
+            fireCustomTrigger(syntaxOptions.onCommentRender, comment);
           }
         }
       }
     }
     return innerHTML;
   }
-  function renderElementStringQuotesPatternVariables(innerHTML, patternItems) {
+  function renderElementStringQuotesPatternVariables(innerHTML, patternItems, syntaxOptions) {
     if (patternItems !== null) {
       var patternItemsLength = patternItems.length;
       var patternItemsIndex = 0;
@@ -129,6 +140,7 @@
         _strings_Cached[quoteVariable] = '<q class="string">' + quoteReplacement + "</q>";
         _strings_Cached_Count++;
         innerHTML = innerHTML.replace(quote, quoteVariable);
+        fireCustomTrigger(syntaxOptions.onStringRender, quote);
       }
     }
     return innerHTML;
@@ -147,6 +159,7 @@
       } else {
         innerHTML = innerHTML.replace(regEx, '<span class="keyword">' + keyword + "</span>");
       }
+      fireCustomTrigger(syntaxOptions.onKeywordRender, keyword);
     }
     return innerHTML;
   }
@@ -242,6 +255,9 @@
     options.onCopy = getDefaultFunction(options.onCopy, null);
     options.onRenderComplete = getDefaultFunction(options.onRenderComplete, null);
     options.onKeywordClicked = getDefaultFunction(options.onKeywordClicked, null);
+    options.onKeywordRender = getDefaultFunction(options.onKeywordRender, null);
+    options.onStringRender = getDefaultFunction(options.onStringRender, null);
+    options.onCommentRender = getDefaultFunction(options.onCommentRender, null);
     return options;
   }
   function isDefined(value) {
@@ -410,7 +426,7 @@
     return _languages;
   };
   this.getVersion = function() {
-    return "1.0.0";
+    return "1.1.0";
   };
   (function(documentObject, navigatorObject, windowObject) {
     _parameter_Document = documentObject;

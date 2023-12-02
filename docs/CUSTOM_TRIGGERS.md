@@ -7,9 +7,24 @@ Below is a list of all the custom triggers supported in Syntax.js, which are fir
 <h1>For Rendering:</h1>
 
 ### options.onRenderComplete( *element* ):
-Fires when the syntax for an element is rendered.
+Fires when the rendering of the syntax for an element is complete.
 <br>
 ***Parameter:*** syntax: '*object*' - The DOM element that was rendered.
+
+### options.onKeywordRender( *keyword* ):
+Fires when a keyword is rendered.
+<br>
+***Parameter:*** keyword: '*string*' - The keyword that was rendered.
+
+### options.onStringRender( *string* ):
+Fires when a string is rendered.
+<br>
+***Parameter:*** string: '*string*' - The string that was rendered.
+
+### options.onCommentRender( *comment* ):
+Fires when a comment is rendered.
+<br>
+***Parameter:*** comment: '*string*' - The comment that was rendered.
 
 
 <br>
