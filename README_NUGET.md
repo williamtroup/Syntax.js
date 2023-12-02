@@ -16,8 +16,8 @@
 - Full API available via public functions.
 - Fully styled in CSS/SASS (including the buttons) and compatible with the Bootstrap library.
 - Full CSS theme support (using :root variables).
-- Custom triggers for actions (when elements are rendered, options are updated, etc).
-- Fully configurable.
+- Custom triggers for actions (when elements are rendered, keywords are clicked, etc).
+- 12 of the most popular languages built in by default (you can add your own easily if yours is not supported by default).
 
 
 ## What browsers are supported?
