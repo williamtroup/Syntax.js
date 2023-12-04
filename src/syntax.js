@@ -4,7 +4,7 @@
  * A lightweight, and easy-to-use, JavaScript library for code syntax highlighting!
  * 
  * @file        syntax.js
- * @version     v1.2.0
+ * @version     v1.3.0
  * @author      Bunoon
  * @license     MIT License
  * @copyright   Bunoon 2023
@@ -831,7 +831,7 @@
      * @returns     {string}                                                The version number.
      */
     this.getVersion = function() {
-        return "1.2.0";
+        return "1.3.0";
     };
 
 
