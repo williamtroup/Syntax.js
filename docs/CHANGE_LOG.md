@@ -11,8 +11,8 @@
 - Added new BootStrap testing files.
 
 #### **Languages:**
-- Added a new JSON property called "friendlyName", which states the friendly name to shown in the language label.
-- The JSON property "keywords" now accepts either an array of strings, or a space separated string.
+- Added a new JSON property called "friendlyName", which states the friendly name to be shown in the language label.
+- The JSON property "keywords" now accepts either an array of strings or a space-separated string.
 
 #### **Settings:**
 - Added a new setting called "showLanguageLabel", which states if the language label should be shown (defaults to true).
@@ -20,11 +20,10 @@
 - Added a new setting called "printButtonText", which states the text that should be shown for the new Print button (defaults to "Print").
 
 #### **Custom Triggers:**
-- Added new custom trigger "onPrint", which is called when the "Print" button is clicked.
+- Added a new custom trigger "onPrint", which is called when the "Print" button is clicked.
 
 #### **Fixes:**
-- Fixed the default color for <code> blocks reverting to the color set in BootStrap.
-- 
+- Fixed the default color for "code" DOM elements reverting to the color set in Bootstrap.
 
 <br>
 
