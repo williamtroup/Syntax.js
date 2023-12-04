@@ -84,4 +84,4 @@ $syntax.addLanguage( "c-sharp", {
     comment: "//",
     multiLineComment: [ "/*", "*/" ],
     caseSensitive: true
-} );
+}, false );

@@ -42,4 +42,4 @@ $syntax.addLanguage( "ruby", {
     comment: "#",
     multiLineComment: [ "=begin", "=end" ],
     caseSensitive: true
-} );
+}, false );

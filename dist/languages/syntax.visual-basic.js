@@ -159,4 +159,4 @@ $syntax.addLanguage( "visual-basic", {
     ],
     comment: "'",
     caseSensitive: true
-} );
+}, false );

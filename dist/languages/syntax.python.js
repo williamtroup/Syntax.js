@@ -40,4 +40,4 @@ $syntax.addLanguage( "python", {
     ],
     comment: "#",
     caseSensitive: true
-} );
+}, false );

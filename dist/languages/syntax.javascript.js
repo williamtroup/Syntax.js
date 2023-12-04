@@ -73,4 +73,4 @@ $syntax.addLanguage( "javascript", {
         "*/"
     ],
     caseSensitive: true
-} );
+}, false );

@@ -39,4 +39,4 @@ $syntax.addLanguage( "c", {
     comment: "//",
     multiLineComment: [ "/*", "*/" ],
     caseSensitive: true
-} );
+}, false );

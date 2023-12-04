@@ -13,6 +13,9 @@
 #### **Configuration Option:**
 - Added new configuration option "safeMode" (defaults to true), which allows all errors to be ignored (all valid renders will still be displayed).
 
+#### **Languages:**
+- All language files (under "dist/languages") now pass false for the "triggerRender" parameter, as the library will render automatically once the DOM is loaded.
+
 #### **General Improvements:**
 - Removed some code that was no longer needed.
 - The numbers column can no longer have its numbers selected (CSS controlled).

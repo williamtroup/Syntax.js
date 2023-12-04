@@ -31,4 +31,4 @@ $syntax.addLanguage( "go", {
     comment: "//",
     multiLineComment: [ "/*", "*/" ],
     caseSensitive: true
-} );
+}, false );

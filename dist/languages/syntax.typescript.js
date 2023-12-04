@@ -69,4 +69,4 @@ $syntax.addLanguage( "typescript", {
         "*/"
     ],
     caseSensitive: true
-} );
+}, false );
