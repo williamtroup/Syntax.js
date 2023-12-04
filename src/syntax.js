@@ -696,7 +696,7 @@
         }
 
         _elements_Original = {};
-        _elements = {};
+        _elements = [];
 
         return this;
     };

@@ -26,6 +26,9 @@
 - Added a new version of "OPTIONS.md", which is now used to show all the configuration that can be used for the public function "setConfiguration()".
 - Minor documentation updates to make things a bit clearer.
 
+#### **Fixes:**
+- Fixed the public function "destroyAll()" reset the "_elements" variable to the wrong type.
+
 <br>
 
 
