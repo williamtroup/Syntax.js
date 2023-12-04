@@ -8,6 +8,7 @@
 
 #### **General Improvements:**
 - Removed some code that was no longer needed.
+- The numbers column can no longer have its numbers selected (CSS controlled).
 
 <br>
 

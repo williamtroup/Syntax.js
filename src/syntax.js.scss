@@ -67,6 +67,9 @@ div.syntax-highlight {
             border: var(--border-size) solid #BBBBBB;
             display: none;
             cursor: default;
+            -webkit-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
 
             p {
                 margin: 0;
