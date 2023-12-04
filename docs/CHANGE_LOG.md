@@ -1,8 +1,9 @@
 # Syntax.js - Change Log:
 
 ## Version 1.2.0:
-- The copy button is now hidden in mobile mode.
+- The copy button is now hidden in mobile mode (as it's not needed).
 - Added new BootStrap testing files.
+- Fixed the default color for <code> blocks reverting to the color set in BootStrap.
 - 
 
 <br>

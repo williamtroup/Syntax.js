@@ -48,6 +48,7 @@ div.syntax-highlight {
         overflow-y: hidden;
         position: relative;
         border: var(--border-size) solid var(--color-black);
+        color: var(--color-black);
 
         pre {
             margin: 0 !important;

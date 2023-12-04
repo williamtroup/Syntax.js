@@ -41,6 +41,7 @@ div.syntax-highlight div.code {
   overflow-y: hidden;
   position: relative;
   border: var(--border-size) solid var(--color-black);
+  color: var(--color-black);
 }
 code.syntax-highlight div.code pre,
 div.syntax-highlight div.code pre {
