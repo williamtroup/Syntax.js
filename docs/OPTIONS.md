@@ -14,6 +14,7 @@ Below are all the options that can be passed to the "setOptions()" public functi
 | *boolean* | highlightKeywords | States if the keywords should be highlighted (defaults to true). |
 | *boolean* | highlightStrings | States if the strings should be highlighted (defaults to true). |
 | *boolean* | highlightComments | States if the comments should be highlighted (defaults to true). |
+| *boolean* | showLanguageLabel | States if the language label should be shown or not (defaults to true). |
 <br/>
 
 

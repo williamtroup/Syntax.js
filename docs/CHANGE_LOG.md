@@ -1,8 +1,18 @@
 # Syntax.js - Change Log:
 
 ## Version 1.2.0:
-- The copy button is now hidden in mobile mode (as it's not needed).
+
+#### **General Improvements:**
+- Redesigned the layout for the button(s) shown in the top left of the display (minor CSS class name changes).
 - Added new BootStrap testing files.
+
+#### **Languages:**
+- Added a new JSON property called "friendlyName", which states the friendly name to shown in the language label.
+
+#### **Settings:**
+- Added a new setting called "showLanguageLabel", which states if the language label should be shown (defaults to true).
+
+#### **Fixes:**
 - Fixed the default color for <code> blocks reverting to the color set in BootStrap.
 - 
 

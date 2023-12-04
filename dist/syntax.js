@@ -47,14 +47,27 @@
           }
           var syntax = createElement("div", "syntax");
           code.appendChild(syntax);
-          if (syntaxOptions.showCopyButton) {
-            var copyButton = createElement("div", "copy-button");
-            copyButton.innerHTML = syntaxOptions.copyButtonText;
-            syntax.appendChild(copyButton);
-            copyButton.onclick = function() {
-              _parameter_Navigator.clipboard.writeText(innerHTMLCopy);
-              fireCustomTrigger(syntaxOptions.onCopy, innerHTMLCopy);
-            };
+          if (syntaxOptions.showLanguageLabel || syntaxOptions.showCopyButton) {
+            var buttons = createElement("div", "buttons");
+            syntax.appendChild(buttons);
+            if (syntaxOptions.showCopyButton) {
+              var copyButton = createElement("div", "button");
+              copyButton.innerHTML = syntaxOptions.copyButtonText;
+              buttons.appendChild(copyButton);
+              copyButton.onclick = function() {
+                _parameter_Navigator.clipboard.writeText(innerHTMLCopy);
+                fireCustomTrigger(syntaxOptions.onCopy, innerHTMLCopy);
+              };
+            }
+            if (syntaxOptions.showLanguageLabel) {
+              var languageLabel = createElement("div", "label");
+              if (isDefinedString(_languages[syntaxLanguage].friendlyName)) {
+                languageLabel.innerHTML = _languages[syntaxLanguage].friendlyName.toUpperCase();
+              } else {
+                languageLabel.innerHTML = syntaxLanguage.toUpperCase();
+              }
+              buttons.appendChild(languageLabel);
+            }
           }
           if (syntaxOptions.highlightComments) {
             innerHTML = renderElementCommentVariables(innerHTML, syntaxLanguage, syntaxOptions);
@@ -249,6 +262,7 @@
     options.highlightKeywords = getDefaultBoolean(options.highlightKeywords, true);
     options.highlightStrings = getDefaultBoolean(options.highlightStrings, true);
     options.highlightComments = getDefaultBoolean(options.highlightComments, true);
+    options.showLanguageLabel = getDefaultBoolean(options.showLanguageLabel, true);
     return buildAttributeOptionCustomTriggers(options);
   }
   function buildAttributeOptionCustomTriggers(options) {

@@ -1,5 +1,6 @@
 /*! Syntax.js v1.2.0 | (c) Bunoon | MIT License */
 $syntax.addLanguage( "ms-sql", {
+    friendlyName: "MS SQL",
     keywords: [
         "ADD",
         "EXTERNAL",

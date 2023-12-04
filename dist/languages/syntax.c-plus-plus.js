@@ -1,5 +1,6 @@
 /*! Syntax.js v1.2.0 | (c) Bunoon | MIT License */
 $syntax.addLanguage( "c-plus-plus", {
+    friendlyName: "C++",
     keywords: [
         "alignas",
         "alignof",
