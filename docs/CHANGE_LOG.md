@@ -20,6 +20,7 @@
 #### **Documentation:**
 - Renamed "OPTIONS.md" to "BINDING_OPTIONS.md" (which states all the options that can be used for the "data-syntax-options" binding attribute).
 - Added a new version of "OPTIONS.md", which is now used to show all the configuration that can be used for the public function "setConfiguration()".
+- Minor documentation updates to make things a bit clearer.
 
 <br>
 
