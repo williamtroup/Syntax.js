@@ -53,3 +53,7 @@ div.date-picker {
     background-color: #AAAAAA;
     padding: 10px;
 }
+
+code pre {
+    color: black;
+}
