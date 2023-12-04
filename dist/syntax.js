@@ -53,9 +53,9 @@
             innerHTML = renderElementMultiLineCommentVariables(innerHTML, syntaxLanguage, syntaxOptions);
           }
           if (syntaxOptions.highlightStrings) {
-            innerHTML = renderElementStringQuotesPatternVariables(innerHTML, innerHTML.match(/".*?"/g), syntaxOptions);
+            innerHTML = renderElementStringQuotesPatternVariables(innerHTML, innerHTML.match(/"((?:\\.|[^"\\])*)"/g), syntaxOptions);
             if (_languages[syntaxLanguage].comment !== "'") {
-              innerHTML = renderElementStringQuotesPatternVariables(innerHTML, innerHTML.match(/'.*?'/g), syntaxOptions);
+              innerHTML = renderElementStringQuotesPatternVariables(innerHTML, innerHTML.match(/'((?:\\.|[^"\\])*)'/g), syntaxOptions);
             }
           }
           if (syntaxOptions.highlightKeywords) {
@@ -176,11 +176,16 @@
       var patternItemsIndex = 0;
       for (; patternItemsIndex < patternItemsLength; patternItemsIndex++) {
         var quote = patternItems[patternItemsIndex];
-        var quoteReplacement = quote.replaceAll('"', _string.empty).replaceAll("'", _string.empty);
-        var quoteVariable = "$S{" + _strings_Cached_Count.toString() + "}";
-        _strings_Cached[quoteVariable] = '<q class="string">' + quoteReplacement + "</q>";
-        _strings_Cached_Count++;
-        innerHTML = innerHTML.replace(quote, quoteVariable);
+        var quoteLines = quote.split(_string.newLine);
+        var quoteLinesLength = quoteLines.length;
+        var quoteLineIndex = 0;
+        for (; quoteLineIndex < quoteLinesLength; quoteLineIndex++) {
+          var quoteLine = quoteLines[quoteLineIndex];
+          var quoteVariable = "$S{" + _strings_Cached_Count.toString() + "}";
+          _strings_Cached[quoteVariable] = '<span class="string">' + quoteLine + "</span>";
+          _strings_Cached_Count++;
+          innerHTML = innerHTML.replace(quoteLine, quoteVariable);
+        }
         fireCustomTrigger(syntaxOptions.onStringRender, quote);
       }
     }

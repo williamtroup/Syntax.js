@@ -111,10 +111,10 @@
                     }
 
                     if ( syntaxOptions.highlightStrings ) {
-                        innerHTML = renderElementStringQuotesPatternVariables( innerHTML, innerHTML.match( /".*?"/g ), syntaxOptions );
+                        innerHTML = renderElementStringQuotesPatternVariables( innerHTML, innerHTML.match( /"((?:\\.|[^"\\])*)"/g ), syntaxOptions );
 
                         if ( _languages[ syntaxLanguage ].comment !== "'" ) {
-                            innerHTML = renderElementStringQuotesPatternVariables( innerHTML, innerHTML.match( /'.*?'/g ), syntaxOptions );
+                            innerHTML = renderElementStringQuotesPatternVariables( innerHTML, innerHTML.match( /'((?:\\.|[^"\\])*)'/g ), syntaxOptions );
                         }
                     }
 
@@ -268,13 +268,18 @@
         
             for ( var patternItemsIndex = 0; patternItemsIndex < patternItemsLength; patternItemsIndex++ ) {
                 var quote = patternItems[ patternItemsIndex ],
-                    quoteReplacement = quote.replaceAll( '"', _string.empty ).replaceAll( "'", _string.empty ),
-                    quoteVariable = "$S{" + _strings_Cached_Count.toString() + "}";
+                    quoteLines = quote.split( _string.newLine ),
+                    quoteLinesLength = quoteLines.length;
 
-                _strings_Cached[ quoteVariable ] = "<q class=\"string\">" + quoteReplacement + "</q>";
-                _strings_Cached_Count++;
-    
-                innerHTML = innerHTML.replace( quote, quoteVariable );
+                for ( var quoteLineIndex = 0; quoteLineIndex < quoteLinesLength; quoteLineIndex++ ) {
+                    var quoteLine = quoteLines[ quoteLineIndex ],
+                        quoteVariable = "$S{" + _strings_Cached_Count.toString() + "}";
+
+                    _strings_Cached[ quoteVariable ] = "<span class=\"string\">" + quoteLine + "</span>";
+                    _strings_Cached_Count++;
+        
+                    innerHTML = innerHTML.replace( quoteLine, quoteVariable );
+                }
 
                 fireCustomTrigger( syntaxOptions.onStringRender, quote );
             }

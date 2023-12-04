@@ -156,8 +156,8 @@ code.syntax-highlight div.code div.syntax p span.comment,
 div.syntax-highlight div.code div.syntax p span.comment {
   color: var(--color-comment);
 }
-code.syntax-highlight div.code div.syntax p q.string,
-div.syntax-highlight div.code div.syntax p q.string {
+code.syntax-highlight div.code div.syntax p span.string,
+div.syntax-highlight div.code div.syntax p span.string {
   color: var(--color-string);
 }
 

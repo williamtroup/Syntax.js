@@ -1,8 +1,13 @@
 # Syntax.js - Change Log:
 
 ## Version 1.3.0:
+
+#### **New Features:**
+- Added multi-line string support for languages that support them (such as C#).
+- String searching now uses an improved RegEx for more accurate searches.
+
+#### **General Improvements:**
 - Removed some code that was no longer needed.
-- 
 
 <br>
 

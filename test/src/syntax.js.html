@@ -53,6 +53,9 @@
                 if ( something == 1 ) {
                     Console.WriteLine( "Output is written." ); // Comment
                 }
+
+                string @"A multi-line 
+                    string";
             </div>
             <br />
         </div>
@@ -86,7 +89,7 @@
 
         function addNewLanguage() {
             $syntax.addLanguage( "c-sharp", {
-                keywords: "if var true bool int",
+                keywords: "if var true bool int string",
                 comment: "//",
                 multiLineComment: [ "/*", "*/" ],
                 friendlyName: "C#"
