@@ -5,7 +5,7 @@
 #### **New Features:**
 - Added multi-line string support for languages that support them (such as C#).
 - String searching now uses an improved RegEx for more accurate searches.
-- SafeMode support.
+- SafeMode support and new global library configuration options.
 
 #### **Public Functions:**
 - Added new public function "setConfiguration()", which will setup global configuration options for the whole library.
