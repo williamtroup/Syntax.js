@@ -8,6 +8,7 @@
 
 #### **Languages:**
 - Added a new JSON property called "friendlyName", which states the friendly name to shown in the language label.
+- The JSON property "keywords" now accepts either an array of strings, or a space separated string.
 
 #### **Settings:**
 - Added a new setting called "showLanguageLabel", which states if the language label should be shown (defaults to true).

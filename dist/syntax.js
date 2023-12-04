@@ -161,6 +161,9 @@
   function renderElementKeywords(innerHTML, syntaxLanguage, syntaxOptions) {
     var keywords = _languages[syntaxLanguage].keywords;
     var caseSensitive = _languages[syntaxLanguage].caseSensitive;
+    if (isDefinedString(keywords)) {
+      keywords = keywords.split(_string.space);
+    }
     var keywordsLength = keywords.length;
     var keywordIndex = 0;
     for (; keywordIndex < keywordsLength; keywordIndex++) {

@@ -4,7 +4,7 @@ Below is the format that is expected for a language object when calling "addLang
 
 | Type: | Name: | Description: |
 | --- | --- | --- |
-| *string[]* | keywords | The keywords of the language. |
+| *Object* | keywords | The keywords of the language (can be either an array of strings, or a space separated string). |
 | *string* | comment | The start character(s) use for a single line comment. |
 | *string[]* | multiLineComment | The start/end characters used to define multi-line comments (optional). |
 | *bool* | caseSensitive | States if the lookups for keywords are case sensitive (defaults to true). |
