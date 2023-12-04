@@ -394,6 +394,11 @@
     }
     return result;
   }
+  function getClonedObject(object) {
+    var json = JSON.stringify(object);
+    var result = JSON.parse(json);
+    return result;
+  }
   function newGuid() {
     var result = [];
     var charIndex = 0;
@@ -492,12 +497,12 @@
   this.getLanguage = function(name) {
     var details = null;
     if (_languages.hasOwnProperty(name.toLowerCase())) {
-      details = _languages[name.toLowerCase()];
+      details = getClonedObject(_languages[name.toLowerCase()]);
     }
     return details;
   };
   this.getAllLanguages = function() {
-    return _languages;
+    return getClonedObject(_languages);
   };
   this.setConfiguration = function(newOptions) {
     _configuration = !isDefinedObject(newOptions) ? {} : newOptions;

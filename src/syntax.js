@@ -583,6 +583,13 @@
         return result;
     }
 
+    function getClonedObject( object ) {
+        var json = JSON.stringify( object ),
+            result = JSON.parse( json );
+
+        return result;
+    }
+
 
     /*
      * ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -809,7 +816,7 @@
         var details = null;
 
         if ( _languages.hasOwnProperty( name.toLowerCase() ) ) {
-            details = _languages[ name.toLowerCase() ];
+            details = getClonedObject( _languages[ name.toLowerCase() ] );
         }
 
         return details;
@@ -825,7 +832,7 @@
      * @returns     {Object}                                                The object that contains the languages.
      */
     this.getAllLanguages = function() {
-        return _languages;
+        return getClonedObject( _languages );
     };
 
 

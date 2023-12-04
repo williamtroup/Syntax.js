@@ -9,7 +9,8 @@
 
 #### **Public Functions:**
 - Added new public function "setConfiguration()", which will setup global configuration options for the whole library.
-- The public function "getAllElementsHighlighted()" now returns a copy of "_elements" instead of a referenced version.
+- The public function "getAllElementsHighlighted()" now returns a cloned version of "_elements" instead of a referenced version.
+- The public functions "getLanguage()" and "getAllLanguages()" now return a cloned version of the language objects.
 
 #### **Configuration Option:**
 - Added new configuration option "safeMode" (defaults to true), which allows all errors to be ignored (all valid renders will still be displayed).
