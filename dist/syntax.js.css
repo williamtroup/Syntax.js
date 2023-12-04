@@ -1,5 +1,5 @@
 /*
- * Syntax.js Library v1.1.0
+ * Syntax.js Library v1.2.0
  *
  * Copyright 2023 Bunoon
  * Released under the MIT License
@@ -16,6 +16,7 @@
   --color-string: #484dd2;
   --color-black: #3b3a3a;
   --color-white: #F5F5F5;
+  --color-gray: #BBBBBB;
   --border-radius: 0.5rem;
   --border-style-scrollbar: inset 0 0 6px gray;
   --border-size: 0.5px;
@@ -41,6 +42,7 @@ div.syntax-highlight div.code {
   overflow-y: hidden;
   position: relative;
   border: var(--border-size) solid var(--color-black);
+  color: var(--color-black);
 }
 code.syntax-highlight div.code pre,
 div.syntax-highlight div.code pre {
@@ -58,6 +60,7 @@ div.syntax-highlight div.code div.number {
   font-weight: 800 !important;
   border: var(--border-size) solid #BBBBBB;
   display: none;
+  cursor: default;
 }
 code.syntax-highlight div.code div.number p,
 div.syntax-highlight div.code div.number p {
@@ -77,6 +80,53 @@ div.syntax-highlight div.code div.syntax {
   border-radius: var(--border-radius);
   background-color: #EEEEEE;
   border: var(--border-size) solid #CCCCCC;
+  position: relative;
+}
+code.syntax-highlight div.code div.syntax div.buttons,
+div.syntax-highlight div.code div.syntax div.buttons {
+  position: absolute;
+  top: 0;
+  right: 0;
+}
+code.syntax-highlight div.code div.syntax div.buttons div.button,
+code.syntax-highlight div.code div.syntax div.buttons div.label,
+div.syntax-highlight div.code div.syntax div.buttons div.button,
+div.syntax-highlight div.code div.syntax div.buttons div.label {
+  color: var(--color-white);
+  background-color: var(--color-black);
+  padding: 7px;
+  padding-left: 10px;
+  padding-right: 10px;
+  display: inline-block;
+  border-right: 1px dotted var(--color-gray);
+  font-size: small;
+}
+code.syntax-highlight div.code div.syntax div.buttons div.button:first-child,
+code.syntax-highlight div.code div.syntax div.buttons div.label:first-child,
+div.syntax-highlight div.code div.syntax div.buttons div.button:first-child,
+div.syntax-highlight div.code div.syntax div.buttons div.label:first-child {
+  border-bottom-left-radius: var(--border-radius);
+}
+code.syntax-highlight div.code div.syntax div.buttons div.button:last-child,
+code.syntax-highlight div.code div.syntax div.buttons div.label:last-child,
+div.syntax-highlight div.code div.syntax div.buttons div.button:last-child,
+div.syntax-highlight div.code div.syntax div.buttons div.label:last-child {
+  border-top-right-radius: var(--border-radius);
+  border-right: none;
+}
+code.syntax-highlight div.code div.syntax div.buttons div.label,
+div.syntax-highlight div.code div.syntax div.buttons div.label {
+  cursor: default;
+}
+code.syntax-highlight div.code div.syntax div.buttons div.button,
+div.syntax-highlight div.code div.syntax div.buttons div.button {
+  font-weight: 700;
+}
+code.syntax-highlight div.code div.syntax div.buttons div.button:hover,
+div.syntax-highlight div.code div.syntax div.buttons div.button:hover {
+  cursor: pointer;
+  opacity: 0.7;
+  transition: all 0.3s;
 }
 code.syntax-highlight div.code div.syntax p,
 div.syntax-highlight div.code div.syntax p {
@@ -109,26 +159,6 @@ div.syntax-highlight div.code div.syntax p span.comment {
 code.syntax-highlight div.code div.syntax p q.string,
 div.syntax-highlight div.code div.syntax p q.string {
   color: var(--color-string);
-}
-code.syntax-highlight div.code div.copy-button,
-div.syntax-highlight div.code div.copy-button {
-  position: absolute;
-  right: 30px;
-  top: 30px;
-  background-color: var(--color-black);
-  color: var(--color-white);
-  font-size: small;
-  padding: 7px;
-  padding-left: 10px;
-  padding-right: 10px;
-  border-radius: var(--border-radius);
-  font-weight: 700;
-}
-code.syntax-highlight div.code div.copy-button:hover,
-div.syntax-highlight div.code div.copy-button:hover {
-  cursor: pointer;
-  opacity: 0.7;
-  transition: all 0.3s;
 }
 
 /*

@@ -1,5 +1,5 @@
 /*
- * Syntax.js Library v1.1.0
+ * Syntax.js Library v1.2.0
  *
  * Copyright 2023 Bunoon
  * Released under the MIT License
@@ -20,6 +20,7 @@
     --color-string: #484dd2;
     --color-black: #3b3a3a;
     --color-white: #F5F5F5;
+    --color-gray: #BBBBBB;
 
     // Borders
     --border-radius: 0.5rem;
@@ -48,6 +49,7 @@ div.syntax-highlight {
         overflow-y: hidden;
         position: relative;
         border: var(--border-size) solid var(--color-black);
+        color: var(--color-black);
 
         pre {
             margin: 0 !important;
@@ -64,6 +66,7 @@ div.syntax-highlight {
             font-weight: 800 !important;
             border: var(--border-size) solid #BBBBBB;
             display: none;
+            cursor: default;
 
             p {
                 margin: 0;
@@ -81,6 +84,48 @@ div.syntax-highlight {
             border-radius: var(--border-radius);
             background-color: #EEEEEE;
             border: var(--border-size) solid #CCCCCC;
+            position: relative;
+
+            div.buttons {
+                position: absolute;
+                top: 0;
+                right: 0;
+    
+                div.button,
+                div.label {
+                    color: var(--color-white);
+                    background-color: var(--color-black);
+                    padding: 7px;
+                    padding-left: 10px;
+                    padding-right: 10px;
+                    display: inline-block;
+                    border-right: 1px dotted var(--color-gray);
+                    font-size: small;
+    
+                    &:first-child {
+                        border-bottom-left-radius: var(--border-radius);
+                    }
+    
+                    &:last-child {
+                        border-top-right-radius: var(--border-radius);
+                        border-right: none;
+                    }
+                }
+
+                div.label {
+                    cursor: default;
+                }
+
+                div.button {
+                    font-weight: 700;
+                }
+    
+                div.button:hover {
+                    cursor: pointer;
+                    opacity: 0.7;
+                    transition: all .3s;
+                }
+            }
 
             p {
                 margin: 0;
@@ -109,26 +154,6 @@ div.syntax-highlight {
                 q.string {
                     color: var(--color-string);
                 }
-            }
-        }
-
-        div.copy-button {
-            position: absolute;
-            right: 30px;
-            top: 30px;
-            background-color: var(--color-black);
-            color: var(--color-white);
-            font-size: small;
-            padding: 7px;
-            padding-left: 10px;
-            padding-right: 10px;
-            border-radius: var(--border-radius);
-            font-weight: 700;
-
-            &:hover {
-                cursor: pointer;
-                opacity: 0.7;
-                transition: all .3s;
             }
         }
     }

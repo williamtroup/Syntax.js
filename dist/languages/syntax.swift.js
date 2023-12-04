@@ -1,5 +1,6 @@
-/*! Syntax.js v1.1.0 | (c) Bunoon | MIT License */
+/*! Syntax.js v1.2.0 | (c) Bunoon | MIT License */
 $syntax.addLanguage( "swift", {
+    friendlyName: "Swift",
     keywords: [
         "class",
         "deinit",

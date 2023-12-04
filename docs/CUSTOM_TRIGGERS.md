@@ -39,3 +39,8 @@ Fires when the "Copy" button is pressed.
 Fires when a keyword is clicked in the code syntax.
 <br>
 ***Parameter:*** code: '*keyword*' - The keyword that was clicked.
+
+### options.onPrint( *code* ):
+Fires when the "Print" button is pressed.
+<br>
+***Parameter:*** code: '*string*' - The string that was sent to the printer.

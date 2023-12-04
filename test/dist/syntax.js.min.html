@@ -31,7 +31,7 @@
             </code>
             <br />
     
-            <code data-syntax-language="c-sharp" data-syntax-options="{ 'copyButtonText': 'Copy Code', 'onCopy': onCopyCustomTrigger, 'onKeywordClicked': onKeywordClickedCustomTrigger }">
+            <code data-syntax-language="c-sharp" data-syntax-options="{ 'copyButtonText': 'Copy Code', 'onCopy': onCopyCustomTrigger, 'onKeywordClicked': onKeywordClickedCustomTrigger, 'showLanguageLabel': false }">
                 <pre>
                     bool something = true;
                     int something_else = 1;
@@ -47,7 +47,7 @@
             </code>
             <br />
     
-            <div data-syntax-language="c-sharp" data-syntax-options="{ 'showCopyButton': false, 'removeBlankLines': false, 'showLineNumbers': false }">
+            <div data-syntax-language="c-sharp" data-syntax-options="{ 'showCopyButton': false, 'removeBlankLines': false, 'showLineNumbers': false, 'showPrintButton': false }">
                 int something = 1;
 
                 if ( something == 1 ) {
@@ -86,15 +86,10 @@
 
         function addNewLanguage() {
             $syntax.addLanguage( "c-sharp", {
-                keywords: [
-                    "if",
-                    "var",
-                    "true",
-                    "bool",
-                    "int"
-                ],
+                keywords: "if var true bool int",
                 comment: "//",
-                multiLineComment: [ "/*", "*/" ]
+                multiLineComment: [ "/*", "*/" ],
+                friendlyName: "C#"
             } );
         }
 

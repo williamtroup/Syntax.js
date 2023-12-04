@@ -1,4 +1,4 @@
-/*! Syntax.js v1.1.0 | (c) Bunoon | MIT License */
+/*! Syntax.js v1.2.0 | (c) Bunoon | MIT License */
 (function() {
   function render() {
     var tagTypes = ["div", "code"];
@@ -47,15 +47,7 @@
           }
           var syntax = createElement("div", "syntax");
           code.appendChild(syntax);
-          if (syntaxOptions.showCopyButton) {
-            var copyButton = createElement("div", "copy-button");
-            copyButton.innerHTML = syntaxOptions.copyButtonText;
-            syntax.appendChild(copyButton);
-            copyButton.onclick = function() {
-              _parameter_Navigator.clipboard.writeText(innerHTMLCopy);
-              fireCustomTrigger(syntaxOptions.onCopy, innerHTMLCopy);
-            };
-          }
+          renderElementButtons(syntax, syntaxOptions, syntaxLanguage, innerHTMLCopy);
           if (syntaxOptions.highlightComments) {
             innerHTML = renderElementCommentVariables(innerHTML, syntaxLanguage, syntaxOptions);
             innerHTML = renderElementMultiLineCommentVariables(innerHTML, syntaxLanguage, syntaxOptions);
@@ -81,6 +73,55 @@
         } else {
           console.error("Language '" + syntaxLanguage + "' is not supported.");
         }
+      }
+    }
+  }
+  function renderElementButtons(syntax, syntaxOptions, syntaxLanguage, innerHTMLCopy) {
+    if (syntaxOptions.showLanguageLabel || syntaxOptions.showCopyButton || syntaxOptions.showPrintButton) {
+      var buttons = createElement("div", "buttons");
+      syntax.appendChild(buttons);
+      if (syntaxOptions.showCopyButton) {
+        var copyButton = createElement("div", "button");
+        copyButton.innerHTML = syntaxOptions.copyButtonText;
+        buttons.appendChild(copyButton);
+        copyButton.onclick = function() {
+          _parameter_Navigator.clipboard.writeText(innerHTMLCopy);
+          fireCustomTrigger(syntaxOptions.onCopy, innerHTMLCopy);
+        };
+      }
+      if (syntaxOptions.showPrintButton) {
+        var printButton = createElement("div", "button");
+        printButton.innerHTML = syntaxOptions.printButtonText;
+        buttons.appendChild(printButton);
+        printButton.onclick = function() {
+          var newWindow = window.open(_string.empty, "PRINT", "height=400,width=600");
+          var newElementForPrint = syntax.cloneNode(true);
+          newElementForPrint.removeChild(newElementForPrint.children[0]);
+          newWindow.document.write("<html>");
+          newWindow.document.write("<head>");
+          newWindow.document.write("<title>");
+          newWindow.document.write(getFriendlyLanguageName(syntaxLanguage));
+          newWindow.document.write("</title>");
+          newWindow.document.write("</head>");
+          newWindow.document.write("<body>");
+          newWindow.document.write("<code>");
+          newWindow.document.write("<pre>");
+          newWindow.document.write(newElementForPrint.innerHTML);
+          newWindow.document.write("</pre>");
+          newWindow.document.write("</code>");
+          newWindow.document.write("</body>");
+          newWindow.document.write("</html>");
+          newWindow.document.close();
+          newWindow.focus();
+          newWindow.print();
+          newWindow.close();
+          fireCustomTrigger(syntaxOptions.onPrint, newElementForPrint.innerHTML);
+        };
+      }
+      if (syntaxOptions.showLanguageLabel) {
+        var languageLabel = createElement("div", "label");
+        languageLabel.innerHTML = getFriendlyLanguageName(syntaxLanguage);
+        buttons.appendChild(languageLabel);
       }
     }
   }
@@ -148,6 +189,9 @@
   function renderElementKeywords(innerHTML, syntaxLanguage, syntaxOptions) {
     var keywords = _languages[syntaxLanguage].keywords;
     var caseSensitive = _languages[syntaxLanguage].caseSensitive;
+    if (isDefinedString(keywords)) {
+      keywords = keywords.split(_string.space);
+    }
     var keywordsLength = keywords.length;
     var keywordIndex = 0;
     for (; keywordIndex < keywordsLength; keywordIndex++) {
@@ -240,16 +284,32 @@
       customTrigger(text);
     };
   }
+  function getFriendlyLanguageName(syntaxLanguage) {
+    var result = null;
+    if (isDefinedString(_languages[syntaxLanguage].friendlyName)) {
+      result = _languages[syntaxLanguage].friendlyName.toUpperCase();
+    } else {
+      result = syntaxLanguage.toUpperCase();
+    }
+    return result;
+  }
   function buildAttributeOptions(newOptions) {
     var options = !isDefinedObject(newOptions) ? {} : newOptions;
     options.showCopyButton = getDefaultBoolean(options.showCopyButton, true);
-    options.copyButtonText = getDefaultString(options.copyButtonText, "Copy");
     options.removeBlankLines = getDefaultBoolean(options.removeBlankLines, false);
     options.showLineNumbers = getDefaultBoolean(options.showLineNumbers, true);
     options.highlightKeywords = getDefaultBoolean(options.highlightKeywords, true);
     options.highlightStrings = getDefaultBoolean(options.highlightStrings, true);
     options.highlightComments = getDefaultBoolean(options.highlightComments, true);
+    options.showLanguageLabel = getDefaultBoolean(options.showLanguageLabel, true);
+    options.showPrintButton = getDefaultBoolean(options.showPrintButton, true);
+    options = buildAttributeOptionStrings(options);
     return buildAttributeOptionCustomTriggers(options);
+  }
+  function buildAttributeOptionStrings(options) {
+    options.copyButtonText = getDefaultString(options.copyButtonText, "Copy");
+    options.printButtonText = getDefaultString(options.printButtonText, "Print");
+    return options;
   }
   function buildAttributeOptionCustomTriggers(options) {
     options.onCopy = getDefaultFunction(options.onCopy, null);
@@ -258,6 +318,7 @@
     options.onKeywordRender = getDefaultFunction(options.onKeywordRender, null);
     options.onStringRender = getDefaultFunction(options.onStringRender, null);
     options.onCommentRender = getDefaultFunction(options.onCommentRender, null);
+    options.onPrint = getDefaultFunction(options.onPrint, null);
     return options;
   }
   function isDefined(value) {
@@ -426,7 +487,7 @@
     return _languages;
   };
   this.getVersion = function() {
-    return "1.1.0";
+    return "1.2.0";
   };
   (function(documentObject, navigatorObject, windowObject) {
     _parameter_Document = documentObject;
