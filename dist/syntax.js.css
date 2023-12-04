@@ -123,6 +123,13 @@ div.syntax-highlight div.code div.copy-button {
   padding-right: 10px;
   border-radius: var(--border-radius);
   font-weight: 700;
+  display: none;
+}
+@media (min-width: 768px) {
+  code.syntax-highlight div.code div.copy-button,
+  div.syntax-highlight div.code div.copy-button {
+    display: block;
+  }
 }
 code.syntax-highlight div.code div.copy-button:hover,
 div.syntax-highlight div.code div.copy-button:hover {

@@ -1,7 +1,8 @@
 # Syntax.js - Change Log:
 
 ## Version 1.2.0:
--
+- The copy button is now hidden in mobile mode.
+- 
 
 <br>
 

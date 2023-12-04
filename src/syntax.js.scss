@@ -124,6 +124,11 @@ div.syntax-highlight {
             padding-right: 10px;
             border-radius: var(--border-radius);
             font-weight: 700;
+            display: none;
+
+            @media (min-width: 768px) { 
+                display: block;
+            }
 
             &:hover {
                 cursor: pointer;
