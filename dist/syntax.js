@@ -436,7 +436,7 @@
     return this;
   };
   this.getAllElementsHighlighted = function() {
-    return _elements;
+    return [].slice.call(_elements);
   };
   this.destroyAll = function() {
     var elementId;

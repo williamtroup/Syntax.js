@@ -665,7 +665,7 @@
      */
 
     this.getAllElementsHighlighted = function() {
-        return _elements;
+        return [].slice.call( _elements );
     };
 
 
