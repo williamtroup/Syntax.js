@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" user-scalable="no" />
+        <title>Syntax.js - Basic (with BootStrap)</title>
+        <link rel="stylesheet" href="../css/styles.css" />
+        <link rel="stylesheet" href="../../dist/syntax.js.css" />
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous" />
+        <script src="../../src/syntax.js"></script>
+        <script src="../../dist/languages/syntax.javascript.js"></script>
+    </head>
+
+    <body>
+        <div class="header">
+            <h1 id="header">Syntax.js - Basic (with BootStrap)</h1>
+            <p>This is a basic example of how to use Syntax.js to highlight code inside a DOM element.</p>
+        </div>
+
+        <div class="contents">
+            <code id="manual-destroy" data-syntax-language="javascript">
+                <pre>
+                    var something = true;
+    
+                    if ( something ) {
+                        console.log( "Output is written." ); // Comment
+                        
+                        /* Multi-line
+                        comment */
+                    }
+                </pre>
+            </code>
+            <br />
+    
+            <code data-syntax-language="c-sharp" data-syntax-options="{ 'copyButtonText': 'Copy Code', 'onCopy': onCopyCustomTrigger, 'onKeywordClicked': onKeywordClickedCustomTrigger }">
+                <pre>
+                    bool something = true;
+                    int something_else = 1;
+    
+                    if ( something ) {
+                        Console.WriteLine( "Output is written." ); // Comment
+
+                        if ( something_else == 1 ) {
+                            Console.WriteLine( "Output is written again." ); // Another comment
+                        }
+                    }
+                </pre>
+            </code>
+            <br />
+    
+            <div data-syntax-language="c-sharp" data-syntax-options="{ 'showCopyButton': false, 'removeBlankLines': false, 'showLineNumbers': false }">
+                int something = 1;
+
+                if ( something == 1 ) {
+                    Console.WriteLine( "Output is written." ); // Comment
+                }
+            </div>
+            <br />
+        </div>
+
+        <div class="contents">
+            <h2>Highlighting:</h2>
+            <button class="btn btn-primary" onclick="$syntax.highlightAll();">Highlight All</button>
+            <button class="btn btn-primary" onclick="console.log( $syntax.getAllElementsHighlighted() );">Get All Elements Highlighted</button>
+            <br />
+
+            <h2>Destroying:</h2>
+            <button class="btn btn-primary" onclick="$syntax.destroy( 'manual-destroy' );">Destroy</button>
+            <button class="btn btn-primary" onclick="$syntax.destroyAll();">Destroy All</button>
+            <br />
+
+            <h2>Languages:</h2>
+            <button class="btn btn-primary" onclick="addNewLanguage();">Add Language</button>
+            <button class="btn btn-primary" onclick="removeNewLanguage();">Remove Language</button>
+            <button class="btn btn-primary" onclick="console.log( $syntax.getLanguage( 'c-sharp' ) );">Get Language</button>
+            <button class="btn btn-primary" onclick="console.log( $syntax.getAllLanguages() );">Get All Languages</button>
+            <br />
+
+            <h2>Additional Data:</h2>
+            <button onclick="console.log( $syntax.getVersion() );">Get Version</button>
+        </div>
+    </body>
+
+    <script>
+        document.title += " v" + $syntax.getVersion();
+        document.getElementById( "header" ).innerText += " - v" + $syntax.getVersion();
+
+        function addNewLanguage() {
+            $syntax.addLanguage( "c-sharp", {
+                keywords: [
+                    "if",
+                    "var",
+                    "true",
+                    "bool",
+                    "int"
+                ],
+                comment: "//",
+                multiLineComment: [ "/*", "*/" ]
+            } );
+        }
+
+        function removeNewLanguage() {
+            $syntax.removeLanguage( "c-sharp" );
+        }
+
+        function onCopyCustomTrigger( copiedCode ) {
+            console.log( "Copied code: " + copiedCode );
+        }
+
+        function onKeywordClickedCustomTrigger( keyword ) {
+            console.log( "Keyword clicked: " + keyword );
+        }
+    </script>
+</html>

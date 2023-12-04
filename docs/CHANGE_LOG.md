@@ -2,6 +2,7 @@
 
 ## Version 1.2.0:
 - The copy button is now hidden in mobile mode.
+- Added new BootStrap testing files.
 - 
 
 <br>
