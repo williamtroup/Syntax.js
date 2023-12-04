@@ -1,7 +1,8 @@
 # Syntax.js - Change Log:
 
 ## Version 1.3.0:
--
+- Removed some code that was no longer needed.
+- 
 
 <br>
 

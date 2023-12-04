@@ -480,15 +480,11 @@
     }
 
     function isDefinedFunction( object ) {
-        return isDefined( object ) && isFunction( object );
+        return isDefined( object ) && typeof object === "function";
     }
 
     function isDefinedArray( object ) {
         return isDefinedObject( object ) && object instanceof Array;
-    }
-
-    function isFunction( object ) {
-        return typeof object === "function";
     }
 
 
