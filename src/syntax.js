@@ -16,6 +16,9 @@
         _parameter_Document = null,
         _parameter_Navigator = null,
 
+        // Variables: Configuration
+        _configuration = {},
+
         // Variables: Strings
         _string = {
             empty: "",
@@ -54,12 +57,16 @@
                 elementsLength = elements.length;
 
             for ( var elementIndex = 0; elementIndex < elementsLength; elementIndex++ ) {
-                renderElement( elements[ elementIndex ] );
+                if ( !renderElement( elements[ elementIndex ] ) ) {
+                    break;
+                }
             }
         }
     }
 
     function renderElement( element ) {
+        var result = true;
+
         if ( isDefined( element ) ) {
             var syntaxLanguage = element.getAttribute( "data-syntax-language" );
 
@@ -136,10 +143,16 @@
                     _elements.push( element );
 
                 } else {
-                    console.error( "Language '" + syntaxLanguage + "' is not supported." );
+                    
+                    if ( !_configuration.safeMode ) {
+                        console.error( "Language '" + syntaxLanguage + "' is not supported." );
+                        result = false;
+                    }
                 }
             }
         }
+
+        return result;
     }
 
     function renderElementButtons( syntax, syntaxOptions, syntaxLanguage, innerHTMLCopy ) {
@@ -818,6 +831,36 @@
 
     /*
      * ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+     * Public Functions:  Configuration
+     * ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+     */
+
+    /**
+     * setConfiguration().
+     * 
+     * Sets the specific configuration options that should be used.
+     * 
+     * @public
+     * 
+     * @param       {Options}   newConfiguration                            All the configuration options that should be set (refer to "Options" documentation for properties).
+     * 
+     * @returns     {Object}                                                The Syntax.js class instance.
+     */
+    this.setConfiguration = function( newOptions ) {
+        _configuration = !isDefinedObject( newOptions ) ? {} : newOptions;
+        
+        buildDefaultConfiguration();
+
+        return this;
+    };
+
+    function buildDefaultConfiguration() {
+        _configuration.safeMode = getDefaultBoolean( _configuration.safeMode, true );
+    }
+
+
+    /*
+     * ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
      * Public Functions:  Additional Data
      * ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
      */
@@ -845,6 +888,8 @@
     ( function ( documentObject, navigatorObject, windowObject ) {
         _parameter_Document = documentObject;
         _parameter_Navigator = navigatorObject;
+
+        buildDefaultConfiguration();
 
         _parameter_Document.addEventListener( "DOMContentLoaded", function() {
             render();

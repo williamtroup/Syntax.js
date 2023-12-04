@@ -82,6 +82,19 @@ Returns all the languages that can be rendered.
 
 
 <br>
+<h1>Configuration:</h1>
+
+### **setConfiguration( *newOptions* )**:
+Sets the specific configuration options that should be used.
+<br>
+***Fires***:  onOptionsUpdated
+<br>
+***Parameter: newOptions***: '*Options*' - All the configuration options that should be set (refer to ["Options"](OPTIONS.md) documentation for properties).
+<br>
+***Returns***: '*Object*' - The Syntax.js class instance.
+
+
+<br>
 <h1>Additional Data:</h1>
 
 ### **getVersion()**:

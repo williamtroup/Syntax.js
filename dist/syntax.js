@@ -10,11 +10,14 @@
       var elementsLength = elements.length;
       var elementIndex = 0;
       for (; elementIndex < elementsLength; elementIndex++) {
-        renderElement(elements[elementIndex]);
+        if (!renderElement(elements[elementIndex])) {
+          break;
+        }
       }
     }
   }
   function renderElement(element) {
+    var result = true;
     if (isDefined(element)) {
       var syntaxLanguage = element.getAttribute("data-syntax-language");
       if (isDefined(syntaxLanguage)) {
@@ -71,10 +74,14 @@
           fireCustomTrigger(syntaxOptions.onRenderComplete, element);
           _elements.push(element);
         } else {
-          console.error("Language '" + syntaxLanguage + "' is not supported.");
+          if (!_configuration.safeMode) {
+            console.error("Language '" + syntaxLanguage + "' is not supported.");
+            result = false;
+          }
         }
       }
     }
+    return result;
   }
   function renderElementButtons(syntax, syntaxOptions, syntaxLanguage, innerHTMLCopy) {
     if (syntaxOptions.showLanguageLabel || syntaxOptions.showCopyButton || syntaxOptions.showPrintButton) {
@@ -399,8 +406,12 @@
     }
     return result.join(_string.empty);
   }
+  function buildDefaultConfiguration() {
+    _configuration.safeMode = getDefaultBoolean(_configuration.safeMode, true);
+  }
   var _parameter_Document = null;
   var _parameter_Navigator = null;
+  var _configuration = {};
   var _string = {empty:"", space:" ", newLine:"\n"};
   var _elements_Type = {};
   var _elements = [];
@@ -488,12 +499,18 @@
   this.getAllLanguages = function() {
     return _languages;
   };
+  this.setConfiguration = function(newOptions) {
+    _configuration = !isDefinedObject(newOptions) ? {} : newOptions;
+    buildDefaultConfiguration();
+    return this;
+  };
   this.getVersion = function() {
     return "1.3.0";
   };
   (function(documentObject, navigatorObject, windowObject) {
     _parameter_Document = documentObject;
     _parameter_Navigator = navigatorObject;
+    buildDefaultConfiguration();
     _parameter_Document.addEventListener("DOMContentLoaded", function() {
       render();
     });

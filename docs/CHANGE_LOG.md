@@ -6,9 +6,20 @@
 - Added multi-line string support for languages that support them (such as C#).
 - String searching now uses an improved RegEx for more accurate searches.
 
+#### **Public Functions:**
+- Added new public function "setConfiguration()", which will setup global configuration options for the whole library.
+
+#### **Configuration Option:**
+- Added new configuration option "safeMode" (defaults to true), which allows all errors to be ignored (all valid renders will still be displayed).
+
 #### **General Improvements:**
 - Removed some code that was no longer needed.
 - The numbers column can no longer have its numbers selected (CSS controlled).
+- The error log shown when a language is not available is now only shown when "safeMode" is disabled.
+
+#### **Documentation:**
+- Renamed "OPTIONS.md" to "BINDING_OPTIONS.md" (which states all the options that can be used for the "data-syntax-options" binding attribute).
+- Added a new version of "OPTIONS.md", which is now used to show all the configuration that can be used for the public function "setConfiguration()".
 
 <br>
 
