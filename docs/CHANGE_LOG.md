@@ -2,8 +2,12 @@
 
 ## Version 1.2.0:
 
+#### **New Features:**
+- Printing support is now available as a configurable button (on by default).
+- A new language label is now shown in the UI to state what language is being shown.
+
 #### **General Improvements:**
-- Redesigned the layout for the button(s) shown in the top left of the display (minor CSS class name changes).
+- Redesigned the layout for the button(s) shown in the top left of the display (minor CSS class name changes), along with the new language label.
 - Added new BootStrap testing files.
 
 #### **Languages:**
@@ -12,6 +16,11 @@
 
 #### **Settings:**
 - Added a new setting called "showLanguageLabel", which states if the language label should be shown (defaults to true).
+- Added a new setting called "showPrintButton", which states if the Print button should be shown (defaults to true).
+- Added a new setting called "printButtonText", which states the text that should be shown for the new Print button (defaults to "Print").
+
+#### **Custom Triggers:**
+- Added new custom trigger "onPrint", which is called when the "Print" button is clicked.
 
 #### **Fixes:**
 - Fixed the default color for <code> blocks reverting to the color set in BootStrap.
