@@ -18,11 +18,11 @@
   }
   function renderElement(element) {
     var result = true;
-    if (isDefined(element) && element.hasAttribute("data-syntax-language")) {
-      var syntaxLanguage = element.getAttribute("data-syntax-language");
+    if (isDefined(element) && element.hasAttribute(_attribute_Name_Language)) {
+      var syntaxLanguage = element.getAttribute(_attribute_Name_Language);
       if (isDefined(syntaxLanguage)) {
         if (_languages.hasOwnProperty(syntaxLanguage) || syntaxLanguage.toLowerCase() === _languages_Unknown) {
-          var syntaxOptionsParsed = getObjectFromString(element.getAttribute("data-syntax-options"));
+          var syntaxOptionsParsed = getObjectFromString(element.getAttribute(_attribute_Name_Options));
           if (syntaxOptionsParsed[0]) {
             var innerHTML = element.innerHTML;
             var syntaxOptions = buildAttributeOptions(syntaxOptionsParsed[1]);
@@ -38,8 +38,8 @@
               elementId = newGuid();
             }
             _elements_Original[elementId] = element.innerHTML;
-            element.removeAttribute("data-syntax-language");
-            element.removeAttribute("data-syntax-options");
+            element.removeAttribute(_attribute_Name_Language);
+            element.removeAttribute(_attribute_Name_Options);
             element.id = elementId;
             element.className = element.className === _string.empty ? "syntax-highlight" : element.className + " syntax-highlight";
             element.innerHTML = _string.empty;
@@ -87,7 +87,7 @@
         }
       } else {
         if (!_configuration.safeMode) {
-          console.error("The attribute 'data-syntax-language' has not been set correctly.");
+          console.error("The attribute '" + _attribute_Name_Language + "' has not been set correctly.");
           result = false;
         }
       }
@@ -492,6 +492,8 @@
   var _comments_Cached_Count = 0;
   var _languages = {};
   var _languages_Unknown = "unknown";
+  var _attribute_Name_Language = "data-syntax-language";
+  var _attribute_Name_Options = "data-syntax-options";
   this.highlightAll = function() {
     render();
     return this;
