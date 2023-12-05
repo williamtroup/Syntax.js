@@ -18,7 +18,7 @@
   }
   function renderElement(element) {
     var result = true;
-    if (isDefined(element)) {
+    if (isDefined(element) && element.hasAttribute("data-syntax-language")) {
       var syntaxLanguage = element.getAttribute("data-syntax-language");
       if (isDefined(syntaxLanguage)) {
         if (_languages.hasOwnProperty(syntaxLanguage)) {
@@ -84,6 +84,11 @@
             console.error("Language '" + syntaxLanguage + "' is not supported.");
             result = false;
           }
+        }
+      } else {
+        if (!_configuration.safeMode) {
+          console.error("The attribute 'data-syntax-language' has not been set correctly.");
+          result = false;
         }
       }
     }
