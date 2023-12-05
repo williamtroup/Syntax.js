@@ -46,7 +46,7 @@ Reverts all rendered Syntax elements back to their original state (without rende
 
 
 <br>
-<h1>Language:</h1>
+<h1>Languages:</h1>
 
 ### **addLanguage( *name*, *languageDetails*, *[triggerRender]* )**:
 Adds a new language that can be rendered.
@@ -62,7 +62,7 @@ Adds a new language that can be rendered.
 ***Returns***: '*boolean*' - States if the language has been added.
 
 ### **removeLanguage( *name* )**:
-Removes new language that can be rendered.
+Removes a language that can be rendered.
 <br>
 ***Parameter: name***: '*string*' - The name of the language.
 <br>
@@ -79,6 +79,42 @@ Returns the language details (by name) that can be rendered.
 Returns all the languages that can be rendered.
 <br>
 ***Returns***: '*Object*' - The object that contains the languages.
+
+
+<br>
+<h1>Language Aliases:</h1>
+
+### **addAlias( *alias*, *language*, *[triggerRender]* )**:
+Adds a new language alias.
+<br>
+***Fires***:  onRenderComplete
+<br>
+***Parameter: alias***: '*string*' - The name of the alias.
+<br>
+***Parameter: language***: '*string*' - The name of the language.
+<br>
+***Parameter: [triggerRender]***: '*boolean*' - States if new language alias DOM elements available should be rendered.
+<br>
+***Returns***: '*boolean*' - States if the alias has been added.
+
+### **removeAlias( *alias* )**:
+Removes a language alias.
+<br>
+***Parameter: alias***: '*string*' - The name of the alias.
+<br>
+***Returns***: '*boolean*' - States if the alias has been removed.
+
+### **getAlias( *alias* )**:
+Returns a language alias.
+<br>
+***Parameter: alias***: '*string*' - The name of the alias.
+<br>
+***Returns***: '*Object*' - The name of the language.
+
+### **getAliases()**:
+Returns all the language aliases.
+<br>
+***Returns***: '*Object*' - The object that contains the aliases.
 
 
 <br>

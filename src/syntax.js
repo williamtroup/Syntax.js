@@ -27,6 +27,9 @@
             newLine: "\n"
         },
 
+        // Variables: Aliases
+        _aliases_Rules = {},
+
         // Variables: Elements
         _elements_Type = {},
         _elements = [],
@@ -76,8 +79,10 @@
         if ( isDefined( element ) && element.hasAttribute( _attribute_Name_Language ) ) {
             var syntaxLanguage = element.getAttribute( _attribute_Name_Language );
 
-            if ( isDefined( syntaxLanguage ) ) {
-                if ( _languages.hasOwnProperty( syntaxLanguage ) || syntaxLanguage.toLowerCase() === _languages_Unknown ) {
+            if ( isDefinedString( syntaxLanguage ) ) {
+                var language = getLanguage( syntaxLanguage );
+
+                if ( isDefined( language ) || syntaxLanguage.toLowerCase() === _languages_Unknown ) {
                     var syntaxOptionsParsed = getObjectFromString( element.getAttribute( _attribute_Name_Options ) );
 
                     if ( syntaxOptionsParsed[ 0 ] ) {
@@ -121,19 +126,19 @@
 
                         if ( syntaxLanguage.toLowerCase() !== _languages_Unknown ) {
                             if ( syntaxOptions.highlightComments ) {
-                                innerHTML = renderElementCommentVariables( innerHTML, syntaxLanguage, syntaxOptions );
-                                innerHTML = renderElementMultiLineCommentVariables( innerHTML, syntaxLanguage, syntaxOptions );
+                                innerHTML = renderElementCommentVariables( innerHTML, language, syntaxOptions );
+                                innerHTML = renderElementMultiLineCommentVariables( innerHTML, language, syntaxOptions );
                             }
     
                             if ( syntaxOptions.highlightStrings ) {
                                 innerHTML = renderElementStringQuotesPatternVariables( innerHTML, innerHTML.match( /"((?:\\.|[^"\\])*)"/g ), syntaxOptions );
     
-                                if ( _languages[ syntaxLanguage ].comment !== "'" ) {
+                                if ( language.comment !== "'" ) {
                                     innerHTML = renderElementStringQuotesPatternVariables( innerHTML, innerHTML.match( /'((?:\\.|[^"\\])*)'/g ), syntaxOptions );
                                 }
                             }
 
-                            innerHTML = renderElementKeywords( innerHTML, syntaxLanguage, syntaxOptions );
+                            innerHTML = renderElementKeywords( innerHTML, language, syntaxOptions );
     
                             if ( syntaxOptions.highlightComments ) {
                                 innerHTML = renderElementCommentsFromVariables( innerHTML );
@@ -233,8 +238,8 @@
         }
     }
 
-    function renderElementCommentVariables( innerHTML, syntaxLanguage, syntaxOptions ) {
-        var lookup = _languages[ syntaxLanguage ].comment,
+    function renderElementCommentVariables( innerHTML, language, syntaxOptions ) {
+        var lookup = language.comment,
             patternItems = innerHTML.match( new RegExp( lookup + ".*", "g" ) );
 
         if ( patternItems !== null ) {
@@ -256,8 +261,8 @@
         return innerHTML;
     }
 
-    function renderElementMultiLineCommentVariables( innerHTML, syntaxLanguage, syntaxOptions ) {
-        var lookup = _languages[ syntaxLanguage ].multiLineComment;
+    function renderElementMultiLineCommentVariables( innerHTML, language, syntaxOptions ) {
+        var lookup = language.multiLineComment;
 
         if ( isDefinedArray( lookup ) && lookup.length === 2 ) {
             var startIndex = 0,
@@ -319,10 +324,10 @@
         return innerHTML;
     }
 
-    function renderElementKeywords( innerHTML, syntaxLanguage, syntaxOptions ) {
-        var keywords = getDefaultStringOrArray( _languages[ syntaxLanguage ].keywords, [] ),
-            caseSensitive = _languages[ syntaxLanguage ].caseSensitive,
-            keywordsCasing = _languages[ syntaxLanguage ].keywordsCasing;
+    function renderElementKeywords( innerHTML, language, syntaxOptions ) {
+        var keywords = getDefaultStringOrArray( language.keywords, [] ),
+            caseSensitive = language.caseSensitive,
+            keywordsCasing = language.keywordsCasing;
 
         if ( isDefinedString( keywordsCasing ) ) {
             keywordsCasing = keywordsCasing.toLowerCase().trim();
@@ -466,12 +471,33 @@
     }
 
     function getFriendlyLanguageName( syntaxLanguage ) {
-        var result = null;
+        var result = null,
+            language = getLanguage( syntaxLanguage );
 
-        if ( _languages.hasOwnProperty( syntaxLanguage.toLowerCase() ) && isDefinedString( _languages[ syntaxLanguage ].friendlyName ) ) {
-            result = _languages[ syntaxLanguage ].friendlyName.toUpperCase();
+        if ( isDefined( language ) && isDefinedString( language.friendlyName ) ) {
+            result = language.friendlyName.toUpperCase();
         } else {
             result = syntaxLanguage.toUpperCase();
+        }
+
+        return result;
+    }
+
+    function getLanguage( syntaxLanguage ) {
+        var result = null,
+            lookup = syntaxLanguage.toLowerCase();
+
+        if ( _languages.hasOwnProperty( lookup ) ) {
+            result = _languages[ lookup ];
+        } else {
+
+            if ( _aliases_Rules.hasOwnProperty( lookup ) ) {
+                lookup = _aliases_Rules[ lookup ];
+
+                if ( _languages.hasOwnProperty( lookup ) ) {
+                    result = _languages[ lookup ];
+                }
+            }
         }
 
         return result;
@@ -864,12 +890,13 @@
      * @returns     {boolean}                                               States if the language has been added.
      */
     this.addLanguage = function( name, languageDetails, triggerRender ) {
-        var added = false;
+        var added = false,
+            lookup = name.toLowerCase();
 
-        if ( !_languages.hasOwnProperty( name.toLowerCase() ) ) {
+        if ( !_languages.hasOwnProperty( lookup ) ) {
             triggerRender = !isDefinedBoolean( triggerRender ) ? true : triggerRender;
 
-            _languages[ name.toLowerCase() ] = languageDetails;
+            _languages[ lookup ] = languageDetails;
             added = true;
 
             if ( triggerRender ) {
@@ -883,7 +910,7 @@
     /**
      * removeLanguage().
      * 
-     * Removes new language that can be rendered.
+     * Removes a language that can be rendered.
      * 
      * @public
      * 
@@ -892,10 +919,19 @@
      * @returns     {boolean}                                               States if the language has been removed.
      */
     this.removeLanguage = function( name ) {
-        var removed = false;
+        var removed = false,
+            lookup = name.toLowerCase();
 
-        if ( _languages.hasOwnProperty( name.toLowerCase() ) ) {
-            delete _languages[ name.toLowerCase() ];
+        if ( _languages.hasOwnProperty( lookup ) ) {
+            delete _languages[ lookup ];
+
+            for ( var alias in _aliases_Rules ) {
+                if ( _aliases_Rules.hasOwnProperty( alias ) && _aliases_Rules[ alias ] === lookup ) {
+                    delete _aliases_Rules[ alias ];
+                }
+            }
+
+            removed = true;
         }
 
         return removed;
@@ -913,10 +949,11 @@
      * @returns     {Object}                                                The language details.
      */
     this.getLanguage = function( name ) {
-        var details = null;
+        var details = null,
+            lookup = name.toLowerCase();
 
-        if ( _languages.hasOwnProperty( name.toLowerCase() ) ) {
-            details = getClonedObject( _languages[ name.toLowerCase() ] );
+        if ( _languages.hasOwnProperty( lookup ) ) {
+            details = getClonedObject( lookup );
         }
 
         return details;
@@ -933,6 +970,101 @@
      */
     this.getAllLanguages = function() {
         return getClonedObject( _languages );
+    };
+
+
+    /*
+     * ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+     * Public Functions:  Language Aliases
+     * ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+     */
+
+    /**
+     * addAlias().
+     * 
+     * Adds a new language alias.
+     * 
+     * @public
+     * @fires       onRenderComplete
+     * 
+     * @param       {string}    alias                                       The name of the alias.
+     * @param       {string}    language                                    The name of the language.
+     * @param       {boolean}   [triggerRender]                             States if new language alias DOM elements available should be rendered.
+     * 
+     * @returns     {boolean}                                               States if the alias has been added.
+     */
+    this.addAlias = function( alias, language, triggerRender ) {
+        var added = false;
+
+        if ( _languages.hasOwnProperty( language.toLowerCase() ) && !_aliases_Rules.hasOwnProperty( alias.toLowerCase() ) ) {
+            triggerRender = !isDefinedBoolean( triggerRender ) ? true : triggerRender;
+
+            _aliases_Rules[ alias.toLowerCase() ] = language.toLowerCase();
+            added = true;
+
+            if ( triggerRender ) {
+                render();
+            }
+        }
+
+        return added;
+    };
+
+    /**
+     * removeAlias().
+     * 
+     * Removes a language alias.
+     * 
+     * @public
+     * 
+     * @param       {string}    alias                                       The name of the alias.
+     * 
+     * @returns     {boolean}                                               States if the alias has been removed.
+     */
+    this.removeAlias = function( alias ) {
+        var removed = false;
+
+        if ( _aliases_Rules.hasOwnProperty( alias.toLowerCase() ) ) {
+            delete _aliases_Rules[ alias.toLowerCase() ];
+
+            removed = true;
+        }
+
+        return removed;
+    };
+
+    /**
+     * getAlias().
+     * 
+     * Returns a language alias.
+     * 
+     * @public
+     * 
+     * @param       {string}    alias                                       The name of the alias.
+     * 
+     * @returns     {string}                                                The name of the language.
+     */
+    this.getAlias = function( alias ) {
+        var result = null;
+
+        if ( _aliases_Rules.hasOwnProperty( alias.toLowerCase() ) ) {
+            result = _aliases_Rules[ alias.toLowerCase() ];
+        }
+
+        return result;
+    };
+
+    /**
+     * getAliases().
+     * 
+     * Returns all the language aliases.
+     * 
+     * @public
+     * 
+     * @returns     {Object}                                                The object that contains the aliases.
+     */
+    this.getAliases = function() {
+        return getClonedObject( _aliases_Rules );
     };
 
 

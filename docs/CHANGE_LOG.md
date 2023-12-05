@@ -2,11 +2,23 @@
 
 ## Version 1.5.0:
 
+#### **New Features:**
+- Added full language alias support (allows aliases names to be added that point to a specific language name).
+
+#### **Public Functions:**
+- Added new public function "addAlias()", which is used to add a new language alias.
+- Added new public function "removeAlias()", which is used to remove a language alias.
+- Added new public function "getAlias()", which is used to get a language alias.
+- Added new public function "getAliases()", which is used to get all language aliases.
+
 #### **Documentation:**
 - More documentation improvements to show how some of the new features are used.
 
 #### **General Improvements:**
 - NUSPEC file improvements for NuGet.org submissions.
+
+#### **Fixes:**
+- Fixed a fault that prevented the public function "removeLanguage()" from return a valid flag when a language has been removed.
 
 <br>
 

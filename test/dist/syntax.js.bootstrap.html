@@ -79,6 +79,13 @@
             <button class="btn btn-primary" onclick="console.log( $syntax.getAllLanguages() );">Get All Languages</button>
             <br />
 
+            <h2>Aliases:</h2>
+            <button class="btn btn-primary" onclick="addNewAlias();">Add Alias</button>
+            <button class="btn btn-primary" onclick="removeNewAlias();">Remove Alias</button>
+            <button class="btn btn-primary" onclick="console.log( $syntax.getAlias( 'c-sharp' ) );">Get Alias</button>
+            <button class="btn btn-primary" onclick="console.log( $syntax.getAliases() );">Get Aliases</button>
+            <br />
+
             <h2>Configuration:</h2>
             <button class="btn btn-primary" onclick="setupConfiguration();">Set Configuration</button>
             <br />
@@ -93,17 +100,27 @@
         document.getElementById( "header" ).innerText += " - v" + $syntax.getVersion();
 
         function addNewLanguage() {
-            $syntax.addLanguage( "c-sharp", {
+            var result = $syntax.addLanguage( "c#", {
                 keywords: "if var true bool int string",
                 comment: "//",
                 multiLineComment: [ "/*", "*/" ],
                 friendlyName: "C#",
                 keywordsCasing: "initial"
             } );
+
+            console.log( "Language Added: " + result.toString() );
         }
 
         function removeNewLanguage() {
-            $syntax.removeLanguage( "c-sharp" );
+            console.log( "Language Removed: " + $syntax.removeLanguage( "c#" ).toString() );
+        }
+
+        function addNewAlias() {
+            console.log( "Alias Added: " + $syntax.addAlias( "c-sharp", "c#" ).toString() );
+        }
+
+        function removeNewAlias() {
+            console.log( "Alias Removed: " + $syntax.removeAlias( "c-sharp" ).toString() );
         }
 
         function onCopyCustomTrigger( copiedCode ) {

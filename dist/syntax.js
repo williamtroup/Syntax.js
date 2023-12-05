@@ -20,8 +20,9 @@
     var result = true;
     if (isDefined(element) && element.hasAttribute(_attribute_Name_Language)) {
       var syntaxLanguage = element.getAttribute(_attribute_Name_Language);
-      if (isDefined(syntaxLanguage)) {
-        if (_languages.hasOwnProperty(syntaxLanguage) || syntaxLanguage.toLowerCase() === _languages_Unknown) {
+      if (isDefinedString(syntaxLanguage)) {
+        var language = getLanguage(syntaxLanguage);
+        if (isDefined(language) || syntaxLanguage.toLowerCase() === _languages_Unknown) {
           var syntaxOptionsParsed = getObjectFromString(element.getAttribute(_attribute_Name_Options));
           if (syntaxOptionsParsed[0]) {
             var innerHTML = element.innerHTML;
@@ -54,16 +55,16 @@
             renderElementButtons(syntax, syntaxOptions, syntaxLanguage, innerHTMLCopy);
             if (syntaxLanguage.toLowerCase() !== _languages_Unknown) {
               if (syntaxOptions.highlightComments) {
-                innerHTML = renderElementCommentVariables(innerHTML, syntaxLanguage, syntaxOptions);
-                innerHTML = renderElementMultiLineCommentVariables(innerHTML, syntaxLanguage, syntaxOptions);
+                innerHTML = renderElementCommentVariables(innerHTML, language, syntaxOptions);
+                innerHTML = renderElementMultiLineCommentVariables(innerHTML, language, syntaxOptions);
               }
               if (syntaxOptions.highlightStrings) {
                 innerHTML = renderElementStringQuotesPatternVariables(innerHTML, innerHTML.match(/"((?:\\.|[^"\\])*)"/g), syntaxOptions);
-                if (_languages[syntaxLanguage].comment !== "'") {
+                if (language.comment !== "'") {
                   innerHTML = renderElementStringQuotesPatternVariables(innerHTML, innerHTML.match(/'((?:\\.|[^"\\])*)'/g), syntaxOptions);
                 }
               }
-              innerHTML = renderElementKeywords(innerHTML, syntaxLanguage, syntaxOptions);
+              innerHTML = renderElementKeywords(innerHTML, language, syntaxOptions);
               if (syntaxOptions.highlightComments) {
                 innerHTML = renderElementCommentsFromVariables(innerHTML);
               }
@@ -143,8 +144,8 @@
       }
     }
   }
-  function renderElementCommentVariables(innerHTML, syntaxLanguage, syntaxOptions) {
-    var lookup = _languages[syntaxLanguage].comment;
+  function renderElementCommentVariables(innerHTML, language, syntaxOptions) {
+    var lookup = language.comment;
     var patternItems = innerHTML.match(new RegExp(lookup + ".*", "g"));
     if (patternItems !== null) {
       var patternItemsLength = patternItems.length;
@@ -160,8 +161,8 @@
     }
     return innerHTML;
   }
-  function renderElementMultiLineCommentVariables(innerHTML, syntaxLanguage, syntaxOptions) {
-    var lookup = _languages[syntaxLanguage].multiLineComment;
+  function renderElementMultiLineCommentVariables(innerHTML, language, syntaxOptions) {
+    var lookup = language.multiLineComment;
     if (isDefinedArray(lookup) && lookup.length === 2) {
       var startIndex = 0;
       var endIndex = 0;
@@ -209,10 +210,10 @@
     }
     return innerHTML;
   }
-  function renderElementKeywords(innerHTML, syntaxLanguage, syntaxOptions) {
-    var keywords = getDefaultStringOrArray(_languages[syntaxLanguage].keywords, []);
-    var caseSensitive = _languages[syntaxLanguage].caseSensitive;
-    var keywordsCasing = _languages[syntaxLanguage].keywordsCasing;
+  function renderElementKeywords(innerHTML, language, syntaxOptions) {
+    var keywords = getDefaultStringOrArray(language.keywords, []);
+    var caseSensitive = language.caseSensitive;
+    var keywordsCasing = language.keywordsCasing;
     if (isDefinedString(keywordsCasing)) {
       keywordsCasing = keywordsCasing.toLowerCase().trim();
     }
@@ -332,10 +333,26 @@
   }
   function getFriendlyLanguageName(syntaxLanguage) {
     var result = null;
-    if (_languages.hasOwnProperty(syntaxLanguage.toLowerCase()) && isDefinedString(_languages[syntaxLanguage].friendlyName)) {
-      result = _languages[syntaxLanguage].friendlyName.toUpperCase();
+    var language = getLanguage(syntaxLanguage);
+    if (isDefined(language) && isDefinedString(language.friendlyName)) {
+      result = language.friendlyName.toUpperCase();
     } else {
       result = syntaxLanguage.toUpperCase();
+    }
+    return result;
+  }
+  function getLanguage(syntaxLanguage) {
+    var result = null;
+    var lookup = syntaxLanguage.toLowerCase();
+    if (_languages.hasOwnProperty(lookup)) {
+      result = _languages[lookup];
+    } else {
+      if (_aliases_Rules.hasOwnProperty(lookup)) {
+        lookup = _aliases_Rules[lookup];
+        if (_languages.hasOwnProperty(lookup)) {
+          result = _languages[lookup];
+        }
+      }
     }
     return result;
   }
@@ -495,6 +512,7 @@
   var _parameter_Window = null;
   var _configuration = {};
   var _string = {empty:"", space:" ", newLine:"\n"};
+  var _aliases_Rules = {};
   var _elements_Type = {};
   var _elements = [];
   var _elements_Original = {};
@@ -557,9 +575,10 @@
   };
   this.addLanguage = function(name, languageDetails, triggerRender) {
     var added = false;
-    if (!_languages.hasOwnProperty(name.toLowerCase())) {
+    var lookup = name.toLowerCase();
+    if (!_languages.hasOwnProperty(lookup)) {
       triggerRender = !isDefinedBoolean(triggerRender) ? true : triggerRender;
-      _languages[name.toLowerCase()] = languageDetails;
+      _languages[lookup] = languageDetails;
       added = true;
       if (triggerRender) {
         render();
@@ -569,20 +588,59 @@
   };
   this.removeLanguage = function(name) {
     var removed = false;
-    if (_languages.hasOwnProperty(name.toLowerCase())) {
-      delete _languages[name.toLowerCase()];
+    var lookup = name.toLowerCase();
+    if (_languages.hasOwnProperty(lookup)) {
+      delete _languages[lookup];
+      var alias;
+      for (alias in _aliases_Rules) {
+        if (_aliases_Rules.hasOwnProperty(alias) && _aliases_Rules[alias] === lookup) {
+          delete _aliases_Rules[alias];
+        }
+      }
+      removed = true;
     }
     return removed;
   };
   this.getLanguage = function(name) {
     var details = null;
-    if (_languages.hasOwnProperty(name.toLowerCase())) {
-      details = getClonedObject(_languages[name.toLowerCase()]);
+    var lookup = name.toLowerCase();
+    if (_languages.hasOwnProperty(lookup)) {
+      details = getClonedObject(lookup);
     }
     return details;
   };
   this.getAllLanguages = function() {
     return getClonedObject(_languages);
+  };
+  this.addAlias = function(alias, language, triggerRender) {
+    var added = false;
+    if (_languages.hasOwnProperty(language.toLowerCase()) && !_aliases_Rules.hasOwnProperty(alias.toLowerCase())) {
+      triggerRender = !isDefinedBoolean(triggerRender) ? true : triggerRender;
+      _aliases_Rules[alias.toLowerCase()] = language.toLowerCase();
+      added = true;
+      if (triggerRender) {
+        render();
+      }
+    }
+    return added;
+  };
+  this.removeAlias = function(alias) {
+    var removed = false;
+    if (_aliases_Rules.hasOwnProperty(alias.toLowerCase())) {
+      delete _aliases_Rules[alias.toLowerCase()];
+      removed = true;
+    }
+    return removed;
+  };
+  this.getAlias = function(alias) {
+    var result = null;
+    if (_aliases_Rules.hasOwnProperty(alias.toLowerCase())) {
+      result = _aliases_Rules[alias.toLowerCase()];
+    }
+    return result;
+  };
+  this.getAllAliases = function() {
+    return getClonedObject(_aliases_Rules);
   };
   this.setConfiguration = function(newOptions) {
     _configuration = !isDefinedObject(newOptions) ? {} : newOptions;
