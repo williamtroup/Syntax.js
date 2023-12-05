@@ -26,6 +26,7 @@ Syntax.js
 - Coping and Printing support is available via action buttons.
 - Custom triggers for actions (when elements are rendered, keywords are clicked, etc).
 - 12 of the most popular languages built in by default (you can add your own easily if yours is not supported by default).
+- Unknown language support (renders the display, but does not highlight any syntax).
 <br />
 <br />
 
