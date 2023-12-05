@@ -38,7 +38,8 @@
         _comments_Cached_Count = 0,
         
         // Variables: Languages
-        _languages = {};
+        _languages = {},
+        _languages_Unknown = "unknown";
 
     
     /*
@@ -71,7 +72,7 @@
             var syntaxLanguage = element.getAttribute( "data-syntax-language" );
 
             if ( isDefined( syntaxLanguage ) ) {
-                if ( _languages.hasOwnProperty( syntaxLanguage ) ) {
+                if ( _languages.hasOwnProperty( syntaxLanguage ) || syntaxLanguage.toLowerCase() === _languages_Unknown ) {
                     var syntaxOptionsParsed = getObjectFromString( element.getAttribute( "data-syntax-options" ) );
 
                     if ( syntaxOptionsParsed[ 0 ] ) {
@@ -113,29 +114,31 @@
 
                         renderElementButtons( syntax, syntaxOptions, syntaxLanguage, innerHTMLCopy );
 
-                        if ( syntaxOptions.highlightComments ) {
-                            innerHTML = renderElementCommentVariables( innerHTML, syntaxLanguage, syntaxOptions );
-                            innerHTML = renderElementMultiLineCommentVariables( innerHTML, syntaxLanguage, syntaxOptions );
-                        }
-
-                        if ( syntaxOptions.highlightStrings ) {
-                            innerHTML = renderElementStringQuotesPatternVariables( innerHTML, innerHTML.match( /"((?:\\.|[^"\\])*)"/g ), syntaxOptions );
-
-                            if ( _languages[ syntaxLanguage ].comment !== "'" ) {
-                                innerHTML = renderElementStringQuotesPatternVariables( innerHTML, innerHTML.match( /'((?:\\.|[^"\\])*)'/g ), syntaxOptions );
+                        if ( syntaxLanguage.toLowerCase() !== _languages_Unknown ) {
+                            if ( syntaxOptions.highlightComments ) {
+                                innerHTML = renderElementCommentVariables( innerHTML, syntaxLanguage, syntaxOptions );
+                                innerHTML = renderElementMultiLineCommentVariables( innerHTML, syntaxLanguage, syntaxOptions );
                             }
-                        }
-
-                        if ( syntaxOptions.highlightKeywords ) {
-                            innerHTML = renderElementKeywords( innerHTML, syntaxLanguage, syntaxOptions );
-                        }
-
-                        if ( syntaxOptions.highlightComments ) {
-                            innerHTML = renderElementCommentsFromVariables( innerHTML );
-                        }
-                        
-                        if ( syntaxOptions.highlightStrings ) {
-                            innerHTML = renderElementStringQuotesFromVariables( innerHTML );
+    
+                            if ( syntaxOptions.highlightStrings ) {
+                                innerHTML = renderElementStringQuotesPatternVariables( innerHTML, innerHTML.match( /"((?:\\.|[^"\\])*)"/g ), syntaxOptions );
+    
+                                if ( _languages[ syntaxLanguage ].comment !== "'" ) {
+                                    innerHTML = renderElementStringQuotesPatternVariables( innerHTML, innerHTML.match( /'((?:\\.|[^"\\])*)'/g ), syntaxOptions );
+                                }
+                            }
+    
+                            if ( syntaxOptions.highlightKeywords ) {
+                                innerHTML = renderElementKeywords( innerHTML, syntaxLanguage, syntaxOptions );
+                            }
+    
+                            if ( syntaxOptions.highlightComments ) {
+                                innerHTML = renderElementCommentsFromVariables( innerHTML );
+                            }
+                            
+                            if ( syntaxOptions.highlightStrings ) {
+                                innerHTML = renderElementStringQuotesFromVariables( innerHTML );
+                            }
                         }
 
                         renderElementCompletedHTML( element, number, syntax, innerHTML, syntaxOptions, isPreFormatted );
@@ -435,7 +438,7 @@
     function getFriendlyLanguageName( syntaxLanguage ) {
         var result = null;
 
-        if ( isDefinedString( _languages[ syntaxLanguage ].friendlyName ) ) {
+        if ( _languages.hasOwnProperty( syntaxLanguage.toLowerCase() ) && isDefinedString( _languages[ syntaxLanguage ].friendlyName ) ) {
             result = _languages[ syntaxLanguage ].friendlyName.toUpperCase();
         } else {
             result = syntaxLanguage.toUpperCase();
