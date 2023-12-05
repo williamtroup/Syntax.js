@@ -22,57 +22,63 @@
       var syntaxLanguage = element.getAttribute("data-syntax-language");
       if (isDefined(syntaxLanguage)) {
         if (_languages.hasOwnProperty(syntaxLanguage)) {
-          var innerHTML = element.innerHTML;
-          var syntaxOptions = getObjectFromString(element.getAttribute("data-syntax-options"));
-          var isPreFormatted = false;
-          syntaxOptions = buildAttributeOptions(syntaxOptions);
-          if (element.children.length > 0 && element.children[0].nodeName.toLowerCase() === "pre") {
-            innerHTML = element.children[0].innerHTML;
-            isPreFormatted = true;
-          }
-          var innerHTMLCopy = innerHTML.trim();
-          var number = null;
-          var elementId = element.id;
-          if (!isDefinedString(elementId)) {
-            elementId = newGuid();
-          }
-          _elements_Original[elementId] = element.innerHTML;
-          element.removeAttribute("data-syntax-language");
-          element.removeAttribute("data-syntax-options");
-          element.id = elementId;
-          element.className = element.className === _string.empty ? "syntax-highlight" : element.className + " syntax-highlight";
-          element.innerHTML = _string.empty;
-          var code = createElement("div", "code custom-scroll-bars");
-          element.appendChild(code);
-          if (syntaxOptions.showLineNumbers) {
-            number = createElement("div", "number");
-            code.appendChild(number);
-          }
-          var syntax = createElement("div", "syntax");
-          code.appendChild(syntax);
-          renderElementButtons(syntax, syntaxOptions, syntaxLanguage, innerHTMLCopy);
-          if (syntaxOptions.highlightComments) {
-            innerHTML = renderElementCommentVariables(innerHTML, syntaxLanguage, syntaxOptions);
-            innerHTML = renderElementMultiLineCommentVariables(innerHTML, syntaxLanguage, syntaxOptions);
-          }
-          if (syntaxOptions.highlightStrings) {
-            innerHTML = renderElementStringQuotesPatternVariables(innerHTML, innerHTML.match(/"((?:\\.|[^"\\])*)"/g), syntaxOptions);
-            if (_languages[syntaxLanguage].comment !== "'") {
-              innerHTML = renderElementStringQuotesPatternVariables(innerHTML, innerHTML.match(/'((?:\\.|[^"\\])*)'/g), syntaxOptions);
+          var syntaxOptionsParsed = getObjectFromString(element.getAttribute("data-syntax-options"));
+          if (syntaxOptionsParsed[0]) {
+            var innerHTML = element.innerHTML;
+            var syntaxOptions = buildAttributeOptions(syntaxOptionsParsed[1]);
+            var isPreFormatted = false;
+            if (element.children.length > 0 && element.children[0].nodeName.toLowerCase() === "pre") {
+              innerHTML = element.children[0].innerHTML;
+              isPreFormatted = true;
+            }
+            var innerHTMLCopy = innerHTML.trim();
+            var number = null;
+            var elementId = element.id;
+            if (!isDefinedString(elementId)) {
+              elementId = newGuid();
+            }
+            _elements_Original[elementId] = element.innerHTML;
+            element.removeAttribute("data-syntax-language");
+            element.removeAttribute("data-syntax-options");
+            element.id = elementId;
+            element.className = element.className === _string.empty ? "syntax-highlight" : element.className + " syntax-highlight";
+            element.innerHTML = _string.empty;
+            var code = createElement("div", "code custom-scroll-bars");
+            element.appendChild(code);
+            if (syntaxOptions.showLineNumbers) {
+              number = createElement("div", "number");
+              code.appendChild(number);
+            }
+            var syntax = createElement("div", "syntax");
+            code.appendChild(syntax);
+            renderElementButtons(syntax, syntaxOptions, syntaxLanguage, innerHTMLCopy);
+            if (syntaxOptions.highlightComments) {
+              innerHTML = renderElementCommentVariables(innerHTML, syntaxLanguage, syntaxOptions);
+              innerHTML = renderElementMultiLineCommentVariables(innerHTML, syntaxLanguage, syntaxOptions);
+            }
+            if (syntaxOptions.highlightStrings) {
+              innerHTML = renderElementStringQuotesPatternVariables(innerHTML, innerHTML.match(/"((?:\\.|[^"\\])*)"/g), syntaxOptions);
+              if (_languages[syntaxLanguage].comment !== "'") {
+                innerHTML = renderElementStringQuotesPatternVariables(innerHTML, innerHTML.match(/'((?:\\.|[^"\\])*)'/g), syntaxOptions);
+              }
+            }
+            if (syntaxOptions.highlightKeywords) {
+              innerHTML = renderElementKeywords(innerHTML, syntaxLanguage, syntaxOptions);
+            }
+            if (syntaxOptions.highlightComments) {
+              innerHTML = renderElementCommentsFromVariables(innerHTML);
+            }
+            if (syntaxOptions.highlightStrings) {
+              innerHTML = renderElementStringQuotesFromVariables(innerHTML);
+            }
+            renderElementCompletedHTML(element, number, syntax, innerHTML, syntaxOptions, isPreFormatted);
+            fireCustomTrigger(syntaxOptions.onRenderComplete, element);
+            _elements.push(element);
+          } else {
+            if (!_configuration.safeMode) {
+              result = false;
             }
           }
-          if (syntaxOptions.highlightKeywords) {
-            innerHTML = renderElementKeywords(innerHTML, syntaxLanguage, syntaxOptions);
-          }
-          if (syntaxOptions.highlightComments) {
-            innerHTML = renderElementCommentsFromVariables(innerHTML);
-          }
-          if (syntaxOptions.highlightStrings) {
-            innerHTML = renderElementStringQuotesFromVariables(innerHTML);
-          }
-          renderElementCompletedHTML(element, number, syntax, innerHTML, syntaxOptions, isPreFormatted);
-          fireCustomTrigger(syntaxOptions.onRenderComplete, element);
-          _elements.push(element);
         } else {
           if (!_configuration.safeMode) {
             console.error("Language '" + syntaxLanguage + "' is not supported.");
@@ -379,6 +385,7 @@
     return isDefinedFunction(value) ? value : defaultValue;
   }
   function getObjectFromString(objectString) {
+    var parsed = true;
     var result = null;
     try {
       if (isDefinedString(objectString)) {
@@ -388,11 +395,14 @@
       try {
         result = eval("(" + objectString + ")");
       } catch (e2) {
-        console.error("Errors in object: " + e1.message + ", " + e2.message);
+        if (!_configuration.safeMode) {
+          console.error("Errors in object: " + e1.message + ", " + e2.message);
+          parsed = false;
+        }
         result = null;
       }
     }
-    return result;
+    return [parsed, result];
   }
   function getClonedObject(object) {
     var json = JSON.stringify(object);
