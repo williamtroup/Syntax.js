@@ -15,6 +15,7 @@
     var // Variables: Constructor Parameters
         _parameter_Document = null,
         _parameter_Navigator = null,
+        _parameter_Window = null,
 
         // Variables: Configuration
         _configuration = {},
@@ -382,6 +383,12 @@
             }
         }
 
+        if ( isDefined( number ) ) {
+            number.ondblclick = function() {
+                selectTextInElement( codeContainer );
+            };
+        }
+
         for ( var lineIndex = 0; lineIndex < linesLength; lineIndex++ ) {
             var line = lines[ lineIndex ];
 
@@ -550,6 +557,21 @@
         }
 
         return result;
+    }
+
+    function selectTextInElement( element ) {
+        if ( _parameter_Document.selection ) {
+            var textRange = _parameter_Document.body.createTextRange();
+            textRange.moveToElementText( element );
+            textRange.select();
+
+        } else if ( _parameter_Window.getSelection ) {
+            var range = _parameter_Document.createRange();
+            range.selectNode( element );
+
+            _parameter_Window.getSelection().removeAllRanges();
+            _parameter_Window.getSelection().addRange( range );
+        }
     }
 
 
@@ -932,6 +954,7 @@
     ( function ( documentObject, navigatorObject, windowObject ) {
         _parameter_Document = documentObject;
         _parameter_Navigator = navigatorObject;
+        _parameter_Window = windowObject;
 
         buildDefaultConfiguration();
 
@@ -939,8 +962,8 @@
             render();
         } );
 
-        if ( !isDefined( windowObject.$syntax ) ) {
-            windowObject.$syntax = this;
+        if ( !isDefined( _parameter_Window.$syntax ) ) {
+            _parameter_Window.$syntax = this;
         }
 
     } ) ( document, navigator, window );

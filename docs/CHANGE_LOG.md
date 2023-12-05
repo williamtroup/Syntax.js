@@ -8,6 +8,9 @@
 #### **Binding Settings:**
 - Added a new setting called "padLineNumbers", which states if the line numbers should be padded (defaults to false).
 
+#### **General Improvements:**
+- Double-clicking the numbers column (when enabled) will now highlight all the code in the right panel.
+
 <br>
 
 
