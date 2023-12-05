@@ -16,6 +16,7 @@ Below are all the options that can be passed in the "data-syntax-options" bindin
 | *boolean* | highlightComments | States if the comments should be highlighted (defaults to true). |
 | *boolean* | showLanguageLabel | States if the language label should be shown or not (defaults to true). |
 | *boolean* | showPrintButton | States if the print button should be added (defaults to true). |
+| *boolean* | padLineNumbers | States if the line numbers should be shown as "01" instead of "1" (defaults to false). |
 <br/>
 
 

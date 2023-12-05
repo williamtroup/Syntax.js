@@ -5,6 +5,9 @@
 #### **Languages:**
 - The binding attribute "data-syntax-language" can now be set to "unknown", which will force the layout to still be drawn, but no highlighting will be applied.
 
+#### **Binding Settings:**
+- Added a new setting called "padLineNumbers", which states if the line numbers should be padded (defaults to false).
+
 <br>
 
 

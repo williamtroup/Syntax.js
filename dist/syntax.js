@@ -253,6 +253,7 @@
   function renderElementCompletedHTML(element, number, syntax, innerHTML, syntaxOptions, isPreFormatted) {
     var lines = innerHTML.split(_string.newLine);
     var linesLength = lines.length;
+    var linesLengthStringLength = linesLength.toString().length;
     var numberContainer = number;
     var codeContainer = syntax;
     var replaceWhitespace = null;
@@ -275,7 +276,11 @@
         if (line.trim() !== _string.empty || !syntaxOptions.removeBlankLines) {
           if (isDefined(numberContainer)) {
             var numberCode = createElement("p");
-            numberCode.innerHTML = lineNumber.toString();
+            if (syntaxOptions.padLineNumbers) {
+              numberCode.innerHTML = padNumber(lineNumber.toString(), linesLengthStringLength);
+            } else {
+              numberCode.innerHTML = lineNumber.toString();
+            }
             numberContainer.appendChild(numberCode);
             lineNumber++;
           }
@@ -328,6 +333,7 @@
     options.highlightComments = getDefaultBoolean(options.highlightComments, true);
     options.showLanguageLabel = getDefaultBoolean(options.showLanguageLabel, true);
     options.showPrintButton = getDefaultBoolean(options.showPrintButton, true);
+    options.padLineNumbers = getDefaultBoolean(options.padLineNumbers, false);
     options = buildAttributeOptionStrings(options);
     return buildAttributeOptionCustomTriggers(options);
   }
@@ -427,6 +433,13 @@
       result.push(character);
     }
     return result.join(_string.empty);
+  }
+  function padNumber(number, length) {
+    var result = number;
+    for (; result.length < length;) {
+      result = "0" + result;
+    }
+    return result;
   }
   function buildDefaultConfiguration() {
     _configuration.safeMode = getDefaultBoolean(_configuration.safeMode, true);

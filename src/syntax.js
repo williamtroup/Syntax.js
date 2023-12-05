@@ -366,6 +366,7 @@
     function renderElementCompletedHTML( element, number, syntax, innerHTML, syntaxOptions, isPreFormatted ) {
         var lines = innerHTML.split( _string.newLine ),
             linesLength = lines.length,
+            linesLengthStringLength = linesLength.toString().length,
             numberContainer = number,
             codeContainer = syntax,
             replaceWhitespace = null,
@@ -392,7 +393,12 @@
                 if ( line.trim() !== _string.empty || !syntaxOptions.removeBlankLines ) {
                     if ( isDefined( numberContainer ) ) {
                         var numberCode = createElement( "p" );
-                        numberCode.innerHTML = lineNumber.toString();
+
+                        if ( syntaxOptions.padLineNumbers ) {
+                            numberCode.innerHTML = padNumber( lineNumber.toString(), linesLengthStringLength );
+                        } else {
+                            numberCode.innerHTML = lineNumber.toString();
+                        }
 
                         numberContainer.appendChild( numberCode );
                         lineNumber++;
@@ -464,6 +470,7 @@
         options.highlightComments = getDefaultBoolean( options.highlightComments, true );
         options.showLanguageLabel = getDefaultBoolean( options.showLanguageLabel, true );
         options.showPrintButton = getDefaultBoolean( options.showPrintButton, true );
+        options.padLineNumbers = getDefaultBoolean( options.padLineNumbers, false );
         
         options = buildAttributeOptionStrings( options );
 
@@ -630,6 +637,16 @@
         }
 
         return result.join( _string.empty );
+    }
+
+    function padNumber( number, length ) {
+        var result = number;
+
+        while ( result.length < length ) {
+            result = "0" + result;
+        }
+            
+        return result;
     }
 
 
