@@ -75,7 +75,7 @@ Returns the language details (by name) that can be rendered.
 <br>
 ***Returns***: '*Object*' - The language details.
 
-### **getAllLanguages()**:
+### **getLanguages()**:
 Returns all the languages that can be rendered.
 <br>
 ***Returns***: '*Object*' - The object that contains the languages.

@@ -960,7 +960,7 @@
     };
 
     /**
-     * getAllLanguages().
+     * getLanguages().
      * 
      * Returns all the languages that can be rendered.
      * 
@@ -968,7 +968,7 @@
      * 
      * @returns     {Object}                                                The object that contains the languages.
      */
-    this.getAllLanguages = function() {
+    this.getLanguages = function() {
         return getClonedObject( _languages );
     };
 

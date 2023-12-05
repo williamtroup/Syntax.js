@@ -609,7 +609,7 @@
     }
     return details;
   };
-  this.getAllLanguages = function() {
+  this.getLanguages = function() {
     return getClonedObject(_languages);
   };
   this.addAlias = function(alias, language, triggerRender) {
@@ -639,7 +639,7 @@
     }
     return result;
   };
-  this.getAllAliases = function() {
+  this.getAliases = function() {
     return getClonedObject(_aliases_Rules);
   };
   this.setConfiguration = function(newOptions) {

@@ -10,6 +10,7 @@
 - Added new public function "removeAlias()", which is used to remove a language alias.
 - Added new public function "getAlias()", which is used to get a language alias.
 - Added new public function "getAliases()", which is used to get all language aliases.
+- Renamed the public function "getAllLanguages" to "getLanguages()".
 
 #### **Documentation:**
 - More documentation improvements to show how some of the new features are used.
