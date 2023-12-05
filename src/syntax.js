@@ -320,16 +320,12 @@
     }
 
     function renderElementKeywords( innerHTML, syntaxLanguage, syntaxOptions ) {
-        var keywords = _languages[ syntaxLanguage ].keywords,
+        var keywords = getDefaultStringOrArray( _languages[ syntaxLanguage ].keywords, [] ),
             caseSensitive = _languages[ syntaxLanguage ].caseSensitive,
             keywordsCasing = _languages[ syntaxLanguage ].keywordsCasing;
 
         if ( isDefinedString( keywordsCasing ) ) {
             keywordsCasing = keywordsCasing.toLowerCase().trim();
-        }
-
-        if ( isDefinedString( keywords ) ) {
-            keywords = keywords.split( _string.space );
         }
 
         var keywordsLength = keywords.length;
@@ -629,6 +625,21 @@
 
     function getDefaultArray( value, defaultValue ) {
         return isDefinedArray( value ) ? value : defaultValue;
+    }
+
+    function getDefaultStringOrArray( value, defaultValue ) {
+        if ( isDefinedString( value ) ) {
+            value = value.split( _string.space );
+
+            if ( value.length === 0 ) {
+                value = defaultValue;
+            }
+
+        } else {
+            value = getDefaultArray( value, defaultValue );
+        }
+
+        return value;
     }
 
     function getObjectFromString( objectString ) {
@@ -952,19 +963,7 @@
 
     function buildDefaultConfiguration() {
         _configuration.safeMode = getDefaultBoolean( _configuration.safeMode, true );
-
-        var defaultDomElementTypes = [ "div", "code" ];
-
-        if ( isDefinedString( _configuration.highlightAllDomElementTypes ) ) {
-            _configuration.highlightAllDomElementTypes = _configuration.highlightAllDomElementTypes.split( _string.empty );
-
-            if ( _configuration.highlightAllDomElementTypes.length === 0 ) {
-                _configuration.highlightAllDomElementTypes = defaultDomElementTypes;
-            }
-
-        } else {
-            _configuration.highlightAllDomElementTypes = getDefaultArray( _configuration.highlightAllDomElementTypes, defaultDomElementTypes );
-        }
+        _configuration.highlightAllDomElementTypes = getDefaultStringOrArray( _configuration.highlightAllDomElementTypes, [ "div", "code" ] );
     }
 
 
