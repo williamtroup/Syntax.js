@@ -1,4 +1,4 @@
-# Syntax.js - Configuration:
+# Syntax.js - Configuration Options:
 
 Below are all the configuration options that can be passed to the "setConfiguration()" public function.
 

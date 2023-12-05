@@ -1,7 +1,9 @@
 # Syntax.js - Change Log:
 
 ## Version 1.5.0:
-- 
+
+#### **Documentation:**
+- More documentation improvements to show how some of the new features are used.
 
 <br>
 

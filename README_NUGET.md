@@ -80,7 +80,7 @@ Make sure you include the "DOCTYPE html" tag at the top of your email, as follow
 </code>
 ```
 
-To see a list of all the available options you can use for "data-syntax-options", click [here](https://github.com/williamtroup/Syntax.js/blob/main/docs/OPTIONS.md).
+To see a list of all the available binding options you can use for "data-syntax-options", click [here](https://github.com/williamtroup/Syntax.js/blob/main/docs/BINDING_OPTIONS.md).
 
 To see a list of all the available custom triggers you can use for "data-syntax-options", click [here](https://github.com/williamtroup/Syntax.js/blob/main/docs/CUSTOM_TRIGGERS.md).
 
@@ -98,3 +98,18 @@ To customize, and get more out of Syntax.js, please read through the following d
 ### 1. Public Functions:
 
 To see a list of all the public functions available, click [here](https://github.com/williamtroup/Syntax.js/blob/main/docs/FUNCTIONS.md).
+
+
+### 2. Configuration:
+
+Configuration options allow you to customize how Syntax.js will function.  You can set them as follows:
+
+```markdown
+<script> 
+  $syntax.setConfiguration( {
+      safeMode: false
+  } );
+</script>
+```
+
+To see a list of all the available configuration options you can use, click [here](https://github.com/williamtroup/Syntax.js/blob/main/docs/CONFIGURATION_OPTIONS.md).
