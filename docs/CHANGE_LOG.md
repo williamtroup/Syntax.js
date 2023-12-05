@@ -21,6 +21,7 @@
 #### **General Improvements:**
 - Removed some code that was no longer needed.
 - The numbers column can no longer have its numbers selected (CSS controlled).
+- The buttons (top right) can no longer have their text selected (CSS controlled).
 - The error log shown when a language is not available is now only shown when "safeMode" is disabled.
 
 #### **Documentation:**

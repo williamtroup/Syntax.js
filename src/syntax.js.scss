@@ -93,6 +93,9 @@ div.syntax-highlight {
                 position: absolute;
                 top: 0;
                 right: 0;
+                -webkit-user-select: none;
+                -ms-user-select: none;
+                user-select: none;
     
                 div.button,
                 div.label {

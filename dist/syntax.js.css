@@ -90,6 +90,9 @@ div.syntax-highlight div.code div.syntax div.buttons {
   position: absolute;
   top: 0;
   right: 0;
+  -webkit-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
 }
 code.syntax-highlight div.code div.syntax div.buttons div.button,
 code.syntax-highlight div.code div.syntax div.buttons div.label,
