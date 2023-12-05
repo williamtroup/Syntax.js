@@ -5,6 +5,9 @@
 #### **Documentation:**
 - More documentation improvements to show how some of the new features are used.
 
+#### **General Improvements:**
+- NUSPEC file improvements for NuGet.org submissions.
+
 <br>
 
 

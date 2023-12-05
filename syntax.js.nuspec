@@ -3,6 +3,7 @@
     <metadata>
         <id>jSyntax.js</id>
         <version>1.5.0</version>
+        <title>Syntax.js</title>
         <description>A lightweight, and easy-to-use, JavaScript library for code syntax highlighting!</description>
         <authors>William Troup</authors>
         <projectUrl>https://github.com/williamtroup/Syntax.js</projectUrl>
@@ -11,6 +12,7 @@
         <license type="expression">MIT</license>
         <tags>javascript syntax-highlighting code syntax highlight css</tags>
         <icon>docs\images\icon.png</icon>
+        <copyright>William Troup</copyright>
     </metadata>
     <files>
         <file src="**" target="/" exclude=".git\**;.vscode\**" />
