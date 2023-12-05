@@ -8,7 +8,7 @@
 - SafeMode support and new global library configuration options.
 
 #### **Public Functions:**
-- Added new public function "setConfiguration()", which will setup global configuration options for the whole library.
+- Added new public function "setConfiguration()", which will set up global configuration options for the whole library.
 - The public function "getAllElementsHighlighted()" now returns a cloned version of "_elements" instead of a referenced version.
 - The public functions "getLanguage()" and "getAllLanguages()" now return a cloned version of the language objects.
 
@@ -26,7 +26,7 @@
 
 #### **Documentation:**
 - Renamed "OPTIONS.md" to "BINDING_OPTIONS.md" (which states all the options that can be used for the "data-syntax-options" binding attribute).
-- Added a new version of "OPTIONS.md", which is now used to show all the configuration that can be used for the public function "setConfiguration()".
+- Added a new version of "OPTIONS.md", which is now used to show all the configurations that can be used for the public function "setConfiguration()".
 - Minor documentation updates to make things a bit clearer.
 
 #### **Fixes:**
