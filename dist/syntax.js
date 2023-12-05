@@ -214,6 +214,10 @@
   function renderElementKeywords(innerHTML, syntaxLanguage, syntaxOptions) {
     var keywords = _languages[syntaxLanguage].keywords;
     var caseSensitive = _languages[syntaxLanguage].caseSensitive;
+    var keywordsCasing = _languages[syntaxLanguage].keywordsCasing;
+    if (isDefinedString(keywordsCasing)) {
+      keywordsCasing = keywordsCasing.toLowerCase().trim();
+    }
     if (isDefinedString(keywords)) {
       keywords = keywords.split(_string.space);
     }
@@ -221,12 +225,18 @@
     var keywordIndex = 0;
     for (; keywordIndex < keywordsLength; keywordIndex++) {
       var keyword = keywords[keywordIndex];
+      var keywordDisplay = keyword;
       var regExFlags = caseSensitive ? "g" : "gi";
       var regEx = new RegExp("\\b" + keyword + "\\b", regExFlags);
+      if (keywordsCasing === "uppercase") {
+        keywordDisplay = keywordDisplay.toUpperCase();
+      } else if (keywordsCasing === "lowercase") {
+        keywordDisplay = keywordDisplay.toLowerCase();
+      }
       if (isDefinedFunction(syntaxOptions.onKeywordClicked)) {
-        innerHTML = innerHTML.replace(regEx, '<span class="keyword-clickable">' + keyword + "</span>");
+        innerHTML = innerHTML.replace(regEx, '<span class="keyword-clickable">' + keywordDisplay + "</span>");
       } else {
-        innerHTML = innerHTML.replace(regEx, '<span class="keyword">' + keyword + "</span>");
+        innerHTML = innerHTML.replace(regEx, '<span class="keyword">' + keywordDisplay + "</span>");
       }
       fireCustomTrigger(syntaxOptions.onKeywordRender, keyword);
     }

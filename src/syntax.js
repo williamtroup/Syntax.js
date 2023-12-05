@@ -319,7 +319,12 @@
 
     function renderElementKeywords( innerHTML, syntaxLanguage, syntaxOptions ) {
         var keywords = _languages[ syntaxLanguage ].keywords,
-            caseSensitive = _languages[ syntaxLanguage ].caseSensitive;
+            caseSensitive = _languages[ syntaxLanguage ].caseSensitive,
+            keywordsCasing = _languages[ syntaxLanguage ].keywordsCasing;
+
+        if ( isDefinedString( keywordsCasing ) ) {
+            keywordsCasing = keywordsCasing.toLowerCase().trim();
+        }
 
         if ( isDefinedString( keywords ) ) {
             keywords = keywords.split( _string.space );
@@ -329,13 +334,20 @@
 
         for ( var keywordIndex = 0; keywordIndex < keywordsLength; keywordIndex++ ) {
             var keyword = keywords[ keywordIndex ],
+                keywordDisplay = keyword,
                 regExFlags = caseSensitive ? "g" : "gi",
                 regEx = new RegExp( "\\b" + keyword + "\\b", regExFlags );
 
+            if ( keywordsCasing === "uppercase" ) {
+                keywordDisplay = keywordDisplay.toUpperCase();
+            } else if ( keywordsCasing === "lowercase" ) {
+                keywordDisplay = keywordDisplay.toLowerCase();
+            }
+
             if ( isDefinedFunction( syntaxOptions.onKeywordClicked ) ) {
-                innerHTML = innerHTML.replace( regEx, "<span class=\"keyword-clickable\">" + keyword + "</span>" );
+                innerHTML = innerHTML.replace( regEx, "<span class=\"keyword-clickable\">" + keywordDisplay + "</span>" );
             } else {
-                innerHTML = innerHTML.replace( regEx, "<span class=\"keyword\">" + keyword + "</span>" );
+                innerHTML = innerHTML.replace( regEx, "<span class=\"keyword\">" + keywordDisplay + "</span>" );
             }
 
             fireCustomTrigger( syntaxOptions.onKeywordRender, keyword );
