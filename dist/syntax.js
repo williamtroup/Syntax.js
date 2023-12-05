@@ -1,7 +1,7 @@
 /*! Syntax.js v1.4.0 | (c) Bunoon | MIT License */
 (function() {
   function render() {
-    var tagTypes = ["div", "code"];
+    var tagTypes = _configuration.highlightAllDomElementTypes;
     var tagTypesLength = tagTypes.length;
     var tagTypeIndex = 0;
     for (; tagTypeIndex < tagTypesLength; tagTypeIndex++) {
@@ -428,6 +428,9 @@
   function getDefaultFunction(value, defaultValue) {
     return isDefinedFunction(value) ? value : defaultValue;
   }
+  function getDefaultArray(value, defaultValue) {
+    return isDefinedArray(value) ? value : defaultValue;
+  }
   function getObjectFromString(objectString) {
     var parsed = true;
     var result = null;
@@ -477,6 +480,15 @@
   }
   function buildDefaultConfiguration() {
     _configuration.safeMode = getDefaultBoolean(_configuration.safeMode, true);
+    var defaultDomElementTypes = ["div", "code"];
+    if (isDefinedString(_configuration.highlightAllDomElementTypes)) {
+      _configuration.highlightAllDomElementTypes = _configuration.highlightAllDomElementTypes.split(_string.empty);
+      if (_configuration.highlightAllDomElementTypes.length === 0) {
+        _configuration.highlightAllDomElementTypes = defaultDomElementTypes;
+      }
+    } else {
+      _configuration.highlightAllDomElementTypes = getDefaultArray(_configuration.highlightAllDomElementTypes, defaultDomElementTypes);
+    }
   }
   var _parameter_Document = null;
   var _parameter_Navigator = null;

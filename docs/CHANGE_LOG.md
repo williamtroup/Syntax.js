@@ -9,6 +9,9 @@
 #### **Binding Settings:**
 - Added a new setting called "padLineNumbers", which states if the line numbers should be padded (defaults to false).
 
+#### **Configuration Options:**
+- Added new configuration option "highlightAllDomElementTypes" (defaults to "div" and "code"), which states the element types that should be looked up when rendering.
+
 #### **General Improvements:**
 - Double-clicking the numbers column (when enabled) will now highlight all the code in the right panel.
 - The "data-syntax-options" attribute now can accept a function name to get the required configuration.
@@ -32,7 +35,7 @@
 - The public functions "getLanguage()" and "getAllLanguages()" now return a cloned version of the language objects.
 
 #### **Configuration Option:**
-- Added new configuration option "safeMode" (defaults to true), which allows all errors to be ignored (all valid renders will still be displayed).
+- Added new configuration option "safeMode" (defaults to true), which allows all errors to be ignored (all valid renders will still be displayed.
 
 #### **Languages:**
 - All language files (under "dist/languages") now pass false for the "triggerRender" parameter, as the library will render automatically once the DOM is loaded.
