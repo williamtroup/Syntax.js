@@ -11,6 +11,7 @@
 
 #### **General Improvements:**
 - Double-clicking the numbers column (when enabled) will now highlight all the code in the right panel.
+- The "data-syntax-options" attribute now can accept a function name to get the required configuration.
 
 #### **Fixes:**
 - Fixed a fault that prevented the "onKeywordClicked" custom trigger being assigned to keywords when "highlightKeywords" is set to false.

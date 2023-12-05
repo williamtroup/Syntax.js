@@ -636,6 +636,11 @@
 
             try {
                 result = eval( "(" + objectString + ")" );
+
+                if ( isDefinedFunction( result ) ) {
+                    result = result();
+                }
+                
             } catch ( e2 ) {
                 if ( !_configuration.safeMode ) {
                     console.error( "Errors in object: " + e1.message + ", " + e2.message );

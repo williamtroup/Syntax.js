@@ -32,7 +32,7 @@
             </code>
             <br />
     
-            <code data-syntax-language="c-sharp" data-syntax-options="{ 'copyButtonText': 'Copy Code', 'onCopy': onCopyCustomTrigger, 'onKeywordClicked': onKeywordClickedCustomTrigger, 'showLanguageLabel': false, 'padLineNumbers': true }">
+            <code data-syntax-language="c-sharp" data-syntax-options="bindingSyntaxOptions">
                 <pre>
                     bool something = true;
                     int something_else = 1;
@@ -118,6 +118,16 @@
             $syntax.setConfiguration( {
                 safeMode: false
             } );
+        }
+
+        function bindingSyntaxOptions() {
+            return { 
+                'copyButtonText': 'Copy Code',
+                'onCopy': onCopyCustomTrigger,
+                'onKeywordClicked': onKeywordClickedCustomTrigger,
+                'showLanguageLabel': false,
+                'padLineNumbers': true
+            };
         }
     </script>
 </html>
