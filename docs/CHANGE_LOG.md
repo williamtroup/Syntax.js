@@ -1,5 +1,40 @@
 # Syntax.js - Change Log:
 
+## Version 1.3.0:
+
+#### **New Features:**
+- Added multi-line string support for languages that support them (such as C#).
+- String searching now uses an improved RegEx for more accurate searches.
+- SafeMode support and new global library configuration options.
+
+#### **Public Functions:**
+- Added new public function "setConfiguration()", which will set up global configuration options for the whole library.
+- The public function "getAllElementsHighlighted()" now returns a cloned version of "_elements" instead of a referenced version.
+- The public functions "getLanguage()" and "getAllLanguages()" now return a cloned version of the language objects.
+
+#### **Configuration Option:**
+- Added new configuration option "safeMode" (defaults to true), which allows all errors to be ignored (all valid renders will still be displayed).
+
+#### **Languages:**
+- All language files (under "dist/languages") now pass false for the "triggerRender" parameter, as the library will render automatically once the DOM is loaded.
+
+#### **General Improvements:**
+- Removed some code that was no longer needed.
+- The numbers column can no longer have its numbers selected (CSS controlled).
+- The buttons (top right) can no longer have their text selected (CSS controlled).
+- The error log shown when a language is not available is now only shown when "safeMode" is disabled.
+
+#### **Documentation:**
+- Renamed "OPTIONS.md" to "BINDING_OPTIONS.md" (which states all the options that can be used for the "data-syntax-options" binding attribute).
+- Added a new version of "OPTIONS.md", which is now used to show all the configurations that can be used for the public function "setConfiguration()".
+- Minor documentation updates to make things a bit clearer.
+
+#### **Fixes:**
+- Fixed the public function "destroyAll()" reset the "_elements" variable to the wrong type.
+
+<br>
+
+
 ## Version 1.2.0:
 
 #### **New Features:**

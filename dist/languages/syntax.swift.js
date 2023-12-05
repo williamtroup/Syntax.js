@@ -1,4 +1,4 @@
-/*! Syntax.js v1.2.0 | (c) Bunoon | MIT License */
+/*! Syntax.js v1.3.0 | (c) Bunoon | MIT License */
 $syntax.addLanguage( "swift", {
     friendlyName: "Swift",
     keywords: [
@@ -76,4 +76,4 @@ $syntax.addLanguage( "swift", {
     comment: "//",
     multiLineComment: [ "/*", "*/" ],
     caseSensitive: true
-} );
+}, false );

@@ -54,6 +54,9 @@
                 if ( something == 1 ) {
                     Console.WriteLine( "Output is written." ); // Comment
                 }
+
+                string @"A multi-line 
+                    string";
             </div>
             <br />
         </div>
@@ -76,6 +79,10 @@
             <button class="btn btn-primary" onclick="console.log( $syntax.getAllLanguages() );">Get All Languages</button>
             <br />
 
+            <h2>Configuration:</h2>
+            <button class="btn btn-primary" onclick="setupConfiguration();">Set Configuration</button>
+            <br />
+
             <h2>Additional Data:</h2>
             <button class="btn btn-primary" onclick="console.log( $syntax.getVersion() );">Get Version</button>
         </div>
@@ -87,7 +94,7 @@
 
         function addNewLanguage() {
             $syntax.addLanguage( "c-sharp", {
-                keywords: "if var true bool int",
+                keywords: "if var true bool int string",
                 comment: "//",
                 multiLineComment: [ "/*", "*/" ],
                 friendlyName: "C#"
@@ -104,6 +111,12 @@
 
         function onKeywordClickedCustomTrigger( keyword ) {
             console.log( "Keyword clicked: " + keyword );
+        }
+
+        function setupConfiguration() {
+            $syntax.setConfiguration( {
+                safeMode: false
+            } );
         }
     </script>
 </html>

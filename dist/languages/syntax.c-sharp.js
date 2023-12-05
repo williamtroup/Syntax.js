@@ -1,4 +1,4 @@
-/*! Syntax.js v1.2.0 | (c) Bunoon | MIT License */
+/*! Syntax.js v1.3.0 | (c) Bunoon | MIT License */
 $syntax.addLanguage( "c-sharp", {
     friendlyName: "C#",
     keywords: [
@@ -84,4 +84,4 @@ $syntax.addLanguage( "c-sharp", {
     comment: "//",
     multiLineComment: [ "/*", "*/" ],
     caseSensitive: true
-} );
+}, false );

@@ -1,6 +1,6 @@
 # Syntax.js - Custom Triggers:
 
-Below is a list of all the custom triggers supported in Syntax.js, which are fired when specific actions occur.
+Below is a list of all the custom triggers supported in the "data-syntax-options" binding attribute for DOM elements.
 <br>
 <br>
 

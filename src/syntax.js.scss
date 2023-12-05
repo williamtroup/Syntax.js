@@ -1,5 +1,5 @@
 /*
- * Syntax.js Library v1.2.0
+ * Syntax.js Library v1.3.0
  *
  * Copyright 2023 Bunoon
  * Released under the MIT License
@@ -67,6 +67,9 @@ div.syntax-highlight {
             border: var(--border-size) solid #BBBBBB;
             display: none;
             cursor: default;
+            -webkit-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
 
             p {
                 margin: 0;
@@ -90,6 +93,9 @@ div.syntax-highlight {
                 position: absolute;
                 top: 0;
                 right: 0;
+                -webkit-user-select: none;
+                -ms-user-select: none;
+                user-select: none;
     
                 div.button,
                 div.label {
@@ -151,7 +157,7 @@ div.syntax-highlight {
                     color: var(--color-comment);
                 }
 
-                q.string {
+                span.string {
                     color: var(--color-string);
                 }
             }

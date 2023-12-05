@@ -4,7 +4,7 @@
  * A lightweight, and easy-to-use, JavaScript library for code syntax highlighting!
  * 
  * @file        syntax.js
- * @version     v1.2.0
+ * @version     v1.3.0
  * @author      Bunoon
  * @license     MIT License
  * @copyright   Bunoon 2023
@@ -15,6 +15,9 @@
     var // Variables: Constructor Parameters
         _parameter_Document = null,
         _parameter_Navigator = null,
+
+        // Variables: Configuration
+        _configuration = {},
 
         // Variables: Strings
         _string = {
@@ -54,92 +57,114 @@
                 elementsLength = elements.length;
 
             for ( var elementIndex = 0; elementIndex < elementsLength; elementIndex++ ) {
-                renderElement( elements[ elementIndex ] );
+                if ( !renderElement( elements[ elementIndex ] ) ) {
+                    break;
+                }
             }
         }
     }
 
     function renderElement( element ) {
-        if ( isDefined( element ) ) {
+        var result = true;
+
+        if ( isDefined( element ) && element.hasAttribute( "data-syntax-language" ) ) {
             var syntaxLanguage = element.getAttribute( "data-syntax-language" );
 
             if ( isDefined( syntaxLanguage ) ) {
                 if ( _languages.hasOwnProperty( syntaxLanguage ) ) {
-                    var innerHTML = element.innerHTML,
-                        syntaxOptions = getObjectFromString( element.getAttribute( "data-syntax-options" ) ),
-                        isPreFormatted = false;
-                    
-                    syntaxOptions = buildAttributeOptions( syntaxOptions );
+                    var syntaxOptionsParsed = getObjectFromString( element.getAttribute( "data-syntax-options" ) );
 
-                    if ( element.children.length > 0 && element.children[ 0 ].nodeName.toLowerCase() === "pre" ) {
-                        innerHTML = element.children[ 0 ].innerHTML;
-                        isPreFormatted = true;
-                    }
-                    
-                    var innerHTMLCopy = innerHTML.trim(),
-                        number = null,
-                        elementId = element.id;
+                    if ( syntaxOptionsParsed[ 0 ] ) {
+                        var innerHTML = element.innerHTML,
+                            syntaxOptions = buildAttributeOptions( syntaxOptionsParsed[ 1 ] ),
+                            isPreFormatted = false;
 
-                    if ( !isDefinedString( elementId ) ) {
-                        elementId = newGuid();
-                    }
+                        if ( element.children.length > 0 && element.children[ 0 ].nodeName.toLowerCase() === "pre" ) {
+                            innerHTML = element.children[ 0 ].innerHTML;
+                            isPreFormatted = true;
+                        }
+                        
+                        var innerHTMLCopy = innerHTML.trim(),
+                            number = null,
+                            elementId = element.id;
 
-                    _elements_Original[ elementId ] = element.innerHTML;
+                        if ( !isDefinedString( elementId ) ) {
+                            elementId = newGuid();
+                        }
 
-                    element.removeAttribute( "data-syntax-language" );
-                    element.removeAttribute( "data-syntax-options" );
-                    element.id = elementId;
-                    element.className = element.className === _string.empty ? "syntax-highlight" : element.className + " syntax-highlight";
-                    element.innerHTML = _string.empty;
+                        _elements_Original[ elementId ] = element.innerHTML;
 
-                    var code = createElement( "div", "code custom-scroll-bars" );
-                    element.appendChild( code );
+                        element.removeAttribute( "data-syntax-language" );
+                        element.removeAttribute( "data-syntax-options" );
+                        element.id = elementId;
+                        element.className = element.className === _string.empty ? "syntax-highlight" : element.className + " syntax-highlight";
+                        element.innerHTML = _string.empty;
 
-                    if ( syntaxOptions.showLineNumbers ) {
-                        number = createElement( "div", "number" );
-                        code.appendChild( number );
-                    }
-        
-                    var syntax = createElement( "div", "syntax" );
-                    code.appendChild( syntax );
+                        var code = createElement( "div", "code custom-scroll-bars" );
+                        element.appendChild( code );
 
-                    renderElementButtons( syntax, syntaxOptions, syntaxLanguage, innerHTMLCopy );
+                        if ( syntaxOptions.showLineNumbers ) {
+                            number = createElement( "div", "number" );
+                            code.appendChild( number );
+                        }
+            
+                        var syntax = createElement( "div", "syntax" );
+                        code.appendChild( syntax );
 
-                    if ( syntaxOptions.highlightComments ) {
-                        innerHTML = renderElementCommentVariables( innerHTML, syntaxLanguage, syntaxOptions );
-                        innerHTML = renderElementMultiLineCommentVariables( innerHTML, syntaxLanguage, syntaxOptions );
-                    }
+                        renderElementButtons( syntax, syntaxOptions, syntaxLanguage, innerHTMLCopy );
 
-                    if ( syntaxOptions.highlightStrings ) {
-                        innerHTML = renderElementStringQuotesPatternVariables( innerHTML, innerHTML.match( /".*?"/g ), syntaxOptions );
+                        if ( syntaxOptions.highlightComments ) {
+                            innerHTML = renderElementCommentVariables( innerHTML, syntaxLanguage, syntaxOptions );
+                            innerHTML = renderElementMultiLineCommentVariables( innerHTML, syntaxLanguage, syntaxOptions );
+                        }
 
-                        if ( _languages[ syntaxLanguage ].comment !== "'" ) {
-                            innerHTML = renderElementStringQuotesPatternVariables( innerHTML, innerHTML.match( /'.*?'/g ), syntaxOptions );
+                        if ( syntaxOptions.highlightStrings ) {
+                            innerHTML = renderElementStringQuotesPatternVariables( innerHTML, innerHTML.match( /"((?:\\.|[^"\\])*)"/g ), syntaxOptions );
+
+                            if ( _languages[ syntaxLanguage ].comment !== "'" ) {
+                                innerHTML = renderElementStringQuotesPatternVariables( innerHTML, innerHTML.match( /'((?:\\.|[^"\\])*)'/g ), syntaxOptions );
+                            }
+                        }
+
+                        if ( syntaxOptions.highlightKeywords ) {
+                            innerHTML = renderElementKeywords( innerHTML, syntaxLanguage, syntaxOptions );
+                        }
+
+                        if ( syntaxOptions.highlightComments ) {
+                            innerHTML = renderElementCommentsFromVariables( innerHTML );
+                        }
+                        
+                        if ( syntaxOptions.highlightStrings ) {
+                            innerHTML = renderElementStringQuotesFromVariables( innerHTML );
+                        }
+
+                        renderElementCompletedHTML( element, number, syntax, innerHTML, syntaxOptions, isPreFormatted );
+                        fireCustomTrigger( syntaxOptions.onRenderComplete, element );
+
+                        _elements.push( element );
+
+                    } else {
+                        if ( !_configuration.safeMode ) {
+                            result = false;
                         }
                     }
 
-                    if ( syntaxOptions.highlightKeywords ) {
-                        innerHTML = renderElementKeywords( innerHTML, syntaxLanguage, syntaxOptions );
-                    }
-
-                    if ( syntaxOptions.highlightComments ) {
-                        innerHTML = renderElementCommentsFromVariables( innerHTML );
-                    }
-                    
-                    if ( syntaxOptions.highlightStrings ) {
-                        innerHTML = renderElementStringQuotesFromVariables( innerHTML );
-                    }
-
-                    renderElementCompletedHTML( element, number, syntax, innerHTML, syntaxOptions, isPreFormatted );
-                    fireCustomTrigger( syntaxOptions.onRenderComplete, element );
-
-                    _elements.push( element );
-
                 } else {
-                    console.error( "Language '" + syntaxLanguage + "' is not supported." );
+                    if ( !_configuration.safeMode ) {
+                        console.error( "Language '" + syntaxLanguage + "' is not supported." );
+                        result = false;
+                    }
+                }
+
+            } else {
+                if ( !_configuration.safeMode ) {
+                    console.error( "The attribute 'data-syntax-language' has not been set correctly." );
+                    result = false;
                 }
             }
         }
+
+        return result;
     }
 
     function renderElementButtons( syntax, syntaxOptions, syntaxLanguage, innerHTMLCopy ) {
@@ -268,13 +293,18 @@
         
             for ( var patternItemsIndex = 0; patternItemsIndex < patternItemsLength; patternItemsIndex++ ) {
                 var quote = patternItems[ patternItemsIndex ],
-                    quoteReplacement = quote.replaceAll( '"', _string.empty ).replaceAll( "'", _string.empty ),
-                    quoteVariable = "$S{" + _strings_Cached_Count.toString() + "}";
+                    quoteLines = quote.split( _string.newLine ),
+                    quoteLinesLength = quoteLines.length;
 
-                _strings_Cached[ quoteVariable ] = "<q class=\"string\">" + quoteReplacement + "</q>";
-                _strings_Cached_Count++;
-    
-                innerHTML = innerHTML.replace( quote, quoteVariable );
+                for ( var quoteLineIndex = 0; quoteLineIndex < quoteLinesLength; quoteLineIndex++ ) {
+                    var quoteLine = quoteLines[ quoteLineIndex ],
+                        quoteVariable = "$S{" + _strings_Cached_Count.toString() + "}";
+
+                    _strings_Cached[ quoteVariable ] = "<span class=\"string\">" + quoteLine + "</span>";
+                    _strings_Cached_Count++;
+        
+                    innerHTML = innerHTML.replace( quoteLine, quoteVariable );
+                }
 
                 fireCustomTrigger( syntaxOptions.onStringRender, quote );
             }
@@ -480,15 +510,11 @@
     }
 
     function isDefinedFunction( object ) {
-        return isDefined( object ) && isFunction( object );
+        return isDefined( object ) && typeof object === "function";
     }
 
     function isDefinedArray( object ) {
         return isDefinedObject( object ) && object instanceof Array;
-    }
-
-    function isFunction( object ) {
-        return typeof object === "function";
     }
 
 
@@ -549,7 +575,8 @@
     }
 
     function getObjectFromString( objectString ) {
-        var result = null;
+        var parsed = true,
+            result = null;
 
         try {
             if ( isDefinedString( objectString ) ) {
@@ -561,10 +588,21 @@
             try {
                 result = eval( "(" + objectString + ")" );
             } catch ( e2 ) {
-                console.error( "Errors in object: " + e1.message + ", " + e2.message );
+                if ( !_configuration.safeMode ) {
+                    console.error( "Errors in object: " + e1.message + ", " + e2.message );
+                    parsed = false;
+                }
+                
                 result = null;
             }
         }
+
+        return [ parsed, result ];
+    }
+
+    function getClonedObject( object ) {
+        var json = JSON.stringify( object ),
+            result = JSON.parse( json );
 
         return result;
     }
@@ -651,7 +689,7 @@
      */
 
     this.getAllElementsHighlighted = function() {
-        return _elements;
+        return [].slice.call( _elements );
     };
 
 
@@ -682,7 +720,7 @@
         }
 
         _elements_Original = {};
-        _elements = {};
+        _elements = [];
 
         return this;
     };
@@ -795,7 +833,7 @@
         var details = null;
 
         if ( _languages.hasOwnProperty( name.toLowerCase() ) ) {
-            details = _languages[ name.toLowerCase() ];
+            details = getClonedObject( _languages[ name.toLowerCase() ] );
         }
 
         return details;
@@ -811,8 +849,38 @@
      * @returns     {Object}                                                The object that contains the languages.
      */
     this.getAllLanguages = function() {
-        return _languages;
+        return getClonedObject( _languages );
     };
+
+
+    /*
+     * ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+     * Public Functions:  Configuration
+     * ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+     */
+
+    /**
+     * setConfiguration().
+     * 
+     * Sets the specific configuration options that should be used.
+     * 
+     * @public
+     * 
+     * @param       {Options}   newConfiguration                            All the configuration options that should be set (refer to "Options" documentation for properties).
+     * 
+     * @returns     {Object}                                                The Syntax.js class instance.
+     */
+    this.setConfiguration = function( newOptions ) {
+        _configuration = !isDefinedObject( newOptions ) ? {} : newOptions;
+        
+        buildDefaultConfiguration();
+
+        return this;
+    };
+
+    function buildDefaultConfiguration() {
+        _configuration.safeMode = getDefaultBoolean( _configuration.safeMode, true );
+    }
 
 
     /*
@@ -831,7 +899,7 @@
      * @returns     {string}                                                The version number.
      */
     this.getVersion = function() {
-        return "1.2.0";
+        return "1.3.0";
     };
 
 
@@ -844,6 +912,8 @@
     ( function ( documentObject, navigatorObject, windowObject ) {
         _parameter_Document = documentObject;
         _parameter_Navigator = navigatorObject;
+
+        buildDefaultConfiguration();
 
         _parameter_Document.addEventListener( "DOMContentLoaded", function() {
             render();

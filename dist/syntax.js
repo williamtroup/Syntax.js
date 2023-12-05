@@ -1,4 +1,4 @@
-/*! Syntax.js v1.2.0 | (c) Bunoon | MIT License */
+/*! Syntax.js v1.3.0 | (c) Bunoon | MIT License */
 (function() {
   function render() {
     var tagTypes = ["div", "code"];
@@ -10,71 +10,89 @@
       var elementsLength = elements.length;
       var elementIndex = 0;
       for (; elementIndex < elementsLength; elementIndex++) {
-        renderElement(elements[elementIndex]);
+        if (!renderElement(elements[elementIndex])) {
+          break;
+        }
       }
     }
   }
   function renderElement(element) {
-    if (isDefined(element)) {
+    var result = true;
+    if (isDefined(element) && element.hasAttribute("data-syntax-language")) {
       var syntaxLanguage = element.getAttribute("data-syntax-language");
       if (isDefined(syntaxLanguage)) {
         if (_languages.hasOwnProperty(syntaxLanguage)) {
-          var innerHTML = element.innerHTML;
-          var syntaxOptions = getObjectFromString(element.getAttribute("data-syntax-options"));
-          var isPreFormatted = false;
-          syntaxOptions = buildAttributeOptions(syntaxOptions);
-          if (element.children.length > 0 && element.children[0].nodeName.toLowerCase() === "pre") {
-            innerHTML = element.children[0].innerHTML;
-            isPreFormatted = true;
-          }
-          var innerHTMLCopy = innerHTML.trim();
-          var number = null;
-          var elementId = element.id;
-          if (!isDefinedString(elementId)) {
-            elementId = newGuid();
-          }
-          _elements_Original[elementId] = element.innerHTML;
-          element.removeAttribute("data-syntax-language");
-          element.removeAttribute("data-syntax-options");
-          element.id = elementId;
-          element.className = element.className === _string.empty ? "syntax-highlight" : element.className + " syntax-highlight";
-          element.innerHTML = _string.empty;
-          var code = createElement("div", "code custom-scroll-bars");
-          element.appendChild(code);
-          if (syntaxOptions.showLineNumbers) {
-            number = createElement("div", "number");
-            code.appendChild(number);
-          }
-          var syntax = createElement("div", "syntax");
-          code.appendChild(syntax);
-          renderElementButtons(syntax, syntaxOptions, syntaxLanguage, innerHTMLCopy);
-          if (syntaxOptions.highlightComments) {
-            innerHTML = renderElementCommentVariables(innerHTML, syntaxLanguage, syntaxOptions);
-            innerHTML = renderElementMultiLineCommentVariables(innerHTML, syntaxLanguage, syntaxOptions);
-          }
-          if (syntaxOptions.highlightStrings) {
-            innerHTML = renderElementStringQuotesPatternVariables(innerHTML, innerHTML.match(/".*?"/g), syntaxOptions);
-            if (_languages[syntaxLanguage].comment !== "'") {
-              innerHTML = renderElementStringQuotesPatternVariables(innerHTML, innerHTML.match(/'.*?'/g), syntaxOptions);
+          var syntaxOptionsParsed = getObjectFromString(element.getAttribute("data-syntax-options"));
+          if (syntaxOptionsParsed[0]) {
+            var innerHTML = element.innerHTML;
+            var syntaxOptions = buildAttributeOptions(syntaxOptionsParsed[1]);
+            var isPreFormatted = false;
+            if (element.children.length > 0 && element.children[0].nodeName.toLowerCase() === "pre") {
+              innerHTML = element.children[0].innerHTML;
+              isPreFormatted = true;
+            }
+            var innerHTMLCopy = innerHTML.trim();
+            var number = null;
+            var elementId = element.id;
+            if (!isDefinedString(elementId)) {
+              elementId = newGuid();
+            }
+            _elements_Original[elementId] = element.innerHTML;
+            element.removeAttribute("data-syntax-language");
+            element.removeAttribute("data-syntax-options");
+            element.id = elementId;
+            element.className = element.className === _string.empty ? "syntax-highlight" : element.className + " syntax-highlight";
+            element.innerHTML = _string.empty;
+            var code = createElement("div", "code custom-scroll-bars");
+            element.appendChild(code);
+            if (syntaxOptions.showLineNumbers) {
+              number = createElement("div", "number");
+              code.appendChild(number);
+            }
+            var syntax = createElement("div", "syntax");
+            code.appendChild(syntax);
+            renderElementButtons(syntax, syntaxOptions, syntaxLanguage, innerHTMLCopy);
+            if (syntaxOptions.highlightComments) {
+              innerHTML = renderElementCommentVariables(innerHTML, syntaxLanguage, syntaxOptions);
+              innerHTML = renderElementMultiLineCommentVariables(innerHTML, syntaxLanguage, syntaxOptions);
+            }
+            if (syntaxOptions.highlightStrings) {
+              innerHTML = renderElementStringQuotesPatternVariables(innerHTML, innerHTML.match(/"((?:\\.|[^"\\])*)"/g), syntaxOptions);
+              if (_languages[syntaxLanguage].comment !== "'") {
+                innerHTML = renderElementStringQuotesPatternVariables(innerHTML, innerHTML.match(/'((?:\\.|[^"\\])*)'/g), syntaxOptions);
+              }
+            }
+            if (syntaxOptions.highlightKeywords) {
+              innerHTML = renderElementKeywords(innerHTML, syntaxLanguage, syntaxOptions);
+            }
+            if (syntaxOptions.highlightComments) {
+              innerHTML = renderElementCommentsFromVariables(innerHTML);
+            }
+            if (syntaxOptions.highlightStrings) {
+              innerHTML = renderElementStringQuotesFromVariables(innerHTML);
+            }
+            renderElementCompletedHTML(element, number, syntax, innerHTML, syntaxOptions, isPreFormatted);
+            fireCustomTrigger(syntaxOptions.onRenderComplete, element);
+            _elements.push(element);
+          } else {
+            if (!_configuration.safeMode) {
+              result = false;
             }
           }
-          if (syntaxOptions.highlightKeywords) {
-            innerHTML = renderElementKeywords(innerHTML, syntaxLanguage, syntaxOptions);
-          }
-          if (syntaxOptions.highlightComments) {
-            innerHTML = renderElementCommentsFromVariables(innerHTML);
-          }
-          if (syntaxOptions.highlightStrings) {
-            innerHTML = renderElementStringQuotesFromVariables(innerHTML);
-          }
-          renderElementCompletedHTML(element, number, syntax, innerHTML, syntaxOptions, isPreFormatted);
-          fireCustomTrigger(syntaxOptions.onRenderComplete, element);
-          _elements.push(element);
         } else {
-          console.error("Language '" + syntaxLanguage + "' is not supported.");
+          if (!_configuration.safeMode) {
+            console.error("Language '" + syntaxLanguage + "' is not supported.");
+            result = false;
+          }
+        }
+      } else {
+        if (!_configuration.safeMode) {
+          console.error("The attribute 'data-syntax-language' has not been set correctly.");
+          result = false;
         }
       }
     }
+    return result;
   }
   function renderElementButtons(syntax, syntaxOptions, syntaxLanguage, innerHTMLCopy) {
     if (syntaxOptions.showLanguageLabel || syntaxOptions.showCopyButton || syntaxOptions.showPrintButton) {
@@ -176,11 +194,16 @@
       var patternItemsIndex = 0;
       for (; patternItemsIndex < patternItemsLength; patternItemsIndex++) {
         var quote = patternItems[patternItemsIndex];
-        var quoteReplacement = quote.replaceAll('"', _string.empty).replaceAll("'", _string.empty);
-        var quoteVariable = "$S{" + _strings_Cached_Count.toString() + "}";
-        _strings_Cached[quoteVariable] = '<q class="string">' + quoteReplacement + "</q>";
-        _strings_Cached_Count++;
-        innerHTML = innerHTML.replace(quote, quoteVariable);
+        var quoteLines = quote.split(_string.newLine);
+        var quoteLinesLength = quoteLines.length;
+        var quoteLineIndex = 0;
+        for (; quoteLineIndex < quoteLinesLength; quoteLineIndex++) {
+          var quoteLine = quoteLines[quoteLineIndex];
+          var quoteVariable = "$S{" + _strings_Cached_Count.toString() + "}";
+          _strings_Cached[quoteVariable] = '<span class="string">' + quoteLine + "</span>";
+          _strings_Cached_Count++;
+          innerHTML = innerHTML.replace(quoteLine, quoteVariable);
+        }
         fireCustomTrigger(syntaxOptions.onStringRender, quote);
       }
     }
@@ -334,13 +357,10 @@
     return isDefined(object) && typeof object === "string";
   }
   function isDefinedFunction(object) {
-    return isDefined(object) && isFunction(object);
+    return isDefined(object) && typeof object === "function";
   }
   function isDefinedArray(object) {
     return isDefinedObject(object) && object instanceof Array;
-  }
-  function isFunction(object) {
-    return typeof object === "function";
   }
   function createElement(type, className) {
     var result = null;
@@ -370,6 +390,7 @@
     return isDefinedFunction(value) ? value : defaultValue;
   }
   function getObjectFromString(objectString) {
+    var parsed = true;
     var result = null;
     try {
       if (isDefinedString(objectString)) {
@@ -379,10 +400,18 @@
       try {
         result = eval("(" + objectString + ")");
       } catch (e2) {
-        console.error("Errors in object: " + e1.message + ", " + e2.message);
+        if (!_configuration.safeMode) {
+          console.error("Errors in object: " + e1.message + ", " + e2.message);
+          parsed = false;
+        }
         result = null;
       }
     }
+    return [parsed, result];
+  }
+  function getClonedObject(object) {
+    var json = JSON.stringify(object);
+    var result = JSON.parse(json);
     return result;
   }
   function newGuid() {
@@ -397,8 +426,12 @@
     }
     return result.join(_string.empty);
   }
+  function buildDefaultConfiguration() {
+    _configuration.safeMode = getDefaultBoolean(_configuration.safeMode, true);
+  }
   var _parameter_Document = null;
   var _parameter_Navigator = null;
+  var _configuration = {};
   var _string = {empty:"", space:" ", newLine:"\n"};
   var _elements_Type = {};
   var _elements = [];
@@ -423,7 +456,7 @@
     return this;
   };
   this.getAllElementsHighlighted = function() {
-    return _elements;
+    return [].slice.call(_elements);
   };
   this.destroyAll = function() {
     var elementId;
@@ -436,7 +469,7 @@
       }
     }
     _elements_Original = {};
-    _elements = {};
+    _elements = [];
     return this;
   };
   this.destroy = function(elementId) {
@@ -479,19 +512,25 @@
   this.getLanguage = function(name) {
     var details = null;
     if (_languages.hasOwnProperty(name.toLowerCase())) {
-      details = _languages[name.toLowerCase()];
+      details = getClonedObject(_languages[name.toLowerCase()]);
     }
     return details;
   };
   this.getAllLanguages = function() {
-    return _languages;
+    return getClonedObject(_languages);
+  };
+  this.setConfiguration = function(newOptions) {
+    _configuration = !isDefinedObject(newOptions) ? {} : newOptions;
+    buildDefaultConfiguration();
+    return this;
   };
   this.getVersion = function() {
-    return "1.2.0";
+    return "1.3.0";
   };
   (function(documentObject, navigatorObject, windowObject) {
     _parameter_Document = documentObject;
     _parameter_Navigator = navigatorObject;
+    buildDefaultConfiguration();
     _parameter_Document.addEventListener("DOMContentLoaded", function() {
       render();
     });
