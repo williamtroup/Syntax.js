@@ -147,7 +147,8 @@ div.syntax-highlight {
                     color: var(--color-keyword);
                 }
 
-                span.keyword-clickable:hover {
+                span.keyword-clickable:hover,
+                span.no-highlight-keyword-clickable:hover {
                     color: var(--color-keyword-hover);
                     transition: all .3s;
                     cursor: pointer;

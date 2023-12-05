@@ -63,9 +63,7 @@
                   innerHTML = renderElementStringQuotesPatternVariables(innerHTML, innerHTML.match(/'((?:\\.|[^"\\])*)'/g), syntaxOptions);
                 }
               }
-              if (syntaxOptions.highlightKeywords) {
-                innerHTML = renderElementKeywords(innerHTML, syntaxLanguage, syntaxOptions);
-              }
+              innerHTML = renderElementKeywords(innerHTML, syntaxLanguage, syntaxOptions);
               if (syntaxOptions.highlightComments) {
                 innerHTML = renderElementCommentsFromVariables(innerHTML);
               }
@@ -233,10 +231,16 @@
       } else if (keywordsCasing === "lowercase") {
         keywordDisplay = keywordDisplay.toLowerCase();
       }
-      if (isDefinedFunction(syntaxOptions.onKeywordClicked)) {
-        innerHTML = innerHTML.replace(regEx, '<span class="keyword-clickable">' + keywordDisplay + "</span>");
+      if (syntaxOptions.highlightKeywords) {
+        if (isDefinedFunction(syntaxOptions.onKeywordClicked)) {
+          innerHTML = innerHTML.replace(regEx, '<span class="keyword-clickable">' + keywordDisplay + "</span>");
+        } else {
+          innerHTML = innerHTML.replace(regEx, '<span class="keyword">' + keywordDisplay + "</span>");
+        }
       } else {
-        innerHTML = innerHTML.replace(regEx, '<span class="keyword">' + keywordDisplay + "</span>");
+        if (isDefinedFunction(syntaxOptions.onKeywordClicked)) {
+          innerHTML = innerHTML.replace(regEx, '<span class="no-highlight-keyword-clickable">' + keywordDisplay + "</span>");
+        }
       }
       fireCustomTrigger(syntaxOptions.onKeywordRender, keyword);
     }

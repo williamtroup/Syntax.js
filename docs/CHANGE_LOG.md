@@ -12,6 +12,9 @@
 #### **General Improvements:**
 - Double-clicking the numbers column (when enabled) will now highlight all the code in the right panel.
 
+#### **Fixes:**
+- Fixed a fault that prevented the "onKeywordClicked" custom trigger being assigned to keywords when "highlightKeywords" is set to false.
+
 <br>
 
 
