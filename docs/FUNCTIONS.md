@@ -23,8 +23,8 @@ Renders a specific DOM element.
 <br>
 ***Returns***: '*Object*' - The Syntax.js class instance.
 
-### **getAllElementsHighlighted()**:
-Returns all the elements that have been detected and rendered.
+### **getElementsHighlighted()**:
+Returns the elements that have been detected and rendered.
 <br>
 ***Returns***: '*Object[]*' - An array containing the rendered DOM elements.
 

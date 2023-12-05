@@ -788,16 +788,16 @@
     };
 
     /**
-     * getAllElementsHighlighted().
+     * getElementsHighlighted().
      * 
-     * Returns all the elements that have been detected and rendered.
+     * Returns the elements that have been detected and rendered.
      * 
      * @public
      * 
      * @returns     {Object[]}                                              An array containing the rendered DOM elements.
      */
 
-    this.getAllElementsHighlighted = function() {
+    this.getElementsHighlighted = function() {
         return [].slice.call( _elements );
     };
 
