@@ -17,7 +17,7 @@
         </div>
 
         <div class="contents">
-            <code data-syntax-language="javascript" data-syntax-options="{ 'highlightComments': false, 'highlightStrings': false, 'highlightKeywords': false }">
+            <code data-syntax-language="javascript" data-syntax-options="{ 'highlightComments': false, 'highlightStrings': false, 'highlightKeywords': false, 'onKeywordClicked': onKeywordClickedCustomTrigger }">
                 <pre>
                     var something = true;
     
@@ -35,5 +35,9 @@
     <script>
         document.title += " v" + $syntax.getVersion();
         document.getElementById( "header" ).innerText += " - v" + $syntax.getVersion();
+
+        function onKeywordClickedCustomTrigger( keyword ) {
+            console.log( "Keyword clicked: " + keyword );
+        }
     </script>
 </html>

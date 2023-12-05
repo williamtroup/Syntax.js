@@ -32,7 +32,7 @@
             </code>
             <br />
     
-            <code data-syntax-language="c-sharp" data-syntax-options="{ 'copyButtonText': 'Copy Code', 'onCopy': onCopyCustomTrigger, 'onKeywordClicked': onKeywordClickedCustomTrigger, 'showLanguageLabel': false }">
+            <code data-syntax-language="c-sharp" data-syntax-options="bindingSyntaxOptions">
                 <pre>
                     bool something = true;
                     int something_else = 1;
@@ -97,7 +97,8 @@
                 keywords: "if var true bool int string",
                 comment: "//",
                 multiLineComment: [ "/*", "*/" ],
-                friendlyName: "C#"
+                friendlyName: "C#",
+                keywordsCasing: "initial"
             } );
         }
 
@@ -117,6 +118,16 @@
             $syntax.setConfiguration( {
                 safeMode: false
             } );
+        }
+
+        function bindingSyntaxOptions() {
+            return { 
+                'copyButtonText': 'Copy Code',
+                'onCopy': onCopyCustomTrigger,
+                'onKeywordClicked': onKeywordClickedCustomTrigger,
+                'showLanguageLabel': false,
+                'padLineNumbers': true
+            };
         }
     </script>
 </html>

@@ -4,7 +4,7 @@
  * A lightweight, and easy-to-use, JavaScript library for code syntax highlighting!
  * 
  * @file        syntax.js
- * @version     v1.3.0
+ * @version     v1.4.0
  * @author      Bunoon
  * @license     MIT License
  * @copyright   Bunoon 2023
@@ -15,6 +15,7 @@
     var // Variables: Constructor Parameters
         _parameter_Document = null,
         _parameter_Navigator = null,
+        _parameter_Window = null,
 
         // Variables: Configuration
         _configuration = {},
@@ -38,7 +39,12 @@
         _comments_Cached_Count = 0,
         
         // Variables: Languages
-        _languages = {};
+        _languages = {},
+        _languages_Unknown = "unknown",
+
+        // Variables: Attribute Names
+        _attribute_Name_Language = "data-syntax-language",
+        _attribute_Name_Options = "data-syntax-options";
 
     
     /*
@@ -48,7 +54,7 @@
      */
 
     function render() {
-        var tagTypes = [ "div", "code" ],
+        var tagTypes = _configuration.highlightAllDomElementTypes,
             tagTypesLength = tagTypes.length;
 
         for ( var tagTypeIndex = 0; tagTypeIndex < tagTypesLength; tagTypeIndex++ ) {
@@ -67,12 +73,12 @@
     function renderElement( element ) {
         var result = true;
 
-        if ( isDefined( element ) && element.hasAttribute( "data-syntax-language" ) ) {
-            var syntaxLanguage = element.getAttribute( "data-syntax-language" );
+        if ( isDefined( element ) && element.hasAttribute( _attribute_Name_Language ) ) {
+            var syntaxLanguage = element.getAttribute( _attribute_Name_Language );
 
             if ( isDefined( syntaxLanguage ) ) {
-                if ( _languages.hasOwnProperty( syntaxLanguage ) ) {
-                    var syntaxOptionsParsed = getObjectFromString( element.getAttribute( "data-syntax-options" ) );
+                if ( _languages.hasOwnProperty( syntaxLanguage ) || syntaxLanguage.toLowerCase() === _languages_Unknown ) {
+                    var syntaxOptionsParsed = getObjectFromString( element.getAttribute( _attribute_Name_Options ) );
 
                     if ( syntaxOptionsParsed[ 0 ] ) {
                         var innerHTML = element.innerHTML,
@@ -94,8 +100,8 @@
 
                         _elements_Original[ elementId ] = element.innerHTML;
 
-                        element.removeAttribute( "data-syntax-language" );
-                        element.removeAttribute( "data-syntax-options" );
+                        element.removeAttribute( _attribute_Name_Language );
+                        element.removeAttribute( _attribute_Name_Options );
                         element.id = elementId;
                         element.className = element.className === _string.empty ? "syntax-highlight" : element.className + " syntax-highlight";
                         element.innerHTML = _string.empty;
@@ -113,29 +119,29 @@
 
                         renderElementButtons( syntax, syntaxOptions, syntaxLanguage, innerHTMLCopy );
 
-                        if ( syntaxOptions.highlightComments ) {
-                            innerHTML = renderElementCommentVariables( innerHTML, syntaxLanguage, syntaxOptions );
-                            innerHTML = renderElementMultiLineCommentVariables( innerHTML, syntaxLanguage, syntaxOptions );
-                        }
-
-                        if ( syntaxOptions.highlightStrings ) {
-                            innerHTML = renderElementStringQuotesPatternVariables( innerHTML, innerHTML.match( /"((?:\\.|[^"\\])*)"/g ), syntaxOptions );
-
-                            if ( _languages[ syntaxLanguage ].comment !== "'" ) {
-                                innerHTML = renderElementStringQuotesPatternVariables( innerHTML, innerHTML.match( /'((?:\\.|[^"\\])*)'/g ), syntaxOptions );
+                        if ( syntaxLanguage.toLowerCase() !== _languages_Unknown ) {
+                            if ( syntaxOptions.highlightComments ) {
+                                innerHTML = renderElementCommentVariables( innerHTML, syntaxLanguage, syntaxOptions );
+                                innerHTML = renderElementMultiLineCommentVariables( innerHTML, syntaxLanguage, syntaxOptions );
                             }
-                        }
+    
+                            if ( syntaxOptions.highlightStrings ) {
+                                innerHTML = renderElementStringQuotesPatternVariables( innerHTML, innerHTML.match( /"((?:\\.|[^"\\])*)"/g ), syntaxOptions );
+    
+                                if ( _languages[ syntaxLanguage ].comment !== "'" ) {
+                                    innerHTML = renderElementStringQuotesPatternVariables( innerHTML, innerHTML.match( /'((?:\\.|[^"\\])*)'/g ), syntaxOptions );
+                                }
+                            }
 
-                        if ( syntaxOptions.highlightKeywords ) {
                             innerHTML = renderElementKeywords( innerHTML, syntaxLanguage, syntaxOptions );
-                        }
-
-                        if ( syntaxOptions.highlightComments ) {
-                            innerHTML = renderElementCommentsFromVariables( innerHTML );
-                        }
-                        
-                        if ( syntaxOptions.highlightStrings ) {
-                            innerHTML = renderElementStringQuotesFromVariables( innerHTML );
+    
+                            if ( syntaxOptions.highlightComments ) {
+                                innerHTML = renderElementCommentsFromVariables( innerHTML );
+                            }
+                            
+                            if ( syntaxOptions.highlightStrings ) {
+                                innerHTML = renderElementStringQuotesFromVariables( innerHTML );
+                            }
                         }
 
                         renderElementCompletedHTML( element, number, syntax, innerHTML, syntaxOptions, isPreFormatted );
@@ -158,7 +164,7 @@
 
             } else {
                 if ( !_configuration.safeMode ) {
-                    console.error( "The attribute 'data-syntax-language' has not been set correctly." );
+                    console.error( "The attribute '" + _attribute_Name_Language + "' has not been set correctly." );
                     result = false;
                 }
             }
@@ -314,24 +320,39 @@
     }
 
     function renderElementKeywords( innerHTML, syntaxLanguage, syntaxOptions ) {
-        var keywords = _languages[ syntaxLanguage ].keywords,
-            caseSensitive = _languages[ syntaxLanguage ].caseSensitive;
+        var keywords = getDefaultStringOrArray( _languages[ syntaxLanguage ].keywords, [] ),
+            caseSensitive = _languages[ syntaxLanguage ].caseSensitive,
+            keywordsCasing = _languages[ syntaxLanguage ].keywordsCasing;
 
-        if ( isDefinedString( keywords ) ) {
-            keywords = keywords.split( _string.space );
+        if ( isDefinedString( keywordsCasing ) ) {
+            keywordsCasing = keywordsCasing.toLowerCase().trim();
         }
 
         var keywordsLength = keywords.length;
 
         for ( var keywordIndex = 0; keywordIndex < keywordsLength; keywordIndex++ ) {
             var keyword = keywords[ keywordIndex ],
+                keywordDisplay = keyword,
                 regExFlags = caseSensitive ? "g" : "gi",
                 regEx = new RegExp( "\\b" + keyword + "\\b", regExFlags );
 
-            if ( isDefinedFunction( syntaxOptions.onKeywordClicked ) ) {
-                innerHTML = innerHTML.replace( regEx, "<span class=\"keyword-clickable\">" + keyword + "</span>" );
+            if ( keywordsCasing === "uppercase" ) {
+                keywordDisplay = keywordDisplay.toUpperCase();
+            } else if ( keywordsCasing === "lowercase" ) {
+                keywordDisplay = keywordDisplay.toLowerCase();
+            }
+
+            if ( syntaxOptions.highlightKeywords ) {
+                if ( isDefinedFunction( syntaxOptions.onKeywordClicked ) ) {
+                    innerHTML = innerHTML.replace( regEx, "<span class=\"keyword-clickable\">" + keywordDisplay + "</span>" );
+                } else {
+                    innerHTML = innerHTML.replace( regEx, "<span class=\"keyword\">" + keywordDisplay + "</span>" );
+                }
+
             } else {
-                innerHTML = innerHTML.replace( regEx, "<span class=\"keyword\">" + keyword + "</span>" );
+                if ( isDefinedFunction( syntaxOptions.onKeywordClicked ) ) {
+                    innerHTML = innerHTML.replace( regEx, "<span class=\"no-highlight-keyword-clickable\">" + keywordDisplay + "</span>" );
+                }
             }
 
             fireCustomTrigger( syntaxOptions.onKeywordRender, keyword );
@@ -363,6 +384,7 @@
     function renderElementCompletedHTML( element, number, syntax, innerHTML, syntaxOptions, isPreFormatted ) {
         var lines = innerHTML.split( _string.newLine ),
             linesLength = lines.length,
+            linesLengthStringLength = linesLength.toString().length,
             numberContainer = number,
             codeContainer = syntax,
             replaceWhitespace = null,
@@ -378,6 +400,12 @@
             }
         }
 
+        if ( isDefined( number ) ) {
+            number.ondblclick = function() {
+                selectTextInElement( codeContainer );
+            };
+        }
+
         for ( var lineIndex = 0; lineIndex < linesLength; lineIndex++ ) {
             var line = lines[ lineIndex ];
 
@@ -389,7 +417,12 @@
                 if ( line.trim() !== _string.empty || !syntaxOptions.removeBlankLines ) {
                     if ( isDefined( numberContainer ) ) {
                         var numberCode = createElement( "p" );
-                        numberCode.innerHTML = lineNumber.toString();
+
+                        if ( syntaxOptions.padLineNumbers ) {
+                            numberCode.innerHTML = padNumber( lineNumber.toString(), linesLengthStringLength );
+                        } else {
+                            numberCode.innerHTML = lineNumber.toString();
+                        }
 
                         numberContainer.appendChild( numberCode );
                         lineNumber++;
@@ -435,7 +468,7 @@
     function getFriendlyLanguageName( syntaxLanguage ) {
         var result = null;
 
-        if ( isDefinedString( _languages[ syntaxLanguage ].friendlyName ) ) {
+        if ( _languages.hasOwnProperty( syntaxLanguage.toLowerCase() ) && isDefinedString( _languages[ syntaxLanguage ].friendlyName ) ) {
             result = _languages[ syntaxLanguage ].friendlyName.toUpperCase();
         } else {
             result = syntaxLanguage.toUpperCase();
@@ -461,6 +494,7 @@
         options.highlightComments = getDefaultBoolean( options.highlightComments, true );
         options.showLanguageLabel = getDefaultBoolean( options.showLanguageLabel, true );
         options.showPrintButton = getDefaultBoolean( options.showPrintButton, true );
+        options.padLineNumbers = getDefaultBoolean( options.padLineNumbers, false );
         
         options = buildAttributeOptionStrings( options );
 
@@ -542,6 +576,21 @@
         return result;
     }
 
+    function selectTextInElement( element ) {
+        if ( _parameter_Document.selection ) {
+            var textRange = _parameter_Document.body.createTextRange();
+            textRange.moveToElementText( element );
+            textRange.select();
+
+        } else if ( _parameter_Window.getSelection ) {
+            var range = _parameter_Document.createRange();
+            range.selectNode( element );
+
+            _parameter_Window.getSelection().removeAllRanges();
+            _parameter_Window.getSelection().addRange( range );
+        }
+    }
+
 
     /*
      * ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -574,6 +623,25 @@
         return isDefinedFunction( value ) ? value : defaultValue;
     }
 
+    function getDefaultArray( value, defaultValue ) {
+        return isDefinedArray( value ) ? value : defaultValue;
+    }
+
+    function getDefaultStringOrArray( value, defaultValue ) {
+        if ( isDefinedString( value ) ) {
+            value = value.split( _string.space );
+
+            if ( value.length === 0 ) {
+                value = defaultValue;
+            }
+
+        } else {
+            value = getDefaultArray( value, defaultValue );
+        }
+
+        return value;
+    }
+
     function getObjectFromString( objectString ) {
         var parsed = true,
             result = null;
@@ -587,6 +655,11 @@
 
             try {
                 result = eval( "(" + objectString + ")" );
+
+                if ( isDefinedFunction( result ) ) {
+                    result = result();
+                }
+                
             } catch ( e2 ) {
                 if ( !_configuration.safeMode ) {
                     console.error( "Errors in object: " + e1.message + ", " + e2.message );
@@ -627,6 +700,16 @@
         }
 
         return result.join( _string.empty );
+    }
+
+    function padNumber( number, length ) {
+        var result = number;
+
+        while ( result.length < length ) {
+            result = "0" + result;
+        }
+            
+        return result;
     }
 
 
@@ -880,6 +963,7 @@
 
     function buildDefaultConfiguration() {
         _configuration.safeMode = getDefaultBoolean( _configuration.safeMode, true );
+        _configuration.highlightAllDomElementTypes = getDefaultStringOrArray( _configuration.highlightAllDomElementTypes, [ "div", "code" ] );
     }
 
 
@@ -899,7 +983,7 @@
      * @returns     {string}                                                The version number.
      */
     this.getVersion = function() {
-        return "1.3.0";
+        return "1.4.0";
     };
 
 
@@ -912,6 +996,7 @@
     ( function ( documentObject, navigatorObject, windowObject ) {
         _parameter_Document = documentObject;
         _parameter_Navigator = navigatorObject;
+        _parameter_Window = windowObject;
 
         buildDefaultConfiguration();
 
@@ -919,8 +1004,8 @@
             render();
         } );
 
-        if ( !isDefined( windowObject.$syntax ) ) {
-            windowObject.$syntax = this;
+        if ( !isDefined( _parameter_Window.$syntax ) ) {
+            _parameter_Window.$syntax = this;
         }
 
     } ) ( document, navigator, window );

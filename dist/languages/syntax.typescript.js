@@ -1,4 +1,4 @@
-/*! Syntax.js v1.3.0 | (c) Bunoon | MIT License */
+/*! Syntax.js v1.4.0 | (c) Bunoon | MIT License */
 $syntax.addLanguage( "typescript", {
     friendlyName: "TypeScript",
     keywords: [

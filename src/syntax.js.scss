@@ -1,5 +1,5 @@
 /*
- * Syntax.js Library v1.3.0
+ * Syntax.js Library v1.4.0
  *
  * Copyright 2023 Bunoon
  * Released under the MIT License
@@ -147,7 +147,8 @@ div.syntax-highlight {
                     color: var(--color-keyword);
                 }
 
-                span.keyword-clickable:hover {
+                span.keyword-clickable:hover,
+                span.no-highlight-keyword-clickable:hover {
                     color: var(--color-keyword-hover);
                     transition: all .3s;
                     cursor: pointer;

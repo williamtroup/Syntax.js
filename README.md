@@ -2,15 +2,15 @@
 Syntax.js
 
 [![Tweet](https://img.shields.io/twitter/url/http/shields.io.svg?style=social)](https://twitter.com/intent/tweet?text=Syntax.js%2C%20a%20free%20JavaScript%20syntax%20highlighter&url=https://github.com/williamtroup/Syntax.js&hashtags=javascript,syntax,highlighter)
-[![npm](https://img.shields.io/badge/npmjs-v1.3.0-blue)](https://www.npmjs.com/package/jsyntax.js)
-[![nuget](https://img.shields.io/badge/nuget-v1.3.0-purple)](https://www.nuget.org/packages/jSyntax.js/)
+[![npm](https://img.shields.io/badge/npmjs-v1.4.0-blue)](https://www.npmjs.com/package/jsyntax.js)
+[![nuget](https://img.shields.io/badge/nuget-v1.4.0-purple)](https://www.nuget.org/packages/jSyntax.js/)
 [![license](https://img.shields.io/badge/license-MIT-green)](https://github.com/williamtroup/Syntax.js/blob/main/LICENSE.txt)
 [![discussions Welcome](https://img.shields.io/badge/discussions-Welcome-red)](https://github.com/williamtroup/Syntax.js/discussions)
 [![coded by William Troup](https://img.shields.io/badge/coded_by-William_Troup-yellow)](https://github.com/williamtroup)
 </h1>
 
 > <p align="center">A lightweight, and easy-to-use, JavaScript library for code syntax highlighting!</p>
-> <p align="center">v1.3.0</p>
+> <p align="center">v1.4.0</p>
 <br />
 
 ![Syntax.js](docs/images/main.png)
@@ -26,6 +26,7 @@ Syntax.js
 - Coping and Printing support is available via action buttons.
 - Custom triggers for actions (when elements are rendered, keywords are clicked, etc).
 - 12 of the most popular languages built in by default (you can add your own easily if yours is not supported by default).
+- Unknown language support (renders the display, but does not highlight any syntax).
 <br />
 <br />
 
