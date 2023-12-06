@@ -24,7 +24,7 @@
 - NUSPEC file improvements for NuGet.org submissions.
 
 #### **Fixes:**
-- Fixed a fault that prevented the public function "removeLanguage()" from return a valid flag when a language has been removed.
+- Fixed a fault that prevented the public function "removeLanguage()" from returning a valid flag when a language has been removed.
 
 <br>
 
