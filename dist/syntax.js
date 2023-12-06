@@ -133,11 +133,13 @@
         printButton.onclick = function() {
           var newWindow = window.open(_string.empty, "PRINT", "height=400,width=600");
           var newElementForPrint = syntax.cloneNode(true);
+          var newTitleElement = createElement("div");
           newElementForPrint.removeChild(newElementForPrint.children[0]);
+          newTitleElement.innerHTML = getFriendlyLanguageName(syntaxLanguage);
           newWindow.document.write("<html>");
           newWindow.document.write("<head>");
           newWindow.document.write("<title>");
-          newWindow.document.write(getFriendlyLanguageName(syntaxLanguage));
+          newWindow.document.write(newTitleElement.innerHTML);
           newWindow.document.write("</title>");
           newWindow.document.write("</head>");
           newWindow.document.write("<body>");
