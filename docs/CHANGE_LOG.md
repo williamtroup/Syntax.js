@@ -1,5 +1,36 @@
 # Syntax.js - Change Log:
 
+## Version 1.5.0:
+
+#### **New Features:**
+- Added full language alias support (allows alias names to be added that point to a specific language name).
+- Added full custom buttons support via a new attribute called "data-syntax-buttons".
+
+#### **Languages:**
+- Added support for the F# programming language (importable file).
+- Added support for the Rust programming language (importable file).
+
+#### **Public Functions:**
+- Added new public function "addAlias()", which is used to add a new language alias.
+- Added new public function "removeAlias()", which is used to remove a language alias.
+- Added new public function "getAlias()", which is used to get a language alias.
+- Added new public function "getAliases()", which is used to get all language aliases.
+- Renamed the public function "getAllLanguages" to "getLanguages()".
+- Renamed the public function "getAllElementsHighlighted()" to "getElementsHighlighted()".
+
+#### **Documentation:**
+- More documentation improvements to show how some of the new features are used.
+
+#### **General Improvements:**
+- NUSPEC file improvements for NuGet.org submissions.
+
+#### **Fixes:**
+- Fixed a fault that prevented the public function "removeLanguage()" from returning a valid flag when a language has been removed.
+- Fixed package description and keywords being inconsistent with the main repository.
+
+<br>
+
+
 ## Version 1.4.0:
 
 #### **Languages:**

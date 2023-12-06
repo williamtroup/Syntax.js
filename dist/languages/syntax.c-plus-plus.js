@@ -1,4 +1,4 @@
-/*! Syntax.js v1.4.0 | (c) Bunoon | MIT License */
+/*! Syntax.js v1.5.0 | (c) Bunoon | MIT License */
 $syntax.addLanguage( "c-plus-plus", {
     friendlyName: "C++",
     keywords: [
@@ -100,5 +100,6 @@ $syntax.addLanguage( "c-plus-plus", {
     ],
     comment: "//",
     multiLineComment: [ "/*", "*/" ],
-    caseSensitive: true
+    caseSensitive: true,
+    keywordsCasing: "initial"
 }, false );

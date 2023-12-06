@@ -1,8 +1,8 @@
-# Syntax.js v1.4.0
+# Syntax.js v1.5.0
 
 [![Tweet](https://img.shields.io/twitter/url/http/shields.io.svg?style=social)](https://twitter.com/intent/tweet?text=Syntax.js%2C%20a%20free%20JavaScript%20syntax%20highlighter&url=https://github.com/williamtroup/Syntax.js&hashtags=javascript,syntax,highlighter)
-[![npm](https://img.shields.io/badge/npmjs-v1.4.0-blue)](https://www.npmjs.com/package/jsyntax.js)
-[![nuget](https://img.shields.io/badge/nuget-v1.4.0-purple)](https://www.nuget.org/packages/jSyntax.js/)
+[![npm](https://img.shields.io/badge/npmjs-v1.5.0-blue)](https://www.npmjs.com/package/jsyntax.js)
+[![nuget](https://img.shields.io/badge/nuget-v1.5.0-purple)](https://www.nuget.org/packages/jSyntax.js/)
 [![license](https://img.shields.io/badge/license-MIT-green)](https://github.com/williamtroup/Syntax.js/blob/main/LICENSE.txt)
 [![discussions Welcome](https://img.shields.io/badge/discussions-Welcome-red)](https://github.com/williamtroup/Syntax.js/discussions)
 [![coded by William Troup](https://img.shields.io/badge/coded_by-William_Troup-yellow)](https://github.com/williamtroup)
@@ -18,7 +18,9 @@
 - Full CSS theme support (using :root variables).
 - Coping and Printing support is available via action buttons.
 - Custom triggers for actions (when elements are rendered, keywords are clicked, etc).
-- 12 of the most popular languages built in by default (you can add your own easily if yours is not supported by default).
+- 14 of the most popular languages built in by default (with public function support to add more).
+- Language aliases.
+- Custom action buttons (via a binding attribute).
 - Unknown language support (renders the display, but does not highlight any syntax).
 
 
@@ -30,6 +32,24 @@ All modern browsers (such as Google Chrome, FireFox, and Opera) are fully suppor
 ## What are the most recent changes?
 
 To see a list of all the most recent changes, click [here](https://github.com/williamtroup/Syntax.js/blob/main/docs/CHANGE_LOG.md).
+
+
+## What languages are supported by default?
+
+- C++
+- C#
+- C
+- F#
+- GO
+- Java
+- JavaScript
+- Microsoft SQL
+- Python
+- Ruby
+- Rust
+- Swift
+- TypeScript
+- Visual Basic
 
 
 ## How do I get started?
@@ -66,7 +86,7 @@ Make sure you include the "DOCTYPE html" tag at the top of your email, as follow
     }
 </div>
 
-<code data-syntax-language="javascript" data-syntax-options="{ 'showCopyButton': false }">
+<code data-syntax-language="javascript" data-syntax-options="{ 'showCopyButton': false }" data-syntax-buttons="[ { 'text': 'Button 1', 'onClick': yourJsFunction } ]">
     <pre>
         var something = true;
 
@@ -80,9 +100,11 @@ Make sure you include the "DOCTYPE html" tag at the top of your email, as follow
 </code>
 ```
 
-To see a list of all the available options you can use for "data-syntax-options", click [here](https://github.com/williamtroup/Syntax.js/blob/main/docs/OPTIONS.md).
+To see a list of all the available binding options you can use for "data-syntax-options", click [here](https://github.com/williamtroup/Syntax.js/blob/main/docs/BINDING_OPTIONS.md).
 
 To see a list of all the available custom triggers you can use for "data-syntax-options", click [here](https://github.com/williamtroup/Syntax.js/blob/main/docs/CUSTOM_TRIGGERS.md).
+
+To see a list of all the available binding options you can use for "data-syntax-buttons", click [here](https://github.com/williamtroup/Syntax.js/blob/main/docs/BINDING_BUTTONS.md).
 
 
 ### 4. Finishing Up:
@@ -98,3 +120,18 @@ To customize, and get more out of Syntax.js, please read through the following d
 ### 1. Public Functions:
 
 To see a list of all the public functions available, click [here](https://github.com/williamtroup/Syntax.js/blob/main/docs/FUNCTIONS.md).
+
+
+### 2. Configuration:
+
+Configuration options allow you to customize how Syntax.js will function.  You can set them as follows:
+
+```markdown
+<script> 
+  $syntax.setConfiguration( {
+      safeMode: false
+  } );
+</script>
+```
+
+To see a list of all the available configuration options you can use, click [here](https://github.com/williamtroup/Syntax.js/blob/main/docs/CONFIGURATION_OPTIONS.md).

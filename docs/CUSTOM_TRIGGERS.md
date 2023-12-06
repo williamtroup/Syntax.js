@@ -4,6 +4,7 @@ Below is a list of all the custom triggers supported in the "data-syntax-options
 <br>
 <br>
 
+
 <h1>For Rendering:</h1>
 
 ### options.onRenderComplete( *element* ):

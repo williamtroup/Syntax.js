@@ -48,7 +48,7 @@
             </code>
             <br />
     
-            <div data-syntax-language="c-sharp" data-syntax-options="{ 'showCopyButton': false, 'removeBlankLines': false, 'showLineNumbers': false, 'showPrintButton': false }">
+            <div data-syntax-language="c-sharp" data-syntax-options="{ 'showCopyButton': false, 'removeBlankLines': false, 'showLineNumbers': false, 'showPrintButton': false }" data-syntax-buttons="[ { 'text': 'Custom Button 1', 'onClick': customButtonAction1, 'className': 'customButtonClass' }, { 'text': 'Custom Button 2', 'onClick': customButtonAction2 } ]">
                 int something = 1;
 
                 if ( something == 1 ) {
@@ -64,7 +64,7 @@
         <div class="contents">
             <h2>Highlighting:</h2>
             <button class="btn btn-primary" onclick="$syntax.highlightAll();">Highlight All</button>
-            <button class="btn btn-primary" onclick="console.log( $syntax.getAllElementsHighlighted() );">Get All Elements Highlighted</button>
+            <button class="btn btn-primary" onclick="console.log( $syntax.getElementsHighlighted() );">Get Elements Highlighted</button>
             <br />
 
             <h2>Destroying:</h2>
@@ -76,7 +76,14 @@
             <button class="btn btn-primary" onclick="addNewLanguage();">Add Language</button>
             <button class="btn btn-primary" onclick="removeNewLanguage();">Remove Language</button>
             <button class="btn btn-primary" onclick="console.log( $syntax.getLanguage( 'c-sharp' ) );">Get Language</button>
-            <button class="btn btn-primary" onclick="console.log( $syntax.getAllLanguages() );">Get All Languages</button>
+            <button class="btn btn-primary" onclick="console.log( $syntax.getLanguages() );">Get Languages</button>
+            <br />
+
+            <h2>Aliases:</h2>
+            <button class="btn btn-primary" onclick="addNewAlias();">Add Alias</button>
+            <button class="btn btn-primary" onclick="removeNewAlias();">Remove Alias</button>
+            <button class="btn btn-primary" onclick="console.log( $syntax.getAlias( 'c-sharp' ) );">Get Alias</button>
+            <button class="btn btn-primary" onclick="console.log( $syntax.getAliases() );">Get Aliases</button>
             <br />
 
             <h2>Configuration:</h2>
@@ -93,17 +100,27 @@
         document.getElementById( "header" ).innerText += " - v" + $syntax.getVersion();
 
         function addNewLanguage() {
-            $syntax.addLanguage( "c-sharp", {
+            var result = $syntax.addLanguage( "c#", {
                 keywords: "if var true bool int string",
                 comment: "//",
                 multiLineComment: [ "/*", "*/" ],
                 friendlyName: "C#",
                 keywordsCasing: "initial"
             } );
+
+            console.log( "Language Added: " + result.toString() );
         }
 
         function removeNewLanguage() {
-            $syntax.removeLanguage( "c-sharp" );
+            console.log( "Language Removed: " + $syntax.removeLanguage( "c#" ).toString() );
+        }
+
+        function addNewAlias() {
+            console.log( "Alias Added: " + $syntax.addAlias( "c-sharp", "c#" ).toString() );
+        }
+
+        function removeNewAlias() {
+            console.log( "Alias Removed: " + $syntax.removeAlias( "c-sharp" ).toString() );
         }
 
         function onCopyCustomTrigger( copiedCode ) {
@@ -128,6 +145,14 @@
                 'showLanguageLabel': false,
                 'padLineNumbers': true
             };
+        }
+
+        function customButtonAction1() {
+            console.log( "Custom action button 1 clicked" );
+        }
+
+        function customButtonAction2() {
+            console.log( "Custom action button 2 clicked" );
         }
     </script>
 </html>

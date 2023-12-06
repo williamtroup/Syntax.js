@@ -1,4 +1,4 @@
-/*! Syntax.js v1.4.0 | (c) Bunoon | MIT License */
+/*! Syntax.js v1.5.0 | (c) Bunoon | MIT License */
 $syntax.addLanguage( "ruby", {
     friendlyName: "Ruby",
     keywords: [
@@ -41,5 +41,6 @@ $syntax.addLanguage( "ruby", {
     ],
     comment: "#",
     multiLineComment: [ "=begin", "=end" ],
-    caseSensitive: true
+    caseSensitive: true,
+    keywordsCasing: "initial"
 }, false );

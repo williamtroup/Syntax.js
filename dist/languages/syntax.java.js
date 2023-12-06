@@ -1,4 +1,4 @@
-/*! Syntax.js v1.4.0 | (c) Bunoon | MIT License */
+/*! Syntax.js v1.5.0 | (c) Bunoon | MIT License */
 $syntax.addLanguage( "java", {
     friendlyName: "Java",
     keywords: [
@@ -55,5 +55,6 @@ $syntax.addLanguage( "java", {
     ],
     comment: "//",
     multiLineComment: [ "/*", "*/" ],
-    caseSensitive: true
+    caseSensitive: true,
+    keywordsCasing: "initial"
 }, false );
