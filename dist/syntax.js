@@ -111,6 +111,9 @@
             newCustomButton.innerHTML = customButton.text;
             newCustomButton.onclick = customButton.onClick;
             buttons.appendChild(newCustomButton);
+            if (isDefined(customButton.className)) {
+              newCustomButton.className += " " + customButton.className;
+            }
           }
         }
       }

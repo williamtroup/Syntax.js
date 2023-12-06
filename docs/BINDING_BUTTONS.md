@@ -8,3 +8,4 @@ Below are all the JSON properties that can be passed in the "data-syntax-buttons
 | --- | --- | --- |
 | *string* | text | States the text that should be shown on the button. |
 | *Object* | onClick | States the custom event that should be triggered when the button is clicked. |
+| *string* | className | States a CSS class name to apply to the button (optional). |

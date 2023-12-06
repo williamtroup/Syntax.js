@@ -57,3 +57,7 @@ div.date-picker {
 code pre {
     color: black;
 }
+
+div.customButtonClass {
+    background-color: black !important;
+}
