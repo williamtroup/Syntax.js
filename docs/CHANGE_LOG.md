@@ -1,5 +1,11 @@
 # Syntax.js - Change Log:
 
+## Version 1.5.1:
+- 
+
+<br>
+
+
 ## Version 1.5.0:
 
 #### **New Features:**
