@@ -1,5 +1,12 @@
 # Syntax.js - Change Log:
 
+## Version 1.5.1:
+- Removed some unneeded CSS from the testing CSS file (used in the testing HTML files).
+- Fixed a security risk when injecting titles into a new window (for printing).
+
+<br>
+
+
 ## Version 1.5.0:
 
 #### **New Features:**

@@ -1,4 +1,4 @@
-/*! Syntax.js v1.5.0 | (c) Bunoon | MIT License */
+/*! Syntax.js v1.5.1 | (c) Bunoon | MIT License */
 (function() {
   function render() {
     var tagTypes = _configuration.highlightAllDomElementTypes;
@@ -133,11 +133,13 @@
         printButton.onclick = function() {
           var newWindow = window.open(_string.empty, "PRINT", "height=400,width=600");
           var newElementForPrint = syntax.cloneNode(true);
+          var newTitleElement = createElement("div");
           newElementForPrint.removeChild(newElementForPrint.children[0]);
+          newTitleElement.innerHTML = getFriendlyLanguageName(syntaxLanguage);
           newWindow.document.write("<html>");
           newWindow.document.write("<head>");
           newWindow.document.write("<title>");
-          newWindow.document.write(getFriendlyLanguageName(syntaxLanguage));
+          newWindow.document.write(newTitleElement.innerHTML);
           newWindow.document.write("</title>");
           newWindow.document.write("</head>");
           newWindow.document.write("<body>");
@@ -667,7 +669,7 @@
     return this;
   };
   this.getVersion = function() {
-    return "1.5.0";
+    return "1.5.1";
   };
   (function(documentObject, navigatorObject, windowObject) {
     _parameter_Document = documentObject;

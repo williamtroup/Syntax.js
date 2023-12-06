@@ -2,7 +2,7 @@
     "name": "jsyntax.js",
     "title": "Syntax.js",
     "description": "A lightweight, and easy-to-use, JavaScript library for code syntax highlighting!",
-    "version": "1.5.0",
+    "version": "1.5.1",
     "main": "dist/syntax.js",
     "author": {
       "name": "Bunoon"

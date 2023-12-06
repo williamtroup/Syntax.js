@@ -4,7 +4,7 @@
  * A lightweight, and easy-to-use, JavaScript library for code syntax highlighting!
  * 
  * @file        syntax.js
- * @version     v1.5.0
+ * @version     v1.5.1
  * @author      Bunoon
  * @license     MIT License
  * @copyright   Bunoon 2023
@@ -224,14 +224,16 @@
 
                 printButton.onclick = function() {
                     var newWindow = window.open( _string.empty, "PRINT", "height=400,width=600" ),
-                        newElementForPrint = syntax.cloneNode( true );
+                        newElementForPrint = syntax.cloneNode( true ),
+                        newTitleElement = createElement( "div" );
 
                     newElementForPrint.removeChild( newElementForPrint.children[ 0 ] );
+                    newTitleElement.innerHTML = getFriendlyLanguageName( syntaxLanguage );
 
                     newWindow.document.write( "<html>" );
                     newWindow.document.write( "<head>" );
                     newWindow.document.write( "<title>" );
-                    newWindow.document.write( getFriendlyLanguageName( syntaxLanguage ) );
+                    newWindow.document.write( newTitleElement.innerHTML );
                     newWindow.document.write( "</title>" );
                     newWindow.document.write( "</head>" );
                     newWindow.document.write( "<body>" );
@@ -1137,7 +1139,7 @@
      * @returns     {string}                                                The version number.
      */
     this.getVersion = function() {
-        return "1.5.0";
+        return "1.5.1";
     };
 
 
