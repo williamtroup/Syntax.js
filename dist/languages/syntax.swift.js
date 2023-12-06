@@ -75,5 +75,6 @@ $syntax.addLanguage( "swift", {
     ],
     comment: "//",
     multiLineComment: [ "/*", "*/" ],
-    caseSensitive: true
+    caseSensitive: true,
+    keywordsCasing: "initial"
 }, false );

@@ -41,5 +41,6 @@ $syntax.addLanguage( "ruby", {
     ],
     comment: "#",
     multiLineComment: [ "=begin", "=end" ],
-    caseSensitive: true
+    caseSensitive: true,
+    keywordsCasing: "initial"
 }, false );

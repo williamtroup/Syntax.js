@@ -71,5 +71,6 @@ $syntax.addLanguage( "f-sharp", {
     ],
     comment: "//",
     multiLineComment: [ "(*", "*)" ],
-    caseSensitive: true
+    caseSensitive: true,
+    keywordsCasing: "initial"
 }, false );

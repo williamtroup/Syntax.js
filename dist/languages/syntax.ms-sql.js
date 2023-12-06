@@ -190,5 +190,6 @@ $syntax.addLanguage( "ms-sql", {
     ],
     comment: "--",
     multiLineComment: [ "/*", "*/" ],
-    caseSensitive: true
+    caseSensitive: true,
+    keywordsCasing: "initial"
 }, false );

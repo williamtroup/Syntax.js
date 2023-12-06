@@ -64,9 +64,7 @@ $syntax.addLanguage( "typescript", {
         "of"
     ],
     comment: "//",
-    multiLineComment: [
-        "/*",
-        "*/"
-    ],
-    caseSensitive: true
+    multiLineComment: [ "/*", "*/" ],
+    caseSensitive: true,
+    keywordsCasing: "initial"
 }, false );

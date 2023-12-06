@@ -30,5 +30,6 @@ $syntax.addLanguage( "go", {
     ],
     comment: "//",
     multiLineComment: [ "/*", "*/" ],
-    caseSensitive: true
+    caseSensitive: true,
+    keywordsCasing: "initial"
 }, false );

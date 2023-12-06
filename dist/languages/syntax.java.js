@@ -55,5 +55,6 @@ $syntax.addLanguage( "java", {
     ],
     comment: "//",
     multiLineComment: [ "/*", "*/" ],
-    caseSensitive: true
+    caseSensitive: true,
+    keywordsCasing: "initial"
 }, false );

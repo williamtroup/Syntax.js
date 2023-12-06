@@ -83,5 +83,6 @@ $syntax.addLanguage( "c-sharp", {
     ],
     comment: "//",
     multiLineComment: [ "/*", "*/" ],
-    caseSensitive: true
+    caseSensitive: true,
+    keywordsCasing: "initial"
 }, false );

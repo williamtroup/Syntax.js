@@ -68,9 +68,7 @@ $syntax.addLanguage( "javascript", {
         "yield"
     ],
     comment: "//",
-    multiLineComment: [
-        "/*",
-        "*/"
-    ],
-    caseSensitive: true
+    multiLineComment: [ "/*", "*/" ],
+    caseSensitive: true,
+    keywordsCasing: "initial"
 }, false );

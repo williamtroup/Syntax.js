@@ -100,5 +100,6 @@ $syntax.addLanguage( "c-plus-plus", {
     ],
     comment: "//",
     multiLineComment: [ "/*", "*/" ],
-    caseSensitive: true
+    caseSensitive: true,
+    keywordsCasing: "initial"
 }, false );

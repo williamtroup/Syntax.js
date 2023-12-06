@@ -39,5 +39,6 @@ $syntax.addLanguage( "python", {
         "yield"      
     ],
     comment: "#",
-    caseSensitive: true
+    caseSensitive: true,
+    keywordsCasing: "initial"
 }, false );
