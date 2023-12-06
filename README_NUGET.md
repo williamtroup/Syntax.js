@@ -18,7 +18,7 @@
 - Full CSS theme support (using :root variables).
 - Coping and Printing support is available via action buttons.
 - Custom triggers for actions (when elements are rendered, keywords are clicked, etc).
-- 12 of the most popular languages built in by default (with public function support to add more).
+- 13 of the most popular languages built in by default (with public function support to add more).
 - Language aliases.
 - Unknown language support (renders the display, but does not highlight any syntax).
 
@@ -31,6 +31,23 @@ All modern browsers (such as Google Chrome, FireFox, and Opera) are fully suppor
 ## What are the most recent changes?
 
 To see a list of all the most recent changes, click [here](https://github.com/williamtroup/Syntax.js/blob/main/docs/CHANGE_LOG.md).
+
+
+## What languages are supported by default?
+
+- C++
+- C#
+- C
+- F#
+- GO
+- Java
+- JavaScript
+- Microsoft SQL
+- Python
+- Ruby
+- Swift
+- TypeScript
+- Visual Basic
 
 
 ## How do I get started?

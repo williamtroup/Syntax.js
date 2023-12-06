@@ -5,6 +5,9 @@
 #### **New Features:**
 - Added full language alias support (allows aliases names to be added that point to a specific language name).
 
+#### **Languages:**
+- Added support for the F# programming language (importable file).
+
 #### **Public Functions:**
 - Added new public function "addAlias()", which is used to add a new language alias.
 - Added new public function "removeAlias()", which is used to remove a language alias.
