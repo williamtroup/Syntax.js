@@ -3,7 +3,7 @@
 ## Version 1.5.0:
 
 #### **New Features:**
-- Added full language alias support (allows aliases names to be added that point to a specific language name).
+- Added full language alias support (allows alias names to be added that point to a specific language name).
 - Added full custom buttons support via a new attribute called "data-syntax-buttons".
 
 #### **Languages:**
