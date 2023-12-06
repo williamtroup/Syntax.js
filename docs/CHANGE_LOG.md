@@ -8,6 +8,7 @@
 
 #### **Languages:**
 - Added support for the F# programming language (importable file).
+- Added support for the Rust programming language (importable file).
 
 #### **Public Functions:**
 - Added new public function "addAlias()", which is used to add a new language alias.

@@ -25,7 +25,7 @@ Syntax.js
 - Full CSS theme support (using :root variables).
 - Coping and Printing support is available via action buttons.
 - Custom triggers for actions (when elements are rendered, keywords are clicked, etc).
-- 13 of the most popular languages built in by default (with public function support to add more).
+- 14 of the most popular languages built in by default (with public function support to add more).
 - Language aliases.
 - Custom action buttons (via a binding attribute).
 - Unknown language support (renders the display, but does not highlight any syntax).
@@ -56,6 +56,7 @@ To see a list of all the most recent changes, click [here](docs/CHANGE_LOG.md).
 - Microsoft SQL
 - Python
 - Ruby
+- Rust
 - Swift
 - TypeScript
 - Visual Basic
