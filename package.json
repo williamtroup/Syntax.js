@@ -1,7 +1,7 @@
 {
     "name": "jsyntax.js",
     "title": "Syntax.js",
-    "description": "A javascript syntax highlighter.",
+    "description": "A lightweight, and easy-to-use, JavaScript library for code syntax highlighting!",
     "version": "1.5.0",
     "main": "dist/syntax.js",
     "author": {
@@ -13,8 +13,12 @@
     },
     "keywords": [
       "javascript",
-      "Syntax",
-      "highlighter",
+      "css",
+      "highlight",
+      "syntax-highlighting",
+      "html5",
+      "code",
+      "code-highlighter",
       "Syntax.js"
     ],
     "bugs": {

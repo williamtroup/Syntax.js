@@ -26,6 +26,7 @@
 
 #### **Fixes:**
 - Fixed a fault that prevented the public function "removeLanguage()" from returning a valid flag when a language has been removed.
+- Fixed package description and keywords being inconsistent with the main repository.
 
 <br>
 
