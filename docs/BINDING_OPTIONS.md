@@ -1,6 +1,6 @@
 # Syntax.js - Binding Options:
 
-Below are all the options that can be passed in the "data-syntax-options" binding attribute for a DOM element.
+Below are all the JSON properties that can be passed in the "data-syntax-options" binding attribute for a DOM element.
 
 
 ### Standard Options:

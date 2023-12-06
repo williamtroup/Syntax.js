@@ -27,6 +27,7 @@ Syntax.js
 - Custom triggers for actions (when elements are rendered, keywords are clicked, etc).
 - 13 of the most popular languages built in by default (with public function support to add more).
 - Language aliases.
+- Custom action buttons (via a binding attribute).
 - Unknown language support (renders the display, but does not highlight any syntax).
 <br />
 <br />
@@ -99,7 +100,7 @@ Make sure you include the "DOCTYPE html" tag at the top of your email, as follow
     }
 </div>
 
-<code data-syntax-language="javascript" data-syntax-options="{ 'showCopyButton': false }">
+<code data-syntax-language="javascript" data-syntax-options="{ 'showCopyButton': false }" data-syntax-buttons="[ { 'text': 'Button 1', 'onClick': yourJsFunction } ]">
     <pre>
         var something = true;
 
@@ -116,6 +117,8 @@ Make sure you include the "DOCTYPE html" tag at the top of your email, as follow
 To see a list of all the available binding options you can use for "data-syntax-options", click [here](docs/BINDING_OPTIONS.md).
 
 To see a list of all the available custom triggers you can use for "data-syntax-options", click [here](docs/CUSTOM_TRIGGERS.md).
+
+To see a list of all the available binding options you can use for "data-syntax-buttons", click [here](docs/BINDING_BUTTONS.md).
 
 <br>
 

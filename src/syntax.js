@@ -47,7 +47,8 @@
 
         // Variables: Attribute Names
         _attribute_Name_Language = "data-syntax-language",
-        _attribute_Name_Options = "data-syntax-options";
+        _attribute_Name_Options = "data-syntax-options",
+        _attribute_Name_Buttons = "data-syntax-buttons";
 
     
     /*
@@ -83,7 +84,8 @@
                 var language = getLanguage( syntaxLanguage );
 
                 if ( isDefined( language ) || syntaxLanguage.toLowerCase() === _languages_Unknown ) {
-                    var syntaxOptionsParsed = getObjectFromString( element.getAttribute( _attribute_Name_Options ) );
+                    var syntaxOptionsParsed = getObjectFromString( element.getAttribute( _attribute_Name_Options ) ),
+                        syntaxButtonsParsed = getObjectFromString( element.getAttribute( _attribute_Name_Buttons ) );
 
                     if ( syntaxOptionsParsed[ 0 ] ) {
                         var innerHTML = element.innerHTML,
@@ -122,7 +124,7 @@
                         var syntax = createElement( "div", "syntax" );
                         code.appendChild( syntax );
 
-                        renderElementButtons( syntax, syntaxOptions, syntaxLanguage, innerHTMLCopy );
+                        renderElementButtons( syntax, syntaxOptions, syntaxLanguage, syntaxButtonsParsed, innerHTMLCopy );
 
                         if ( syntaxLanguage.toLowerCase() !== _languages_Unknown ) {
                             if ( syntaxOptions.highlightComments ) {
@@ -178,10 +180,26 @@
         return result;
     }
 
-    function renderElementButtons( syntax, syntaxOptions, syntaxLanguage, innerHTMLCopy ) {
-        if ( syntaxOptions.showLanguageLabel || syntaxOptions.showCopyButton || syntaxOptions.showPrintButton ) {
+    function renderElementButtons( syntax, syntaxOptions, syntaxLanguage, syntaxButtonsParsed, innerHTMLCopy ) {
+        if ( syntaxOptions.showLanguageLabel || syntaxOptions.showCopyButton || syntaxOptions.showPrintButton || syntaxButtonsParsed[ 0 ] ) {
             var buttons = createElement( "div", "buttons" );
             syntax.appendChild( buttons );
+
+            if ( syntaxButtonsParsed[ 0 ] && isDefinedArray( syntaxButtonsParsed[ 1 ] ) ) {
+                var customButtons = syntaxButtonsParsed[ 1 ],
+                    customButtonsLength = customButtons.length;
+
+                for ( var customButtonsIndex = 0; customButtonsIndex < customButtonsLength; customButtonsIndex++ ) {
+                    var customButton = customButtons[ customButtonsIndex ];
+
+                    if ( isDefined( customButton.text ) && isDefinedFunction( customButton.onClick ) ) {
+                        var newCustomButton = createElement( "div", "button" );
+                        newCustomButton.innerHTML = customButton.text;
+                        newCustomButton.onclick = customButton.onClick;
+                        buttons.appendChild( newCustomButton );
+                    }
+                }
+            }
 
             if ( syntaxOptions.showCopyButton ) {
                 var copyButton = createElement( "div", "button" );
