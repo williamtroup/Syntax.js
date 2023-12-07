@@ -120,7 +120,7 @@ To customize, and get more out of Syntax.js, please read through the following d
 
 ### 1. Public Functions:
 
-To see a list of all the public functions available, click [here](https://github.com/williamtroup/Syntax.js/blob/main/docs/FUNCTIONS.md).
+To see a list of all the public functions available, click [here](https://github.com/williamtroup/Syntax.js/blob/main/docs/PUBLIC_FUNCTIONS.md).
 
 
 ### 2. Configuration:
