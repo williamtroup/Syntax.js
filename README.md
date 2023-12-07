@@ -28,7 +28,7 @@ Syntax.js
 - Custom triggers for actions (when elements are rendered, keywords are clicked, etc).
 - 14 of the most popular languages built in by default (with public function support to add more).
 - Language aliases.
-- Custom action buttons (via a binding attribute).
+- Custom action buttons (via a binding attribute), with opening/closing support.
 - Unknown language support (renders the display, but does not highlight any syntax).
 <br />
 <br />
