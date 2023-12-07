@@ -22,6 +22,9 @@
 #### **Documentation:**
 - Documentation renames and cleanups to makes things clearer.
 
+#### **Fixes:**
+- Fixed the buttons wrapping down to the next line and looking strange on smaller screens.
+
 <br>
 
 

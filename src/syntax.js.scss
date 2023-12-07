@@ -103,6 +103,7 @@ div.syntax-highlight {
             background-color: var(--container-background-color-syntax);
             border: var(--border-size) solid var(--container-border-color-syntax);
             position: relative;
+            overflow: hidden;
 
             div.buttons {
                 position: absolute;
@@ -111,6 +112,7 @@ div.syntax-highlight {
                 -webkit-user-select: none;
                 -ms-user-select: none;
                 user-select: none;
+                text-wrap: nowrap;
     
                 div.button,
                 div.label {

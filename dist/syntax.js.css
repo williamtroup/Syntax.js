@@ -95,6 +95,7 @@ div.syntax-highlight div.code div.syntax {
   background-color: var(--container-background-color-syntax);
   border: var(--border-size) solid var(--container-border-color-syntax);
   position: relative;
+  overflow: hidden;
 }
 code.syntax-highlight div.code div.syntax div.buttons,
 div.syntax-highlight div.code div.syntax div.buttons {
@@ -104,6 +105,7 @@ div.syntax-highlight div.code div.syntax div.buttons {
   -webkit-user-select: none;
   -ms-user-select: none;
   user-select: none;
+  text-wrap: nowrap;
 }
 code.syntax-highlight div.code div.syntax div.buttons div.button,
 code.syntax-highlight div.code div.syntax div.buttons div.label,
