@@ -16,7 +16,7 @@
 - Highlights keywords, values, strings, and comments.
 - Full API available via public functions.
 - Fully styled in CSS/SASS (including the buttons) and compatible with the Bootstrap library.
-- Full CSS theme support (using :root variables).
+- Full CSS theme support (using :root variables, with a default dark-mode theme).
 - Coping and Printing support is available via action buttons.
 - Custom triggers for actions (when elements are rendered, keywords are clicked, etc).
 - 14 of the most popular languages built in by default (with public function support to add more).

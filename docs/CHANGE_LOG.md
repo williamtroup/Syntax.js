@@ -14,6 +14,7 @@
 
 ### **Themes:**
 - All CSS colors are now root variables, allowing full themes to be generated without referring CSS class names.
+- Added a new folder under "dist" called "themes", which contains a new dark-mode (works based on the browser configuration).
 
 ### **CSS:**
 - Renamed the CSS class "number" to "numbers".

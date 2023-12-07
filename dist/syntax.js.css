@@ -22,6 +22,7 @@
   --color-gray: #BBBBBB;
   --color-lighter-gray: #C0C0C0;
   --container-background-color-container: #e8e6e6;
+  --container-border-color-container: #3b3a3a;
   --container-background-color-syntax: #EEEEEE;
   --container-border-color-syntax: #CCCCCC;
   --container-background-color-numbers: #dddddd;
@@ -51,7 +52,7 @@ div.syntax-highlight div.code {
   overflow-x: auto;
   overflow-y: hidden;
   position: relative;
-  border: var(--border-size) solid var(--color-black);
+  border: var(--border-size) solid var(--container-border-color-container);
   color: var(--color-black);
 }
 code.syntax-highlight div.code pre,
@@ -148,6 +149,7 @@ code.syntax-highlight div.code div.syntax p,
 div.syntax-highlight div.code div.syntax p {
   margin: 0;
   text-wrap: initial;
+  color: var(--color-black);
 }
 @media (min-width: 768px) {
   code.syntax-highlight div.code div.syntax p,
