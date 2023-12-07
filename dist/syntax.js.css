@@ -140,9 +140,7 @@ div.syntax-highlight div.code div.syntax div.buttons div.button-opener {
 code.syntax-highlight div.code div.syntax div.buttons div.label,
 div.syntax-highlight div.code div.syntax div.buttons div.label {
   cursor: default;
-}
-code.syntax-highlight div.code div.syntax div.buttons div.button,
-div.syntax-highlight div.code div.syntax div.buttons div.button {
+  color: var(--color-gray);
   font-weight: 700;
 }
 code.syntax-highlight div.code div.syntax div.buttons div.button:hover,

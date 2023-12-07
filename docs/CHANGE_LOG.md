@@ -25,6 +25,8 @@
 
 ### **CSS:**
 - Renamed the CSS class "number" to "numbers".
+- By default, the buttons are no longer bold.
+- By default, the language label is now bold and use a gray font color.
 
 #### **Documentation:**
 - Documentation renames and cleanups to makes things clearer.
