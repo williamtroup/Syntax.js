@@ -20,7 +20,7 @@
 - Renamed the CSS class "number" to "numbers".
 
 #### **Documentation:**
-- Documentation renames and cleanups to things things clearer.
+- Documentation renames and cleanups to makes things clearer.
 
 <br>
 
