@@ -4,6 +4,7 @@
 
 #### **New Features:**
 - Added "Values" support for languages, which allows values (such as "true" and "false") to be rendered using a different CSS class.
+- Added opening/closing support for the buttons shown in the top right corner (along with configurable options).
 
 #### **Binding Options:**
 - Added a new binding option called "highlightValues", which states if values should be highlighted (defaults to true).
@@ -15,6 +16,12 @@
 ### **Themes:**
 - All CSS colors are now root variables, allowing full themes to be generated without referring CSS class names.
 - Added a new folder under "dist" called "themes", which contains a new dark-mode (works based on the browser configuration).
+
+#### **Configuration Options:**
+- Added new configuration option "maximumButtons" (defaults to 2), which states the maximum number of buttons that can be shown before the opening/closing button is shown.
+- Added new configuration option "buttonsVisible" (defaults to true), which states if the buttons are open (visible).
+- Added new configuration option "buttonsOpenerText" (defaults to "<"), which states the text that should be used for the open buttons button.
+- Added new configuration option "buttonsCloserText" (defaults to ">"), which states the text that should be used for the close buttons button.
 
 ### **CSS:**
 - Renamed the CSS class "number" to "numbers".

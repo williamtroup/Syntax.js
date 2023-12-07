@@ -48,7 +48,7 @@
             </code>
             <br />
     
-            <div data-syntax-language="c-sharp" data-syntax-options="{ 'showCopyButton': false, 'removeBlankLines': false, 'showLineNumbers': false, 'showPrintButton': false }" data-syntax-buttons="[ { 'text': 'Custom Button 1', 'onClick': customButtonAction1, 'className': 'customButtonClass' }, { 'text': 'Custom Button 2', 'onClick': customButtonAction2 } ]">
+            <div data-syntax-language="c-sharp" data-syntax-options="{ 'showCopyButton': false, 'removeBlankLines': false, 'showLineNumbers': false, 'showPrintButton': false }" data-syntax-buttons="[ { 'text': 'Custom Button 1', 'onClick': customButtonAction1, 'className': 'customButtonClass' }, { 'text': 'Custom Button 2', 'onClick': customButtonAction2 }, { 'text': 'Custom Button 3', 'onClick': customButtonAction3 } ]">
                 int something = 1;
 
                 if ( something == 1 ) {
@@ -138,7 +138,8 @@
         
         function setupConfiguration() {
             $syntax.setConfiguration( {
-                safeMode: false
+                safeMode: false,
+                buttonsVisible: false
             } );
         }
 
@@ -159,6 +160,10 @@
 
         function customButtonAction2() {
             console.log( "Custom action button 2 clicked" );
+        }
+
+        function customButtonAction3() {
+            console.log( "Custom action button 3 clicked" );
         }
     </script>
 </html>

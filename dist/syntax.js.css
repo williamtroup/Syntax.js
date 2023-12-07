@@ -133,6 +133,10 @@ div.syntax-highlight div.code div.syntax div.buttons div.label:last-child {
   border-top-right-radius: var(--border-radius);
   border-right: none;
 }
+code.syntax-highlight div.code div.syntax div.buttons div.button-opener,
+div.syntax-highlight div.code div.syntax div.buttons div.button-opener {
+  font-weight: 900 !important;
+}
 code.syntax-highlight div.code div.syntax div.buttons div.label,
 div.syntax-highlight div.code div.syntax div.buttons div.label {
   cursor: default;
