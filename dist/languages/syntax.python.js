@@ -1,18 +1,15 @@
-/*! Syntax.js v1.5.1 | (c) Bunoon | MIT License */
+/*! Syntax.js v1.6.0 | (c) Bunoon | MIT License */
 $syntax.addLanguage( "python", {
     friendlyName: "Python",
     keywords: [
-        "False",
         "await",
         "else",
         "import",
         "pass",
-        "None",
         "break",
         "except",
         "in",
         "raise",
-        "True",
         "class",
         "finally",
         "is",
@@ -37,6 +34,11 @@ $syntax.addLanguage( "python", {
         "if",
         "or",
         "yield"      
+    ],
+    values: [
+        "False",
+        "True",
+        "None"
     ],
     comment: "#",
     caseSensitive: true,

@@ -1,5 +1,5 @@
 /*
- * Syntax.js Library v1.5.1
+ * Syntax.js Library v1.6.0
  *
  * Copyright 2023 Bunoon
  * Released under the MIT License
@@ -15,17 +15,32 @@
 :root {
     // Colors
     --color-keyword: #A71500;
+    --color-value: #F28C28;
     --color-keyword-hover: #FF0000;
+    --color-value-hover: #FFAC1C;
     --color-comment: #78b13f;
     --color-string: #484dd2;
     --color-black: #3b3a3a;
     --color-white: #F5F5F5;
+    --color-dark-gray: #808080;
     --color-gray: #BBBBBB;
+    --color-lighter-gray: #C0C0C0;
+
+    // Containers
+    --container-background-color-container: #e8e6e6;
+    --container-border-color-container: #3b3a3a;
+    --container-background-color-syntax: #EEEEEE;
+    --container-border-color-syntax: #CCCCCC;
+    --container-background-color-numbers: #dddddd;
+    --container-border-color-numbers: #BBBBBB;
 
     // Borders
     --border-radius: 0.5rem;
-    --border-style-scrollbar: inset 0 0 6px gray;
+    --border-style-scrollbar: inset 0 0 6px --color-dark-gray;
     --border-size: 0.5px;
+
+    // Transitions
+    --transition: all .3s;
 }
 
 
@@ -42,29 +57,29 @@ div.syntax-highlight {
 
     div.code {
         display: flex;
-        background-color: #e8e6e6;
+        background-color: var(--container-background-color-container);
         border-radius: var(--border-radius);
         padding: 15px;
         overflow-x: auto;
         overflow-y: hidden;
         position: relative;
-        border: var(--border-size) solid var(--color-black);
+        border: var(--border-size) solid var(--container-border-color-container);
         color: var(--color-black);
 
         pre {
             margin: 0 !important;
         }
 
-        div.number {
+        div.numbers {
             margin-right: 15px;
-            background-color: #dddddd;
+            background-color: var(--container-background-color-numbers);
             padding: 10px;
             padding-left: 15px;
             padding-right: 15px;
             border-radius: var(--border-radius);
             text-align: right;
             font-weight: 800 !important;
-            border: var(--border-size) solid #BBBBBB;
+            border: var(--border-size) solid var(--container-border-color-numbers);
             display: none;
             cursor: default;
             -webkit-user-select: none;
@@ -85,9 +100,10 @@ div.syntax-highlight {
             flex-grow: 1;
             padding: 10px;
             border-radius: var(--border-radius);
-            background-color: #EEEEEE;
-            border: var(--border-size) solid #CCCCCC;
+            background-color: var(--container-background-color-syntax);
+            border: var(--border-size) solid var(--container-border-color-syntax);
             position: relative;
+            overflow: hidden;
 
             div.buttons {
                 position: absolute;
@@ -96,6 +112,7 @@ div.syntax-highlight {
                 -webkit-user-select: none;
                 -ms-user-select: none;
                 user-select: none;
+                text-wrap: nowrap;
     
                 div.button,
                 div.label {
@@ -118,24 +135,27 @@ div.syntax-highlight {
                     }
                 }
 
-                div.label {
-                    cursor: default;
+                div.button-opener {
+                    font-weight: 900 !important;
                 }
 
-                div.button {
+                div.label {
+                    cursor: default;
+                    color: var(--color-gray);
                     font-weight: 700;
                 }
     
                 div.button:hover {
                     cursor: pointer;
                     opacity: 0.7;
-                    transition: all .3s;
+                    transition: var(--transition);
                 }
             }
 
             p {
                 margin: 0;
                 text-wrap: initial;
+                color: var(--color-black);
 
                 @media (min-width: 768px) { 
                     text-wrap: nowrap;
@@ -150,7 +170,20 @@ div.syntax-highlight {
                 span.keyword-clickable:hover,
                 span.no-highlight-keyword-clickable:hover {
                     color: var(--color-keyword-hover);
-                    transition: all .3s;
+                    transition: var(--transition);
+                    cursor: pointer;
+                }
+
+                span.value,
+                span.value-clickable {
+                    font-weight: 700;
+                    color: var(--color-value);
+                }
+
+                span.value-clickable:hover,
+                span.no-highlight-value-clickable:hover {
+                    color: var(--color-value-hover);
+                    transition: var(--transition);
                     cursor: pointer;
                 }
 
@@ -193,7 +226,7 @@ div.syntax-highlight {
         }
 
         &:active {
-            background-color: #C0C0C0;
+            background-color: var(--color-lighter-gray);
         }
     }
 }

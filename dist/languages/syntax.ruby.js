@@ -1,4 +1,4 @@
-/*! Syntax.js v1.5.1 | (c) Bunoon | MIT License */
+/*! Syntax.js v1.6.0 | (c) Bunoon | MIT License */
 $syntax.addLanguage( "ruby", {
     friendlyName: "Ruby",
     keywords: [
@@ -22,11 +22,9 @@ $syntax.addLanguage( "ruby", {
         "return",
         "elsif",
         "end",
-        "false",
         "ensure",
         "for",
         "if",
-        "true",
         "undef",
         "unless",
         "do",
@@ -38,6 +36,10 @@ $syntax.addLanguage( "ruby", {
         "while",
         "defined?",
         "self"   
+    ],
+    values: [
+        "false",
+        "true"
     ],
     comment: "#",
     multiLineComment: [ "=begin", "=end" ],

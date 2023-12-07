@@ -1,4 +1,4 @@
-/*! Syntax.js v1.5.1 | (c) Bunoon | MIT License */
+/*! Syntax.js v1.6.0 | (c) Bunoon | MIT License */
 (function() {
   function render() {
     var tagTypes = _configuration.highlightAllDomElementTypes;
@@ -34,7 +34,7 @@
               isPreFormatted = true;
             }
             var innerHTMLCopy = innerHTML.trim();
-            var number = null;
+            var numbers = null;
             var elementId = element.id;
             if (!isDefinedString(elementId)) {
               elementId = newGuid();
@@ -48,8 +48,8 @@
             var code = createElement("div", "code custom-scroll-bars");
             element.appendChild(code);
             if (syntaxOptions.showLineNumbers) {
-              number = createElement("div", "number");
-              code.appendChild(number);
+              numbers = createElement("div", "numbers");
+              code.appendChild(numbers);
             }
             var syntax = createElement("div", "syntax");
             code.appendChild(syntax);
@@ -66,6 +66,7 @@
                 }
               }
               innerHTML = renderElementKeywords(innerHTML, language, syntaxOptions);
+              innerHTML = renderElementValues(innerHTML, language, syntaxOptions);
               if (syntaxOptions.highlightComments) {
                 innerHTML = renderElementCommentsFromVariables(innerHTML);
               }
@@ -73,7 +74,7 @@
                 innerHTML = renderElementStringQuotesFromVariables(innerHTML);
               }
             }
-            renderElementCompletedHTML(element, number, syntax, innerHTML, syntaxOptions, isPreFormatted);
+            renderElementCompletedHTML(element, numbers, syntax, innerHTML, syntaxOptions, isPreFormatted);
             fireCustomTrigger(syntaxOptions.onRenderComplete, element);
             _elements.push(element);
           } else {
@@ -99,6 +100,7 @@
   function renderElementButtons(syntax, syntaxOptions, syntaxLanguage, syntaxButtonsParsed, innerHTMLCopy) {
     if (syntaxOptions.showLanguageLabel || syntaxOptions.showCopyButton || syntaxOptions.showPrintButton || syntaxButtonsParsed[0]) {
       var buttons = createElement("div", "buttons");
+      var buttonsElements = [];
       syntax.appendChild(buttons);
       if (syntaxButtonsParsed[0] && isDefinedArray(syntaxButtonsParsed[1])) {
         var customButtons = syntaxButtonsParsed[1];
@@ -110,25 +112,30 @@
             var newCustomButton = createElement("div", "button");
             newCustomButton.innerHTML = customButton.text;
             newCustomButton.onclick = customButton.onClick;
+            newCustomButton.style.display = _configuration.buttonsVisible ? "inline-block" : "none";
             buttons.appendChild(newCustomButton);
             if (isDefined(customButton.className)) {
               newCustomButton.className += " " + customButton.className;
             }
+            buttonsElements.push(newCustomButton);
           }
         }
       }
       if (syntaxOptions.showCopyButton) {
         var copyButton = createElement("div", "button");
         copyButton.innerHTML = syntaxOptions.copyButtonText;
+        copyButton.style.display = _configuration.buttonsVisible ? "inline-block" : "none";
         buttons.appendChild(copyButton);
         copyButton.onclick = function() {
           _parameter_Navigator.clipboard.writeText(innerHTMLCopy);
           fireCustomTrigger(syntaxOptions.onCopy, innerHTMLCopy);
         };
+        buttonsElements.push(copyButton);
       }
       if (syntaxOptions.showPrintButton) {
         var printButton = createElement("div", "button");
         printButton.innerHTML = syntaxOptions.printButtonText;
+        printButton.style.display = _configuration.buttonsVisible ? "inline-block" : "none";
         buttons.appendChild(printButton);
         printButton.onclick = function() {
           var newWindow = window.open(_string.empty, "PRINT", "height=400,width=600");
@@ -156,11 +163,26 @@
           newWindow.close();
           fireCustomTrigger(syntaxOptions.onPrint, newElementForPrint.innerHTML);
         };
+        buttonsElements.push(printButton);
       }
       if (syntaxOptions.showLanguageLabel) {
         var languageLabel = createElement("div", "label");
         languageLabel.innerHTML = getFriendlyLanguageName(syntaxLanguage);
         buttons.appendChild(languageLabel);
+      }
+      var buttonsElementsLength = buttonsElements.length;
+      if (buttonsElementsLength > _configuration.maximumButtons) {
+        var openButton = createElement("div", "button button-opener");
+        openButton.innerText = _configuration.buttonsVisible ? _configuration.buttonsCloserText : _configuration.buttonsOpenerText;
+        buttons.insertBefore(openButton, buttons.children[0]);
+        openButton.onclick = function() {
+          var areButtonsVisible = openButton.innerText === _configuration.buttonsCloserText;
+          var buttonsElementIndex = 0;
+          for (; buttonsElementIndex < buttonsElementsLength; buttonsElementIndex++) {
+            buttonsElements[buttonsElementIndex].style.display = areButtonsVisible ? "none" : "inline-block";
+          }
+          openButton.innerText = areButtonsVisible ? _configuration.buttonsOpenerText : _configuration.buttonsCloserText;
+        };
       }
     }
   }
@@ -264,6 +286,30 @@
     }
     return innerHTML;
   }
+  function renderElementValues(innerHTML, language, syntaxOptions) {
+    var values = getDefaultStringOrArray(language.values, []);
+    var valuesLength = values.length;
+    var caseSensitive = language.caseSensitive;
+    var valueIndex = 0;
+    for (; valueIndex < valuesLength; valueIndex++) {
+      var value = values[valueIndex];
+      var regExFlags = caseSensitive ? "g" : "gi";
+      var regEx = new RegExp("\\b" + value + "\\b", regExFlags);
+      if (syntaxOptions.highlightValues) {
+        if (isDefinedFunction(syntaxOptions.onValueClicked)) {
+          innerHTML = innerHTML.replace(regEx, '<span class="value-clickable">' + value + "</span>");
+        } else {
+          innerHTML = innerHTML.replace(regEx, '<span class="value">' + value + "</span>");
+        }
+      } else {
+        if (isDefinedFunction(syntaxOptions.onValueClicked)) {
+          innerHTML = innerHTML.replace(regEx, '<span class="no-highlight-value-clickable">' + value + "</span>");
+        }
+      }
+      fireCustomTrigger(syntaxOptions.onValueRender, value);
+    }
+    return innerHTML;
+  }
   function renderElementStringQuotesFromVariables(innerHTML) {
     var quoteVariable;
     for (quoteVariable in _strings_Cached) {
@@ -282,24 +328,24 @@
     }
     return innerHTML;
   }
-  function renderElementCompletedHTML(element, number, syntax, innerHTML, syntaxOptions, isPreFormatted) {
+  function renderElementCompletedHTML(element, numbers, syntax, innerHTML, syntaxOptions, isPreFormatted) {
     var lines = innerHTML.split(_string.newLine);
     var linesLength = lines.length;
     var linesLengthStringLength = linesLength.toString().length;
-    var numberContainer = number;
+    var numberContainer = numbers;
     var codeContainer = syntax;
     var replaceWhitespace = null;
     var lineNumber = 1;
     if (isPreFormatted) {
       codeContainer = createElement("pre");
       syntax.appendChild(codeContainer);
-      if (isDefined(number)) {
+      if (isDefined(numbers)) {
         numberContainer = createElement("pre");
-        number.appendChild(numberContainer);
+        numbers.appendChild(numberContainer);
       }
     }
-    if (isDefined(number)) {
-      number.ondblclick = function() {
+    if (isDefined(numbers)) {
+      numbers.ondblclick = function() {
         selectTextInElement(codeContainer);
       };
     }
@@ -341,11 +387,19 @@
       var keywordsLength = keywords.length;
       var keywordIndex = 0;
       for (; keywordIndex < keywordsLength; keywordIndex++) {
-        renderElementClickableKeyword(keywords[keywordIndex], syntaxOptions.onKeywordClicked);
+        renderElementClickEvent(keywords[keywordIndex], syntaxOptions.onKeywordClicked);
+      }
+    }
+    if (isDefinedFunction(syntaxOptions.onValueClicked)) {
+      var values = element.getElementsByClassName("value-clickable");
+      var valuesLength = values.length;
+      var valueIndex = 0;
+      for (; valueIndex < valuesLength; valueIndex++) {
+        renderElementClickEvent(values[valueIndex], syntaxOptions.onValueClicked);
       }
     }
   }
-  function renderElementClickableKeyword(element, customTrigger) {
+  function renderElementClickEvent(element, customTrigger) {
     var text = element.innerText;
     element.onclick = function() {
       customTrigger(text);
@@ -382,6 +436,7 @@
     options.removeBlankLines = getDefaultBoolean(options.removeBlankLines, false);
     options.showLineNumbers = getDefaultBoolean(options.showLineNumbers, true);
     options.highlightKeywords = getDefaultBoolean(options.highlightKeywords, true);
+    options.highlightValues = getDefaultBoolean(options.highlightValues, true);
     options.highlightStrings = getDefaultBoolean(options.highlightStrings, true);
     options.highlightComments = getDefaultBoolean(options.highlightComments, true);
     options.showLanguageLabel = getDefaultBoolean(options.showLanguageLabel, true);
@@ -399,7 +454,9 @@
     options.onCopy = getDefaultFunction(options.onCopy, null);
     options.onRenderComplete = getDefaultFunction(options.onRenderComplete, null);
     options.onKeywordClicked = getDefaultFunction(options.onKeywordClicked, null);
+    options.onValueClicked = getDefaultFunction(options.onValueClicked, null);
     options.onKeywordRender = getDefaultFunction(options.onKeywordRender, null);
+    options.onValueRender = getDefaultFunction(options.onValueRender, null);
     options.onStringRender = getDefaultFunction(options.onStringRender, null);
     options.onCommentRender = getDefaultFunction(options.onCommentRender, null);
     options.onPrint = getDefaultFunction(options.onPrint, null);
@@ -419,6 +476,9 @@
   }
   function isDefinedFunction(object) {
     return isDefined(object) && typeof object === "function";
+  }
+  function isDefinedNumber(object) {
+    return isDefined(object) && typeof object === "number";
   }
   function isDefinedArray(object) {
     return isDefinedObject(object) && object instanceof Array;
@@ -464,6 +524,9 @@
   }
   function getDefaultArray(value, defaultValue) {
     return isDefinedArray(value) ? value : defaultValue;
+  }
+  function getDefaultNumber(value, defaultValue) {
+    return isDefinedNumber(value) ? value : defaultValue;
   }
   function getDefaultStringOrArray(value, defaultValue) {
     if (isDefinedString(value)) {
@@ -526,6 +589,10 @@
   function buildDefaultConfiguration() {
     _configuration.safeMode = getDefaultBoolean(_configuration.safeMode, true);
     _configuration.highlightAllDomElementTypes = getDefaultStringOrArray(_configuration.highlightAllDomElementTypes, ["div", "code"]);
+    _configuration.maximumButtons = getDefaultNumber(_configuration.maximumButtons, 2);
+    _configuration.buttonsVisible = getDefaultBoolean(_configuration.buttonsVisible, true);
+    _configuration.buttonsOpenerText = getDefaultString(_configuration.buttonsOpenerText, "<");
+    _configuration.buttonsCloserText = getDefaultString(_configuration.buttonsCloserText, ">");
   }
   var _parameter_Document = null;
   var _parameter_Navigator = null;
@@ -669,7 +736,7 @@
     return this;
   };
   this.getVersion = function() {
-    return "1.5.1";
+    return "1.6.0";
   };
   (function(documentObject, navigatorObject, windowObject) {
     _parameter_Document = documentObject;

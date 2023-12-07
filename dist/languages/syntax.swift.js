@@ -1,4 +1,4 @@
-/*! Syntax.js v1.5.1 | (c) Bunoon | MIT License */
+/*! Syntax.js v1.6.0 | (c) Bunoon | MIT License */
 $syntax.addLanguage( "swift", {
     friendlyName: "Swift",
     keywords: [
@@ -36,12 +36,10 @@ $syntax.addLanguage( "swift", {
         "while",
         "as",
         "dynamicType",
-        "false",
         "is",
         "nil",
         "self",
         "super",
-        "true",
         "_COLUMN_",
         "_FILE_",
         "_FUNCTION_",
@@ -72,6 +70,10 @@ $syntax.addLanguage( "swift", {
         "unowned",
         "weak",
         "willSet"
+    ],
+    values: [
+        "false",
+        "true"
     ],
     comment: "//",
     multiLineComment: [ "/*", "*/" ],

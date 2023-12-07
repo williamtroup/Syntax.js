@@ -1,4 +1,4 @@
-/*! Syntax.js v1.5.1 | (c) Bunoon | MIT License */
+/*! Syntax.js v1.6.0 | (c) Bunoon | MIT License */
 $syntax.addLanguage( "rust", {
     friendlyName: "Rust",
     keywords: [
@@ -13,7 +13,6 @@ $syntax.addLanguage( "rust", {
         "else",
         "enum",
         "extern",
-        "false",
         "fn",
         "for",
         "if",
@@ -34,13 +33,16 @@ $syntax.addLanguage( "rust", {
         "struct",
         "super",
         "trait",
-        "true",
         "type",
         "union",
         "unsafe",
         "use",
         "where",
         "while"  
+    ],
+    values: [
+        "false",
+        "true"
     ],
     comment: "//",
     multiLineComment: [ "/*", "*/" ],

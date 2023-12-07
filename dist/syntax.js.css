@@ -1,5 +1,5 @@
 /*
- * Syntax.js Library v1.5.1
+ * Syntax.js Library v1.6.0
  *
  * Copyright 2023 Bunoon
  * Released under the MIT License
@@ -11,15 +11,26 @@
 */
 :root {
   --color-keyword: #A71500;
+  --color-value: #F28C28;
   --color-keyword-hover: #FF0000;
+  --color-value-hover: #FFAC1C;
   --color-comment: #78b13f;
   --color-string: #484dd2;
   --color-black: #3b3a3a;
   --color-white: #F5F5F5;
+  --color-dark-gray: #808080;
   --color-gray: #BBBBBB;
+  --color-lighter-gray: #C0C0C0;
+  --container-background-color-container: #e8e6e6;
+  --container-border-color-container: #3b3a3a;
+  --container-background-color-syntax: #EEEEEE;
+  --container-border-color-syntax: #CCCCCC;
+  --container-background-color-numbers: #dddddd;
+  --container-border-color-numbers: #BBBBBB;
   --border-radius: 0.5rem;
-  --border-style-scrollbar: inset 0 0 6px gray;
+  --border-style-scrollbar: inset 0 0 6px --color-dark-gray;
   --border-size: 0.5px;
+  --transition: all .3s;
 }
 
 /*
@@ -35,44 +46,44 @@ div.syntax-highlight {
 code.syntax-highlight div.code,
 div.syntax-highlight div.code {
   display: flex;
-  background-color: #e8e6e6;
+  background-color: var(--container-background-color-container);
   border-radius: var(--border-radius);
   padding: 15px;
   overflow-x: auto;
   overflow-y: hidden;
   position: relative;
-  border: var(--border-size) solid var(--color-black);
+  border: var(--border-size) solid var(--container-border-color-container);
   color: var(--color-black);
 }
 code.syntax-highlight div.code pre,
 div.syntax-highlight div.code pre {
   margin: 0 !important;
 }
-code.syntax-highlight div.code div.number,
-div.syntax-highlight div.code div.number {
+code.syntax-highlight div.code div.numbers,
+div.syntax-highlight div.code div.numbers {
   margin-right: 15px;
-  background-color: #dddddd;
+  background-color: var(--container-background-color-numbers);
   padding: 10px;
   padding-left: 15px;
   padding-right: 15px;
   border-radius: var(--border-radius);
   text-align: right;
   font-weight: 800 !important;
-  border: var(--border-size) solid #BBBBBB;
+  border: var(--border-size) solid var(--container-border-color-numbers);
   display: none;
   cursor: default;
   -webkit-user-select: none;
   -ms-user-select: none;
   user-select: none;
 }
-code.syntax-highlight div.code div.number p,
-div.syntax-highlight div.code div.number p {
+code.syntax-highlight div.code div.numbers p,
+div.syntax-highlight div.code div.numbers p {
   margin: 0;
   text-wrap: nowrap;
 }
 @media (min-width: 768px) {
-  code.syntax-highlight div.code div.number,
-  div.syntax-highlight div.code div.number {
+  code.syntax-highlight div.code div.numbers,
+  div.syntax-highlight div.code div.numbers {
     display: block;
   }
 }
@@ -81,9 +92,10 @@ div.syntax-highlight div.code div.syntax {
   flex-grow: 1;
   padding: 10px;
   border-radius: var(--border-radius);
-  background-color: #EEEEEE;
-  border: var(--border-size) solid #CCCCCC;
+  background-color: var(--container-background-color-syntax);
+  border: var(--border-size) solid var(--container-border-color-syntax);
   position: relative;
+  overflow: hidden;
 }
 code.syntax-highlight div.code div.syntax div.buttons,
 div.syntax-highlight div.code div.syntax div.buttons {
@@ -93,6 +105,7 @@ div.syntax-highlight div.code div.syntax div.buttons {
   -webkit-user-select: none;
   -ms-user-select: none;
   user-select: none;
+  text-wrap: nowrap;
 }
 code.syntax-highlight div.code div.syntax div.buttons div.button,
 code.syntax-highlight div.code div.syntax div.buttons div.label,
@@ -120,24 +133,27 @@ div.syntax-highlight div.code div.syntax div.buttons div.label:last-child {
   border-top-right-radius: var(--border-radius);
   border-right: none;
 }
+code.syntax-highlight div.code div.syntax div.buttons div.button-opener,
+div.syntax-highlight div.code div.syntax div.buttons div.button-opener {
+  font-weight: 900 !important;
+}
 code.syntax-highlight div.code div.syntax div.buttons div.label,
 div.syntax-highlight div.code div.syntax div.buttons div.label {
   cursor: default;
-}
-code.syntax-highlight div.code div.syntax div.buttons div.button,
-div.syntax-highlight div.code div.syntax div.buttons div.button {
+  color: var(--color-gray);
   font-weight: 700;
 }
 code.syntax-highlight div.code div.syntax div.buttons div.button:hover,
 div.syntax-highlight div.code div.syntax div.buttons div.button:hover {
   cursor: pointer;
   opacity: 0.7;
-  transition: all 0.3s;
+  transition: var(--transition);
 }
 code.syntax-highlight div.code div.syntax p,
 div.syntax-highlight div.code div.syntax p {
   margin: 0;
   text-wrap: initial;
+  color: var(--color-black);
 }
 @media (min-width: 768px) {
   code.syntax-highlight div.code div.syntax p,
@@ -157,7 +173,22 @@ code.syntax-highlight div.code div.syntax p span.no-highlight-keyword-clickable:
 div.syntax-highlight div.code div.syntax p span.keyword-clickable:hover,
 div.syntax-highlight div.code div.syntax p span.no-highlight-keyword-clickable:hover {
   color: var(--color-keyword-hover);
-  transition: all 0.3s;
+  transition: var(--transition);
+  cursor: pointer;
+}
+code.syntax-highlight div.code div.syntax p span.value,
+code.syntax-highlight div.code div.syntax p span.value-clickable,
+div.syntax-highlight div.code div.syntax p span.value,
+div.syntax-highlight div.code div.syntax p span.value-clickable {
+  font-weight: 700;
+  color: var(--color-value);
+}
+code.syntax-highlight div.code div.syntax p span.value-clickable:hover,
+code.syntax-highlight div.code div.syntax p span.no-highlight-value-clickable:hover,
+div.syntax-highlight div.code div.syntax p span.value-clickable:hover,
+div.syntax-highlight div.code div.syntax p span.no-highlight-value-clickable:hover {
+  color: var(--color-value-hover);
+  transition: var(--transition);
   cursor: pointer;
 }
 code.syntax-highlight div.code div.syntax p span.comment,
@@ -190,5 +221,5 @@ div.syntax-highlight div.code div.syntax p span.string {
   background-color: var(--color-white);
 }
 .custom-scroll-bars::-webkit-scrollbar-thumb:active {
-  background-color: #C0C0C0;
+  background-color: var(--color-lighter-gray);
 }/*# sourceMappingURL=syntax.js.css.map */

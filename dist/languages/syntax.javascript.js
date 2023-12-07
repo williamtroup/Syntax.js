@@ -1,4 +1,4 @@
-/*! Syntax.js v1.5.1 | (c) Bunoon | MIT License */
+/*! Syntax.js v1.6.0 | (c) Bunoon | MIT License */
 $syntax.addLanguage( "javascript", {
     friendlyName: "JavaScript",
     keywords: [
@@ -24,7 +24,6 @@ $syntax.addLanguage( "javascript", {
         "eval",
         "export",
         "extends",
-        "false",
         "final",
         "finally",
         "float",
@@ -57,7 +56,6 @@ $syntax.addLanguage( "javascript", {
         "throw",
         "throws",
         "transient",
-        "true",
         "try",
         "typeof",
         "var",
@@ -66,6 +64,10 @@ $syntax.addLanguage( "javascript", {
         "while",
         "with",
         "yield"
+    ],
+    values: [
+        "false",
+        "true"
     ],
     comment: "//",
     multiLineComment: [ "/*", "*/" ],

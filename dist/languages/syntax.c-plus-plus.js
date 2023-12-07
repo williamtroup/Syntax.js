@@ -1,4 +1,4 @@
-/*! Syntax.js v1.5.1 | (c) Bunoon | MIT License */
+/*! Syntax.js v1.6.0 | (c) Bunoon | MIT License */
 $syntax.addLanguage( "c-plus-plus", {
     friendlyName: "C++",
     keywords: [
@@ -41,7 +41,6 @@ $syntax.addLanguage( "c-plus-plus", {
         "explicit",
         "export",
         "extern",
-        "false",
         "float",
         "for",
         "friend",
@@ -82,7 +81,6 @@ $syntax.addLanguage( "c-plus-plus", {
         "this",
         "thread_local",
         "throw",
-        "true",
         "try",
         "typedef",
         "typeid",
@@ -97,6 +95,10 @@ $syntax.addLanguage( "c-plus-plus", {
         "while",
         "xor",
         "xor_eq"     
+    ],
+    values: [
+        "false",
+        "true"
     ],
     comment: "//",
     multiLineComment: [ "/*", "*/" ],

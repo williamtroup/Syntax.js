@@ -1,4 +1,4 @@
-/*! Syntax.js v1.5.1 | (c) Bunoon | MIT License */
+/*! Syntax.js v1.6.0 | (c) Bunoon | MIT License */
 $syntax.addLanguage( "typescript", {
     friendlyName: "TypeScript",
     keywords: [
@@ -16,7 +16,6 @@ $syntax.addLanguage( "typescript", {
         "enum",
         "export",
         "extends",
-        "false",
         "finally",
         "for",
         "function",
@@ -31,7 +30,6 @@ $syntax.addLanguage( "typescript", {
         "switch",
         "this",
         "throw",
-        "true",
         "try",
         "typeof",
         "var",
@@ -62,6 +60,10 @@ $syntax.addLanguage( "typescript", {
         "type",
         "from",
         "of"
+    ],
+    values: [
+        "false",
+        "true"
     ],
     comment: "//",
     multiLineComment: [ "/*", "*/" ],

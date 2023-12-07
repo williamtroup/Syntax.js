@@ -1,4 +1,4 @@
-/*! Syntax.js v1.5.1 | (c) Bunoon | MIT License */
+/*! Syntax.js v1.6.0 | (c) Bunoon | MIT License */
 $syntax.addLanguage( "visual-basic", {
     friendlyName: "Visual Basic",
     keywords: [
@@ -55,7 +55,6 @@ $syntax.addLanguage( "visual-basic", {
         "Error",
         "Event",
         "Exit",
-        "False",
         "Finally",
         "For",
         "Friend",
@@ -138,7 +137,6 @@ $syntax.addLanguage( "visual-basic", {
         "Then",
         "Throw",
         "To",
-        "True",
         "Try",
         "TryCast",
         "TypeOf",
@@ -156,6 +154,10 @@ $syntax.addLanguage( "visual-basic", {
         "WriteOnly",
         "Xor",
         "#Else"  
+    ],
+    values: [
+        "False",
+        "True"
     ],
     comment: "'",
     caseSensitive: true,

@@ -1,5 +1,42 @@
 # Syntax.js - Change Log:
 
+## Version 1.6.0:
+
+#### **New Features:**
+- Added "Values" support for languages, which allows values (such as "true" and "false") to be rendered using a different CSS class.
+- Added opening/closing support for the buttons shown in the top right corner (along with configurable options).
+
+#### **Binding Options:**
+- Added a new binding option called "highlightValues", which states if values should be highlighted (defaults to true).
+
+#### **Binding Options - Custom Triggers:**
+- Added a new binding custom trigger called "onValueClicked", which states an event that should be triggered when a value is clicked.
+- Added a new binding custom trigger called "onValueRender", which states an event that should be triggered when a value is rendered.
+
+### **Themes:**
+- All CSS colors are now root variables, allowing full themes to be generated without referring CSS class names.
+- Added a new folder under "dist" called "themes", which contains a new dark-mode (works based on the browser configuration).
+
+#### **Configuration Options:**
+- Added new configuration option "maximumButtons" (defaults to 2), which states the maximum number of buttons that can be shown before the opening/closing button is shown.
+- Added new configuration option "buttonsVisible" (defaults to true), which states if the buttons are open (visible).
+- Added new configuration option "buttonsOpenerText" (defaults to "<"), which states the text that should be used for the open buttons button.
+- Added new configuration option "buttonsCloserText" (defaults to ">"), which states the text that should be used for the close buttons button.
+
+### **CSS:**
+- Renamed the CSS class "number" to "numbers".
+- By default, the buttons are no longer bold.
+- By default, the language label is now bold and use a gray font color.
+
+#### **Documentation:**
+- Documentation renames and cleanups to makes things clearer.
+
+#### **Fixes:**
+- Fixed the buttons wrapping down to the next line and looking strange on smaller screens.
+
+<br>
+
+
 ## Version 1.5.1:
 - Removed some unneeded CSS from the testing CSS file (used in the testing HTML files).
 - Fixed a security risk when injecting titles into a new window (for printing).

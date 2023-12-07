@@ -3,7 +3,7 @@
     <head>
         <meta charset="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" user-scalable="no" />
-        <title>Syntax.js - Basic - Minimized</title>
+        <title>Syntax.js - Bootstrap</title>
         <link rel="stylesheet" href="../css/styles.css" />
         <link rel="stylesheet" href="../../dist/syntax.js.min.css" />
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous" />
@@ -13,8 +13,8 @@
 
     <body>
         <div class="header">
-            <h1 id="header">Syntax.js - Basic - Minimized</h1>
-            <p>This is a basic example of how to use Syntax.js to highlight code inside a DOM element.</p>
+            <h1 id="header">Syntax.js - Bootstrap</h1>
+            <p>This is a basic example of how to use Syntax.js to highlight code inside a DOM element alongside Bootstrap.</p>
         </div>
 
         <div id="manual-destroy" class="contents">
@@ -48,7 +48,7 @@
             </code>
             <br />
     
-            <div data-syntax-language="c-sharp" data-syntax-options="{ 'showCopyButton': false, 'removeBlankLines': false, 'showLineNumbers': false, 'showPrintButton': false }" data-syntax-buttons="[ { 'text': 'Custom Button 1', 'onClick': customButtonAction1, 'className': 'customButtonClass' }, { 'text': 'Custom Button 2', 'onClick': customButtonAction2 } ]">
+            <div data-syntax-language="c-sharp" data-syntax-options="{ 'showCopyButton': false, 'removeBlankLines': false, 'showLineNumbers': false, 'showPrintButton': false }" data-syntax-buttons="[ { 'text': 'Custom Button 1', 'onClick': customButtonAction1, 'className': 'customButtonClass' }, { 'text': 'Custom Button 2', 'onClick': customButtonAction2 }, { 'text': 'Custom Button 3', 'onClick': customButtonAction3 } ]">
                 int something = 1;
 
                 if ( something == 1 ) {
@@ -101,7 +101,8 @@
 
         function addNewLanguage() {
             var result = $syntax.addLanguage( "c#", {
-                keywords: "if var true bool int string",
+                keywords: "if var bool int string",
+                values: "true",
                 comment: "//",
                 multiLineComment: [ "/*", "*/" ],
                 friendlyName: "C#",
@@ -131,9 +132,14 @@
             console.log( "Keyword clicked: " + keyword );
         }
 
+        function onValueClickedCustomTrigger( value ) {
+            console.log( "Value clicked: " + value );
+        }
+
         function setupConfiguration() {
             $syntax.setConfiguration( {
-                safeMode: false
+                safeMode: false,
+                buttonsVisible: false
             } );
         }
 
@@ -142,6 +148,7 @@
                 'copyButtonText': 'Copy Code',
                 'onCopy': onCopyCustomTrigger,
                 'onKeywordClicked': onKeywordClickedCustomTrigger,
+                'onValueClicked': onValueClickedCustomTrigger,
                 'showLanguageLabel': false,
                 'padLineNumbers': true
             };
@@ -153,6 +160,10 @@
 
         function customButtonAction2() {
             console.log( "Custom action button 2 clicked" );
+        }
+
+        function customButtonAction3() {
+            console.log( "Custom action button 3 clicked" );
         }
     </script>
 </html>
