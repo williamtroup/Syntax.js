@@ -22,12 +22,48 @@
     --color-string: #484dd2;
     --color-black: #3b3a3a;
     --color-white: #F5F5F5;
+    --color-dark-gray: #808080;
     --color-gray: #BBBBBB;
+    --color-lighter-gray: #C0C0C0;
+
+    // Containers
+    --container-background-color-container: #e8e6e6;
+    --container-background-color-syntax: #EEEEEE;
+    --container-border-color-syntax: #CCCCCC;
+    --container-background-color-numbers: #dddddd;
+    --container-border-color-numbers: #BBBBBB;
 
     // Borders
     --border-radius: 0.5rem;
-    --border-style-scrollbar: inset 0 0 6px gray;
+    --border-style-scrollbar: inset 0 0 6px --color-dark-gray;
     --border-size: 0.5px;
+
+    // Transition
+    --transition: all .3s;
+}
+
+@media (prefers-color-scheme: dark) {
+    :root {
+        // Colors
+        --color-keyword: #A71500;
+        --color-value: #F28C28;
+        --color-keyword-hover: #FF0000;
+        --color-value-hover: #FFAC1C;
+        --color-comment: #78b13f;
+        --color-string: #484dd2;
+        --color-black: #3b3a3a;
+        --color-white: #F5F5F5;
+        --color-dark-gray: #808080;
+        --color-gray: #BBBBBB;
+        --color-lighter-gray: #C0C0C0;
+        
+        // Background Colors
+        --container-background-color-container: #e8e6e6;
+        --container-background-color-syntax: #EEEEEE;
+        --container-border-color-syntax: #CCCCCC;
+        --container-background-color-numbers: #dddddd;
+        --container-border-color-numbers: #BBBBBB;
+    }
 }
 
 
@@ -44,7 +80,7 @@ div.syntax-highlight {
 
     div.code {
         display: flex;
-        background-color: #e8e6e6;
+        background-color: var(--container-background-color-container);
         border-radius: var(--border-radius);
         padding: 15px;
         overflow-x: auto;
@@ -57,16 +93,16 @@ div.syntax-highlight {
             margin: 0 !important;
         }
 
-        div.number {
+        div.numbers {
             margin-right: 15px;
-            background-color: #dddddd;
+            background-color: var(--container-background-color-numbers);
             padding: 10px;
             padding-left: 15px;
             padding-right: 15px;
             border-radius: var(--border-radius);
             text-align: right;
             font-weight: 800 !important;
-            border: var(--border-size) solid #BBBBBB;
+            border: var(--border-size) solid var(--container-border-color-numbers);
             display: none;
             cursor: default;
             -webkit-user-select: none;
@@ -87,8 +123,8 @@ div.syntax-highlight {
             flex-grow: 1;
             padding: 10px;
             border-radius: var(--border-radius);
-            background-color: #EEEEEE;
-            border: var(--border-size) solid #CCCCCC;
+            background-color: var(--container-background-color-syntax);
+            border: var(--border-size) solid var(--container-border-color-syntax);
             position: relative;
 
             div.buttons {
@@ -131,7 +167,7 @@ div.syntax-highlight {
                 div.button:hover {
                     cursor: pointer;
                     opacity: 0.7;
-                    transition: all .3s;
+                    transition: var(--transition);
                 }
             }
 
@@ -152,7 +188,7 @@ div.syntax-highlight {
                 span.keyword-clickable:hover,
                 span.no-highlight-keyword-clickable:hover {
                     color: var(--color-keyword-hover);
-                    transition: all .3s;
+                    transition: var(--transition);
                     cursor: pointer;
                 }
 
@@ -165,7 +201,7 @@ div.syntax-highlight {
                 span.value-clickable:hover,
                 span.no-highlight-value-clickable:hover {
                     color: var(--color-value-hover);
-                    transition: all .3s;
+                    transition: var(--transition);
                     cursor: pointer;
                 }
 
@@ -208,7 +244,7 @@ div.syntax-highlight {
         }
 
         &:active {
-            background-color: #C0C0C0;
+            background-color: var(--color-lighter-gray);
         }
     }
 }

@@ -34,7 +34,7 @@
               isPreFormatted = true;
             }
             var innerHTMLCopy = innerHTML.trim();
-            var number = null;
+            var numbers = null;
             var elementId = element.id;
             if (!isDefinedString(elementId)) {
               elementId = newGuid();
@@ -48,8 +48,8 @@
             var code = createElement("div", "code custom-scroll-bars");
             element.appendChild(code);
             if (syntaxOptions.showLineNumbers) {
-              number = createElement("div", "number");
-              code.appendChild(number);
+              numbers = createElement("div", "numbers");
+              code.appendChild(numbers);
             }
             var syntax = createElement("div", "syntax");
             code.appendChild(syntax);
@@ -74,7 +74,7 @@
                 innerHTML = renderElementStringQuotesFromVariables(innerHTML);
               }
             }
-            renderElementCompletedHTML(element, number, syntax, innerHTML, syntaxOptions, isPreFormatted);
+            renderElementCompletedHTML(element, numbers, syntax, innerHTML, syntaxOptions, isPreFormatted);
             fireCustomTrigger(syntaxOptions.onRenderComplete, element);
             _elements.push(element);
           } else {
@@ -307,24 +307,24 @@
     }
     return innerHTML;
   }
-  function renderElementCompletedHTML(element, number, syntax, innerHTML, syntaxOptions, isPreFormatted) {
+  function renderElementCompletedHTML(element, numbers, syntax, innerHTML, syntaxOptions, isPreFormatted) {
     var lines = innerHTML.split(_string.newLine);
     var linesLength = lines.length;
     var linesLengthStringLength = linesLength.toString().length;
-    var numberContainer = number;
+    var numberContainer = numbers;
     var codeContainer = syntax;
     var replaceWhitespace = null;
     var lineNumber = 1;
     if (isPreFormatted) {
       codeContainer = createElement("pre");
       syntax.appendChild(codeContainer);
-      if (isDefined(number)) {
+      if (isDefined(numbers)) {
         numberContainer = createElement("pre");
-        number.appendChild(numberContainer);
+        numbers.appendChild(numberContainer);
       }
     }
-    if (isDefined(number)) {
-      number.ondblclick = function() {
+    if (isDefined(numbers)) {
+      numbers.ondblclick = function() {
         selectTextInElement(codeContainer);
       };
     }

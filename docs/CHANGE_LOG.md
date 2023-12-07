@@ -12,6 +12,12 @@
 - Added a new binding custom trigger called "onValueClicked", which states an event that should be triggered when a value is clicked.
 - Added a new binding custom trigger called "onValueRender", which states an event that should be triggered when a value is rendered.
 
+### **Themes:**
+- All CSS colors are now root variables, allowing full themes to be generated without referring CSS class names.
+
+### **CSS:**
+- Renamed the CSS class "number" to "numbers".
+
 #### **Documentation:**
 - Documentation renames and cleanups to things things clearer.
 

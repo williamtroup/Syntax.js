@@ -98,7 +98,7 @@
                         }
                         
                         var innerHTMLCopy = innerHTML.trim(),
-                            number = null,
+                            numbers = null,
                             elementId = element.id;
 
                         if ( !isDefinedString( elementId ) ) {
@@ -117,8 +117,8 @@
                         element.appendChild( code );
 
                         if ( syntaxOptions.showLineNumbers ) {
-                            number = createElement( "div", "number" );
-                            code.appendChild( number );
+                            numbers = createElement( "div", "numbers" );
+                            code.appendChild( numbers );
                         }
             
                         var syntax = createElement( "div", "syntax" );
@@ -152,7 +152,7 @@
                             }
                         }
 
-                        renderElementCompletedHTML( element, number, syntax, innerHTML, syntaxOptions, isPreFormatted );
+                        renderElementCompletedHTML( element, numbers, syntax, innerHTML, syntaxOptions, isPreFormatted );
                         fireCustomTrigger( syntaxOptions.onRenderComplete, element );
 
                         _elements.push( element );
@@ -440,11 +440,11 @@
         return innerHTML;
     }
 
-    function renderElementCompletedHTML( element, number, syntax, innerHTML, syntaxOptions, isPreFormatted ) {
+    function renderElementCompletedHTML( element, numbers, syntax, innerHTML, syntaxOptions, isPreFormatted ) {
         var lines = innerHTML.split( _string.newLine ),
             linesLength = lines.length,
             linesLengthStringLength = linesLength.toString().length,
-            numberContainer = number,
+            numberContainer = numbers,
             codeContainer = syntax,
             replaceWhitespace = null,
             lineNumber = 1;
@@ -453,14 +453,14 @@
             codeContainer = createElement( "pre" );
             syntax.appendChild( codeContainer );
 
-            if ( isDefined( number ) ) {
+            if ( isDefined( numbers ) ) {
                 numberContainer = createElement( "pre" );
-                number.appendChild( numberContainer );
+                numbers.appendChild( numberContainer );
             }
         }
 
-        if ( isDefined( number ) ) {
-            number.ondblclick = function() {
+        if ( isDefined( numbers ) ) {
+            numbers.ondblclick = function() {
                 selectTextInElement( codeContainer );
             };
         }
