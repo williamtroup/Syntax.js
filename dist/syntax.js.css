@@ -32,26 +32,6 @@
   --transition: all .3s;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --color-keyword: #A71500;
-    --color-value: #F28C28;
-    --color-keyword-hover: #FF0000;
-    --color-value-hover: #FFAC1C;
-    --color-comment: #78b13f;
-    --color-string: #484dd2;
-    --color-black: #3b3a3a;
-    --color-white: #F5F5F5;
-    --color-dark-gray: #808080;
-    --color-gray: #BBBBBB;
-    --color-lighter-gray: #C0C0C0;
-    --container-background-color-container: #e8e6e6;
-    --container-background-color-syntax: #EEEEEE;
-    --container-border-color-syntax: #CCCCCC;
-    --container-background-color-numbers: #dddddd;
-    --container-border-color-numbers: #BBBBBB;
-  }
-}
 /*
     -------------------------------------------------------------------------
     Syntax Highlight - Code

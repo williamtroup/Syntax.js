@@ -1,0 +1,31 @@
+@media (prefers-color-scheme: dark) {
+    :root {
+        /* Colors */
+        --color-keyword: #A71500;
+        --color-value: #F28C28;
+        --color-keyword-hover: #FF0000;
+        --color-value-hover: #FFAC1C;
+        --color-comment: #78b13f;
+        --color-string: #484dd2;
+        --color-black: #3b3a3a;
+        --color-white: #F5F5F5;
+        --color-dark-gray: #808080;
+        --color-gray: #BBBBBB;
+        --color-lighter-gray: #C0C0C0;
+
+        /* Containers */
+        --container-background-color-container: #e8e6e6;
+        --container-background-color-syntax: #EEEEEE;
+        --container-border-color-syntax: #CCCCCC;
+        --container-background-color-numbers: #dddddd;
+        --container-border-color-numbers: #BBBBBB;
+
+        /* Borders */
+        --border-radius: 0.5rem;
+        --border-style-scrollbar: inset 0 0 6px --color-dark-gray;
+        --border-size: 0.5px;
+
+        /* Transitions */
+        --transition: all .3s;
+      }
+}
