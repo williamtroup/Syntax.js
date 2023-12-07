@@ -13,7 +13,6 @@ $syntax.addLanguage( "rust", {
         "else",
         "enum",
         "extern",
-        "false",
         "fn",
         "for",
         "if",
@@ -34,13 +33,16 @@ $syntax.addLanguage( "rust", {
         "struct",
         "super",
         "trait",
-        "true",
         "type",
         "union",
         "unsafe",
         "use",
         "where",
         "while"  
+    ],
+    values: [
+        "false",
+        "true"
     ],
     comment: "//",
     multiLineComment: [ "/*", "*/" ],

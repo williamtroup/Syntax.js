@@ -66,6 +66,7 @@
                 }
               }
               innerHTML = renderElementKeywords(innerHTML, language, syntaxOptions);
+              innerHTML = renderElementValues(innerHTML, language, syntaxOptions);
               if (syntaxOptions.highlightComments) {
                 innerHTML = renderElementCommentsFromVariables(innerHTML);
               }
@@ -264,6 +265,30 @@
     }
     return innerHTML;
   }
+  function renderElementValues(innerHTML, language, syntaxOptions) {
+    var values = getDefaultStringOrArray(language.values, []);
+    var valuesLength = values.length;
+    var caseSensitive = language.caseSensitive;
+    var valueIndex = 0;
+    for (; valueIndex < valuesLength; valueIndex++) {
+      var value = values[valueIndex];
+      var regExFlags = caseSensitive ? "g" : "gi";
+      var regEx = new RegExp("\\b" + value + "\\b", regExFlags);
+      if (syntaxOptions.highlightValues) {
+        if (isDefinedFunction(syntaxOptions.onValueClicked)) {
+          innerHTML = innerHTML.replace(regEx, '<span class="value-clickable">' + value + "</span>");
+        } else {
+          innerHTML = innerHTML.replace(regEx, '<span class="value">' + value + "</span>");
+        }
+      } else {
+        if (isDefinedFunction(syntaxOptions.onValueClicked)) {
+          innerHTML = innerHTML.replace(regEx, '<span class="no-highlight-value-clickable">' + value + "</span>");
+        }
+      }
+      fireCustomTrigger(syntaxOptions.onValueRender, value);
+    }
+    return innerHTML;
+  }
   function renderElementStringQuotesFromVariables(innerHTML) {
     var quoteVariable;
     for (quoteVariable in _strings_Cached) {
@@ -341,11 +366,19 @@
       var keywordsLength = keywords.length;
       var keywordIndex = 0;
       for (; keywordIndex < keywordsLength; keywordIndex++) {
-        renderElementClickableKeyword(keywords[keywordIndex], syntaxOptions.onKeywordClicked);
+        renderElementClickEvent(keywords[keywordIndex], syntaxOptions.onKeywordClicked);
+      }
+    }
+    if (isDefinedFunction(syntaxOptions.onValueClicked)) {
+      var values = element.getElementsByClassName("value-clickable");
+      var valuesLength = values.length;
+      var valueIndex = 0;
+      for (; valueIndex < valuesLength; valueIndex++) {
+        renderElementClickEvent(values[valueIndex], syntaxOptions.onValueClicked);
       }
     }
   }
-  function renderElementClickableKeyword(element, customTrigger) {
+  function renderElementClickEvent(element, customTrigger) {
     var text = element.innerText;
     element.onclick = function() {
       customTrigger(text);
@@ -382,6 +415,7 @@
     options.removeBlankLines = getDefaultBoolean(options.removeBlankLines, false);
     options.showLineNumbers = getDefaultBoolean(options.showLineNumbers, true);
     options.highlightKeywords = getDefaultBoolean(options.highlightKeywords, true);
+    options.highlightValues = getDefaultBoolean(options.highlightValues, true);
     options.highlightStrings = getDefaultBoolean(options.highlightStrings, true);
     options.highlightComments = getDefaultBoolean(options.highlightComments, true);
     options.showLanguageLabel = getDefaultBoolean(options.showLanguageLabel, true);
@@ -399,7 +433,9 @@
     options.onCopy = getDefaultFunction(options.onCopy, null);
     options.onRenderComplete = getDefaultFunction(options.onRenderComplete, null);
     options.onKeywordClicked = getDefaultFunction(options.onKeywordClicked, null);
+    options.onValueClicked = getDefaultFunction(options.onValueClicked, null);
     options.onKeywordRender = getDefaultFunction(options.onKeywordRender, null);
+    options.onValueRender = getDefaultFunction(options.onValueRender, null);
     options.onStringRender = getDefaultFunction(options.onStringRender, null);
     options.onCommentRender = getDefaultFunction(options.onCommentRender, null);
     options.onPrint = getDefaultFunction(options.onPrint, null);

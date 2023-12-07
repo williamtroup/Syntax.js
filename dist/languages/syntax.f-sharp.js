@@ -20,7 +20,6 @@ $syntax.addLanguage( "f-sharp", {
         "end",
         "exception",
         "extern",
-        "false",
         "finally",
         "fixed",
         "for",
@@ -56,7 +55,6 @@ $syntax.addLanguage( "f-sharp", {
         "struct",
         "then",
         "to",
-        "true",
         "try",
         "type",
         "upcast",
@@ -68,6 +66,10 @@ $syntax.addLanguage( "f-sharp", {
         "with",
         "yield",
         "const"            
+    ],
+    values: [
+        "false",
+        "true"
     ],
     comment: "//",
     multiLineComment: [ "(*", "*)" ],

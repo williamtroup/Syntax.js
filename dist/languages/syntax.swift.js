@@ -36,12 +36,10 @@ $syntax.addLanguage( "swift", {
         "while",
         "as",
         "dynamicType",
-        "false",
         "is",
         "nil",
         "self",
         "super",
-        "true",
         "_COLUMN_",
         "_FILE_",
         "_FUNCTION_",
@@ -72,6 +70,10 @@ $syntax.addLanguage( "swift", {
         "unowned",
         "weak",
         "willSet"
+    ],
+    values: [
+        "false",
+        "true"
     ],
     comment: "//",
     multiLineComment: [ "/*", "*/" ],

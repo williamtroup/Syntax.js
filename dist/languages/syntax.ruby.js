@@ -22,11 +22,9 @@ $syntax.addLanguage( "ruby", {
         "return",
         "elsif",
         "end",
-        "false",
         "ensure",
         "for",
         "if",
-        "true",
         "undef",
         "unless",
         "do",
@@ -38,6 +36,10 @@ $syntax.addLanguage( "ruby", {
         "while",
         "defined?",
         "self"   
+    ],
+    values: [
+        "false",
+        "true"
     ],
     comment: "#",
     multiLineComment: [ "=begin", "=end" ],

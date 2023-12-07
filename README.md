@@ -20,6 +20,7 @@ Syntax.js
 <h1>What features does Syntax.js have?</h1>
 
 - Zero-dependencies and extremely lightweight!
+- Highlights keywords, values, strings, and comments.
 - Full API available via public functions.
 - Fully styled in CSS/SASS (including the buttons) and compatible with the Bootstrap library.
 - Full CSS theme support (using :root variables).
@@ -117,7 +118,7 @@ Make sure you include the "DOCTYPE html" tag at the top of your email, as follow
 
 To see a list of all the available binding options you can use for "data-syntax-options", click [here](docs/BINDING_OPTIONS.md).
 
-To see a list of all the available custom triggers you can use for "data-syntax-options", click [here](docs/CUSTOM_TRIGGERS.md).
+To see a list of all the available custom triggers you can use for "data-syntax-options", click [here](docs/BINDING_OPTIONS_CUSTOM_TRIGGERS).
 
 To see a list of all the available binding options you can use for "data-syntax-buttons", click [here](docs/BINDING_BUTTONS.md).
 

@@ -31,7 +31,7 @@
             </code>
             <br />
     
-            <code data-syntax-language="c-sharp" data-syntax-options="{ 'copyButtonText': 'Copy Code', 'onCopy': onCopyCustomTrigger, 'onKeywordClicked': onKeywordClickedCustomTrigger, 'showLanguageLabel': false, 'padLineNumbers': true }">
+            <code data-syntax-language="c-sharp" data-syntax-options="{ 'copyButtonText': 'Copy Code', 'onCopy': onCopyCustomTrigger, 'onKeywordClicked': onKeywordClickedCustomTrigger, 'onValueClicked': onValueClickedCustomTrigger, 'showLanguageLabel': false, 'padLineNumbers': true }">
                 <pre>
                     bool something = true;
                     int something_else = 1;
@@ -100,7 +100,8 @@
 
         function addNewLanguage() {
             var result = $syntax.addLanguage( "c#", {
-                keywords: "if var true bool int string",
+                keywords: "if var bool int string",
+                values: "true",
                 comment: "//",
                 multiLineComment: [ "/*", "*/" ],
                 friendlyName: "C#",
@@ -128,6 +129,10 @@
 
         function onKeywordClickedCustomTrigger( keyword ) {
             console.log( "Keyword clicked: " + keyword );
+        }
+
+        function onValueClickedCustomTrigger( value ) {
+            console.log( "Value clicked: " + value );
         }
 
         function setupConfiguration() {

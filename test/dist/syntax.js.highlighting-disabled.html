@@ -17,7 +17,7 @@
         </div>
 
         <div class="contents">
-            <code data-syntax-language="javascript" data-syntax-options="{ 'highlightComments': false, 'highlightStrings': false, 'highlightKeywords': false, 'onKeywordClicked': onKeywordClickedCustomTrigger }">
+            <code data-syntax-language="javascript" data-syntax-options="{ 'highlightComments': false, 'highlightStrings': false, 'highlightKeywords': false, 'highlightValues': false, 'onKeywordClicked': onKeywordClickedCustomTrigger, 'onValueClicked': onValueClickedCustomTrigger }">
                 <pre>
                     var something = true;
     
@@ -38,6 +38,10 @@
 
         function onKeywordClickedCustomTrigger( keyword ) {
             console.log( "Keyword clicked: " + keyword );
+        }
+
+        function onValueClickedCustomTrigger( value ) {
+            console.log( "Value clicked: " + value );
         }
     </script>
 </html>

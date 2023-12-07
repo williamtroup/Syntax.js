@@ -3,7 +3,17 @@
 ## Version 1.6.0:
 
 #### **New Features:**
-- 
+- Added "Values" support for languages, which allows values (such as "true" and "false") to be rendered using a different CSS class.
+
+#### **Binding Options:**
+- Added a new binding option called "highlightValues", which states if values should be highlighted (defaults to true).
+
+#### **Binding Options - Custom Triggers:**
+- Added a new binding custom trigger called "onValueClicked", which states an event that should be triggered when a value is clicked.
+- Added a new binding custom trigger called "onValueRender", which states an event that should be triggered when a value is rendered.
+
+#### **Documentation:**
+- Documentation renames and cleanups to things things clearer.
 
 <br>
 

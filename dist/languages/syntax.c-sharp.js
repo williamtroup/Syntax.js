@@ -25,7 +25,6 @@ $syntax.addLanguage( "c-sharp", {
         "event",
         "explicit",
         "extern",
-        "false",
         "finally",
         "fixed",
         "float",
@@ -66,7 +65,6 @@ $syntax.addLanguage( "c-sharp", {
         "switch",
         "this",
         "throw",
-        "true",
         "try",
         "typeof",
         "uint",
@@ -80,6 +78,10 @@ $syntax.addLanguage( "c-sharp", {
         "void",
         "volatile",
         "while"        
+    ],
+    values: [
+        "false",
+        "true"
     ],
     comment: "//",
     multiLineComment: [ "/*", "*/" ],
