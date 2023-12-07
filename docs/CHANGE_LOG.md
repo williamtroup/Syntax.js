@@ -1,5 +1,11 @@
 # Syntax.js - Change Log:
 
+## Version 1.6.1:
+- Fixed some of the documentation that were pointing at the wrong files.
+
+<br>
+
+
 ## Version 1.6.0:
 
 #### **New Features:**
