@@ -26,7 +26,7 @@
           var syntaxOptionsParsed = getObjectFromString(element.getAttribute(_attribute_Name_Options));
           var syntaxButtonsParsed = getObjectFromString(element.getAttribute(_attribute_Name_Buttons));
           if (syntaxOptionsParsed.parsed) {
-            if (element.innerHTML.trim() === _string.empty) {
+            if (element.innerHTML.trim() !== _string.empty) {
               var innerHTML = element.innerHTML;
               var syntaxOptions = buildAttributeOptions(syntaxOptionsParsed.result);
               var isPreFormatted = false;

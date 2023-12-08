@@ -88,7 +88,7 @@
                         syntaxButtonsParsed = getObjectFromString( element.getAttribute( _attribute_Name_Buttons ) );
 
                     if ( syntaxOptionsParsed.parsed ) {
-                        if ( element.innerHTML.trim() === _string.empty ) {
+                        if ( element.innerHTML.trim() !== _string.empty ) {
                             var innerHTML = element.innerHTML,
                                 syntaxOptions = buildAttributeOptions( syntaxOptionsParsed.result ),
                                 isPreFormatted = false;
