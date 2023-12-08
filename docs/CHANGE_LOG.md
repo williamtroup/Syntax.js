@@ -1,7 +1,9 @@
 # Syntax.js - Change Log:
 
 ## Version 1.7.0:
--
+
+### **Highlighting:**
+- If there is no code available for highlighting, the element is skipped and left as is (an error log is thrown when safeMode is off).
 
 <br>
 
