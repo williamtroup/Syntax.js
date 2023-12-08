@@ -1,5 +1,11 @@
 # Syntax.js - Change Log:
 
+## Version 1.7.0:
+-
+
+<br>
+
+
 ## Version 1.6.2:
 - Internal code cleanup to make object parsing a little clearer.
 - More documentation fixes.

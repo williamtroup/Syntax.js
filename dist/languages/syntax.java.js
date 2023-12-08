@@ -1,4 +1,4 @@
-/*! Syntax.js v1.6.2 | (c) Bunoon | MIT License */
+/*! Syntax.js v1.7.0 | (c) Bunoon | MIT License */
 $syntax.addLanguage( "java", {
     friendlyName: "Java",
     keywords: [
