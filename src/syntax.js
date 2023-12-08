@@ -87,9 +87,9 @@
                     var syntaxOptionsParsed = getObjectFromString( element.getAttribute( _attribute_Name_Options ) ),
                         syntaxButtonsParsed = getObjectFromString( element.getAttribute( _attribute_Name_Buttons ) );
 
-                    if ( syntaxOptionsParsed[ 0 ] ) {
+                    if ( syntaxOptionsParsed.parsed ) {
                         var innerHTML = element.innerHTML,
-                            syntaxOptions = buildAttributeOptions( syntaxOptionsParsed[ 1 ] ),
+                            syntaxOptions = buildAttributeOptions( syntaxOptionsParsed.result ),
                             isPreFormatted = false;
 
                         if ( element.children.length > 0 && element.children[ 0 ].nodeName.toLowerCase() === "pre" ) {
@@ -182,14 +182,14 @@
     }
 
     function renderElementButtons( syntax, syntaxOptions, syntaxLanguage, syntaxButtonsParsed, innerHTMLCopy ) {
-        if ( syntaxOptions.showLanguageLabel || syntaxOptions.showCopyButton || syntaxOptions.showPrintButton || syntaxButtonsParsed[ 0 ] ) {
+        if ( syntaxOptions.showLanguageLabel || syntaxOptions.showCopyButton || syntaxOptions.showPrintButton || syntaxButtonsParsed.parsed ) {
             var buttons = createElement( "div", "buttons" ),
                 buttonsElements = [];
 
             syntax.appendChild( buttons );
 
-            if ( syntaxButtonsParsed[ 0 ] && isDefinedArray( syntaxButtonsParsed[ 1 ] ) ) {
-                var customButtons = syntaxButtonsParsed[ 1 ],
+            if ( syntaxButtonsParsed.parsed && isDefinedArray( syntaxButtonsParsed.result ) ) {
+                var customButtons = syntaxButtonsParsed.result,
                     customButtonsLength = customButtons.length;
 
                 for ( var customButtonsIndex = 0; customButtonsIndex < customButtonsLength; customButtonsIndex++ ) {
@@ -799,7 +799,10 @@
             }
         }
 
-        return [ parsed, result ];
+        return {
+            parsed: parsed,
+            result: result
+        };
     }
 
     function getClonedObject( object ) {
