@@ -1,5 +1,13 @@
 # Syntax.js - Change Log:
 
+## Version 1.6.2:
+- Internal code cleanup to make object parsing a little clearer.
+- More documentation fixes.
+- Minor CSS comment updates.
+
+<br>
+
+
 ## Version 1.6.1:
 - Fixed some of the documentation files that were pointing at the wrong files.
 

@@ -1,4 +1,4 @@
-/*! Syntax.js v1.6.1 | (c) Bunoon | MIT License */
+/*! Syntax.js v1.6.2 | (c) Bunoon | MIT License */
 (function() {
   function render() {
     var tagTypes = _configuration.highlightAllDomElementTypes;
@@ -25,9 +25,9 @@
         if (isDefined(language) || syntaxLanguage.toLowerCase() === _languages_Unknown) {
           var syntaxOptionsParsed = getObjectFromString(element.getAttribute(_attribute_Name_Options));
           var syntaxButtonsParsed = getObjectFromString(element.getAttribute(_attribute_Name_Buttons));
-          if (syntaxOptionsParsed[0]) {
+          if (syntaxOptionsParsed.parsed) {
             var innerHTML = element.innerHTML;
-            var syntaxOptions = buildAttributeOptions(syntaxOptionsParsed[1]);
+            var syntaxOptions = buildAttributeOptions(syntaxOptionsParsed.result);
             var isPreFormatted = false;
             if (element.children.length > 0 && element.children[0].nodeName.toLowerCase() === "pre") {
               innerHTML = element.children[0].innerHTML;
@@ -98,12 +98,12 @@
     return result;
   }
   function renderElementButtons(syntax, syntaxOptions, syntaxLanguage, syntaxButtonsParsed, innerHTMLCopy) {
-    if (syntaxOptions.showLanguageLabel || syntaxOptions.showCopyButton || syntaxOptions.showPrintButton || syntaxButtonsParsed[0]) {
+    if (syntaxOptions.showLanguageLabel || syntaxOptions.showCopyButton || syntaxOptions.showPrintButton || syntaxButtonsParsed.parsed) {
       var buttons = createElement("div", "buttons");
       var buttonsElements = [];
       syntax.appendChild(buttons);
-      if (syntaxButtonsParsed[0] && isDefinedArray(syntaxButtonsParsed[1])) {
-        var customButtons = syntaxButtonsParsed[1];
+      if (syntaxButtonsParsed.parsed && isDefinedArray(syntaxButtonsParsed.result)) {
+        var customButtons = syntaxButtonsParsed.result;
         var customButtonsLength = customButtons.length;
         var customButtonsIndex = 0;
         for (; customButtonsIndex < customButtonsLength; customButtonsIndex++) {
@@ -560,7 +560,7 @@
         result = null;
       }
     }
-    return [parsed, result];
+    return {parsed:parsed, result:result};
   }
   function getClonedObject(object) {
     var json = JSON.stringify(object);
@@ -736,7 +736,7 @@
     return this;
   };
   this.getVersion = function() {
-    return "1.6.1";
+    return "1.6.2";
   };
   (function(documentObject, navigatorObject, windowObject) {
     _parameter_Document = documentObject;

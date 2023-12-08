@@ -1,12 +1,12 @@
 /*
- * Syntax.js Library v1.6.1
+ * Syntax.js Library v1.6.2
  *
  * Copyright 2023 Bunoon
  * Released under the MIT License
  */
 /*
     -------------------------------------------------------------------------
-    Syntax Highlight - Variables
+    Syntax.js - Variables
     -------------------------------------------------------------------------
 */
 :root {
@@ -35,7 +35,7 @@
 
 /*
     -------------------------------------------------------------------------
-    Syntax Highlight - Code
+    Syntax.js - Code
     -------------------------------------------------------------------------
 */
 code.syntax-highlight,
@@ -202,7 +202,7 @@ div.syntax-highlight div.code div.syntax p span.string {
 
 /*
     -------------------------------------------------------------------------
-    Syntax Highlight - Custom Scroll Bar
+    Syntax.js - Custom Scroll Bar
     -------------------------------------------------------------------------
 */
 .custom-scroll-bars::-webkit-scrollbar {
