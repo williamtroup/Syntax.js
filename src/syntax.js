@@ -93,10 +93,13 @@
                                 syntaxOptions = buildAttributeOptions( syntaxOptionsParsed.result ),
                                 isPreFormatted = false;
 
+
                             if ( element.children.length > 0 && element.children[ 0 ].nodeName.toLowerCase() === "pre" ) {
                                 innerHTML = element.children[ 0 ].innerHTML;
                                 isPreFormatted = true;
                             }
+
+                            innerHTML = encodeMarkUpCharacters( innerHTML );
                             
                             var innerHTMLCopy = innerHTML.trim(),
                                 numbers = null,
@@ -850,6 +853,13 @@
         }
             
         return result;
+    }
+
+    function encodeMarkUpCharacters( data ) {
+        data = data.replace(/</g, '&lt;');
+        data = data.replace(/>/g, '&gt;');
+
+        return data;
     }
 
 
