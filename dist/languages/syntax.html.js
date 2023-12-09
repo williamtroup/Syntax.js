@@ -126,7 +126,6 @@ $syntax.addLanguage( "html", {
         "video",
         "wbr"
     ],
-    multiLineComment: [ "<!--", "-->" ],
     caseSensitive: true,
     keywordsCasing: "initial",
     isMarkUp: true

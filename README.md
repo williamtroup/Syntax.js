@@ -52,6 +52,7 @@ To see a list of all the most recent changes, click [here](docs/CHANGE_LOG.md).
 - C
 - F#
 - GO
+- HTML
 - Java
 - JavaScript
 - Microsoft SQL

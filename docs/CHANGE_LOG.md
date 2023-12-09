@@ -12,6 +12,9 @@
 - Added support for the HTML markup language (importable file).
 - Added a new JSON property called "isMarkUp", which states if the language is a markup language (processed slightly differently).
 
+#### **Documentation:**
+- More documentation fixes and improvements.
+
 <br>
 
 
