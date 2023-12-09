@@ -2,6 +2,7 @@
 
 ## Version 1.7.1:
 - More documentation improvements.
+- Added shortcut files for quickly packing/publishing the project.
 
 <br>
 
