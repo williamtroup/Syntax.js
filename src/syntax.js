@@ -398,9 +398,7 @@
             keywordsCasing = keywordsCasing.toLowerCase().trim();
         }
 
-        keywords.sort( function( a, b ){
-            return b.length - a.length;
-        } );
+        sortArrayOfStringByLength( keywords );
 
         var keywordsLength = keywords.length;
 
@@ -439,6 +437,8 @@
         var values = getDefaultStringOrArray( language.values, [] ),
             valuesLength = values.length,
             caseSensitive = language.caseSensitive;
+
+        sortArrayOfStringByLength( values );
 
         for ( var valueIndex = 0; valueIndex < valuesLength; valueIndex++ ) {
             var value = values[ valueIndex ],
@@ -864,6 +864,12 @@
         data = data.replace(/>/g, '&gt;');
 
         return data;
+    }
+
+    function sortArrayOfStringByLength( array ) {
+        array.sort( function( a, b ){
+            return b.length - a.length;
+        } );
     }
 
 
