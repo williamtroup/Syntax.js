@@ -398,6 +398,10 @@
             keywordsCasing = keywordsCasing.toLowerCase().trim();
         }
 
+        keywords.sort( function( a, b ){
+            return b.length - a.length;
+        } );
+
         var keywordsLength = keywords.length;
 
         for ( var keywordIndex = 0; keywordIndex < keywordsLength; keywordIndex++ ) {
