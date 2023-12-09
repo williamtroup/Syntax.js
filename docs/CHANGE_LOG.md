@@ -3,7 +3,7 @@
 ## Version 1.7.0:
 
 #### **New Features:**
-- MarkUp languages support!
+- Markup language support!
 
 ### **Highlighting:**
 - If there is no code available for highlighting, the element is skipped and left as is (an error log is thrown when safeMode is off).
