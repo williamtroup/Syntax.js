@@ -93,13 +93,10 @@
                                 syntaxOptions = buildAttributeOptions( syntaxOptionsParsed.result ),
                                 isPreFormatted = false;
 
-
                             if ( element.children.length > 0 && element.children[ 0 ].nodeName.toLowerCase() === "pre" ) {
                                 innerHTML = element.children[ 0 ].innerHTML;
                                 isPreFormatted = true;
                             }
-
-                            innerHTML = encodeMarkUpCharacters( innerHTML );
                             
                             var innerHTMLCopy = innerHTML.trim(),
                                 numbers = null,
@@ -144,7 +141,12 @@
                                     }
                                 }
 
-                                innerHTML = renderElementKeywords( innerHTML, language, syntaxOptions );
+                                if ( !language.isMarkUp ) {
+                                    innerHTML = renderElementKeywords( innerHTML, language, syntaxOptions );
+                                } else {
+                                    innerHTML = replaceMarkUpKeywords( innerHTML, language, syntaxOptions );
+                                }
+
                                 innerHTML = renderElementValues( innerHTML, language, syntaxOptions );
         
                                 if ( syntaxOptions.highlightComments ) {
@@ -428,6 +430,77 @@
             }
 
             fireCustomTrigger( syntaxOptions.onKeywordRender, keyword );
+        }
+
+        return innerHTML;
+    }
+
+    function replaceMarkUpKeywords( innerHTML, language, syntaxOptions ) {
+        var keywords = getDefaultStringOrArray( language.keywords, [] ),
+            caseSensitive = language.caseSensitive,
+            keywordsCasing = language.keywordsCasing;
+
+        if ( isDefinedString( keywordsCasing ) ) {
+            keywordsCasing = keywordsCasing.toLowerCase().trim();
+        }
+
+        var regEx = /(<([^>]+)>)/ig,
+            replacements = {},
+            replacementsNumber = 1,
+            regExFlags = caseSensitive ? "g" : "gi",
+            regExResult = regEx.exec( innerHTML );
+
+        while ( regExResult ) {
+            if ( regExResult.index === regEx.lastIndex ) {
+                regEx.lastIndex++;
+            }
+
+            var tag = regExResult[ 0 ];
+            tag = tag.replace( "</", _string.empty ).replace( "<", _string.empty ).replace( ">", _string.empty );
+            tag = tag.split( _string.space )[ 0 ];
+
+            if ( keywords.indexOf( tag ) > -1 ) {
+                var replacementVariable = "KW" + replacementsNumber.toString() + ";",
+                    regExReplace = new RegExp( "\\b" + tag + "\\b", regExFlags ),
+                    replacement = null,
+                    replacementTagDisplay = tag;
+
+                if ( keywordsCasing === "uppercase" ) {
+                    replacementTagDisplay = replacementTagDisplay.toUpperCase();
+                } else if ( keywordsCasing === "lowercase" ) {
+                    replacementTagDisplay = replacementTagDisplay.toLowerCase();
+                }
+
+                if ( syntaxOptions.highlightKeywords ) {
+                    if ( isDefinedFunction( syntaxOptions.onKeywordClicked ) ) {
+                        replacement = "<span class=\"keyword-clickable\">" + replacementTagDisplay + "</span>";
+                    } else {
+                        replacement = "<span class=\"keyword\">" + replacementTagDisplay + "</span>";
+                    }
+    
+                } else {
+                    if ( isDefinedFunction( syntaxOptions.onKeywordClicked ) ) {
+                        replacement = "<span class=\"no-highlight-keyword-clickable\">" + replacementTagDisplay + "</span>";
+                    }
+                }
+
+                innerHTML = innerHTML.replace( regExReplace, replacementVariable );
+
+                replacements[ replacementVariable ] = replacement;
+                replacementsNumber++;
+            }
+
+            regExResult = regEx.exec( innerHTML );
+        }
+
+        innerHTML = encodeMarkUpCharacters( innerHTML );
+
+        for ( var variable in replacements ) {
+            if ( replacements.hasOwnProperty( variable ) ) {
+                var regExHtmlReplace = new RegExp( variable, "g" );
+
+                innerHTML = innerHTML.replace( regExHtmlReplace, replacements[ variable ] );
+            }
         }
 
         return innerHTML;

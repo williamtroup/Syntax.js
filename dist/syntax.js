@@ -66,7 +66,11 @@
                     innerHTML = renderElementStringQuotesPatternVariables(innerHTML, innerHTML.match(/'((?:\\.|[^"\\])*)'/g), syntaxOptions);
                   }
                 }
-                innerHTML = renderElementKeywords(innerHTML, language, syntaxOptions);
+                if (!language.isMarkUp) {
+                  innerHTML = renderElementKeywords(innerHTML, language, syntaxOptions);
+                } else {
+                  innerHTML = replaceMarkUpKeywords(innerHTML, language, syntaxOptions);
+                }
                 innerHTML = renderElementValues(innerHTML, language, syntaxOptions);
                 if (syntaxOptions.highlightComments) {
                   innerHTML = renderElementCommentsFromVariables(innerHTML);
@@ -266,6 +270,7 @@
     if (isDefinedString(keywordsCasing)) {
       keywordsCasing = keywordsCasing.toLowerCase().trim();
     }
+    sortArrayOfStringByLength(keywords);
     var keywordsLength = keywords.length;
     var keywordIndex = 0;
     for (; keywordIndex < keywordsLength; keywordIndex++) {
@@ -293,10 +298,67 @@
     }
     return innerHTML;
   }
+  function replaceMarkUpKeywords(innerHTML, language, syntaxOptions) {
+    var keywords = getDefaultStringOrArray(language.keywords, []);
+    var caseSensitive = language.caseSensitive;
+    var keywordsCasing = language.keywordsCasing;
+    if (isDefinedString(keywordsCasing)) {
+      keywordsCasing = keywordsCasing.toLowerCase().trim();
+    }
+    var regEx = /(<([^>]+)>)/ig;
+    var replacements = {};
+    var replacementsNumber = 1;
+    var regExFlags = caseSensitive ? "g" : "gi";
+    var regExResult = regEx.exec(innerHTML);
+    for (; regExResult;) {
+      if (regExResult.index === regEx.lastIndex) {
+        regEx.lastIndex++;
+      }
+      var tag = regExResult[0];
+      tag = tag.replace("</", _string.empty).replace("<", _string.empty).replace(">", _string.empty);
+      tag = tag.split(_string.space)[0];
+      if (keywords.indexOf(tag) > -1) {
+        var replacementVariable = "KW" + replacementsNumber.toString() + ";";
+        var regExReplace = new RegExp("\\b" + tag + "\\b", regExFlags);
+        var replacement = null;
+        var replacementTagDisplay = tag;
+        if (keywordsCasing === "uppercase") {
+          replacementTagDisplay = replacementTagDisplay.toUpperCase();
+        } else if (keywordsCasing === "lowercase") {
+          replacementTagDisplay = replacementTagDisplay.toLowerCase();
+        }
+        if (syntaxOptions.highlightKeywords) {
+          if (isDefinedFunction(syntaxOptions.onKeywordClicked)) {
+            replacement = '<span class="keyword-clickable">' + replacementTagDisplay + "</span>";
+          } else {
+            replacement = '<span class="keyword">' + replacementTagDisplay + "</span>";
+          }
+        } else {
+          if (isDefinedFunction(syntaxOptions.onKeywordClicked)) {
+            replacement = '<span class="no-highlight-keyword-clickable">' + replacementTagDisplay + "</span>";
+          }
+        }
+        innerHTML = innerHTML.replace(regExReplace, replacementVariable);
+        replacements[replacementVariable] = replacement;
+        replacementsNumber++;
+      }
+      regExResult = regEx.exec(innerHTML);
+    }
+    innerHTML = encodeMarkUpCharacters(innerHTML);
+    var variable;
+    for (variable in replacements) {
+      if (replacements.hasOwnProperty(variable)) {
+        var regExHtmlReplace = new RegExp(variable, "g");
+        innerHTML = innerHTML.replace(regExHtmlReplace, replacements[variable]);
+      }
+    }
+    return innerHTML;
+  }
   function renderElementValues(innerHTML, language, syntaxOptions) {
     var values = getDefaultStringOrArray(language.values, []);
     var valuesLength = values.length;
     var caseSensitive = language.caseSensitive;
+    sortArrayOfStringByLength(values);
     var valueIndex = 0;
     for (; valueIndex < valuesLength; valueIndex++) {
       var value = values[valueIndex];
@@ -592,6 +654,16 @@
       result = "0" + result;
     }
     return result;
+  }
+  function encodeMarkUpCharacters(data) {
+    data = data.replace(/</g, "&lt;");
+    data = data.replace(/>/g, "&gt;");
+    return data;
+  }
+  function sortArrayOfStringByLength(array) {
+    array.sort(function(a, b) {
+      return b.length - a.length;
+    });
   }
   function buildDefaultConfiguration() {
     _configuration.safeMode = getDefaultBoolean(_configuration.safeMode, true);
