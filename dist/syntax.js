@@ -82,6 +82,10 @@
               renderElementCompletedHTML(element, numbers, syntax, innerHTML, syntaxOptions, isPreFormatted);
               fireCustomTrigger(syntaxOptions.onRenderComplete, element);
               _elements.push(element);
+              _strings_Cached = {};
+              _strings_Cached_Count = 0;
+              _comments_Cached = {};
+              _comments_Cached_Count = 0;
             } else {
               if (!_configuration.safeMode) {
                 console.error("No code is available available to render, skipping.");

@@ -15,6 +15,9 @@
 #### **Documentation:**
 - More documentation fixes and improvements.
 
+#### **Fixes:**
+- Fixed a fault that caused comments and strings from other elements to be added to others.
+
 <br>
 
 

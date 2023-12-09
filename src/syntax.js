@@ -163,6 +163,11 @@
 
                             _elements.push( element );
 
+                            _strings_Cached = {};
+                            _strings_Cached_Count = 0;
+                            _comments_Cached = {};
+                            _comments_Cached_Count = 0;
+
                         } else {
                             if ( !_configuration.safeMode ) {
                                 console.error( "No code is available available to render, skipping." );
