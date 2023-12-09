@@ -128,5 +128,6 @@ $syntax.addLanguage( "html", {
     ],
     multiLineComment: [ "<!--", "-->" ],
     caseSensitive: true,
-    keywordsCasing: "initial"
+    keywordsCasing: "initial",
+    isMarkUp: true
 }, false );
