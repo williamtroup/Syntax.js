@@ -1,5 +1,26 @@
 # Syntax.js - Change Log:
 
+## Version 1.7.0:
+
+#### **New Features:**
+- Markup language support!
+
+### **Highlighting:**
+- If there is no code available for highlighting, the element is skipped and left as is (an error log is thrown when safeMode is off).
+
+#### **Languages:**
+- Added support for the HTML markup language (importable file).
+- Added a new JSON property called "isMarkUp", which states if the language is a markup language (processed slightly differently).
+
+#### **Documentation:**
+- More documentation fixes and improvements.
+
+#### **Fixes:**
+- Fixed a fault that caused comments and strings from other elements to be added to others.
+
+<br>
+
+
 ## Version 1.6.2:
 - Internal code cleanup to make object parsing a little clearer.
 - More documentation fixes.

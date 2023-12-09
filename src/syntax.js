@@ -4,7 +4,7 @@
  * A lightweight, and easy-to-use, JavaScript library for code syntax highlighting!
  * 
  * @file        syntax.js
- * @version     v1.6.2
+ * @version     v1.7.0
  * @author      Bunoon
  * @license     MIT License
  * @copyright   Bunoon 2023
@@ -88,74 +88,92 @@
                         syntaxButtonsParsed = getObjectFromString( element.getAttribute( _attribute_Name_Buttons ) );
 
                     if ( syntaxOptionsParsed.parsed ) {
-                        var innerHTML = element.innerHTML,
-                            syntaxOptions = buildAttributeOptions( syntaxOptionsParsed.result ),
-                            isPreFormatted = false;
+                        if ( element.innerHTML.trim() !== _string.empty ) {
+                            var innerHTML = element.innerHTML,
+                                syntaxOptions = buildAttributeOptions( syntaxOptionsParsed.result ),
+                                isPreFormatted = false;
 
-                        if ( element.children.length > 0 && element.children[ 0 ].nodeName.toLowerCase() === "pre" ) {
-                            innerHTML = element.children[ 0 ].innerHTML;
-                            isPreFormatted = true;
-                        }
-                        
-                        var innerHTMLCopy = innerHTML.trim(),
-                            numbers = null,
-                            elementId = element.id;
-
-                        if ( !isDefinedString( elementId ) ) {
-                            elementId = newGuid();
-                        }
-
-                        _elements_Original[ elementId ] = element.innerHTML;
-
-                        element.removeAttribute( _attribute_Name_Language );
-                        element.removeAttribute( _attribute_Name_Options );
-                        element.id = elementId;
-                        element.className = element.className === _string.empty ? "syntax-highlight" : element.className + " syntax-highlight";
-                        element.innerHTML = _string.empty;
-
-                        var code = createElement( "div", "code custom-scroll-bars" );
-                        element.appendChild( code );
-
-                        if ( syntaxOptions.showLineNumbers ) {
-                            numbers = createElement( "div", "numbers" );
-                            code.appendChild( numbers );
-                        }
-            
-                        var syntax = createElement( "div", "syntax" );
-                        code.appendChild( syntax );
-
-                        renderElementButtons( syntax, syntaxOptions, syntaxLanguage, syntaxButtonsParsed, innerHTMLCopy );
-
-                        if ( syntaxLanguage.toLowerCase() !== _languages_Unknown ) {
-                            if ( syntaxOptions.highlightComments ) {
-                                innerHTML = renderElementCommentVariables( innerHTML, language, syntaxOptions );
-                                innerHTML = renderElementMultiLineCommentVariables( innerHTML, language, syntaxOptions );
+                            if ( element.children.length > 0 && element.children[ 0 ].nodeName.toLowerCase() === "pre" ) {
+                                innerHTML = element.children[ 0 ].innerHTML;
+                                isPreFormatted = true;
                             }
-    
-                            if ( syntaxOptions.highlightStrings ) {
-                                innerHTML = renderElementStringQuotesPatternVariables( innerHTML, innerHTML.match( /"((?:\\.|[^"\\])*)"/g ), syntaxOptions );
-    
-                                if ( language.comment !== "'" ) {
-                                    innerHTML = renderElementStringQuotesPatternVariables( innerHTML, innerHTML.match( /'((?:\\.|[^"\\])*)'/g ), syntaxOptions );
+                            
+                            var innerHTMLCopy = innerHTML.trim(),
+                                numbers = null,
+                                elementId = element.id;
+
+                            if ( !isDefinedString( elementId ) ) {
+                                elementId = newGuid();
+                            }
+
+                            _elements_Original[ elementId ] = element.innerHTML;
+
+                            element.removeAttribute( _attribute_Name_Language );
+                            element.removeAttribute( _attribute_Name_Options );
+                            element.id = elementId;
+                            element.className = element.className === _string.empty ? "syntax-highlight" : element.className + " syntax-highlight";
+                            element.innerHTML = _string.empty;
+
+                            var code = createElement( "div", "code custom-scroll-bars" );
+                            element.appendChild( code );
+
+                            if ( syntaxOptions.showLineNumbers ) {
+                                numbers = createElement( "div", "numbers" );
+                                code.appendChild( numbers );
+                            }
+                
+                            var syntax = createElement( "div", "syntax" );
+                            code.appendChild( syntax );
+
+                            renderElementButtons( syntax, syntaxOptions, syntaxLanguage, syntaxButtonsParsed, innerHTMLCopy );
+
+                            if ( syntaxLanguage.toLowerCase() !== _languages_Unknown ) {
+                                if ( syntaxOptions.highlightComments ) {
+                                    innerHTML = renderElementCommentVariables( innerHTML, language, syntaxOptions );
+                                    innerHTML = renderElementMultiLineCommentVariables( innerHTML, language, syntaxOptions );
+                                }
+        
+                                if ( syntaxOptions.highlightStrings ) {
+                                    innerHTML = renderElementStringQuotesPatternVariables( innerHTML, innerHTML.match( /"((?:\\.|[^"\\])*)"/g ), syntaxOptions );
+        
+                                    if ( language.comment !== "'" ) {
+                                        innerHTML = renderElementStringQuotesPatternVariables( innerHTML, innerHTML.match( /'((?:\\.|[^"\\])*)'/g ), syntaxOptions );
+                                    }
+                                }
+
+                                if ( !language.isMarkUp ) {
+                                    innerHTML = renderElementKeywords( innerHTML, language, syntaxOptions );
+                                } else {
+                                    innerHTML = replaceMarkUpKeywords( innerHTML, language, syntaxOptions );
+                                }
+
+                                innerHTML = renderElementValues( innerHTML, language, syntaxOptions );
+        
+                                if ( syntaxOptions.highlightComments ) {
+                                    innerHTML = renderElementCommentsFromVariables( innerHTML );
+                                }
+                                
+                                if ( syntaxOptions.highlightStrings ) {
+                                    innerHTML = renderElementStringQuotesFromVariables( innerHTML );
                                 }
                             }
 
-                            innerHTML = renderElementKeywords( innerHTML, language, syntaxOptions );
-                            innerHTML = renderElementValues( innerHTML, language, syntaxOptions );
-    
-                            if ( syntaxOptions.highlightComments ) {
-                                innerHTML = renderElementCommentsFromVariables( innerHTML );
-                            }
-                            
-                            if ( syntaxOptions.highlightStrings ) {
-                                innerHTML = renderElementStringQuotesFromVariables( innerHTML );
+                            renderElementCompletedHTML( element, numbers, syntax, innerHTML, syntaxOptions, isPreFormatted );
+                            fireCustomTrigger( syntaxOptions.onRenderComplete, element );
+
+                            _elements.push( element );
+
+                            _strings_Cached = {};
+                            _strings_Cached_Count = 0;
+                            _comments_Cached = {};
+                            _comments_Cached_Count = 0;
+
+                        } else {
+                            if ( !_configuration.safeMode ) {
+                                console.error( "No code is available available to render, skipping." );
+                                result = false;
                             }
                         }
-
-                        renderElementCompletedHTML( element, numbers, syntax, innerHTML, syntaxOptions, isPreFormatted );
-                        fireCustomTrigger( syntaxOptions.onRenderComplete, element );
-
-                        _elements.push( element );
 
                     } else {
                         if ( !_configuration.safeMode ) {
@@ -387,6 +405,8 @@
             keywordsCasing = keywordsCasing.toLowerCase().trim();
         }
 
+        sortArrayOfStringByLength( keywords );
+
         var keywordsLength = keywords.length;
 
         for ( var keywordIndex = 0; keywordIndex < keywordsLength; keywordIndex++ ) {
@@ -420,10 +440,83 @@
         return innerHTML;
     }
 
+    function replaceMarkUpKeywords( innerHTML, language, syntaxOptions ) {
+        var keywords = getDefaultStringOrArray( language.keywords, [] ),
+            caseSensitive = language.caseSensitive,
+            keywordsCasing = language.keywordsCasing;
+
+        if ( isDefinedString( keywordsCasing ) ) {
+            keywordsCasing = keywordsCasing.toLowerCase().trim();
+        }
+
+        var regEx = /(<([^>]+)>)/ig,
+            replacements = {},
+            replacementsNumber = 1,
+            regExFlags = caseSensitive ? "g" : "gi",
+            regExResult = regEx.exec( innerHTML );
+
+        while ( regExResult ) {
+            if ( regExResult.index === regEx.lastIndex ) {
+                regEx.lastIndex++;
+            }
+
+            var tag = regExResult[ 0 ];
+            tag = tag.replace( "</", _string.empty ).replace( "<", _string.empty ).replace( ">", _string.empty );
+            tag = tag.split( _string.space )[ 0 ];
+
+            if ( keywords.indexOf( tag ) > -1 ) {
+                var replacementVariable = "KW" + replacementsNumber.toString() + ";",
+                    regExReplace = new RegExp( "\\b" + tag + "\\b", regExFlags ),
+                    replacement = null,
+                    replacementTagDisplay = tag;
+
+                if ( keywordsCasing === "uppercase" ) {
+                    replacementTagDisplay = replacementTagDisplay.toUpperCase();
+                } else if ( keywordsCasing === "lowercase" ) {
+                    replacementTagDisplay = replacementTagDisplay.toLowerCase();
+                }
+
+                if ( syntaxOptions.highlightKeywords ) {
+                    if ( isDefinedFunction( syntaxOptions.onKeywordClicked ) ) {
+                        replacement = "<span class=\"keyword-clickable\">" + replacementTagDisplay + "</span>";
+                    } else {
+                        replacement = "<span class=\"keyword\">" + replacementTagDisplay + "</span>";
+                    }
+    
+                } else {
+                    if ( isDefinedFunction( syntaxOptions.onKeywordClicked ) ) {
+                        replacement = "<span class=\"no-highlight-keyword-clickable\">" + replacementTagDisplay + "</span>";
+                    }
+                }
+
+                innerHTML = innerHTML.replace( regExReplace, replacementVariable );
+
+                replacements[ replacementVariable ] = replacement;
+                replacementsNumber++;
+            }
+
+            regExResult = regEx.exec( innerHTML );
+        }
+
+        innerHTML = encodeMarkUpCharacters( innerHTML );
+
+        for ( var variable in replacements ) {
+            if ( replacements.hasOwnProperty( variable ) ) {
+                var regExHtmlReplace = new RegExp( variable, "g" );
+
+                innerHTML = innerHTML.replace( regExHtmlReplace, replacements[ variable ] );
+            }
+        }
+
+        return innerHTML;
+    }
+
     function renderElementValues( innerHTML, language, syntaxOptions ) {
         var values = getDefaultStringOrArray( language.values, [] ),
             valuesLength = values.length,
             caseSensitive = language.caseSensitive;
+
+        sortArrayOfStringByLength( values );
 
         for ( var valueIndex = 0; valueIndex < valuesLength; valueIndex++ ) {
             var value = values[ valueIndex ],
@@ -844,6 +937,19 @@
         return result;
     }
 
+    function encodeMarkUpCharacters( data ) {
+        data = data.replace(/</g, '&lt;');
+        data = data.replace(/>/g, '&gt;');
+
+        return data;
+    }
+
+    function sortArrayOfStringByLength( array ) {
+        array.sort( function( a, b ){
+            return b.length - a.length;
+        } );
+    }
+
 
     /*
      * ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -1225,7 +1331,7 @@
      * @returns     {string}                                                The version number.
      */
     this.getVersion = function() {
-        return "1.6.2";
+        return "1.7.0";
     };
 
 
