@@ -311,7 +311,7 @@
         };
 
         if ( isDefined( customButton.className ) ) {
-            newCustomButton.className += " " + customButton.className;
+            newCustomButton.className += _string.space + customButton.className;
         }
 
         buttonsElements.push( newCustomButton );
