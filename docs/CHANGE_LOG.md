@@ -4,6 +4,7 @@
 - The custom buttons "onClick" event now accepts the code as a parameter (see documentation).
 - Fixed a fault that caused the wrong events to sometimes be added for custom buttons when there is more than one.
 - Added a new binding option called "removeDuplicateBlankLines" (defaults to true), which will remove all duplicate blank lines.
+- Fixed some bad documentation.
 - 
 
 <br>
