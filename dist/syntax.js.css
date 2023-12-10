@@ -1,5 +1,5 @@
 /*
- * Syntax.js Library v1.7.2
+ * Syntax.js Library v1.7.3
  *
  * Copyright 2023 Bunoon
  * Released under the MIT License
@@ -15,7 +15,9 @@
   --color-keyword-hover: #FF0000;
   --color-value-hover: #FFAC1C;
   --color-comment: #78b13f;
+  --color-multi-line-comment: #78b13f;
   --color-string: #484dd2;
+  --color-multi-line-string: #484dd2;
   --color-black: #3b3a3a;
   --color-white: #F5F5F5;
   --color-dark-gray: #808080;
@@ -195,9 +197,17 @@ code.syntax-highlight div.code div.syntax p span.comment,
 div.syntax-highlight div.code div.syntax p span.comment {
   color: var(--color-comment);
 }
+code.syntax-highlight div.code div.syntax p span.multi-line-comment,
+div.syntax-highlight div.code div.syntax p span.multi-line-comment {
+  color: var(--color-multi-line-comment);
+}
 code.syntax-highlight div.code div.syntax p span.string,
 div.syntax-highlight div.code div.syntax p span.string {
   color: var(--color-string);
+}
+code.syntax-highlight div.code div.syntax p span.multi-line-string,
+div.syntax-highlight div.code div.syntax p span.multi-line-string {
+  color: var(--color-multi-line-string);
 }
 
 /*

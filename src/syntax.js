@@ -4,7 +4,7 @@
  * A lightweight, and easy-to-use, JavaScript library for code syntax highlighting!
  * 
  * @file        syntax.js
- * @version     v1.7.2
+ * @version     v1.7.3
  * @author      Bunoon
  * @license     MIT License
  * @copyright   Bunoon 2023
@@ -214,17 +214,7 @@
                     var customButton = customButtons[ customButtonsIndex ];
 
                     if ( isDefined( customButton.text ) && isDefinedFunction( customButton.onClick ) ) {
-                        var newCustomButton = createElement( "div", "button" );
-                        newCustomButton.innerHTML = customButton.text;
-                        newCustomButton.onclick = customButton.onClick;
-                        newCustomButton.style.display = _configuration.buttonsVisible ? "inline-block" : "none";
-                        buttons.appendChild( newCustomButton );
-
-                        if ( isDefined( customButton.className ) ) {
-                            newCustomButton.className += " " + customButton.className;
-                        }
-
-                        buttonsElements.push( newCustomButton );
+                        renderElementButton( customButton, buttonsElements, buttons, innerHTMLCopy );
                     }
                 }
             }
@@ -310,6 +300,23 @@
         }
     }
 
+    function renderElementButton( customButton, buttonsElements, buttons, innerHTMLCopy ) {
+        var newCustomButton = createElement( "div", "button" );
+        newCustomButton.innerHTML = customButton.text;
+        newCustomButton.style.display = _configuration.buttonsVisible ? "inline-block" : "none";
+        buttons.appendChild( newCustomButton );
+
+        newCustomButton.onclick = function() {
+            customButton.onClick( innerHTMLCopy );
+        };
+
+        if ( isDefined( customButton.className ) ) {
+            newCustomButton.className += _string.space + customButton.className;
+        }
+
+        buttonsElements.push( newCustomButton );
+    }
+
     function renderElementCommentVariables( innerHTML, language, syntaxOptions ) {
         var lookup = language.comment,
             patternItems = innerHTML.match( new RegExp( lookup + ".*", "g" ) );
@@ -349,13 +356,14 @@
                     if ( endIndex > -1 ) {
                         var comment = innerHTML.substring( startIndex, endIndex + multiLineComment[ 1 ].length ),
                             commentLines = comment.split( _string.newLine ),
-                            commentLinesLength = commentLines.length;
+                            commentLinesLength = commentLines.length,
+                            commentCssClass = commentLinesLength === 1 ? "comment" : "multi-line-comment";
                         
                         for ( var commentLineIndex = 0; commentLineIndex < commentLinesLength; commentLineIndex++ ) {
                             var commentVariable = "$C{" + _comments_Cached_Count.toString() + "}",
                                 commentLine = commentLines[ commentLineIndex ];
                             
-                            _comments_Cached[ commentVariable ] = "<span class=\"comment\">" + commentLine + "</span>";
+                            _comments_Cached[ commentVariable ] = "<span class=\"" + commentCssClass + "\">" + commentLine + "</span>";
                             _comments_Cached_Count++;
                 
                             innerHTML = innerHTML.replace( commentLine, commentVariable );
@@ -377,13 +385,14 @@
             for ( var patternItemsIndex = 0; patternItemsIndex < patternItemsLength; patternItemsIndex++ ) {
                 var quote = patternItems[ patternItemsIndex ],
                     quoteLines = quote.split( _string.newLine ),
-                    quoteLinesLength = quoteLines.length;
+                    quoteLinesLength = quoteLines.length,
+                    quoteCssClass = quoteLinesLength === 1 ? "string" : "multi-line-string";
 
                 for ( var quoteLineIndex = 0; quoteLineIndex < quoteLinesLength; quoteLineIndex++ ) {
                     var quoteLine = quoteLines[ quoteLineIndex ],
                         quoteVariable = "$S{" + _strings_Cached_Count.toString() + "}";
 
-                    _strings_Cached[ quoteVariable ] = "<span class=\"string\">" + quoteLine + "</span>";
+                    _strings_Cached[ quoteVariable ] = "<span class=\"" + quoteCssClass + "\">" + quoteLine + "</span>";
                     _strings_Cached_Count++;
         
                     innerHTML = innerHTML.replace( quoteLine, quoteVariable );
@@ -585,7 +594,8 @@
             numberContainer = numbers,
             codeContainer = syntax,
             replaceWhitespace = null,
-            lineNumber = 1;
+            lineNumber = 1,
+            lastLineWasBlank = false;
 
         if ( isPreFormatted ) {
             codeContainer = createElement( "pre" );
@@ -612,34 +622,40 @@
 
             if ( ( lineIndex !== 0 && lineIndex !== linesLength - 1 ) || line.trim() !== _string.empty ) {
                 if ( line.trim() !== _string.empty || !syntaxOptions.removeBlankLines ) {
-                    if ( isDefined( numberContainer ) ) {
-                        var numberCode = createElement( "p" );
+                    var isBlank = line.trim() === _string.empty;
 
-                        if ( syntaxOptions.padLineNumbers ) {
-                            numberCode.innerHTML = padNumber( lineNumber.toString(), linesLengthStringLength );
-                        } else {
-                            numberCode.innerHTML = lineNumber.toString();
+                    if ( isBlank && !lastLineWasBlank || !syntaxOptions.removeDuplicateBlankLines || !isBlank ) {
+                        lastLineWasBlank = isBlank;
+
+                        if ( isDefined( numberContainer ) ) {
+                            var numberCode = createElement( "p" );
+    
+                            if ( syntaxOptions.padLineNumbers ) {
+                                numberCode.innerHTML = padNumber( lineNumber.toString(), linesLengthStringLength );
+                            } else {
+                                numberCode.innerHTML = lineNumber.toString();
+                            }
+    
+                            numberContainer.appendChild( numberCode );
+                            lineNumber++;
+                        }                    
+            
+                        if ( replaceWhitespace !== null ) {
+                            line = line.replace( replaceWhitespace, _string.empty );
+    
+                            if ( !isPreFormatted ) {
+                                var remainingStartWhitespaceCount = line.match( /^\s*/ )[ 0 ].length,
+                                    remainingStartWhitespace = line.substring( 0, remainingStartWhitespaceCount ),
+                                    whitespaceReplacement = Array( remainingStartWhitespaceCount ).join( "&nbsp;" );
+    
+                                line = line.replace( remainingStartWhitespace, whitespaceReplacement );
+                            }
                         }
-
-                        numberContainer.appendChild( numberCode );
-                        lineNumber++;
-                    }                    
-        
-                    if ( replaceWhitespace !== null ) {
-                        line = line.replace( replaceWhitespace, _string.empty );
-
-                        if ( !isPreFormatted ) {
-                            var remainingStartWhitespaceCount = line.match( /^\s*/ )[ 0 ].length,
-                                remainingStartWhitespace = line.substring( 0, remainingStartWhitespaceCount ),
-                                whitespaceReplacement = Array( remainingStartWhitespaceCount ).join( "&nbsp;" );
-
-                            line = line.replace( remainingStartWhitespace, whitespaceReplacement );
-                        }
+            
+                        var syntaxCode = createElement( "p" );
+                        syntaxCode.innerHTML = line.trim() === _string.empty ? "<br>" : line;
+                        codeContainer.appendChild( syntaxCode );
                     }
-        
-                    var syntaxCode = createElement( "p" );
-                    syntaxCode.innerHTML = line.trim() === _string.empty ? "<br>" : line;
-                    codeContainer.appendChild( syntaxCode );
                 }
             }
         }
@@ -723,6 +739,7 @@
         options.showLanguageLabel = getDefaultBoolean( options.showLanguageLabel, true );
         options.showPrintButton = getDefaultBoolean( options.showPrintButton, true );
         options.padLineNumbers = getDefaultBoolean( options.padLineNumbers, false );
+        options.removeDuplicateBlankLines = getDefaultBoolean( options.removeDuplicateBlankLines, true );
         
         options = buildAttributeOptionStrings( options );
 
@@ -1347,7 +1364,7 @@
      * @returns     {string}                                                The version number.
      */
     this.getVersion = function() {
-        return "1.7.2";
+        return "1.7.3";
     };
 
 

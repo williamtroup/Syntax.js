@@ -1,5 +1,16 @@
 # Syntax.js - Change Log:
 
+## Version 1.7.3:
+- The custom buttons "onClick" event now accepts the code as a parameter (see documentation).
+- Fixed a fault that caused the wrong the events to be assigned to the custom buttons when there is more than one.
+- Added a new binding option called "removeDuplicateBlankLines" (defaults to true), which will remove all duplicate blank lines.
+- Fixed some bad documentation.
+- Added new CSS class "multi-line-comment", which is used for multi-line comments.
+- Added new CSS class "multi-line-string", which is used for multi-line strings.
+
+<br>
+
+
 ## Version 1.7.2:
 - Added "multiLineComment" support for Markup languages (HTML, for example).
 - Minor code cleanups to make things a bit more readable.

@@ -1,4 +1,4 @@
-/*! Syntax.js v1.7.2 | (c) Bunoon | MIT License */
+/*! Syntax.js v1.7.3 | (c) Bunoon | MIT License */
 $syntax.addLanguage( "python", {
     friendlyName: "Python",
     keywords: [
