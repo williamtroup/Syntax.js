@@ -592,7 +592,8 @@
             numberContainer = numbers,
             codeContainer = syntax,
             replaceWhitespace = null,
-            lineNumber = 1;
+            lineNumber = 1,
+            lastLineWasBlank = false;
 
         if ( isPreFormatted ) {
             codeContainer = createElement( "pre" );
@@ -619,34 +620,40 @@
 
             if ( ( lineIndex !== 0 && lineIndex !== linesLength - 1 ) || line.trim() !== _string.empty ) {
                 if ( line.trim() !== _string.empty || !syntaxOptions.removeBlankLines ) {
-                    if ( isDefined( numberContainer ) ) {
-                        var numberCode = createElement( "p" );
+                    var isBlank = line.trim() === _string.empty;
 
-                        if ( syntaxOptions.padLineNumbers ) {
-                            numberCode.innerHTML = padNumber( lineNumber.toString(), linesLengthStringLength );
-                        } else {
-                            numberCode.innerHTML = lineNumber.toString();
+                    if ( isBlank && !lastLineWasBlank || !syntaxOptions.removeDuplicateBlankLines || !isBlank ) {
+                        lastLineWasBlank = isBlank;
+
+                        if ( isDefined( numberContainer ) ) {
+                            var numberCode = createElement( "p" );
+    
+                            if ( syntaxOptions.padLineNumbers ) {
+                                numberCode.innerHTML = padNumber( lineNumber.toString(), linesLengthStringLength );
+                            } else {
+                                numberCode.innerHTML = lineNumber.toString();
+                            }
+    
+                            numberContainer.appendChild( numberCode );
+                            lineNumber++;
+                        }                    
+            
+                        if ( replaceWhitespace !== null ) {
+                            line = line.replace( replaceWhitespace, _string.empty );
+    
+                            if ( !isPreFormatted ) {
+                                var remainingStartWhitespaceCount = line.match( /^\s*/ )[ 0 ].length,
+                                    remainingStartWhitespace = line.substring( 0, remainingStartWhitespaceCount ),
+                                    whitespaceReplacement = Array( remainingStartWhitespaceCount ).join( "&nbsp;" );
+    
+                                line = line.replace( remainingStartWhitespace, whitespaceReplacement );
+                            }
                         }
-
-                        numberContainer.appendChild( numberCode );
-                        lineNumber++;
-                    }                    
-        
-                    if ( replaceWhitespace !== null ) {
-                        line = line.replace( replaceWhitespace, _string.empty );
-
-                        if ( !isPreFormatted ) {
-                            var remainingStartWhitespaceCount = line.match( /^\s*/ )[ 0 ].length,
-                                remainingStartWhitespace = line.substring( 0, remainingStartWhitespaceCount ),
-                                whitespaceReplacement = Array( remainingStartWhitespaceCount ).join( "&nbsp;" );
-
-                            line = line.replace( remainingStartWhitespace, whitespaceReplacement );
-                        }
+            
+                        var syntaxCode = createElement( "p" );
+                        syntaxCode.innerHTML = line.trim() === _string.empty ? "<br>" : line;
+                        codeContainer.appendChild( syntaxCode );
                     }
-        
-                    var syntaxCode = createElement( "p" );
-                    syntaxCode.innerHTML = line.trim() === _string.empty ? "<br>" : line;
-                    codeContainer.appendChild( syntaxCode );
                 }
             }
         }
@@ -730,6 +737,7 @@
         options.showLanguageLabel = getDefaultBoolean( options.showLanguageLabel, true );
         options.showPrintButton = getDefaultBoolean( options.showPrintButton, true );
         options.padLineNumbers = getDefaultBoolean( options.padLineNumbers, false );
+        options.removeDuplicateBlankLines = getDefaultBoolean( options.removeDuplicateBlankLines, true );
         
         options = buildAttributeOptionStrings( options );
 

@@ -18,6 +18,7 @@ Below are all the JSON properties that can be passed in the "data-syntax-options
 | *boolean* | showLanguageLabel | States if the language label should be shown or not (defaults to true). |
 | *boolean* | showPrintButton | States if the print button should be added (defaults to true). |
 | *boolean* | padLineNumbers | States if the line numbers should be shown as "01" instead of "1" (defaults to false). |
+| *boolean* | removeDuplicateBlankLines | States if duplicate blank lines should be removed (defaults to true). |
 <br/>
 
 
