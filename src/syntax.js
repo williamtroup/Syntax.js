@@ -150,7 +150,7 @@
                                 innerHTML = renderElementValues( innerHTML, language, syntaxOptions );
         
                                 if ( syntaxOptions.highlightComments ) {
-                                    innerHTML = renderElementCommentsFromVariables( innerHTML );
+                                    innerHTML = renderElementCommentsFromVariables( innerHTML, language );
                                 }
                                 
                                 if ( syntaxOptions.highlightStrings ) {
@@ -334,20 +334,20 @@
     }
 
     function renderElementMultiLineCommentVariables( innerHTML, language, syntaxOptions ) {
-        var lookup = language.multiLineComment;
+        var multiLineComment = language.multiLineComment;
 
-        if ( isDefinedArray( lookup ) && lookup.length === 2 ) {
+        if ( isDefinedArray( multiLineComment ) && multiLineComment.length === 2 ) {
             var startIndex = 0,
                 endIndex = 0;
 
             while ( startIndex >= 0 && endIndex >= 0 ) {
-                startIndex = innerHTML.indexOf( lookup[ 0 ], endIndex );
+                startIndex = innerHTML.indexOf( multiLineComment[ 0 ], endIndex );
     
                 if ( startIndex > -1 ) {
-                    endIndex = innerHTML.indexOf( lookup[ 1 ], startIndex + lookup[ 0 ].length );
+                    endIndex = innerHTML.indexOf( multiLineComment[ 1 ], startIndex + multiLineComment[ 0 ].length );
     
                     if ( endIndex > -1 ) {
-                        var comment = innerHTML.substring( startIndex, endIndex + lookup[ 1 ].length ),
+                        var comment = innerHTML.substring( startIndex, endIndex + multiLineComment[ 1 ].length ),
                             commentLines = comment.split( _string.newLine ),
                             commentLinesLength = commentLines.length;
                         
@@ -552,10 +552,26 @@
         return innerHTML;
     }
 
-    function renderElementCommentsFromVariables( innerHTML ) {
+    function renderElementCommentsFromVariables( innerHTML, language ) {
+        var multiLineComment = language.multiLineComment,
+            start = null,
+            end = null;
+
+        if ( isDefinedArray( multiLineComment ) && multiLineComment.length === 2 ) {
+            start = encodeMarkUpCharacters( multiLineComment[ 0 ] );
+            end = encodeMarkUpCharacters( multiLineComment[ 1 ] );
+        }
+
         for ( var commentVariable in _comments_Cached ) {
             if ( _comments_Cached.hasOwnProperty( commentVariable ) ) {
-                innerHTML = innerHTML.replace( commentVariable, _comments_Cached[ commentVariable ] );
+                var replacement = _comments_Cached[ commentVariable ];
+
+                if ( language.isMarkUp && isDefinedString( start ) && isDefinedString( end ) ) {
+                    replacement = replacement.replace( multiLineComment[ 0 ], start );
+                    replacement = replacement.replace( multiLineComment[ 1 ], end );
+                }
+
+                innerHTML = innerHTML.replace( commentVariable, replacement );
             }
         }
 
