@@ -5,7 +5,8 @@
 - Fixed a fault that caused the wrong events to sometimes be added for custom buttons when there is more than one.
 - Added a new binding option called "removeDuplicateBlankLines" (defaults to true), which will remove all duplicate blank lines.
 - Fixed some bad documentation.
-- 
+- Added new CSS class "multi-line-comment", which is used for multi-line comments.
+- Added new CSS class "multi-line-string", which is used for multi-line strings.
 
 <br>
 

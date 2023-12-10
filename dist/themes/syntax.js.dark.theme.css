@@ -6,7 +6,9 @@
         --color-keyword-hover: #ff8080;
         --color-value-hover: #FFAC1C;
         --color-comment: #78b13f;
-        --color-string: #adafeb;
+        --color-multi-line-comment: #78b13f;
+        --color-string: #484dd2;
+        --color-multi-line-string: #484dd2;
         --color-black: #F5F5F5;
         --color-white: #3b3a3a;
         --color-dark-gray: #808080;

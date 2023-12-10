@@ -236,11 +236,12 @@
             var comment = innerHTML.substring(startIndex, endIndex + multiLineComment[1].length);
             var commentLines = comment.split(_string.newLine);
             var commentLinesLength = commentLines.length;
+            var commentCssClass = commentLinesLength === 1 ? "comment" : "multi-line-comment";
             var commentLineIndex = 0;
             for (; commentLineIndex < commentLinesLength; commentLineIndex++) {
               var commentVariable = "$C{" + _comments_Cached_Count.toString() + "}";
               var commentLine = commentLines[commentLineIndex];
-              _comments_Cached[commentVariable] = '<span class="comment">' + commentLine + "</span>";
+              _comments_Cached[commentVariable] = '<span class="' + commentCssClass + '">' + commentLine + "</span>";
               _comments_Cached_Count++;
               innerHTML = innerHTML.replace(commentLine, commentVariable);
             }
@@ -259,11 +260,12 @@
         var quote = patternItems[patternItemsIndex];
         var quoteLines = quote.split(_string.newLine);
         var quoteLinesLength = quoteLines.length;
+        var quoteCssClass = quoteLinesLength === 1 ? "string" : "multi-line-string";
         var quoteLineIndex = 0;
         for (; quoteLineIndex < quoteLinesLength; quoteLineIndex++) {
           var quoteLine = quoteLines[quoteLineIndex];
           var quoteVariable = "$S{" + _strings_Cached_Count.toString() + "}";
-          _strings_Cached[quoteVariable] = '<span class="string">' + quoteLine + "</span>";
+          _strings_Cached[quoteVariable] = '<span class="' + quoteCssClass + '">' + quoteLine + "</span>";
           _strings_Cached_Count++;
           innerHTML = innerHTML.replace(quoteLine, quoteVariable);
         }

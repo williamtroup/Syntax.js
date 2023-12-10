@@ -356,13 +356,14 @@
                     if ( endIndex > -1 ) {
                         var comment = innerHTML.substring( startIndex, endIndex + multiLineComment[ 1 ].length ),
                             commentLines = comment.split( _string.newLine ),
-                            commentLinesLength = commentLines.length;
+                            commentLinesLength = commentLines.length,
+                            commentCssClass = commentLinesLength === 1 ? "comment" : "multi-line-comment";
                         
                         for ( var commentLineIndex = 0; commentLineIndex < commentLinesLength; commentLineIndex++ ) {
                             var commentVariable = "$C{" + _comments_Cached_Count.toString() + "}",
                                 commentLine = commentLines[ commentLineIndex ];
                             
-                            _comments_Cached[ commentVariable ] = "<span class=\"comment\">" + commentLine + "</span>";
+                            _comments_Cached[ commentVariable ] = "<span class=\"" + commentCssClass + "\">" + commentLine + "</span>";
                             _comments_Cached_Count++;
                 
                             innerHTML = innerHTML.replace( commentLine, commentVariable );
@@ -384,13 +385,14 @@
             for ( var patternItemsIndex = 0; patternItemsIndex < patternItemsLength; patternItemsIndex++ ) {
                 var quote = patternItems[ patternItemsIndex ],
                     quoteLines = quote.split( _string.newLine ),
-                    quoteLinesLength = quoteLines.length;
+                    quoteLinesLength = quoteLines.length,
+                    quoteCssClass = quoteLinesLength === 1 ? "string" : "multi-line-string";
 
                 for ( var quoteLineIndex = 0; quoteLineIndex < quoteLinesLength; quoteLineIndex++ ) {
                     var quoteLine = quoteLines[ quoteLineIndex ],
                         quoteVariable = "$S{" + _strings_Cached_Count.toString() + "}";
 
-                    _strings_Cached[ quoteVariable ] = "<span class=\"string\">" + quoteLine + "</span>";
+                    _strings_Cached[ quoteVariable ] = "<span class=\"" + quoteCssClass + "\">" + quoteLine + "</span>";
                     _strings_Cached_Count++;
         
                     innerHTML = innerHTML.replace( quoteLine, quoteVariable );
