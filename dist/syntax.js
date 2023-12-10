@@ -1,4 +1,4 @@
-/*! Syntax.js v1.7.1 | (c) Bunoon | MIT License */
+/*! Syntax.js v1.7.2 | (c) Bunoon | MIT License */
 (function() {
   function render() {
     var tagTypes = _configuration.highlightAllDomElementTypes;
@@ -819,7 +819,7 @@
     return this;
   };
   this.getVersion = function() {
-    return "1.7.1";
+    return "1.7.2";
   };
   (function(documentObject, navigatorObject, windowObject) {
     _parameter_Document = documentObject;
