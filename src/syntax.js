@@ -214,17 +214,7 @@
                     var customButton = customButtons[ customButtonsIndex ];
 
                     if ( isDefined( customButton.text ) && isDefinedFunction( customButton.onClick ) ) {
-                        var newCustomButton = createElement( "div", "button" );
-                        newCustomButton.innerHTML = customButton.text;
-                        newCustomButton.onclick = customButton.onClick;
-                        newCustomButton.style.display = _configuration.buttonsVisible ? "inline-block" : "none";
-                        buttons.appendChild( newCustomButton );
-
-                        if ( isDefined( customButton.className ) ) {
-                            newCustomButton.className += " " + customButton.className;
-                        }
-
-                        buttonsElements.push( newCustomButton );
+                        renderElementButton( customButton, buttonsElements, buttons, innerHTMLCopy );
                     }
                 }
             }
@@ -308,6 +298,23 @@
                 };
             }
         }
+    }
+
+    function renderElementButton( customButton, buttonsElements, buttons, innerHTMLCopy ) {
+        var newCustomButton = createElement( "div", "button" );
+        newCustomButton.innerHTML = customButton.text;
+        newCustomButton.style.display = _configuration.buttonsVisible ? "inline-block" : "none";
+        buttons.appendChild( newCustomButton );
+
+        newCustomButton.onclick = function() {
+            customButton.onClick( innerHTMLCopy );
+        };
+
+        if ( isDefined( customButton.className ) ) {
+            newCustomButton.className += " " + customButton.className;
+        }
+
+        buttonsElements.push( newCustomButton );
     }
 
     function renderElementCommentVariables( innerHTML, language, syntaxOptions ) {
