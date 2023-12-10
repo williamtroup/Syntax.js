@@ -2,7 +2,7 @@
 
 ## Version 1.7.2:
 - Added "multiLineComment" support for Markup languages (HTML, for example).
-- 
+- Minor code cleanups to make things a bit more readable.
 
 <br>
 

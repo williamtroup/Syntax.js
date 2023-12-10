@@ -502,14 +502,14 @@
   }
   function getLanguage(syntaxLanguage) {
     var result = null;
-    var lookup = syntaxLanguage.toLowerCase();
-    if (_languages.hasOwnProperty(lookup)) {
-      result = _languages[lookup];
+    var language = syntaxLanguage.toLowerCase();
+    if (_languages.hasOwnProperty(language)) {
+      result = _languages[language];
     } else {
-      if (_aliases_Rules.hasOwnProperty(lookup)) {
-        lookup = _aliases_Rules[lookup];
-        if (_languages.hasOwnProperty(lookup)) {
-          result = _languages[lookup];
+      if (_aliases_Rules.hasOwnProperty(language)) {
+        language = _aliases_Rules[language];
+        if (_languages.hasOwnProperty(language)) {
+          result = _languages[language];
         }
       }
     }
