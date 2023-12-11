@@ -87,27 +87,16 @@
               _comments_Cached = {};
               _comments_Cached_Count = 0;
             } else {
-              if (!_configuration.safeMode) {
-                console.error("No code is available available to render, skipping.");
-                result = false;
-              }
+              result = logError("No code is available available to render, skipping.");
             }
           } else {
-            if (!_configuration.safeMode) {
-              result = false;
-            }
+            result = !_configuration.safeMode;
           }
         } else {
-          if (!_configuration.safeMode) {
-            console.error("Language '" + syntaxLanguage + "' is not supported.");
-            result = false;
-          }
+          result = logError("Language '" + syntaxLanguage + "' is not supported.");
         }
       } else {
-        if (!_configuration.safeMode) {
-          console.error("The attribute '" + _attribute_Name_Language + "' has not been set correctly.");
-          result = false;
-        }
+        result = logError("The attribute '" + _attribute_Name_Language + "' has not been set correctly.");
       }
     }
     return result;
@@ -526,6 +515,14 @@
       keyword = keyword.toLowerCase();
     }
     return keyword;
+  }
+  function logError(error) {
+    var result = true;
+    if (!_configuration.safeMode) {
+      console.error(error);
+      result = false;
+    }
+    return result;
   }
   function buildAttributeOptions(newOptions) {
     var options = !isDefinedObject(newOptions) ? {} : newOptions;

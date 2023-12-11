@@ -1,6 +1,7 @@
 # Syntax.js - Change Log:
 
 ## Version 1.8.1:
+- Minor error logging improvements (uses less code and can be re-used as needed).
 - 
 
 <br>
