@@ -8,7 +8,8 @@
 #### **Languages:**
 - Added support for the Perl programming language (importable file).
 - Added support for the Bash scripting language (importable file).
-- Added support for the Kotlin programming language (importable file).
+- Added support for the Kotlin programming language (importable file).\
+- Added support for the R programming language (importable file).
 - Moved some of the keywords for the supported languages into "values".
 
 #### **Binding Options:**
