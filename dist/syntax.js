@@ -516,14 +516,6 @@
     }
     return keyword;
   }
-  function logError(error) {
-    var result = true;
-    if (!_configuration.safeMode) {
-      console.error(error);
-      result = false;
-    }
-    return result;
-  }
   function getBindingOptions(newOptions) {
     var options = !isDefinedObject(newOptions) ? {} : newOptions;
     options = buildBindingAttributeOptions(options);
@@ -655,10 +647,7 @@
           result = result();
         }
       } catch (e2) {
-        if (!_configuration.safeMode) {
-          console.error("Errors in object: " + e1.message + ", " + e2.message);
-          parsed = false;
-        }
+        parsed = logError("Errors in object: " + e1.message + ", " + e2.message);
         result = null;
       }
     }
@@ -667,6 +656,14 @@
   function getClonedObject(object) {
     var json = JSON.stringify(object);
     var result = JSON.parse(json);
+    return result;
+  }
+  function logError(error) {
+    var result = true;
+    if (!_configuration.safeMode) {
+      console.error(error);
+      result = false;
+    }
     return result;
   }
   function newGuid() {
