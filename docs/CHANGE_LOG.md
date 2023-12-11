@@ -1,5 +1,38 @@
 # Syntax.js - Change Log:
 
+## Version 1.8.0:
+
+#### **Public Functions:**
+- Added new public function "getCode()", which is used to return all of the code inside an element (without rendering colors).
+
+#### **Languages:**
+- Added support for the Perl programming language (importable file).
+- Added support for the Bash scripting language (importable file).
+- Added support for the Kotlin programming language (importable file).\
+- Added support for the R programming language (importable file).
+- Added support for the Matlab programming language (importable file).
+- Added support for the Scala programming language (importable file).
+- Moved some of the keywords for the supported languages into "values".
+- Multi-line comments are now processed before single-line comments.
+
+#### **Binding Options:**
+- Added a new binding option called "doubleClickToSelectAll", which states that double-clicking in one of the containers (numbers, code) will select all the code (defaults to true).
+- Added a new binding option called "languageLabelCasing", which states the casing to use for the language label (defaults to "uppercase").
+
+### **CSS:**
+- Added new ":root" variable "--button-background-color", which will allow you to set the background color of the buttons.
+- Added new ":root" variable "--button-text-color", which will allow you to set the text color of the buttons.
+- Massively improved the theme "dark-mode" (much cleaner and modern).
+- Shared colors now reference the original base ":root" variable.
+
+#### **General Improvements:**
+- Double-clicking in the code container will now select all the code (if the new setting is turned on).
+- Removed a lot of duplicated code.
+- Lots of clean-ups across the HTML testing files.
+
+<br>
+
+
 ## Version 1.7.3:
 - The custom buttons "onClick" event now accepts the code as a parameter (see documentation).
 - Fixed a fault that caused the wrong the events to be assigned to the custom buttons when there is more than one.

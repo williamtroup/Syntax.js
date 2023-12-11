@@ -1,5 +1,5 @@
 /*
- * Syntax.js Library v1.7.3
+ * Syntax.js Library v1.8.0
  *
  * Copyright 2023 Bunoon
  * Released under the MIT License
@@ -15,20 +15,22 @@
   --color-keyword-hover: #FF0000;
   --color-value-hover: #FFAC1C;
   --color-comment: #78b13f;
-  --color-multi-line-comment: #78b13f;
+  --color-multi-line-comment: var(--color-comment);
   --color-string: #484dd2;
-  --color-multi-line-string: #484dd2;
+  --color-multi-line-string: var(--color-string);
   --color-black: #3b3a3a;
   --color-white: #F5F5F5;
   --color-dark-gray: #808080;
   --color-gray: #BBBBBB;
   --color-lighter-gray: #C0C0C0;
   --container-background-color-container: #e8e6e6;
-  --container-border-color-container: #3b3a3a;
+  --container-border-color-container: var(--color-black);
   --container-background-color-syntax: #EEEEEE;
   --container-border-color-syntax: #CCCCCC;
   --container-background-color-numbers: #dddddd;
-  --container-border-color-numbers: #BBBBBB;
+  --container-border-color-numbers: var(--color-gray);
+  --button-background-color: var(--color-black);
+  --button-text-color: var(--color-white);
   --border-radius: 0.5rem;
   --border-style-scrollbar: inset 0 0 6px --color-dark-gray;
   --border-size: 0.5px;
@@ -82,6 +84,7 @@ code.syntax-highlight div.code div.numbers p,
 div.syntax-highlight div.code div.numbers p {
   margin: 0;
   text-wrap: nowrap;
+  color: var(--color-black);
 }
 @media (min-width: 768px) {
   code.syntax-highlight div.code div.numbers,
@@ -113,12 +116,13 @@ code.syntax-highlight div.code div.syntax div.buttons div.button,
 code.syntax-highlight div.code div.syntax div.buttons div.label,
 div.syntax-highlight div.code div.syntax div.buttons div.button,
 div.syntax-highlight div.code div.syntax div.buttons div.label {
-  color: var(--color-white);
-  background-color: var(--color-black);
+  color: var(--button-text-color);
+  background-color: var(--button-background-color);
   padding: 7px;
   padding-left: 10px;
   padding-right: 10px;
   display: inline-block;
+  border: none;
   border-right: 1px dotted var(--color-gray);
   font-size: small;
 }

@@ -1,4 +1,4 @@
-/*! Syntax.js v1.7.3 | (c) Bunoon | MIT License */
+/*! Syntax.js v1.8.0 | (c) Bunoon | MIT License */
 $syntax.addLanguage( "f-sharp", {
     friendlyName: "F#",
     keywords: [
@@ -41,7 +41,6 @@ $syntax.addLanguage( "f-sharp", {
         "namespace",
         "new",
         "not",
-        "null",
         "of",
         "open",
         "or",
@@ -69,7 +68,8 @@ $syntax.addLanguage( "f-sharp", {
     ],
     values: [
         "false",
-        "true"
+        "true",
+        "null"
     ],
     comment: "//",
     multiLineComment: [ "(*", "*)" ],

@@ -4,7 +4,7 @@
  * A lightweight, and easy-to-use, JavaScript library for code syntax highlighting!
  * 
  * @file        syntax.js
- * @version     v1.7.3
+ * @version     v1.8.0
  * @author      Bunoon
  * @license     MIT License
  * @copyright   Bunoon 2023
@@ -129,8 +129,8 @@
 
                             if ( syntaxLanguage.toLowerCase() !== _languages_Unknown ) {
                                 if ( syntaxOptions.highlightComments ) {
-                                    innerHTML = renderElementCommentVariables( innerHTML, language, syntaxOptions );
                                     innerHTML = renderElementMultiLineCommentVariables( innerHTML, language, syntaxOptions );
+                                    innerHTML = renderElementCommentVariables( innerHTML, language, syntaxOptions );
                                 }
         
                                 if ( syntaxOptions.highlightStrings ) {
@@ -276,7 +276,7 @@
 
             if ( syntaxOptions.showLanguageLabel ) {
                 var languageLabel = createElement( "div", "label" );
-                languageLabel.innerHTML = getFriendlyLanguageName( syntaxLanguage );
+                languageLabel.innerHTML = getFriendlyLanguageName( syntaxLanguage, syntaxOptions.languageLabelCasing );
                 buttons.appendChild( languageLabel );
             }
 
@@ -407,28 +407,17 @@
 
     function renderElementKeywords( innerHTML, language, syntaxOptions ) {
         var keywords = getDefaultStringOrArray( language.keywords, [] ),
+            keywordsLength = keywords.length,
             caseSensitive = language.caseSensitive,
-            keywordsCasing = language.keywordsCasing;
-
-        if ( isDefinedString( keywordsCasing ) ) {
-            keywordsCasing = keywordsCasing.toLowerCase().trim();
-        }
+            keywordsCasing = getKeywordCasing( language.keywordsCasing );
 
         sortArrayOfStringByLength( keywords );
 
-        var keywordsLength = keywords.length;
-
         for ( var keywordIndex = 0; keywordIndex < keywordsLength; keywordIndex++ ) {
             var keyword = keywords[ keywordIndex ],
-                keywordDisplay = keyword,
+                keywordDisplay = getDisplayTextTestCasing( keyword, keywordsCasing ),
                 regExFlags = caseSensitive ? "g" : "gi",
                 regEx = new RegExp( "\\b" + keyword + "\\b", regExFlags );
-
-            if ( keywordsCasing === "uppercase" ) {
-                keywordDisplay = keywordDisplay.toUpperCase();
-            } else if ( keywordsCasing === "lowercase" ) {
-                keywordDisplay = keywordDisplay.toLowerCase();
-            }
 
             if ( syntaxOptions.highlightKeywords ) {
                 if ( isDefinedFunction( syntaxOptions.onKeywordClicked ) ) {
@@ -452,11 +441,7 @@
     function replaceMarkUpKeywords( innerHTML, language, syntaxOptions ) {
         var keywords = getDefaultStringOrArray( language.keywords, [] ),
             caseSensitive = language.caseSensitive,
-            keywordsCasing = language.keywordsCasing;
-
-        if ( isDefinedString( keywordsCasing ) ) {
-            keywordsCasing = keywordsCasing.toLowerCase().trim();
-        }
+            keywordsCasing = getKeywordCasing( language.keywordsCasing );
 
         var regEx = /(<([^>]+)>)/ig,
             replacements = {},
@@ -477,13 +462,7 @@
                 var replacementVariable = "KW" + replacementsNumber.toString() + ";",
                     regExReplace = new RegExp( "\\b" + tag + "\\b", regExFlags ),
                     replacement = null,
-                    replacementTagDisplay = tag;
-
-                if ( keywordsCasing === "uppercase" ) {
-                    replacementTagDisplay = replacementTagDisplay.toUpperCase();
-                } else if ( keywordsCasing === "lowercase" ) {
-                    replacementTagDisplay = replacementTagDisplay.toLowerCase();
-                }
+                    replacementTagDisplay = getDisplayTextTestCasing( tag, keywordsCasing );
 
                 if ( syntaxOptions.highlightKeywords ) {
                     if ( isDefinedFunction( syntaxOptions.onKeywordClicked ) ) {
@@ -607,8 +586,14 @@
             }
         }
 
-        if ( isDefined( numbers ) ) {
-            numbers.ondblclick = function() {
+        if ( syntaxOptions.doubleClickToSelectAll ) {
+            if ( isDefined( numbers ) ) {
+                numbers.ondblclick = function() {
+                    selectTextInElement( codeContainer );
+                };
+            }
+    
+            syntax.ondblclick = function() {
                 selectTextInElement( codeContainer );
             };
         }
@@ -660,21 +645,17 @@
             }
         }
 
-        if ( isDefinedFunction( syntaxOptions.onKeywordClicked ) ) {
-            var keywords = element.getElementsByClassName( "keyword-clickable" ),
-                keywordsLength = keywords.length;
+        renderElementClickEvents( element, syntaxOptions.onKeywordClicked, "keyword-clickable" );
+        renderElementClickEvents( element, syntaxOptions.onValueClicked, "value-clickable" );
+    }
 
-            for ( var keywordIndex = 0; keywordIndex < keywordsLength; keywordIndex++ ) {
-                renderElementClickEvent( keywords[ keywordIndex ], syntaxOptions.onKeywordClicked );
-            }
-        }
+    function renderElementClickEvents( element, customTrigger, className ) {
+        if ( isDefinedFunction( customTrigger ) ) {
+            var elements = element.getElementsByClassName( className ),
+                elementsLength = elements.length;
 
-        if ( isDefinedFunction( syntaxOptions.onValueClicked ) ) {
-            var values = element.getElementsByClassName( "value-clickable" ),
-                valuesLength = values.length;
-
-            for ( var valueIndex = 0; valueIndex < valuesLength; valueIndex++ ) {
-                renderElementClickEvent( values[ valueIndex ], syntaxOptions.onValueClicked );
+            for ( var elementIndex = 0; elementIndex < elementsLength; elementIndex++ ) {
+                renderElementClickEvent( elements[ elementIndex ], customTrigger );
             }
         }
     }
@@ -687,15 +668,17 @@
         };
     }
 
-    function getFriendlyLanguageName( syntaxLanguage ) {
+    function getFriendlyLanguageName( syntaxLanguage, languageLabelCasing ) {
         var result = null,
             language = getLanguage( syntaxLanguage );
 
         if ( isDefined( language ) && isDefinedString( language.friendlyName ) ) {
-            result = language.friendlyName.toUpperCase();
+            result = language.friendlyName;
         } else {
-            result = syntaxLanguage.toUpperCase();
+            result = syntaxLanguage;
         }
+
+        result = getDisplayTextTestCasing( result, languageLabelCasing );
 
         return result;
     }
@@ -720,6 +703,23 @@
         return result;
     }
 
+    function getKeywordCasing( keywordsCasing ) {
+        if ( isDefinedString( keywordsCasing ) ) {
+            keywordsCasing = keywordsCasing.toLowerCase().trim();
+        }
+
+        return keywordsCasing;
+    }
+
+    function getDisplayTextTestCasing( keyword, keywordsCasing ) {
+        if ( keywordsCasing === "uppercase" ) {
+            keyword = keyword.toUpperCase();
+        } else if ( keywordsCasing === "lowercase" ) {
+            keyword = keyword.toLowerCase();
+        }
+        return keyword;
+    }
+
 
     /*
      * ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -740,6 +740,8 @@
         options.showPrintButton = getDefaultBoolean( options.showPrintButton, true );
         options.padLineNumbers = getDefaultBoolean( options.padLineNumbers, false );
         options.removeDuplicateBlankLines = getDefaultBoolean( options.removeDuplicateBlankLines, true );
+        options.doubleClickToSelectAll = getDefaultBoolean( options.doubleClickToSelectAll, true );
+        options.languageLabelCasing = getDefaultString( options.languageLabelCasing, "uppercase" );
         
         options = buildAttributeOptionStrings( options );
 
@@ -1044,6 +1046,28 @@
 
     this.getElementsHighlighted = function() {
         return [].slice.call( _elements );
+    };
+
+    /**
+     * getCode().
+     * 
+     * Returns the code inside a specific element (without rendering colors).
+     * 
+     * @public
+     * 
+     * @param       {string}    elementId                                   The element ID.
+     * 
+     * @returns     {string}                                                The code in the element.
+     */
+
+    this.getCode = function( elementId ) {
+        var result = null;
+
+        if ( _elements_Original.hasOwnProperty( elementId ) ) {
+            result = _elements_Original[ elementId ];
+        }
+
+        return result;
     };
 
 
@@ -1364,7 +1388,7 @@
      * @returns     {string}                                                The version number.
      */
     this.getVersion = function() {
-        return "1.7.3";
+        return "1.8.0";
     };
 
 

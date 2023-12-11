@@ -1,4 +1,4 @@
-/*! Syntax.js v1.7.3 | (c) Bunoon | MIT License */
+/*! Syntax.js v1.8.0 | (c) Bunoon | MIT License */
 (function() {
   function render() {
     var tagTypes = _configuration.highlightAllDomElementTypes;
@@ -57,8 +57,8 @@
               renderElementButtons(syntax, syntaxOptions, syntaxLanguage, syntaxButtonsParsed, innerHTMLCopy);
               if (syntaxLanguage.toLowerCase() !== _languages_Unknown) {
                 if (syntaxOptions.highlightComments) {
-                  innerHTML = renderElementCommentVariables(innerHTML, language, syntaxOptions);
                   innerHTML = renderElementMultiLineCommentVariables(innerHTML, language, syntaxOptions);
+                  innerHTML = renderElementCommentVariables(innerHTML, language, syntaxOptions);
                 }
                 if (syntaxOptions.highlightStrings) {
                   innerHTML = renderElementStringQuotesPatternVariables(innerHTML, innerHTML.match(/"((?:\\.|[^"\\])*)"/g), syntaxOptions);
@@ -174,7 +174,7 @@
       }
       if (syntaxOptions.showLanguageLabel) {
         var languageLabel = createElement("div", "label");
-        languageLabel.innerHTML = getFriendlyLanguageName(syntaxLanguage);
+        languageLabel.innerHTML = getFriendlyLanguageName(syntaxLanguage, syntaxOptions.languageLabelCasing);
         buttons.appendChild(languageLabel);
       }
       var buttonsElementsLength = buttonsElements.length;
@@ -276,24 +276,16 @@
   }
   function renderElementKeywords(innerHTML, language, syntaxOptions) {
     var keywords = getDefaultStringOrArray(language.keywords, []);
-    var caseSensitive = language.caseSensitive;
-    var keywordsCasing = language.keywordsCasing;
-    if (isDefinedString(keywordsCasing)) {
-      keywordsCasing = keywordsCasing.toLowerCase().trim();
-    }
-    sortArrayOfStringByLength(keywords);
     var keywordsLength = keywords.length;
+    var caseSensitive = language.caseSensitive;
+    var keywordsCasing = getKeywordCasing(language.keywordsCasing);
+    sortArrayOfStringByLength(keywords);
     var keywordIndex = 0;
     for (; keywordIndex < keywordsLength; keywordIndex++) {
       var keyword = keywords[keywordIndex];
-      var keywordDisplay = keyword;
+      var keywordDisplay = getDisplayTextTestCasing(keyword, keywordsCasing);
       var regExFlags = caseSensitive ? "g" : "gi";
       var regEx = new RegExp("\\b" + keyword + "\\b", regExFlags);
-      if (keywordsCasing === "uppercase") {
-        keywordDisplay = keywordDisplay.toUpperCase();
-      } else if (keywordsCasing === "lowercase") {
-        keywordDisplay = keywordDisplay.toLowerCase();
-      }
       if (syntaxOptions.highlightKeywords) {
         if (isDefinedFunction(syntaxOptions.onKeywordClicked)) {
           innerHTML = innerHTML.replace(regEx, '<span class="keyword-clickable">' + keywordDisplay + "</span>");
@@ -312,10 +304,7 @@
   function replaceMarkUpKeywords(innerHTML, language, syntaxOptions) {
     var keywords = getDefaultStringOrArray(language.keywords, []);
     var caseSensitive = language.caseSensitive;
-    var keywordsCasing = language.keywordsCasing;
-    if (isDefinedString(keywordsCasing)) {
-      keywordsCasing = keywordsCasing.toLowerCase().trim();
-    }
+    var keywordsCasing = getKeywordCasing(language.keywordsCasing);
     var regEx = /(<([^>]+)>)/ig;
     var replacements = {};
     var replacementsNumber = 1;
@@ -332,12 +321,7 @@
         var replacementVariable = "KW" + replacementsNumber.toString() + ";";
         var regExReplace = new RegExp("\\b" + tag + "\\b", regExFlags);
         var replacement = null;
-        var replacementTagDisplay = tag;
-        if (keywordsCasing === "uppercase") {
-          replacementTagDisplay = replacementTagDisplay.toUpperCase();
-        } else if (keywordsCasing === "lowercase") {
-          replacementTagDisplay = replacementTagDisplay.toLowerCase();
-        }
+        var replacementTagDisplay = getDisplayTextTestCasing(tag, keywordsCasing);
         if (syntaxOptions.highlightKeywords) {
           if (isDefinedFunction(syntaxOptions.onKeywordClicked)) {
             replacement = '<span class="keyword-clickable">' + replacementTagDisplay + "</span>";
@@ -437,8 +421,13 @@
         numbers.appendChild(numberContainer);
       }
     }
-    if (isDefined(numbers)) {
-      numbers.ondblclick = function() {
+    if (syntaxOptions.doubleClickToSelectAll) {
+      if (isDefined(numbers)) {
+        numbers.ondblclick = function() {
+          selectTextInElement(codeContainer);
+        };
+      }
+      syntax.ondblclick = function() {
         selectTextInElement(codeContainer);
       };
     }
@@ -479,20 +468,16 @@
         }
       }
     }
-    if (isDefinedFunction(syntaxOptions.onKeywordClicked)) {
-      var keywords = element.getElementsByClassName("keyword-clickable");
-      var keywordsLength = keywords.length;
-      var keywordIndex = 0;
-      for (; keywordIndex < keywordsLength; keywordIndex++) {
-        renderElementClickEvent(keywords[keywordIndex], syntaxOptions.onKeywordClicked);
-      }
-    }
-    if (isDefinedFunction(syntaxOptions.onValueClicked)) {
-      var values = element.getElementsByClassName("value-clickable");
-      var valuesLength = values.length;
-      var valueIndex = 0;
-      for (; valueIndex < valuesLength; valueIndex++) {
-        renderElementClickEvent(values[valueIndex], syntaxOptions.onValueClicked);
+    renderElementClickEvents(element, syntaxOptions.onKeywordClicked, "keyword-clickable");
+    renderElementClickEvents(element, syntaxOptions.onValueClicked, "value-clickable");
+  }
+  function renderElementClickEvents(element, customTrigger, className) {
+    if (isDefinedFunction(customTrigger)) {
+      var elements = element.getElementsByClassName(className);
+      var elementsLength = elements.length;
+      var elementIndex = 0;
+      for (; elementIndex < elementsLength; elementIndex++) {
+        renderElementClickEvent(elements[elementIndex], customTrigger);
       }
     }
   }
@@ -502,14 +487,15 @@
       customTrigger(text);
     };
   }
-  function getFriendlyLanguageName(syntaxLanguage) {
+  function getFriendlyLanguageName(syntaxLanguage, languageLabelCasing) {
     var result = null;
     var language = getLanguage(syntaxLanguage);
     if (isDefined(language) && isDefinedString(language.friendlyName)) {
-      result = language.friendlyName.toUpperCase();
+      result = language.friendlyName;
     } else {
-      result = syntaxLanguage.toUpperCase();
+      result = syntaxLanguage;
     }
+    result = getDisplayTextTestCasing(result, languageLabelCasing);
     return result;
   }
   function getLanguage(syntaxLanguage) {
@@ -527,6 +513,20 @@
     }
     return result;
   }
+  function getKeywordCasing(keywordsCasing) {
+    if (isDefinedString(keywordsCasing)) {
+      keywordsCasing = keywordsCasing.toLowerCase().trim();
+    }
+    return keywordsCasing;
+  }
+  function getDisplayTextTestCasing(keyword, keywordsCasing) {
+    if (keywordsCasing === "uppercase") {
+      keyword = keyword.toUpperCase();
+    } else if (keywordsCasing === "lowercase") {
+      keyword = keyword.toLowerCase();
+    }
+    return keyword;
+  }
   function buildAttributeOptions(newOptions) {
     var options = !isDefinedObject(newOptions) ? {} : newOptions;
     options.showCopyButton = getDefaultBoolean(options.showCopyButton, true);
@@ -540,6 +540,8 @@
     options.showPrintButton = getDefaultBoolean(options.showPrintButton, true);
     options.padLineNumbers = getDefaultBoolean(options.padLineNumbers, false);
     options.removeDuplicateBlankLines = getDefaultBoolean(options.removeDuplicateBlankLines, true);
+    options.doubleClickToSelectAll = getDefaultBoolean(options.doubleClickToSelectAll, true);
+    options.languageLabelCasing = getDefaultString(options.languageLabelCasing, "uppercase");
     options = buildAttributeOptionStrings(options);
     return buildAttributeOptionCustomTriggers(options);
   }
@@ -737,6 +739,13 @@
   this.getElementsHighlighted = function() {
     return [].slice.call(_elements);
   };
+  this.getCode = function(elementId) {
+    var result = null;
+    if (_elements_Original.hasOwnProperty(elementId)) {
+      result = _elements_Original[elementId];
+    }
+    return result;
+  };
   this.destroyAll = function() {
     var elementId;
     for (elementId in _elements_Original) {
@@ -844,7 +853,7 @@
     return this;
   };
   this.getVersion = function() {
-    return "1.7.3";
+    return "1.8.0";
   };
   (function(documentObject, navigatorObject, windowObject) {
     _parameter_Document = documentObject;

@@ -1,4 +1,4 @@
-/*! Syntax.js v1.7.3 | (c) Bunoon | MIT License */
+/*! Syntax.js v1.8.0 | (c) Bunoon | MIT License */
 $syntax.addLanguage( "javascript", {
     friendlyName: "JavaScript",
     keywords: [
@@ -41,7 +41,6 @@ $syntax.addLanguage( "javascript", {
         "long",
         "native",
         "new",
-        "null",
         "package",
         "private",
         "protected",
@@ -67,7 +66,8 @@ $syntax.addLanguage( "javascript", {
     ],
     values: [
         "false",
-        "true"
+        "true",
+        "null"
     ],
     comment: "//",
     multiLineComment: [ "/*", "*/" ],

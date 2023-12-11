@@ -1,4 +1,4 @@
-/*! Syntax.js v1.7.3 | (c) Bunoon | MIT License */
+/*! Syntax.js v1.8.0 | (c) Bunoon | MIT License */
 $syntax.addLanguage( "typescript", {
     friendlyName: "TypeScript",
     keywords: [
@@ -24,7 +24,6 @@ $syntax.addLanguage( "typescript", {
         "in",
         "instanceof",
         "new",
-        "null",
         "return",
         "super",
         "switch",
@@ -63,7 +62,8 @@ $syntax.addLanguage( "typescript", {
     ],
     values: [
         "false",
-        "true"
+        "true",
+        "null"
     ],
     comment: "//",
     multiLineComment: [ "/*", "*/" ],
