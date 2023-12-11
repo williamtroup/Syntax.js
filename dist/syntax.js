@@ -57,8 +57,8 @@
               renderElementButtons(syntax, syntaxOptions, syntaxLanguage, syntaxButtonsParsed, innerHTMLCopy);
               if (syntaxLanguage.toLowerCase() !== _languages_Unknown) {
                 if (syntaxOptions.highlightComments) {
-                  innerHTML = renderElementCommentVariables(innerHTML, language, syntaxOptions);
                   innerHTML = renderElementMultiLineCommentVariables(innerHTML, language, syntaxOptions);
+                  innerHTML = renderElementCommentVariables(innerHTML, language, syntaxOptions);
                 }
                 if (syntaxOptions.highlightStrings) {
                   innerHTML = renderElementStringQuotesPatternVariables(innerHTML, innerHTML.match(/"((?:\\.|[^"\\])*)"/g), syntaxOptions);
