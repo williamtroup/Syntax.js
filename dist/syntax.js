@@ -276,24 +276,16 @@
   }
   function renderElementKeywords(innerHTML, language, syntaxOptions) {
     var keywords = getDefaultStringOrArray(language.keywords, []);
-    var caseSensitive = language.caseSensitive;
-    var keywordsCasing = language.keywordsCasing;
-    if (isDefinedString(keywordsCasing)) {
-      keywordsCasing = keywordsCasing.toLowerCase().trim();
-    }
-    sortArrayOfStringByLength(keywords);
     var keywordsLength = keywords.length;
+    var caseSensitive = language.caseSensitive;
+    var keywordsCasing = getKeywordCasing(language.keywordsCasing);
+    sortArrayOfStringByLength(keywords);
     var keywordIndex = 0;
     for (; keywordIndex < keywordsLength; keywordIndex++) {
       var keyword = keywords[keywordIndex];
-      var keywordDisplay = keyword;
+      var keywordDisplay = getKeywordDisplayTestCasing(keyword, keywordsCasing);
       var regExFlags = caseSensitive ? "g" : "gi";
       var regEx = new RegExp("\\b" + keyword + "\\b", regExFlags);
-      if (keywordsCasing === "uppercase") {
-        keywordDisplay = keywordDisplay.toUpperCase();
-      } else if (keywordsCasing === "lowercase") {
-        keywordDisplay = keywordDisplay.toLowerCase();
-      }
       if (syntaxOptions.highlightKeywords) {
         if (isDefinedFunction(syntaxOptions.onKeywordClicked)) {
           innerHTML = innerHTML.replace(regEx, '<span class="keyword-clickable">' + keywordDisplay + "</span>");
@@ -312,10 +304,7 @@
   function replaceMarkUpKeywords(innerHTML, language, syntaxOptions) {
     var keywords = getDefaultStringOrArray(language.keywords, []);
     var caseSensitive = language.caseSensitive;
-    var keywordsCasing = language.keywordsCasing;
-    if (isDefinedString(keywordsCasing)) {
-      keywordsCasing = keywordsCasing.toLowerCase().trim();
-    }
+    var keywordsCasing = getKeywordCasing(language.keywordsCasing);
     var regEx = /(<([^>]+)>)/ig;
     var replacements = {};
     var replacementsNumber = 1;
@@ -332,12 +321,7 @@
         var replacementVariable = "KW" + replacementsNumber.toString() + ";";
         var regExReplace = new RegExp("\\b" + tag + "\\b", regExFlags);
         var replacement = null;
-        var replacementTagDisplay = tag;
-        if (keywordsCasing === "uppercase") {
-          replacementTagDisplay = replacementTagDisplay.toUpperCase();
-        } else if (keywordsCasing === "lowercase") {
-          replacementTagDisplay = replacementTagDisplay.toLowerCase();
-        }
+        var replacementTagDisplay = getKeywordDisplayTestCasing(tag, keywordsCasing);
         if (syntaxOptions.highlightKeywords) {
           if (isDefinedFunction(syntaxOptions.onKeywordClicked)) {
             replacement = '<span class="keyword-clickable">' + replacementTagDisplay + "</span>";
@@ -484,20 +468,16 @@
         }
       }
     }
-    if (isDefinedFunction(syntaxOptions.onKeywordClicked)) {
-      var keywords = element.getElementsByClassName("keyword-clickable");
-      var keywordsLength = keywords.length;
-      var keywordIndex = 0;
-      for (; keywordIndex < keywordsLength; keywordIndex++) {
-        renderElementClickEvent(keywords[keywordIndex], syntaxOptions.onKeywordClicked);
-      }
-    }
-    if (isDefinedFunction(syntaxOptions.onValueClicked)) {
-      var values = element.getElementsByClassName("value-clickable");
-      var valuesLength = values.length;
-      var valueIndex = 0;
-      for (; valueIndex < valuesLength; valueIndex++) {
-        renderElementClickEvent(values[valueIndex], syntaxOptions.onValueClicked);
+    renderElementClickEvents(element, syntaxOptions.onKeywordClicked, "keyword-clickable");
+    renderElementClickEvents(element, syntaxOptions.onValueClicked, "value-clickable");
+  }
+  function renderElementClickEvents(element, customTrigger, className) {
+    if (isDefinedFunction(customTrigger)) {
+      var elements = element.getElementsByClassName(className);
+      var elementsLength = elements.length;
+      var elementIndex = 0;
+      for (; elementIndex < elementsLength; elementIndex++) {
+        renderElementClickEvent(elements[elementIndex], customTrigger);
       }
     }
   }
@@ -531,6 +511,20 @@
       }
     }
     return result;
+  }
+  function getKeywordCasing(keywordsCasing) {
+    if (isDefinedString(keywordsCasing)) {
+      keywordsCasing = keywordsCasing.toLowerCase().trim();
+    }
+    return keywordsCasing;
+  }
+  function getKeywordDisplayTestCasing(keyword, keywordsCasing) {
+    if (keywordsCasing === "uppercase") {
+      keyword = keyword.toUpperCase();
+    } else if (keywordsCasing === "lowercase") {
+      keyword = keyword.toLowerCase();
+    }
+    return keyword;
   }
   function buildAttributeOptions(newOptions) {
     var options = !isDefinedObject(newOptions) ? {} : newOptions;

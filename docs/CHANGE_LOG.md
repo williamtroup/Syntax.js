@@ -13,6 +13,7 @@
 
 #### **General Improvements:**
 - Double-clicking in the code container will now select all the code (if the new setting is turned on).
+- Removed a lot of duplicated code.
 
 <br>
 

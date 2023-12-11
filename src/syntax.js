@@ -407,28 +407,17 @@
 
     function renderElementKeywords( innerHTML, language, syntaxOptions ) {
         var keywords = getDefaultStringOrArray( language.keywords, [] ),
+            keywordsLength = keywords.length,
             caseSensitive = language.caseSensitive,
-            keywordsCasing = language.keywordsCasing;
-
-        if ( isDefinedString( keywordsCasing ) ) {
-            keywordsCasing = keywordsCasing.toLowerCase().trim();
-        }
+            keywordsCasing = getKeywordCasing( language.keywordsCasing );
 
         sortArrayOfStringByLength( keywords );
 
-        var keywordsLength = keywords.length;
-
         for ( var keywordIndex = 0; keywordIndex < keywordsLength; keywordIndex++ ) {
             var keyword = keywords[ keywordIndex ],
-                keywordDisplay = keyword,
+                keywordDisplay = getKeywordDisplayTestCasing( keyword, keywordsCasing ),
                 regExFlags = caseSensitive ? "g" : "gi",
                 regEx = new RegExp( "\\b" + keyword + "\\b", regExFlags );
-
-            if ( keywordsCasing === "uppercase" ) {
-                keywordDisplay = keywordDisplay.toUpperCase();
-            } else if ( keywordsCasing === "lowercase" ) {
-                keywordDisplay = keywordDisplay.toLowerCase();
-            }
 
             if ( syntaxOptions.highlightKeywords ) {
                 if ( isDefinedFunction( syntaxOptions.onKeywordClicked ) ) {
@@ -452,11 +441,7 @@
     function replaceMarkUpKeywords( innerHTML, language, syntaxOptions ) {
         var keywords = getDefaultStringOrArray( language.keywords, [] ),
             caseSensitive = language.caseSensitive,
-            keywordsCasing = language.keywordsCasing;
-
-        if ( isDefinedString( keywordsCasing ) ) {
-            keywordsCasing = keywordsCasing.toLowerCase().trim();
-        }
+            keywordsCasing = getKeywordCasing( language.keywordsCasing );
 
         var regEx = /(<([^>]+)>)/ig,
             replacements = {},
@@ -477,13 +462,7 @@
                 var replacementVariable = "KW" + replacementsNumber.toString() + ";",
                     regExReplace = new RegExp( "\\b" + tag + "\\b", regExFlags ),
                     replacement = null,
-                    replacementTagDisplay = tag;
-
-                if ( keywordsCasing === "uppercase" ) {
-                    replacementTagDisplay = replacementTagDisplay.toUpperCase();
-                } else if ( keywordsCasing === "lowercase" ) {
-                    replacementTagDisplay = replacementTagDisplay.toLowerCase();
-                }
+                    replacementTagDisplay = getKeywordDisplayTestCasing( tag, keywordsCasing );
 
                 if ( syntaxOptions.highlightKeywords ) {
                     if ( isDefinedFunction( syntaxOptions.onKeywordClicked ) ) {
@@ -666,21 +645,17 @@
             }
         }
 
-        if ( isDefinedFunction( syntaxOptions.onKeywordClicked ) ) {
-            var keywords = element.getElementsByClassName( "keyword-clickable" ),
-                keywordsLength = keywords.length;
+        renderElementClickEvents( element, syntaxOptions.onKeywordClicked, "keyword-clickable" );
+        renderElementClickEvents( element, syntaxOptions.onValueClicked, "value-clickable" );
+    }
 
-            for ( var keywordIndex = 0; keywordIndex < keywordsLength; keywordIndex++ ) {
-                renderElementClickEvent( keywords[ keywordIndex ], syntaxOptions.onKeywordClicked );
-            }
-        }
+    function renderElementClickEvents( element, customTrigger, className ) {
+        if ( isDefinedFunction( customTrigger ) ) {
+            var elements = element.getElementsByClassName( className ),
+                elementsLength = elements.length;
 
-        if ( isDefinedFunction( syntaxOptions.onValueClicked ) ) {
-            var values = element.getElementsByClassName( "value-clickable" ),
-                valuesLength = values.length;
-
-            for ( var valueIndex = 0; valueIndex < valuesLength; valueIndex++ ) {
-                renderElementClickEvent( values[ valueIndex ], syntaxOptions.onValueClicked );
+            for ( var elementIndex = 0; elementIndex < elementsLength; elementIndex++ ) {
+                renderElementClickEvent( elements[ elementIndex ], customTrigger );
             }
         }
     }
@@ -724,6 +699,23 @@
         }
 
         return result;
+    }
+
+    function getKeywordCasing( keywordsCasing ) {
+        if ( isDefinedString( keywordsCasing ) ) {
+            keywordsCasing = keywordsCasing.toLowerCase().trim();
+        }
+
+        return keywordsCasing;
+    }
+
+    function getKeywordDisplayTestCasing( keyword, keywordsCasing ) {
+        if ( keywordsCasing === "uppercase" ) {
+            keyword = keyword.toUpperCase();
+        } else if ( keywordsCasing === "lowercase" ) {
+            keyword = keyword.toLowerCase();
+        }
+        return keyword;
     }
 
 
