@@ -1046,6 +1046,28 @@
         return [].slice.call( _elements );
     };
 
+    /**
+     * getCode().
+     * 
+     * Returns the code inside a specific element (without rendering colors).
+     * 
+     * @public
+     * 
+     * @param       {string}    elementId                                   The element ID.
+     * 
+     * @returns     {string}                                                The code in the element.
+     */
+
+    this.getCode = function( elementId ) {
+        var result = null;
+
+        if ( _elements_Original.hasOwnProperty( elementId ) ) {
+            result = _elements_Original[ elementId ];
+        }
+
+        return result;
+    };
+
 
     /*
      * ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------

@@ -737,6 +737,13 @@
   this.getElementsHighlighted = function() {
     return [].slice.call(_elements);
   };
+  this.getCode = function(elementId) {
+    var result = null;
+    if (_elements_Original.hasOwnProperty(elementId)) {
+      result = _elements_Original[elementId];
+    }
+    return result;
+  };
   this.destroyAll = function() {
     var elementId;
     for (elementId in _elements_Original) {

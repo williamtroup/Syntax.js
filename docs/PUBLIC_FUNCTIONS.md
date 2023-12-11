@@ -28,6 +28,15 @@ Returns the elements that have been detected and rendered.
 <br>
 ***Returns***: '*Object[]*' - An array containing the rendered DOM elements.
 
+### **getCode( *elementId* )**:
+Returns the code inside a specific element (without rendering colors).
+<br>
+***Parameter: elementId***: '*string*' - The element ID.
+<br>
+***Returns***: '*string*' - The code in the element.
+
+
+
 
 <br>
 <h1>Destroying:</h1>

@@ -1,6 +1,9 @@
 # Syntax.js - Change Log:
 
 ## Version 1.8.0:
+
+#### **Public Functions:**
+- Added new public function "getCode()", which is used to return all of the code inside an element (without rendering colors).
 - 
 
 <br>
