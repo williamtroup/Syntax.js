@@ -41,7 +41,6 @@ $syntax.addLanguage( "javascript", {
         "long",
         "native",
         "new",
-        "null",
         "package",
         "private",
         "protected",
@@ -67,7 +66,8 @@ $syntax.addLanguage( "javascript", {
     ],
     values: [
         "false",
-        "true"
+        "true",
+        "null"
     ],
     comment: "//",
     multiLineComment: [ "/*", "*/" ],

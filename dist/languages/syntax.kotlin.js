@@ -15,7 +15,6 @@ $syntax.addLanguage( "kotlin", {
         "in",
         "interface",
         "is",
-        "null",
         "object",
         "package",
         "return",
@@ -79,7 +78,8 @@ $syntax.addLanguage( "kotlin", {
     ],
     values: [
         "false",
-        "true"
+        "true",
+        "null"
     ],
     comment: "//",
     multiLineComment: [ "/*", "*/" ],

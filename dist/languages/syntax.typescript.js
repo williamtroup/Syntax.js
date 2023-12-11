@@ -24,7 +24,6 @@ $syntax.addLanguage( "typescript", {
         "in",
         "instanceof",
         "new",
-        "null",
         "return",
         "super",
         "switch",
@@ -63,7 +62,8 @@ $syntax.addLanguage( "typescript", {
     ],
     values: [
         "false",
-        "true"
+        "true",
+        "null"
     ],
     comment: "//",
     multiLineComment: [ "/*", "*/" ],

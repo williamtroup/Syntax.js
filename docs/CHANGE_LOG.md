@@ -9,6 +9,7 @@
 - Added support for the Perl programming language (importable file).
 - Added support for the Bash scripting language (importable file).
 - Added support for the Kotlin programming language (importable file).
+- Moved some of the keywords for the supported languages into "values".
 
 #### **Binding Options:**
 - Added a new binding option called "doubleClickToSelectAll", which states if double-clicking in one of the containers (numbers, code) will select all the code (defaults to true).

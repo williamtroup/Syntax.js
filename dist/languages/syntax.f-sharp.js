@@ -41,7 +41,6 @@ $syntax.addLanguage( "f-sharp", {
         "namespace",
         "new",
         "not",
-        "null",
         "of",
         "open",
         "or",
@@ -69,7 +68,8 @@ $syntax.addLanguage( "f-sharp", {
     ],
     values: [
         "false",
-        "true"
+        "true",
+        "null"
     ],
     comment: "//",
     multiLineComment: [ "(*", "*)" ],

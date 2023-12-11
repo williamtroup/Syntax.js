@@ -42,7 +42,6 @@ $syntax.addLanguage( "c-sharp", {
         "long",
         "namespace",
         "new",
-        "null",
         "object",
         "operator",
         "out",
@@ -81,7 +80,8 @@ $syntax.addLanguage( "c-sharp", {
     ],
     values: [
         "false",
-        "true"
+        "true",
+        "null"
     ],
     comment: "//",
     multiLineComment: [ "/*", "*/" ],
