@@ -20,6 +20,7 @@ Below are all the JSON properties that can be passed in the "data-syntax-options
 | *boolean* | padLineNumbers | States if the line numbers should be shown as "01" instead of "1" (defaults to false). |
 | *boolean* | removeDuplicateBlankLines | States if duplicate blank lines should be removed (defaults to true). |
 | *boolean* | doubleClickToSelectAll | States if double-clicking in the containers selects all of the code (defaults to true). |
+| *string* | languageLabelCasing | States what casing should be used for the language label (optional, defaults to "lowercase", accepts "initial" and "lowercase"). |
 <br/>
 
 

@@ -174,7 +174,7 @@
       }
       if (syntaxOptions.showLanguageLabel) {
         var languageLabel = createElement("div", "label");
-        languageLabel.innerHTML = getFriendlyLanguageName(syntaxLanguage);
+        languageLabel.innerHTML = getFriendlyLanguageName(syntaxLanguage, syntaxOptions.languageLabelCasing);
         buttons.appendChild(languageLabel);
       }
       var buttonsElementsLength = buttonsElements.length;
@@ -283,7 +283,7 @@
     var keywordIndex = 0;
     for (; keywordIndex < keywordsLength; keywordIndex++) {
       var keyword = keywords[keywordIndex];
-      var keywordDisplay = getKeywordDisplayTestCasing(keyword, keywordsCasing);
+      var keywordDisplay = getDisplayTextTestCasing(keyword, keywordsCasing);
       var regExFlags = caseSensitive ? "g" : "gi";
       var regEx = new RegExp("\\b" + keyword + "\\b", regExFlags);
       if (syntaxOptions.highlightKeywords) {
@@ -321,7 +321,7 @@
         var replacementVariable = "KW" + replacementsNumber.toString() + ";";
         var regExReplace = new RegExp("\\b" + tag + "\\b", regExFlags);
         var replacement = null;
-        var replacementTagDisplay = getKeywordDisplayTestCasing(tag, keywordsCasing);
+        var replacementTagDisplay = getDisplayTextTestCasing(tag, keywordsCasing);
         if (syntaxOptions.highlightKeywords) {
           if (isDefinedFunction(syntaxOptions.onKeywordClicked)) {
             replacement = '<span class="keyword-clickable">' + replacementTagDisplay + "</span>";
@@ -487,14 +487,15 @@
       customTrigger(text);
     };
   }
-  function getFriendlyLanguageName(syntaxLanguage) {
+  function getFriendlyLanguageName(syntaxLanguage, languageLabelCasing) {
     var result = null;
     var language = getLanguage(syntaxLanguage);
     if (isDefined(language) && isDefinedString(language.friendlyName)) {
-      result = language.friendlyName.toUpperCase();
+      result = language.friendlyName;
     } else {
-      result = syntaxLanguage.toUpperCase();
+      result = syntaxLanguage;
     }
+    result = getDisplayTextTestCasing(result, languageLabelCasing);
     return result;
   }
   function getLanguage(syntaxLanguage) {
@@ -518,7 +519,7 @@
     }
     return keywordsCasing;
   }
-  function getKeywordDisplayTestCasing(keyword, keywordsCasing) {
+  function getDisplayTextTestCasing(keyword, keywordsCasing) {
     if (keywordsCasing === "uppercase") {
       keyword = keyword.toUpperCase();
     } else if (keywordsCasing === "lowercase") {
@@ -540,6 +541,7 @@
     options.padLineNumbers = getDefaultBoolean(options.padLineNumbers, false);
     options.removeDuplicateBlankLines = getDefaultBoolean(options.removeDuplicateBlankLines, true);
     options.doubleClickToSelectAll = getDefaultBoolean(options.doubleClickToSelectAll, true);
+    options.languageLabelCasing = getDefaultString(options.languageLabelCasing, "uppercase");
     options = buildAttributeOptionStrings(options);
     return buildAttributeOptionCustomTriggers(options);
   }

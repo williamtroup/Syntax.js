@@ -10,6 +10,7 @@
 
 #### **Binding Options:**
 - Added a new binding option called "doubleClickToSelectAll", which states if double-clicking in one of the containers (numbers, code) will select all the code (defaults to true).
+- Added a new binding option called "languageLabelCasing", which states the casing to use for the language label (defaults to "uppercase").
 
 ### **CSS:**
 - Added new ":root" variable "--button-background-color", which will allow you to set the background color of the buttons.
