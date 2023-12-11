@@ -90,7 +90,7 @@
                     if ( syntaxOptionsParsed.parsed ) {
                         if ( element.innerHTML.trim() !== _string.empty ) {
                             var innerHTML = element.innerHTML,
-                                syntaxOptions = buildAttributeOptions( syntaxOptionsParsed.result ),
+                                syntaxOptions = getBindingOptions( syntaxOptionsParsed.result ),
                                 isPreFormatted = false;
 
                             if ( element.children.length > 0 && element.children[ 0 ].nodeName.toLowerCase() === "pre" ) {
@@ -723,12 +723,21 @@
 
     /*
      * ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-     * Options
+     * Binding Options
      * ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
      */
 
-    function buildAttributeOptions( newOptions ) {
+    function getBindingOptions( newOptions ) {
         var options = !isDefinedObject( newOptions ) ? {} : newOptions;
+
+        options = buildBindingAttributeOptions( options );
+        options = buildBindingAttributeOptionStrings( options );
+        options = buildBindingAttributeOptionCustomTriggers( options );
+
+        return options;
+    }
+
+    function buildBindingAttributeOptions( options ) {
         options.showCopyButton = getDefaultBoolean( options.showCopyButton, true );
         options.removeBlankLines = getDefaultBoolean( options.removeBlankLines, false );
         options.showLineNumbers = getDefaultBoolean( options.showLineNumbers, true );
@@ -743,19 +752,17 @@
         options.doubleClickToSelectAll = getDefaultBoolean( options.doubleClickToSelectAll, true );
         options.languageLabelCasing = getDefaultString( options.languageLabelCasing, "uppercase" );
         
-        options = buildAttributeOptionStrings( options );
-
-        return buildAttributeOptionCustomTriggers( options );
+        return options;
     }
 
-    function buildAttributeOptionStrings( options ) {
+    function buildBindingAttributeOptionStrings( options ) {
         options.copyButtonText = getDefaultString( options.copyButtonText, "Copy" );
         options.printButtonText = getDefaultString( options.printButtonText, "Print" );
 
         return options;
     }
 
-    function buildAttributeOptionCustomTriggers( options ) {
+    function buildBindingAttributeOptionCustomTriggers( options ) {
         options.onCopy = getDefaultFunction( options.onCopy, null );
         options.onRenderComplete = getDefaultFunction( options.onRenderComplete, null );
         options.onKeywordClicked = getDefaultFunction( options.onKeywordClicked, null );
