@@ -9,7 +9,6 @@ $syntax.addLanguage( "kotlin", {
         "continue",
         "do",
         "else",
-        "false",
         "for",
         "fun",
         "if",
@@ -23,7 +22,6 @@ $syntax.addLanguage( "kotlin", {
         "super",
         "this",
         "throw",
-        "true",
         "try",
         "typealias",
         "typeof",
@@ -78,6 +76,10 @@ $syntax.addLanguage( "kotlin", {
         "suspend",
         "tailrec",
         "vararg"
+    ],
+    values: [
+        "false",
+        "true"
     ],
     comment: "//",
     multiLineComment: [ "/*", "*/" ],
