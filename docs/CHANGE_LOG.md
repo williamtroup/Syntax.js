@@ -13,10 +13,10 @@
 - Added support for the Matlab programming language (importable file).
 - Added support for the Scala programming language (importable file).
 - Moved some of the keywords for the supported languages into "values".
-- Multi-line comments are now processed before single line comments.
+- Multi-line comments are now processed before single-line comments.
 
 #### **Binding Options:**
-- Added a new binding option called "doubleClickToSelectAll", which states if double-clicking in one of the containers (numbers, code) will select all the code (defaults to true).
+- Added a new binding option called "doubleClickToSelectAll", which states that double-clicking in one of the containers (numbers, code) will select all the code (defaults to true).
 - Added a new binding option called "languageLabelCasing", which states the casing to use for the language label (defaults to "uppercase").
 
 ### **CSS:**
@@ -28,7 +28,7 @@
 #### **General Improvements:**
 - Double-clicking in the code container will now select all the code (if the new setting is turned on).
 - Removed a lot of duplicated code.
-- Lots of clean ups across the HTML testing files.
+- Lots of clean-ups across the HTML testing files.
 
 <br>
 
