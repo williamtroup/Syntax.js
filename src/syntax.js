@@ -607,8 +607,14 @@
             }
         }
 
-        if ( isDefined( numbers ) ) {
-            numbers.ondblclick = function() {
+        if ( syntaxOptions.doubleClickToSelectAll ) {
+            if ( isDefined( numbers ) ) {
+                numbers.ondblclick = function() {
+                    selectTextInElement( codeContainer );
+                };
+            }
+    
+            syntax.ondblclick = function() {
                 selectTextInElement( codeContainer );
             };
         }
@@ -740,6 +746,7 @@
         options.showPrintButton = getDefaultBoolean( options.showPrintButton, true );
         options.padLineNumbers = getDefaultBoolean( options.padLineNumbers, false );
         options.removeDuplicateBlankLines = getDefaultBoolean( options.removeDuplicateBlankLines, true );
+        options.doubleClickToSelectAll = getDefaultBoolean( options.doubleClickToSelectAll, true );
         
         options = buildAttributeOptionStrings( options );
 

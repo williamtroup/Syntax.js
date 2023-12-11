@@ -8,6 +8,12 @@
 #### **Languages:**
 - Added support for the Perl programming language (importable file).
 
+#### **Binding Options:**
+- Added a new binding option called "doubleClickToSelectAll", which states if double-clicking in one of the containers (numbers, code) will select all the code (defaults to true).
+
+#### **General Improvements:**
+- Double-clicking in the code container will now select all the code (if the new setting is turned on).
+
 <br>
 
 
