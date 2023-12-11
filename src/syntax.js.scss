@@ -36,6 +36,10 @@
     --container-background-color-numbers: #dddddd;
     --container-border-color-numbers: #BBBBBB;
 
+    // Buttons
+    --button-background-color: var(--color-black);
+    --button-text-color: var(--color-white);
+
     // Borders
     --border-radius: 0.5rem;
     --border-style-scrollbar: inset 0 0 6px --color-dark-gray;
@@ -91,6 +95,7 @@ div.syntax-highlight {
             p {
                 margin: 0;
                 text-wrap: nowrap;
+                color: var(--color-white);
             }
 
             @media (min-width: 768px) { 
@@ -118,8 +123,8 @@ div.syntax-highlight {
     
                 div.button,
                 div.label {
-                    color: var(--color-white);
-                    background-color: var(--color-black);
+                    color: var(--button-text-color);
+                    background-color: var(--button-background-color);
                     padding: 7px;
                     padding-left: 10px;
                     padding-right: 10px;

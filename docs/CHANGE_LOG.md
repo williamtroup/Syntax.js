@@ -11,6 +11,11 @@
 #### **Binding Options:**
 - Added a new binding option called "doubleClickToSelectAll", which states if double-clicking in one of the containers (numbers, code) will select all the code (defaults to true).
 
+### **CSS:**
+- Added new ":root" variable "--button-background-color", which will allow you to set the background color of the buttons.
+- Added new ":root" variable "--button-text-color", which will allow you to set the text color of the buttons.
+- Massively improved the theme "dark-mode" (much cleaner and modern).
+
 #### **General Improvements:**
 - Double-clicking in the code container will now select all the code (if the new setting is turned on).
 - Removed a lot of duplicated code.

@@ -10,18 +10,22 @@
         --color-string: #484dd2;
         --color-multi-line-string: #484dd2;
         --color-black: #F5F5F5;
-        --color-white: #3b3a3a;
+        --color-white: #F5F5F5;
         --color-dark-gray: #808080;
         --color-gray: #BBBBBB;
         --color-lighter-gray: #C0C0C0;
 
         /* Containers */
-        --container-background-color-container: #3b3a3a;
-        --container-border-color-container: #CCCCCC;
-        --container-background-color-syntax: #575555;
-        --container-border-color-syntax: #CCCCCC;
-        --container-background-color-numbers: #817e7e;
-        --container-border-color-numbers: #CCCCCC;
+        --container-background-color-container: #1c2128;
+        --container-border-color-container: #454c56;
+        --container-background-color-syntax: #2d333b;
+        --container-border-color-syntax: #454c56;
+        --container-background-color-numbers: #24292e;
+        --container-border-color-numbers: #454c56;
+
+        /* Buttons */
+        --button-background-color: #F5F5F5;
+        --button-text-color: #3b3a3a;
 
         /* Borders */
         --border-radius: 0.5rem;

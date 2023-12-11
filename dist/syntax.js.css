@@ -29,6 +29,8 @@
   --container-border-color-syntax: #CCCCCC;
   --container-background-color-numbers: #dddddd;
   --container-border-color-numbers: #BBBBBB;
+  --button-background-color: var(--color-black);
+  --button-text-color: var(--color-white);
   --border-radius: 0.5rem;
   --border-style-scrollbar: inset 0 0 6px --color-dark-gray;
   --border-size: 0.5px;
@@ -82,6 +84,7 @@ code.syntax-highlight div.code div.numbers p,
 div.syntax-highlight div.code div.numbers p {
   margin: 0;
   text-wrap: nowrap;
+  color: var(--color-white);
 }
 @media (min-width: 768px) {
   code.syntax-highlight div.code div.numbers,
@@ -113,8 +116,8 @@ code.syntax-highlight div.code div.syntax div.buttons div.button,
 code.syntax-highlight div.code div.syntax div.buttons div.label,
 div.syntax-highlight div.code div.syntax div.buttons div.button,
 div.syntax-highlight div.code div.syntax div.buttons div.label {
-  color: var(--color-white);
-  background-color: var(--color-black);
+  color: var(--button-text-color);
+  background-color: var(--button-background-color);
   padding: 7px;
   padding-left: 10px;
   padding-right: 10px;
