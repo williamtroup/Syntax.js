@@ -84,7 +84,7 @@ code.syntax-highlight div.code div.numbers p,
 div.syntax-highlight div.code div.numbers p {
   margin: 0;
   text-wrap: nowrap;
-  color: var(--color-white);
+  color: var(--color-black);
 }
 @media (min-width: 768px) {
   code.syntax-highlight div.code div.numbers,
