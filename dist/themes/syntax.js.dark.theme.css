@@ -1,16 +1,16 @@
 @media (prefers-color-scheme: dark) {
     :root {
         /* Colors */
-        --color-keyword: #FF0000;
+        --color-keyword: #f47067;
         --color-value: #F28C28;
         --color-keyword-hover: #ff8080;
         --color-value-hover: #FFAC1C;
-        --color-comment: #78b13f;
-        --color-multi-line-comment: #78b13f;
-        --color-string: #484dd2;
-        --color-multi-line-string: #484dd2;
-        --color-black: #F5F5F5;
-        --color-white: #F5F5F5;
+        --color-comment: #8edb8c;
+        --color-multi-line-comment: #8edb8c;
+        --color-string: #96d0ff;
+        --color-multi-line-string: #96d0ff;
+        --color-black: #acbac7;
+        --color-white: #acbac7;
         --color-dark-gray: #808080;
         --color-gray: #BBBBBB;
         --color-lighter-gray: #C0C0C0;
