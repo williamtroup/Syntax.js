@@ -15,6 +15,7 @@
 - Added new ":root" variable "--button-background-color", which will allow you to set the background color of the buttons.
 - Added new ":root" variable "--button-text-color", which will allow you to set the text color of the buttons.
 - Massively improved the theme "dark-mode" (much cleaner and modern).
+- Shared colors now reference the original base ":root" variable.
 
 #### **General Improvements:**
 - Double-clicking in the code container will now select all the code (if the new setting is turned on).

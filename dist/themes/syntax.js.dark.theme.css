@@ -6,11 +6,11 @@
         --color-keyword-hover: #ff8080;
         --color-value-hover: #FFAC1C;
         --color-comment: #8edb8c;
-        --color-multi-line-comment: #8edb8c;
+        --color-multi-line-comment: var(--color-comment);
         --color-string: #96d0ff;
-        --color-multi-line-string: #96d0ff;
+        --color-multi-line-string: var(--color-string);
         --color-black: #acbac7;
-        --color-white: #acbac7;
+        --color-white: var(--color-black);
         --color-dark-gray: #808080;
         --color-gray: #BBBBBB;
         --color-lighter-gray: #C0C0C0;
@@ -19,9 +19,9 @@
         --container-background-color-container: #1c2128;
         --container-border-color-container: #454c56;
         --container-background-color-syntax: #2d333b;
-        --container-border-color-syntax: #454c56;
+        --container-border-color-syntax: var(--container-border-color-container);
         --container-background-color-numbers: #24292e;
-        --container-border-color-numbers: #454c56;
+        --container-border-color-numbers: var(--container-border-color-container);
 
         /* Buttons */
         --button-background-color: #F5F5F5;

@@ -19,9 +19,9 @@
     --color-keyword-hover: #FF0000;
     --color-value-hover: #FFAC1C;
     --color-comment: #78b13f;
-    --color-multi-line-comment: #78b13f;
+    --color-multi-line-comment: var(--color-comment);
     --color-string: #484dd2;
-    --color-multi-line-string: #484dd2;
+    --color-multi-line-string: var(--color-string);
     --color-black: #3b3a3a;
     --color-white: #F5F5F5;
     --color-dark-gray: #808080;
@@ -30,11 +30,11 @@
 
     // Containers
     --container-background-color-container: #e8e6e6;
-    --container-border-color-container: #3b3a3a;
+    --container-border-color-container: var(--color-black);
     --container-background-color-syntax: #EEEEEE;
     --container-border-color-syntax: #CCCCCC;
     --container-background-color-numbers: #dddddd;
-    --container-border-color-numbers: #BBBBBB;
+    --container-border-color-numbers: var(--color-gray);
 
     // Buttons
     --button-background-color: var(--color-black);
@@ -129,6 +129,7 @@ div.syntax-highlight {
                     padding-left: 10px;
                     padding-right: 10px;
                     display: inline-block;
+                    border: none;
                     border-right: 1px dotted var(--color-gray);
                     font-size: small;
     
