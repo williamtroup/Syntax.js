@@ -4,7 +4,9 @@
 
 #### **Public Functions:**
 - Added new public function "getCode()", which is used to return all of the code inside an element (without rendering colors).
-- 
+
+#### **Languages:**
+- Added support for the Perl programming language (importable file).
 
 <br>
 
