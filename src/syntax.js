@@ -134,10 +134,10 @@
                                 }
         
                                 if ( syntaxOptions.highlightStrings ) {
-                                    innerHTML = renderElementStringQuotesPatternVariables( innerHTML, innerHTML.match( /"((?:\\.|[^"\\])*)"/g ), syntaxOptions );
+                                    innerHTML = renderElementStringPatternVariables( innerHTML, innerHTML.match( /"((?:\\.|[^"\\])*)"/g ), syntaxOptions );
         
                                     if ( language.comment !== "'" ) {
-                                        innerHTML = renderElementStringQuotesPatternVariables( innerHTML, innerHTML.match( /'((?:\\.|[^"\\])*)'/g ), syntaxOptions );
+                                        innerHTML = renderElementStringPatternVariables( innerHTML, innerHTML.match( /'((?:\\.|[^"\\])*)'/g ), syntaxOptions );
                                     }
                                 }
 
@@ -367,27 +367,27 @@
         return innerHTML;
     }
 
-    function renderElementStringQuotesPatternVariables( innerHTML, patternItems, syntaxOptions ) {
+    function renderElementStringPatternVariables( innerHTML, patternItems, syntaxOptions ) {
         if ( patternItems !== null ) {
             var patternItemsLength = patternItems.length;
         
             for ( var patternItemsIndex = 0; patternItemsIndex < patternItemsLength; patternItemsIndex++ ) {
-                var quote = patternItems[ patternItemsIndex ],
-                    quoteLines = quote.split( _string.newLine ),
-                    quoteLinesLength = quoteLines.length,
-                    quoteCssClass = quoteLinesLength === 1 ? "string" : "multi-line-string";
+                var string = patternItems[ patternItemsIndex ],
+                    stringLines = string.split( _string.newLine ),
+                    stringLinesLength = stringLines.length,
+                    stringCssClass = stringLinesLength === 1 ? "string" : "multi-line-string";
 
-                for ( var quoteLineIndex = 0; quoteLineIndex < quoteLinesLength; quoteLineIndex++ ) {
-                    var quoteLine = quoteLines[ quoteLineIndex ],
-                        quoteVariable = "$S{" + _strings_Cached_Count.toString() + "}";
+                for ( var stringLineIndex = 0; stringLineIndex < stringLinesLength; stringLineIndex++ ) {
+                    var stringLine = stringLines[ stringLineIndex ],
+                        stringVariable = "$S{" + _strings_Cached_Count.toString() + "}";
 
-                    _strings_Cached[ quoteVariable ] = "<span class=\"" + quoteCssClass + "\">" + quoteLine + "</span>";
+                    _strings_Cached[ stringVariable ] = "<span class=\"" + stringCssClass + "\">" + stringLine + "</span>";
                     _strings_Cached_Count++;
         
-                    innerHTML = innerHTML.replace( quoteLine, quoteVariable );
+                    innerHTML = innerHTML.replace( stringLine, stringVariable );
                 }
 
-                fireCustomTrigger( syntaxOptions.onStringRender, quote );
+                fireCustomTrigger( syntaxOptions.onStringRender, string );
             }
         }
 

@@ -61,9 +61,9 @@
                   innerHTML = renderElementCommentVariables(innerHTML, language, syntaxOptions);
                 }
                 if (syntaxOptions.highlightStrings) {
-                  innerHTML = renderElementStringQuotesPatternVariables(innerHTML, innerHTML.match(/"((?:\\.|[^"\\])*)"/g), syntaxOptions);
+                  innerHTML = renderElementStringPatternVariables(innerHTML, innerHTML.match(/"((?:\\.|[^"\\])*)"/g), syntaxOptions);
                   if (language.comment !== "'") {
-                    innerHTML = renderElementStringQuotesPatternVariables(innerHTML, innerHTML.match(/'((?:\\.|[^"\\])*)'/g), syntaxOptions);
+                    innerHTML = renderElementStringPatternVariables(innerHTML, innerHTML.match(/'((?:\\.|[^"\\])*)'/g), syntaxOptions);
                   }
                 }
                 if (!language.isMarkUp) {
@@ -241,24 +241,24 @@
     }
     return innerHTML;
   }
-  function renderElementStringQuotesPatternVariables(innerHTML, patternItems, syntaxOptions) {
+  function renderElementStringPatternVariables(innerHTML, patternItems, syntaxOptions) {
     if (patternItems !== null) {
       var patternItemsLength = patternItems.length;
       var patternItemsIndex = 0;
       for (; patternItemsIndex < patternItemsLength; patternItemsIndex++) {
-        var quote = patternItems[patternItemsIndex];
-        var quoteLines = quote.split(_string.newLine);
-        var quoteLinesLength = quoteLines.length;
-        var quoteCssClass = quoteLinesLength === 1 ? "string" : "multi-line-string";
-        var quoteLineIndex = 0;
-        for (; quoteLineIndex < quoteLinesLength; quoteLineIndex++) {
-          var quoteLine = quoteLines[quoteLineIndex];
-          var quoteVariable = "$S{" + _strings_Cached_Count.toString() + "}";
-          _strings_Cached[quoteVariable] = '<span class="' + quoteCssClass + '">' + quoteLine + "</span>";
+        var string = patternItems[patternItemsIndex];
+        var stringLines = string.split(_string.newLine);
+        var stringLinesLength = stringLines.length;
+        var stringCssClass = stringLinesLength === 1 ? "string" : "multi-line-string";
+        var stringLineIndex = 0;
+        for (; stringLineIndex < stringLinesLength; stringLineIndex++) {
+          var stringLine = stringLines[stringLineIndex];
+          var stringVariable = "$S{" + _strings_Cached_Count.toString() + "}";
+          _strings_Cached[stringVariable] = '<span class="' + stringCssClass + '">' + stringLine + "</span>";
           _strings_Cached_Count++;
-          innerHTML = innerHTML.replace(quoteLine, quoteVariable);
+          innerHTML = innerHTML.replace(stringLine, stringVariable);
         }
-        fireCustomTrigger(syntaxOptions.onStringRender, quote);
+        fireCustomTrigger(syntaxOptions.onStringRender, string);
       }
     }
     return innerHTML;

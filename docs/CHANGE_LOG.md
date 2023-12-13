@@ -4,6 +4,7 @@
 - Added support for the PHP programming language (importable file).
 - Minor improvement to the dark-mode theme to make sure the language label stands out a little more.
 - Grammar and spelling corrections across the project.
+- More internal renaming to make things a bit clearer.
 - 
 
 <br>
