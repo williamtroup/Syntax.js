@@ -2,6 +2,8 @@
 
 ## Version 1.8.2:
 - Added support for the PHP programming language (importable file).
+- Minor improvement to the dark-mode theme to make sure the language label stand out a little more.
+- 
 
 <br>
 

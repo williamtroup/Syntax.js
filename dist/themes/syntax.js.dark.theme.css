@@ -12,7 +12,7 @@
         --color-black: #acbac7;
         --color-white: var(--color-black);
         --color-dark-gray: #808080;
-        --color-gray: #BBBBBB;
+        --color-gray: var(--color-dark-gray);
         --color-lighter-gray: #C0C0C0;
 
         /* Containers */
