@@ -125,7 +125,7 @@
       if (syntaxOptions.showCopyButton) {
         var copyButton = createElement("div", "button");
         copyButton.innerHTML = syntaxOptions.copyButtonText;
-        copyButton.style.display = _configuration.buttonsVisible ? "inline-block" : "none";
+        copyButton.style.display = syntaxOptions.buttonsVisible ? "inline-block" : "none";
         buttons.appendChild(copyButton);
         copyButton.onclick = function() {
           _parameter_Navigator.clipboard.writeText(innerHTMLCopy);
@@ -136,7 +136,7 @@
       if (syntaxOptions.showPrintButton) {
         var printButton = createElement("div", "button");
         printButton.innerHTML = syntaxOptions.printButtonText;
-        printButton.style.display = _configuration.buttonsVisible ? "inline-block" : "none";
+        printButton.style.display = syntaxOptions.buttonsVisible ? "inline-block" : "none";
         buttons.appendChild(printButton);
         printButton.onclick = function() {
           var newWindow = window.open(_string.empty, "PRINT", "height=400,width=600");
@@ -174,7 +174,7 @@
       var buttonsElementsLength = buttonsElements.length;
       if (buttonsElementsLength > _configuration.maximumButtons) {
         var openButton = createElement("div", "button button-opener");
-        openButton.innerText = _configuration.buttonsVisible ? _configuration.buttonsCloserText : _configuration.buttonsOpenerText;
+        openButton.innerText = _configuration.syntaxOptions ? _configuration.buttonsCloserText : _configuration.buttonsOpenerText;
         buttons.insertBefore(openButton, buttons.children[0]);
         openButton.onclick = function() {
           var areButtonsVisible = openButton.innerText === _configuration.buttonsCloserText;
@@ -190,7 +190,7 @@
   function renderElementButton(customButton, buttonsElements, buttons, innerHTMLCopy) {
     var newCustomButton = createElement("div", "button");
     newCustomButton.innerHTML = customButton.text;
-    newCustomButton.style.display = _configuration.buttonsVisible ? "inline-block" : "none";
+    newCustomButton.style.display = _configuration.syntaxOptions ? "inline-block" : "none";
     buttons.appendChild(newCustomButton);
     newCustomButton.onclick = function() {
       customButton.onClick(innerHTMLCopy);
@@ -542,6 +542,7 @@
     options.removeDuplicateBlankLines = getDefaultBoolean(options.removeDuplicateBlankLines, true);
     options.doubleClickToSelectAll = getDefaultBoolean(options.doubleClickToSelectAll, true);
     options.languageLabelCasing = getDefaultString(options.languageLabelCasing, "uppercase");
+    options.buttonsVisible = getDefaultBoolean(options.buttonsVisible, true);
     return options;
   }
   function buildBindingAttributeOptionStrings(options) {
@@ -704,7 +705,6 @@
     _configuration.safeMode = getDefaultBoolean(_configuration.safeMode, true);
     _configuration.highlightAllDomElementTypes = getDefaultStringOrArray(_configuration.highlightAllDomElementTypes, ["div", "code"]);
     _configuration.maximumButtons = getDefaultNumber(_configuration.maximumButtons, 2);
-    _configuration.buttonsVisible = getDefaultBoolean(_configuration.buttonsVisible, true);
     _configuration.buttonsOpenerText = getDefaultString(_configuration.buttonsOpenerText, "<");
     _configuration.buttonsCloserText = getDefaultString(_configuration.buttonsCloserText, ">");
   }

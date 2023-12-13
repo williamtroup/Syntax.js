@@ -6,6 +6,7 @@
 - Grammar and spelling corrections across the project.
 - More internal renaming to make things a bit clearer.
 - Unknown language types, and non-markup based languages, are now encoded before the main render is done (so special characters show up correctly).
+- Moved the configuration option "buttonsVisible" to the binding options (so it can be set per DOM element).
 - 
 
 <br>
