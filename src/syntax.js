@@ -210,7 +210,7 @@
                     var customButton = customButtons[ customButtonsIndex ];
 
                     if ( isDefined( customButton.text ) && isDefinedFunction( customButton.onClick ) ) {
-                        renderElementButton( customButton, buttonsElements, buttons, innerHTMLCopy );
+                        renderElementButton( customButton, buttonsElements, buttons, innerHTMLCopy, syntaxOptions );
                     }
                 }
             }
@@ -278,9 +278,9 @@
 
             var buttonsElementsLength = buttonsElements.length;
 
-            if ( buttonsElementsLength > _configuration.maximumButtons ) {
+            if ( buttonsElementsLength > _configuration.maximumButtons || ( !syntaxOptions.buttonsVisible && buttonsElementsLength > 0 ) ) {
                 var openButton = createElement( "div", "button button-opener" );
-                openButton.innerText = _configuration.syntaxOptions ? _configuration.buttonsCloserText : _configuration.buttonsOpenerText;
+                openButton.innerText = syntaxOptions.buttonsVisible ? _configuration.buttonsCloserText : _configuration.buttonsOpenerText;
                 buttons.insertBefore( openButton, buttons.children[ 0 ] );
 
                 openButton.onclick = function() {
@@ -296,10 +296,10 @@
         }
     }
 
-    function renderElementButton( customButton, buttonsElements, buttons, innerHTMLCopy ) {
+    function renderElementButton( customButton, buttonsElements, buttons, innerHTMLCopy, syntaxOptions ) {
         var newCustomButton = createElement( "div", "button" );
         newCustomButton.innerHTML = customButton.text;
-        newCustomButton.style.display = _configuration.syntaxOptions ? "inline-block" : "none";
+        newCustomButton.style.display = syntaxOptions.buttonsVisible ? "inline-block" : "none";
         buttons.appendChild( newCustomButton );
 
         newCustomButton.onclick = function() {
