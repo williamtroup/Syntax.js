@@ -36,8 +36,6 @@ Returns the code inside a specific element (without rendering colors).
 ***Returns***: '*string*' - The code in the element.
 
 
-
-
 <br>
 <h1>Destroying:</h1>
 

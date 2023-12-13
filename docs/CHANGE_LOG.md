@@ -1,5 +1,11 @@
 # Syntax.js - Change Log:
 
+## Version 1.8.2:
+- 
+
+<br>
+
+
 ## Version 1.8.1:
 - Minor error logging improvements (uses less code and can be re-used as needed).
 - Internal refactoring to make some of the code match up to the names of the sections.
