@@ -43,7 +43,7 @@
                     if ( something ) {
                         Console.WriteLine( "Output is written." ); // Comment
 
-                        if ( something_else == 1 ) {
+                        if ( something_else >= 1 ) {
                             Console.WriteLine( "Output is written again." ); // Another comment
                         }
                     }
@@ -54,7 +54,7 @@
             <div data-syntax-language="c-sharp" data-syntax-options="{ 'showCopyButton': false, 'removeBlankLines': false, 'showLineNumbers': false, 'showPrintButton': false }" data-syntax-buttons="[ { 'text': 'Custom Button 1', 'onClick': customButtonAction1, 'className': 'customButtonClass' }, { 'text': 'Custom Button 2', 'onClick': customButtonAction2 }, { 'text': 'Custom Button 3', 'onClick': customButtonAction3 } ]">
                 int something = 1;
 
-                if ( something == 1 ) {
+                if ( something >= 1 ) {
                     Console.WriteLine( "Output is written." ); // Comment
                 }
 
@@ -142,8 +142,7 @@
         
         function setupConfiguration() {
             $syntax.setConfiguration( {
-                safeMode: false,
-                buttonsVisible: false
+                safeMode: false
             } );
         }
 
@@ -154,7 +153,8 @@
                 'onKeywordClicked': onKeywordClickedCustomTrigger,
                 'onValueClicked': onValueClickedCustomTrigger,
                 'showLanguageLabel': false,
-                'padLineNumbers': true
+                'padLineNumbers': true,
+                'buttonsVisible': false
             };
         }
 

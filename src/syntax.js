@@ -4,7 +4,7 @@
  * A lightweight, and easy-to-use, JavaScript library for code syntax highlighting!
  * 
  * @file        syntax.js
- * @version     v1.8.1
+ * @version     v1.8.2
  * @author      Bunoon
  * @license     MIT License
  * @copyright   Bunoon 2023
@@ -128,16 +128,20 @@
                             renderElementButtons( syntax, syntaxOptions, syntaxLanguage, syntaxButtonsParsed, innerHTMLCopy );
 
                             if ( syntaxLanguage.toLowerCase() !== _languages_Unknown ) {
+                                if ( !language.isMarkUp ) {
+                                    innerHTML = encodeMarkUpCharacters( innerHTML );
+                                }
+
                                 if ( syntaxOptions.highlightComments ) {
                                     innerHTML = renderElementMultiLineCommentVariables( innerHTML, language, syntaxOptions );
                                     innerHTML = renderElementCommentVariables( innerHTML, language, syntaxOptions );
                                 }
         
                                 if ( syntaxOptions.highlightStrings ) {
-                                    innerHTML = renderElementStringQuotesPatternVariables( innerHTML, innerHTML.match( /"((?:\\.|[^"\\])*)"/g ), syntaxOptions );
+                                    innerHTML = renderElementStringPatternVariables( innerHTML, innerHTML.match( /"((?:\\.|[^"\\])*)"/g ), syntaxOptions );
         
                                     if ( language.comment !== "'" ) {
-                                        innerHTML = renderElementStringQuotesPatternVariables( innerHTML, innerHTML.match( /'((?:\\.|[^"\\])*)'/g ), syntaxOptions );
+                                        innerHTML = renderElementStringPatternVariables( innerHTML, innerHTML.match( /'((?:\\.|[^"\\])*)'/g ), syntaxOptions );
                                     }
                                 }
 
@@ -156,6 +160,9 @@
                                 if ( syntaxOptions.highlightStrings ) {
                                     innerHTML = renderElementStringQuotesFromVariables( innerHTML );
                                 }
+                                
+                            } else {
+                                innerHTML = encodeMarkUpCharacters( innerHTML );
                             }
 
                             renderElementCompletedHTML( element, numbers, syntax, innerHTML, syntaxOptions, isPreFormatted );
@@ -203,7 +210,7 @@
                     var customButton = customButtons[ customButtonsIndex ];
 
                     if ( isDefined( customButton.text ) && isDefinedFunction( customButton.onClick ) ) {
-                        renderElementButton( customButton, buttonsElements, buttons, innerHTMLCopy );
+                        renderElementButton( customButton, buttonsElements, buttons, innerHTMLCopy, syntaxOptions );
                     }
                 }
             }
@@ -211,7 +218,7 @@
             if ( syntaxOptions.showCopyButton ) {
                 var copyButton = createElement( "div", "button" );
                 copyButton.innerHTML = syntaxOptions.copyButtonText;
-                copyButton.style.display = _configuration.buttonsVisible ? "inline-block" : "none";
+                copyButton.style.display = syntaxOptions.buttonsVisible ? "inline-block" : "none";
                 buttons.appendChild( copyButton );
 
                 copyButton.onclick = function() {
@@ -226,7 +233,7 @@
             if ( syntaxOptions.showPrintButton ) {
                 var printButton = createElement( "div", "button" );
                 printButton.innerHTML = syntaxOptions.printButtonText;
-                printButton.style.display = _configuration.buttonsVisible ? "inline-block" : "none";
+                printButton.style.display = syntaxOptions.buttonsVisible ? "inline-block" : "none";
                 buttons.appendChild( printButton );
 
                 printButton.onclick = function() {
@@ -271,9 +278,9 @@
 
             var buttonsElementsLength = buttonsElements.length;
 
-            if ( buttonsElementsLength > _configuration.maximumButtons ) {
+            if ( buttonsElementsLength > syntaxOptions.maximumButtons ) {
                 var openButton = createElement( "div", "button button-opener" );
-                openButton.innerText = _configuration.buttonsVisible ? _configuration.buttonsCloserText : _configuration.buttonsOpenerText;
+                openButton.innerText = syntaxOptions.buttonsVisible ? _configuration.buttonsCloserText : _configuration.buttonsOpenerText;
                 buttons.insertBefore( openButton, buttons.children[ 0 ] );
 
                 openButton.onclick = function() {
@@ -285,14 +292,19 @@
 
                     openButton.innerText = areButtonsVisible ? _configuration.buttonsOpenerText : _configuration.buttonsCloserText;
                 };
+
+            } else if ( !syntaxOptions.buttonsVisible && buttonsElementsLength <= syntaxOptions.maximumButtons ) {
+                for ( var buttonsElementIndex = 0; buttonsElementIndex < buttonsElementsLength; buttonsElementIndex++ ) {
+                    buttonsElements[ buttonsElementIndex ].style.display = "inline-block";
+                }
             }
         }
     }
 
-    function renderElementButton( customButton, buttonsElements, buttons, innerHTMLCopy ) {
+    function renderElementButton( customButton, buttonsElements, buttons, innerHTMLCopy, syntaxOptions ) {
         var newCustomButton = createElement( "div", "button" );
         newCustomButton.innerHTML = customButton.text;
-        newCustomButton.style.display = _configuration.buttonsVisible ? "inline-block" : "none";
+        newCustomButton.style.display = syntaxOptions.buttonsVisible ? "inline-block" : "none";
         buttons.appendChild( newCustomButton );
 
         newCustomButton.onclick = function() {
@@ -367,27 +379,27 @@
         return innerHTML;
     }
 
-    function renderElementStringQuotesPatternVariables( innerHTML, patternItems, syntaxOptions ) {
+    function renderElementStringPatternVariables( innerHTML, patternItems, syntaxOptions ) {
         if ( patternItems !== null ) {
             var patternItemsLength = patternItems.length;
         
             for ( var patternItemsIndex = 0; patternItemsIndex < patternItemsLength; patternItemsIndex++ ) {
-                var quote = patternItems[ patternItemsIndex ],
-                    quoteLines = quote.split( _string.newLine ),
-                    quoteLinesLength = quoteLines.length,
-                    quoteCssClass = quoteLinesLength === 1 ? "string" : "multi-line-string";
+                var string = patternItems[ patternItemsIndex ],
+                    stringLines = string.split( _string.newLine ),
+                    stringLinesLength = stringLines.length,
+                    stringCssClass = stringLinesLength === 1 ? "string" : "multi-line-string";
 
-                for ( var quoteLineIndex = 0; quoteLineIndex < quoteLinesLength; quoteLineIndex++ ) {
-                    var quoteLine = quoteLines[ quoteLineIndex ],
-                        quoteVariable = "$S{" + _strings_Cached_Count.toString() + "}";
+                for ( var stringLineIndex = 0; stringLineIndex < stringLinesLength; stringLineIndex++ ) {
+                    var stringLine = stringLines[ stringLineIndex ],
+                        stringVariable = "$S{" + _strings_Cached_Count.toString() + "}";
 
-                    _strings_Cached[ quoteVariable ] = "<span class=\"" + quoteCssClass + "\">" + quoteLine + "</span>";
+                    _strings_Cached[ stringVariable ] = "<span class=\"" + stringCssClass + "\">" + stringLine + "</span>";
                     _strings_Cached_Count++;
         
-                    innerHTML = innerHTML.replace( quoteLine, quoteVariable );
+                    innerHTML = innerHTML.replace( stringLine, stringVariable );
                 }
 
-                fireCustomTrigger( syntaxOptions.onStringRender, quote );
+                fireCustomTrigger( syntaxOptions.onStringRender, string );
             }
         }
 
@@ -740,6 +752,8 @@
         options.removeDuplicateBlankLines = getDefaultBoolean( options.removeDuplicateBlankLines, true );
         options.doubleClickToSelectAll = getDefaultBoolean( options.doubleClickToSelectAll, true );
         options.languageLabelCasing = getDefaultString( options.languageLabelCasing, "uppercase" );
+        options.buttonsVisible = getDefaultBoolean( options.buttonsVisible, true );
+        options.maximumButtons = getDefaultNumber( options.maximumButtons, 2 );
         
         return options;
     }
@@ -1368,8 +1382,6 @@
     function buildDefaultConfiguration() {
         _configuration.safeMode = getDefaultBoolean( _configuration.safeMode, true );
         _configuration.highlightAllDomElementTypes = getDefaultStringOrArray( _configuration.highlightAllDomElementTypes, [ "div", "code" ] );
-        _configuration.maximumButtons = getDefaultNumber( _configuration.maximumButtons, 2 );
-        _configuration.buttonsVisible = getDefaultBoolean( _configuration.buttonsVisible, true );
         _configuration.buttonsOpenerText = getDefaultString( _configuration.buttonsOpenerText, "<" );
         _configuration.buttonsCloserText = getDefaultString( _configuration.buttonsCloserText, ">" );
     }
@@ -1391,7 +1403,7 @@
      * @returns     {string}                                                The version number.
      */
     this.getVersion = function() {
-        return "1.8.1";
+        return "1.8.2";
     };
 
 
