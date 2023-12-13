@@ -278,7 +278,7 @@
 
             var buttonsElementsLength = buttonsElements.length;
 
-            if ( buttonsElementsLength > _configuration.maximumButtons || ( !syntaxOptions.buttonsVisible && buttonsElementsLength > 0 ) ) {
+            if ( buttonsElementsLength > _configuration.maximumButtons ) {
                 var openButton = createElement( "div", "button button-opener" );
                 openButton.innerText = syntaxOptions.buttonsVisible ? _configuration.buttonsCloserText : _configuration.buttonsOpenerText;
                 buttons.insertBefore( openButton, buttons.children[ 0 ] );
@@ -292,6 +292,11 @@
 
                     openButton.innerText = areButtonsVisible ? _configuration.buttonsOpenerText : _configuration.buttonsCloserText;
                 };
+
+            } else if ( !syntaxOptions.buttonsVisible && buttonsElementsLength <= _configuration.maximumButtons ) {
+                for ( var buttonsElementIndex = 0; buttonsElementIndex < buttonsElementsLength; buttonsElementIndex++ ) {
+                    buttonsElements[ buttonsElementIndex ].style.display = "inline-block";
+                }
             }
         }
     }
