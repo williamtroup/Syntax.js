@@ -4,7 +4,7 @@
  * A lightweight, and easy-to-use, JavaScript library for code syntax highlighting!
  * 
  * @file        syntax.js
- * @version     v1.8.0
+ * @version     v1.8.1
  * @author      Bunoon
  * @license     MIT License
  * @copyright   Bunoon 2023
@@ -90,7 +90,7 @@
                     if ( syntaxOptionsParsed.parsed ) {
                         if ( element.innerHTML.trim() !== _string.empty ) {
                             var innerHTML = element.innerHTML,
-                                syntaxOptions = buildAttributeOptions( syntaxOptionsParsed.result ),
+                                syntaxOptions = getBindingOptions( syntaxOptionsParsed.result ),
                                 isPreFormatted = false;
 
                             if ( element.children.length > 0 && element.children[ 0 ].nodeName.toLowerCase() === "pre" ) {
@@ -169,30 +169,19 @@
                             _comments_Cached_Count = 0;
 
                         } else {
-                            if ( !_configuration.safeMode ) {
-                                console.error( "No code is available available to render, skipping." );
-                                result = false;
-                            }
+                            result = logError( "No code is available available to render, skipping." );
                         }
 
                     } else {
-                        if ( !_configuration.safeMode ) {
-                            result = false;
-                        }
+                        result = !_configuration.safeMode;
                     }
 
                 } else {
-                    if ( !_configuration.safeMode ) {
-                        console.error( "Language '" + syntaxLanguage + "' is not supported." );
-                        result = false;
-                    }
+                    result = logError( "Language '" + syntaxLanguage + "' is not supported." );
                 }
 
             } else {
-                if ( !_configuration.safeMode ) {
-                    console.error( "The attribute '" + _attribute_Name_Language + "' has not been set correctly." );
-                    result = false;
-                }
+                result = logError( "The attribute '" + _attribute_Name_Language + "' has not been set correctly." );
             }
         }
 
@@ -723,12 +712,21 @@
 
     /*
      * ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-     * Options
+     * Binding Options
      * ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
      */
 
-    function buildAttributeOptions( newOptions ) {
+    function getBindingOptions( newOptions ) {
         var options = !isDefinedObject( newOptions ) ? {} : newOptions;
+
+        options = buildBindingAttributeOptions( options );
+        options = buildBindingAttributeOptionStrings( options );
+        options = buildBindingAttributeOptionCustomTriggers( options );
+
+        return options;
+    }
+
+    function buildBindingAttributeOptions( options ) {
         options.showCopyButton = getDefaultBoolean( options.showCopyButton, true );
         options.removeBlankLines = getDefaultBoolean( options.removeBlankLines, false );
         options.showLineNumbers = getDefaultBoolean( options.showLineNumbers, true );
@@ -743,19 +741,17 @@
         options.doubleClickToSelectAll = getDefaultBoolean( options.doubleClickToSelectAll, true );
         options.languageLabelCasing = getDefaultString( options.languageLabelCasing, "uppercase" );
         
-        options = buildAttributeOptionStrings( options );
-
-        return buildAttributeOptionCustomTriggers( options );
+        return options;
     }
 
-    function buildAttributeOptionStrings( options ) {
+    function buildBindingAttributeOptionStrings( options ) {
         options.copyButtonText = getDefaultString( options.copyButtonText, "Copy" );
         options.printButtonText = getDefaultString( options.printButtonText, "Print" );
 
         return options;
     }
 
-    function buildAttributeOptionCustomTriggers( options ) {
+    function buildBindingAttributeOptionCustomTriggers( options ) {
         options.onCopy = getDefaultFunction( options.onCopy, null );
         options.onRenderComplete = getDefaultFunction( options.onRenderComplete, null );
         options.onKeywordClicked = getDefaultFunction( options.onKeywordClicked, null );
@@ -918,11 +914,7 @@
                 }
                 
             } catch ( e2 ) {
-                if ( !_configuration.safeMode ) {
-                    console.error( "Errors in object: " + e1.message + ", " + e2.message );
-                    parsed = false;
-                }
-                
+                parsed = logError( "Errors in object: " + e1.message + ", " + e2.message );
                 result = null;
             }
         }
@@ -936,6 +928,17 @@
     function getClonedObject( object ) {
         var json = JSON.stringify( object ),
             result = JSON.parse( json );
+
+        return result;
+    }
+
+    function logError( error ) {
+        var result = true;
+
+        if ( !_configuration.safeMode ) {
+            console.error( error );
+            result = false;
+        }
 
         return result;
     }
@@ -1388,7 +1391,7 @@
      * @returns     {string}                                                The version number.
      */
     this.getVersion = function() {
-        return "1.8.0";
+        return "1.8.1";
     };
 
 

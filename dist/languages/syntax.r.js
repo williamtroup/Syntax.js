@@ -1,4 +1,4 @@
-/*! Syntax.js v1.8.0 | (c) Bunoon | MIT License */
+/*! Syntax.js v1.8.1 | (c) Bunoon | MIT License */
 $syntax.addLanguage( "r", {
     friendlyName: "R",
     keywords: [
