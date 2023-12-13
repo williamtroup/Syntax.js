@@ -19,7 +19,7 @@
 - Full CSS theme support (using :root variables, with a default dark-mode theme).
 - Coping and Printing support is available via action buttons.
 - Custom triggers for actions (when elements are rendered, keywords are clicked, etc).
-- 21 of the most popular languages built in by default (with public function support to add more).
+- 22 of the most popular languages built in by default (with public function support to add more).
 - Language aliases.
 - Custom action buttons (via a binding attribute), with opening/closing support.
 - Unknown language support (renders the display, but does not highlight any syntax).
@@ -50,6 +50,7 @@ To see a list of all the most recent changes, click [here](https://github.com/wi
 - Matlab
 - Microsoft SQL
 - Perl
+- PHP
 - Python
 - R
 - Ruby

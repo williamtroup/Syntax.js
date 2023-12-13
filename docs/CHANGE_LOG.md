@@ -1,7 +1,7 @@
 # Syntax.js - Change Log:
 
 ## Version 1.8.2:
-- 
+- Added support for the PHP programming language (importable file).
 
 <br>
 
