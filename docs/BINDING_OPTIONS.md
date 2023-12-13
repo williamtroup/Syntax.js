@@ -22,6 +22,7 @@ Below are all the JSON properties that can be passed in the "data-syntax-options
 | *boolean* | doubleClickToSelectAll | States if double-clicking in the containers selects all of the code (defaults to true). |
 | *string* | languageLabelCasing | States what casing should be used for the language label (optional, defaults to "lowercase", accepts "initial" and "lowercase"). |
 | *boolean* | buttonsVisible | States if the buttons are open (visible).  Defaults to true. |
+| *number* | maximumButtons | States the maximum buttons that can be shown before the opening/closing button is shown (defaults to 2). |
 <br/>
 
 

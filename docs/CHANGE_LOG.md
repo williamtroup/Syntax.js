@@ -7,6 +7,7 @@
 - More internal renaming to make things a bit clearer.
 - Unknown language types, and non-markup based languages, are now encoded before the main render is done (so special characters show up correctly).
 - Moved the configuration option "buttonsVisible" to the binding options (so it can be set per DOM element).
+- Moved the configuration option "maximumButtons" to the binding options (so it can be set per DOM element).
 - Fixed a fault that caused the buttons to be hidden (and could not be shown) when the total buttons is smaller (or equal) to "maximumButtons" and "buttonsVisible" is false.
 - 
 

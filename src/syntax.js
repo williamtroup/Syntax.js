@@ -278,7 +278,7 @@
 
             var buttonsElementsLength = buttonsElements.length;
 
-            if ( buttonsElementsLength > _configuration.maximumButtons ) {
+            if ( buttonsElementsLength > syntaxOptions.maximumButtons ) {
                 var openButton = createElement( "div", "button button-opener" );
                 openButton.innerText = syntaxOptions.buttonsVisible ? _configuration.buttonsCloserText : _configuration.buttonsOpenerText;
                 buttons.insertBefore( openButton, buttons.children[ 0 ] );
@@ -293,7 +293,7 @@
                     openButton.innerText = areButtonsVisible ? _configuration.buttonsOpenerText : _configuration.buttonsCloserText;
                 };
 
-            } else if ( !syntaxOptions.buttonsVisible && buttonsElementsLength <= _configuration.maximumButtons ) {
+            } else if ( !syntaxOptions.buttonsVisible && buttonsElementsLength <= syntaxOptions.maximumButtons ) {
                 for ( var buttonsElementIndex = 0; buttonsElementIndex < buttonsElementsLength; buttonsElementIndex++ ) {
                     buttonsElements[ buttonsElementIndex ].style.display = "inline-block";
                 }
@@ -753,6 +753,7 @@
         options.doubleClickToSelectAll = getDefaultBoolean( options.doubleClickToSelectAll, true );
         options.languageLabelCasing = getDefaultString( options.languageLabelCasing, "uppercase" );
         options.buttonsVisible = getDefaultBoolean( options.buttonsVisible, true );
+        options.maximumButtons = getDefaultNumber( options.maximumButtons, 2 );
         
         return options;
     }
@@ -1381,7 +1382,6 @@
     function buildDefaultConfiguration() {
         _configuration.safeMode = getDefaultBoolean( _configuration.safeMode, true );
         _configuration.highlightAllDomElementTypes = getDefaultStringOrArray( _configuration.highlightAllDomElementTypes, [ "div", "code" ] );
-        _configuration.maximumButtons = getDefaultNumber( _configuration.maximumButtons, 2 );
         _configuration.buttonsOpenerText = getDefaultString( _configuration.buttonsOpenerText, "<" );
         _configuration.buttonsCloserText = getDefaultString( _configuration.buttonsCloserText, ">" );
     }
