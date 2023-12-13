@@ -5,6 +5,7 @@
 - Minor improvement to the dark-mode theme to make sure the language label stands out a little more.
 - Grammar and spelling corrections across the project.
 - More internal renaming to make things a bit clearer.
+- Unknown language types, and non-markup based languages, are now encoded before the main render is done (so special characters show up correctly).
 - 
 
 <br>

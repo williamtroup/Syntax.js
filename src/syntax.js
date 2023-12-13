@@ -128,6 +128,10 @@
                             renderElementButtons( syntax, syntaxOptions, syntaxLanguage, syntaxButtonsParsed, innerHTMLCopy );
 
                             if ( syntaxLanguage.toLowerCase() !== _languages_Unknown ) {
+                                if ( !language.isMarkUp ) {
+                                    innerHTML = encodeMarkUpCharacters( innerHTML );
+                                }
+
                                 if ( syntaxOptions.highlightComments ) {
                                     innerHTML = renderElementMultiLineCommentVariables( innerHTML, language, syntaxOptions );
                                     innerHTML = renderElementCommentVariables( innerHTML, language, syntaxOptions );
@@ -156,6 +160,9 @@
                                 if ( syntaxOptions.highlightStrings ) {
                                     innerHTML = renderElementStringQuotesFromVariables( innerHTML );
                                 }
+                                
+                            } else {
+                                innerHTML = encodeMarkUpCharacters( innerHTML );
                             }
 
                             renderElementCompletedHTML( element, numbers, syntax, innerHTML, syntaxOptions, isPreFormatted );
