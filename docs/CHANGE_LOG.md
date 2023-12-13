@@ -2,7 +2,8 @@
 
 ## Version 1.8.2:
 - Added support for the PHP programming language (importable file).
-- Minor improvement to the dark-mode theme to make sure the language label stand out a little more.
+- Minor improvement to the dark-mode theme to make sure the language label stands out a little more.
+- Grammar and spelling corrections across the project.
 - 
 
 <br>
@@ -49,12 +50,12 @@
 
 
 ## Version 1.7.3:
-- The custom buttons "onClick" event now accepts the code as a parameter (see documentation).
-- Fixed a fault that caused the wrong the events to be assigned to the custom buttons when there is more than one.
+- The custom button "onClick" event now accepts the code as a parameter (see documentation).
+- Fixed a fault that caused the wrong events to be assigned to the custom buttons when there is more than one.
 - Added a new binding option called "removeDuplicateBlankLines" (defaults to true), which will remove all duplicate blank lines.
 - Fixed some bad documentation.
-- Added new CSS class "multi-line-comment", which is used for multi-line comments.
-- Added new CSS class "multi-line-string", which is used for multi-line strings.
+- Added a new CSS class "multi-line-comment", which is used for multi-line comments.
+- Added a new CSS class "multi-line-string", which is used for multi-line strings.
 
 <br>
 
@@ -134,10 +135,10 @@
 ### **CSS:**
 - Renamed the CSS class "number" to "numbers".
 - By default, the buttons are no longer bold.
-- By default, the language label is now bold and use a gray font color.
+- By default, the language label is now bold and uses a grey font color.
 
 #### **Documentation:**
-- Documentation renames and cleanups to makes things clearer.
+- Documentation renames and cleanups to make things clearer.
 
 #### **Fixes:**
 - Fixed the buttons wrapping down to the next line and looking strange on smaller screens.
@@ -200,7 +201,7 @@
 - The "data-syntax-options" attribute now can accept a function name to get the required configuration.
 
 #### **Fixes:**
-- Fixed a fault that prevented the "onKeywordClicked" custom trigger being assigned to keywords when "highlightKeywords" is set to false.
+- Fixed a fault that prevented the "onKeywordClicked" custom trigger from being assigned to keywords when "highlightKeywords" is set to false.
 
 <br>
 
@@ -352,7 +353,7 @@
 
 ## Version 0.5.0:
 - Added support for the C++ and Java programming languages (importable files).
-- Fixed a fault that caused parameters to be parsed for custom triggers when they were not actually set.
+- Fixed a fault that caused parameters to be parsed for custom triggers when they were not set.
 - Fixed the default language containing the "*" symbol in the keywords.
 - Renamed the root variable "--color-variable" to "--color-keyword".
 - Added a new custom trigger "onKeywordClicked", which is fired when a keyword is clicked.
@@ -382,7 +383,7 @@
 ## Version 0.2.0:
 - Added a border around the code container (uses root variables for easy changing).
 - Increased the padding slightly for the "Copy" button.
-- Added a background color to the code syntax container (next to the numbers) and added a border-radius.
+- Added background color to the code syntax container (next to the numbers) and added a border-radius.
 - Added new public function "addLanguage()", which will add a new language to the library and will auto-render DOM elements found for that language.
 - Added all missing keywords for the built-in language "JavaScript".
 - Added C# language support via an importable file.
