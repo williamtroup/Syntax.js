@@ -36,10 +36,10 @@
         _elements_Original = {},
 
         // Variables: Temporary String Variables
-        _strings_Cached = {},
-        _strings_Cached_Count = 0,
-        _comments_Cached = {},
-        _comments_Cached_Count = 0,
+        _cached_Strings = {},
+        _cached_Strings_Count = 0,
+        _cached_Comments = {},
+        _cached_Comments_Count = 0,
         
         // Variables: Languages
         _languages = {},
@@ -170,10 +170,10 @@
 
                             _elements.push( element );
 
-                            _strings_Cached = {};
-                            _strings_Cached_Count = 0;
-                            _comments_Cached = {};
-                            _comments_Cached_Count = 0;
+                            _cached_Strings = {};
+                            _cached_Strings_Count = 0;
+                            _cached_Comments = {};
+                            _cached_Comments_Count = 0;
 
                         } else {
                             result = logError( "No code is available available to render, skipping." );
@@ -327,10 +327,10 @@
         
             for ( var patternItemsIndex = 0; patternItemsIndex < patternItemsLength; patternItemsIndex++ ) {
                 var comment = patternItems[ patternItemsIndex ],
-                    commentVariable = "$C{" + _comments_Cached_Count.toString() + "}";
+                    commentVariable = "$C{" + _cached_Comments_Count.toString() + "}";
 
-                _comments_Cached[ commentVariable ] = "<span class=\"comment\">" + comment + "</span>";
-                _comments_Cached_Count++;
+                _cached_Comments[ commentVariable ] = "<span class=\"comment\">" + comment + "</span>";
+                _cached_Comments_Count++;
     
                 innerHTML = innerHTML.replace( comment, commentVariable );
 
@@ -361,11 +361,11 @@
                             commentCssClass = commentLinesLength === 1 ? "comment" : "multi-line-comment";
                         
                         for ( var commentLineIndex = 0; commentLineIndex < commentLinesLength; commentLineIndex++ ) {
-                            var commentVariable = "$C{" + _comments_Cached_Count.toString() + "}",
+                            var commentVariable = "$C{" + _cached_Comments_Count.toString() + "}",
                                 commentLine = commentLines[ commentLineIndex ];
                             
-                            _comments_Cached[ commentVariable ] = "<span class=\"" + commentCssClass + "\">" + commentLine + "</span>";
-                            _comments_Cached_Count++;
+                            _cached_Comments[ commentVariable ] = "<span class=\"" + commentCssClass + "\">" + commentLine + "</span>";
+                            _cached_Comments_Count++;
                 
                             innerHTML = innerHTML.replace( commentLine, commentVariable );
                         }
@@ -391,10 +391,10 @@
 
                 for ( var stringLineIndex = 0; stringLineIndex < stringLinesLength; stringLineIndex++ ) {
                     var stringLine = stringLines[ stringLineIndex ],
-                        stringVariable = "$S{" + _strings_Cached_Count.toString() + "}";
+                        stringVariable = "$S{" + _cached_Strings_Count.toString() + "}";
 
-                    _strings_Cached[ stringVariable ] = "<span class=\"" + stringCssClass + "\">" + stringLine + "</span>";
-                    _strings_Cached_Count++;
+                    _cached_Strings[ stringVariable ] = "<span class=\"" + stringCssClass + "\">" + stringLine + "</span>";
+                    _cached_Strings_Count++;
         
                     innerHTML = innerHTML.replace( stringLine, stringVariable );
                 }
@@ -532,9 +532,9 @@
     }
 
     function renderElementStringQuotesFromVariables( innerHTML ) {
-        for ( var quoteVariable in _strings_Cached ) {
-            if ( _strings_Cached.hasOwnProperty( quoteVariable ) ) {
-                innerHTML = innerHTML.replace( quoteVariable, _strings_Cached[ quoteVariable ] );
+        for ( var quoteVariable in _cached_Strings ) {
+            if ( _cached_Strings.hasOwnProperty( quoteVariable ) ) {
+                innerHTML = innerHTML.replace( quoteVariable, _cached_Strings[ quoteVariable ] );
             }
         }
 
@@ -551,9 +551,9 @@
             end = encodeMarkUpCharacters( multiLineComment[ 1 ] );
         }
 
-        for ( var commentVariable in _comments_Cached ) {
-            if ( _comments_Cached.hasOwnProperty( commentVariable ) ) {
-                var replacement = _comments_Cached[ commentVariable ];
+        for ( var commentVariable in _cached_Comments ) {
+            if ( _cached_Comments.hasOwnProperty( commentVariable ) ) {
+                var replacement = _cached_Comments[ commentVariable ];
 
                 if ( language.isMarkUp && isDefinedString( start ) && isDefinedString( end ) ) {
                     replacement = replacement.replace( multiLineComment[ 0 ], start );
