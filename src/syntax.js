@@ -777,6 +777,7 @@
         options.showLineNumbers = getDefaultBoolean( options.showLineNumbers, true );
         options.highlightKeywords = getDefaultBoolean( options.highlightKeywords, true );
         options.highlightValues = getDefaultBoolean( options.highlightValues, true );
+        options.highlightAttributes = getDefaultBoolean( options.highlightAttributes, true );
         options.highlightStrings = getDefaultBoolean( options.highlightStrings, true );
         options.highlightComments = getDefaultBoolean( options.highlightComments, true );
         options.showLanguageLabel = getDefaultBoolean( options.showLanguageLabel, true );
@@ -803,8 +804,10 @@
         options.onRenderComplete = getDefaultFunction( options.onRenderComplete, null );
         options.onKeywordClicked = getDefaultFunction( options.onKeywordClicked, null );
         options.onValueClicked = getDefaultFunction( options.onValueClicked, null );
+        options.onAttributeClicked = getDefaultFunction( options.onAttributeClicked, null );
         options.onKeywordRender = getDefaultFunction( options.onKeywordRender, null );
         options.onValueRender = getDefaultFunction( options.onValueRender, null );
+        options.onAttributeRender = getDefaultFunction( options.onAttributeRender, null );
         options.onStringRender = getDefaultFunction( options.onStringRender, null );
         options.onCommentRender = getDefaultFunction( options.onCommentRender, null );
         options.onPrint = getDefaultFunction( options.onPrint, null );

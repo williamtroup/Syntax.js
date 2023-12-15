@@ -1,7 +1,7 @@
 # Syntax.js - Change Log:
 
 ## Version 1.9.0:
-- 
+- Fixed documentation errors in the "BINDING_OPTIONS_CUSTOM_TRIGGERS.md" file.
 
 <br>
 
