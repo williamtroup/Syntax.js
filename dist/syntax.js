@@ -45,24 +45,26 @@
     }
   }
   function renderTab(tabs, tabElements, tabContentElements, renderResult, divElementIndex) {
-    var tab = createElement("div", "tab");
+    var tab = createElement("button", "tab");
     tab.innerHTML = renderResult.tabTitle;
     tabs.appendChild(tab);
     tabElements.push(tab);
     tabContentElements.push(renderResult.tabContents);
     tab.onclick = function() {
-      var tabElementsLength = tabElements.length;
-      var tabContentElementsLength = tabContentElements.length;
-      var tabElementsIndex = 0;
-      for (; tabElementsIndex < tabElementsLength; tabElementsIndex++) {
-        tabElements[tabElementsIndex].className = "tab";
+      if (tab.className !== "tab-active") {
+        var tabElementsLength = tabElements.length;
+        var tabContentElementsLength = tabContentElements.length;
+        var tabElementsIndex = 0;
+        for (; tabElementsIndex < tabElementsLength; tabElementsIndex++) {
+          tabElements[tabElementsIndex].className = "tab";
+        }
+        var tabContentElementsIndex = 0;
+        for (; tabContentElementsIndex < tabContentElementsLength; tabContentElementsIndex++) {
+          tabContentElements[tabContentElementsIndex].style.display = "none";
+        }
+        tab.className = "tab-active";
+        renderResult.tabContents.style.display = "flex";
       }
-      var tabContentElementsIndex = 0;
-      for (; tabContentElementsIndex < tabContentElementsLength; tabContentElementsIndex++) {
-        tabContentElements[tabContentElementsIndex].style.display = "none";
-      }
-      tab.className = "tab-active";
-      renderResult.tabContents.style.display = "flex";
     };
     if (divElementIndex > 0) {
       renderResult.tabContents.style.display = "none";
@@ -204,7 +206,7 @@
         }
       }
       if (syntaxOptions.showCopyButton) {
-        var copyButton = createElement("div", "button");
+        var copyButton = createElement("button", "button");
         copyButton.innerHTML = syntaxOptions.copyButtonText;
         copyButton.style.display = syntaxOptions.buttonsVisible ? "inline-block" : "none";
         buttons.appendChild(copyButton);
@@ -215,7 +217,7 @@
         buttonsElements.push(copyButton);
       }
       if (syntaxOptions.showPrintButton) {
-        var printButton = createElement("div", "button");
+        var printButton = createElement("button", "button");
         printButton.innerHTML = syntaxOptions.printButtonText;
         printButton.style.display = syntaxOptions.buttonsVisible ? "inline-block" : "none";
         buttons.appendChild(printButton);
@@ -254,7 +256,7 @@
       }
       var buttonsElementsLength = buttonsElements.length;
       if (buttonsElementsLength > syntaxOptions.maximumButtons) {
-        var openButton = createElement("div", "button button-opener");
+        var openButton = createElement("button", "button button-opener");
         openButton.innerText = syntaxOptions.buttonsVisible ? _configuration.buttonsCloserText : _configuration.buttonsOpenerText;
         buttons.insertBefore(openButton, buttons.children[0]);
         openButton.onclick = function() {
@@ -274,7 +276,7 @@
     }
   }
   function renderElementButton(customButton, buttonsElements, buttons, innerHTMLCopy, syntaxOptions) {
-    var newCustomButton = createElement("div", "button");
+    var newCustomButton = createElement("button", "button");
     newCustomButton.innerHTML = customButton.text;
     newCustomButton.style.display = syntaxOptions.buttonsVisible ? "inline-block" : "none";
     buttons.appendChild(newCustomButton);

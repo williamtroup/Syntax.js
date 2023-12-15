@@ -5,6 +5,9 @@
 #### **New Features:**
 - Added tabbing support! This feature allows you to render language under one tabbed container (which is great for showing code examples).
 
+### **CSS:**
+- All buttons (and tabs) are now rendered as buttons instead of divs (this includes minor CSS changes).
+
 #### **Documentation:**
 - Added a new documentation file "BINDING_LANGUAGE.md", which states how the "data-syntax-language" binding attribute is used.
 

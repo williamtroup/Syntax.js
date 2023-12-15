@@ -74,38 +74,40 @@ div.syntax-highlight div.code div.tabs {
   -ms-user-select: none;
   user-select: none;
 }
-code.syntax-highlight div.code div.tabs div.tab,
-code.syntax-highlight div.code div.tabs div.tab-active,
-div.syntax-highlight div.code div.tabs div.tab,
-div.syntax-highlight div.code div.tabs div.tab-active {
+code.syntax-highlight div.code div.tabs button.tab,
+code.syntax-highlight div.code div.tabs button.tab-active,
+div.syntax-highlight div.code div.tabs button.tab,
+div.syntax-highlight div.code div.tabs button.tab-active {
   display: inline-block;
   padding: 10px;
   padding-left: 15px;
   padding-right: 15px;
   border-radius: var(--border-radius);
-  margin-right: 10px;
+  margin: 0 !important;
+  margin-right: 10px !important;
   cursor: default;
+  outline: none !important;
 }
-code.syntax-highlight div.code div.tabs div.tab:last-child,
-code.syntax-highlight div.code div.tabs div.tab-active:last-child,
-div.syntax-highlight div.code div.tabs div.tab:last-child,
-div.syntax-highlight div.code div.tabs div.tab-active:last-child {
+code.syntax-highlight div.code div.tabs button.tab:last-child,
+code.syntax-highlight div.code div.tabs button.tab-active:last-child,
+div.syntax-highlight div.code div.tabs button.tab:last-child,
+div.syntax-highlight div.code div.tabs button.tab-active:last-child {
   margin-right: 0;
 }
-code.syntax-highlight div.code div.tabs div.tab,
-div.syntax-highlight div.code div.tabs div.tab {
+code.syntax-highlight div.code div.tabs button.tab,
+div.syntax-highlight div.code div.tabs button.tab {
   background-color: var(--tab-background-color);
   color: var(--tab-text-color);
   border: var(--border-size) solid var(--tab-border-color);
 }
-code.syntax-highlight div.code div.tabs div.tab:hover,
-div.syntax-highlight div.code div.tabs div.tab:hover {
+code.syntax-highlight div.code div.tabs button.tab:hover,
+div.syntax-highlight div.code div.tabs button.tab:hover {
   cursor: pointer;
   opacity: 0.7;
   transition: var(--transition);
 }
-code.syntax-highlight div.code div.tabs div.tab-active,
-div.syntax-highlight div.code div.tabs div.tab-active {
+code.syntax-highlight div.code div.tabs button.tab-active,
+div.syntax-highlight div.code div.tabs button.tab-active {
   background-color: var(--tab-active-background-color);
   color: var(--tab-active-text-color);
   border: var(--border-size) solid var(--tab-active-border-color);
@@ -168,10 +170,11 @@ div.syntax-highlight div.code div.tab-contents div.syntax div.buttons {
   -ms-user-select: none;
   user-select: none;
   text-wrap: nowrap;
+  display: flex;
 }
-code.syntax-highlight div.code div.tab-contents div.syntax div.buttons div.button,
+code.syntax-highlight div.code div.tab-contents div.syntax div.buttons button.button,
 code.syntax-highlight div.code div.tab-contents div.syntax div.buttons div.label,
-div.syntax-highlight div.code div.tab-contents div.syntax div.buttons div.button,
+div.syntax-highlight div.code div.tab-contents div.syntax div.buttons button.button,
 div.syntax-highlight div.code div.tab-contents div.syntax div.buttons div.label {
   color: var(--button-text-color);
   background-color: var(--button-background-color);
@@ -182,22 +185,24 @@ div.syntax-highlight div.code div.tab-contents div.syntax div.buttons div.label 
   border: none;
   border-right: 1px dotted var(--color-gray);
   font-size: small;
+  margin: 0 !important;
+  outline: none !important;
 }
-code.syntax-highlight div.code div.tab-contents div.syntax div.buttons div.button:first-child,
+code.syntax-highlight div.code div.tab-contents div.syntax div.buttons button.button:first-child,
 code.syntax-highlight div.code div.tab-contents div.syntax div.buttons div.label:first-child,
-div.syntax-highlight div.code div.tab-contents div.syntax div.buttons div.button:first-child,
+div.syntax-highlight div.code div.tab-contents div.syntax div.buttons button.button:first-child,
 div.syntax-highlight div.code div.tab-contents div.syntax div.buttons div.label:first-child {
   border-bottom-left-radius: var(--border-radius);
 }
-code.syntax-highlight div.code div.tab-contents div.syntax div.buttons div.button:last-child,
+code.syntax-highlight div.code div.tab-contents div.syntax div.buttons button.button:last-child,
 code.syntax-highlight div.code div.tab-contents div.syntax div.buttons div.label:last-child,
-div.syntax-highlight div.code div.tab-contents div.syntax div.buttons div.button:last-child,
+div.syntax-highlight div.code div.tab-contents div.syntax div.buttons button.button:last-child,
 div.syntax-highlight div.code div.tab-contents div.syntax div.buttons div.label:last-child {
   border-top-right-radius: var(--border-radius);
   border-right: none;
 }
-code.syntax-highlight div.code div.tab-contents div.syntax div.buttons div.button-opener,
-div.syntax-highlight div.code div.tab-contents div.syntax div.buttons div.button-opener {
+code.syntax-highlight div.code div.tab-contents div.syntax div.buttons button.button-opener,
+div.syntax-highlight div.code div.tab-contents div.syntax div.buttons button.button-opener {
   font-weight: 900 !important;
 }
 code.syntax-highlight div.code div.tab-contents div.syntax div.buttons div.label,
@@ -205,9 +210,10 @@ div.syntax-highlight div.code div.tab-contents div.syntax div.buttons div.label 
   cursor: default;
   color: var(--color-gray);
   font-weight: 700;
+  flex: 1;
 }
-code.syntax-highlight div.code div.tab-contents div.syntax div.buttons div.button:hover,
-div.syntax-highlight div.code div.tab-contents div.syntax div.buttons div.button:hover {
+code.syntax-highlight div.code div.tab-contents div.syntax div.buttons button.button:hover,
+div.syntax-highlight div.code div.tab-contents div.syntax div.buttons button.button:hover {
   cursor: pointer;
   opacity: 0.7;
   transition: var(--transition);

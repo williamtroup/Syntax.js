@@ -88,22 +88,24 @@ div.syntax-highlight {
             -ms-user-select: none;
             user-select: none;
             
-            div.tab,
-            div.tab-active {
+            button.tab,
+            button.tab-active {
                 display: inline-block;
                 padding: 10px;
                 padding-left: 15px;
                 padding-right: 15px;
                 border-radius: var(--border-radius);
-                margin-right: 10px;
+                margin: 0 !important;
+                margin-right: 10px !important;
                 cursor: default;
+                outline: none !important;
 
                 &:last-child {
                     margin-right: 0;
                 }
             }
 
-            div.tab {
+            button.tab {
                 background-color: var(--tab-background-color);
                 color: var(--tab-text-color);
                 border: var(--border-size) solid var(--tab-border-color);
@@ -115,7 +117,7 @@ div.syntax-highlight {
                 }
             }
 
-            div.tab-active {
+            button.tab-active {
                 background-color: var(--tab-active-background-color);
                 color: var(--tab-active-text-color);
                 border: var(--border-size) solid var(--tab-active-border-color);
@@ -175,8 +177,9 @@ div.syntax-highlight {
                     -ms-user-select: none;
                     user-select: none;
                     text-wrap: nowrap;
+                    display: flex;
         
-                    div.button,
+                    button.button,
                     div.label {
                         color: var(--button-text-color);
                         background-color: var(--button-background-color);
@@ -187,6 +190,8 @@ div.syntax-highlight {
                         border: none;
                         border-right: 1px dotted var(--color-gray);
                         font-size: small;
+                        margin: 0 !important;
+                        outline: none !important;
         
                         &:first-child {
                             border-bottom-left-radius: var(--border-radius);
@@ -198,7 +203,7 @@ div.syntax-highlight {
                         }
                     }
     
-                    div.button-opener {
+                    button.button-opener {
                         font-weight: 900 !important;
                     }
     
@@ -206,9 +211,10 @@ div.syntax-highlight {
                         cursor: default;
                         color: var(--color-gray);
                         font-weight: 700;
+                        flex: 1;
                     }
         
-                    div.button:hover {
+                    button.button:hover {
                         cursor: pointer;
                         opacity: 0.7;
                         transition: var(--transition);
