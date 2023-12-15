@@ -3,8 +3,10 @@
         /* Colors */
         --color-keyword: #f47067;
         --color-value: #F28C28;
+        --color-attribute: #dcbdfb;
         --color-keyword-hover: #ff8080;
         --color-value-hover: #FFAC1C;
+        --color-attribute-hover: #f2e7fe;
         --color-comment: #8edb8c;
         --color-multi-line-comment: var(--color-comment);
         --color-string: #96d0ff;

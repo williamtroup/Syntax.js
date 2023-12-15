@@ -12,8 +12,10 @@
 :root {
   --color-keyword: #A71500;
   --color-value: #F28C28;
+  --color-attribute: #730dd9;
   --color-keyword-hover: #FF0000;
   --color-value-hover: #FFAC1C;
+  --color-attribute-hover: #a656f5;
   --color-comment: #78b13f;
   --color-multi-line-comment: var(--color-comment);
   --color-string: #484dd2;
@@ -194,6 +196,21 @@ code.syntax-highlight div.code div.syntax p span.no-highlight-value-clickable:ho
 div.syntax-highlight div.code div.syntax p span.value-clickable:hover,
 div.syntax-highlight div.code div.syntax p span.no-highlight-value-clickable:hover {
   color: var(--color-value-hover);
+  transition: var(--transition);
+  cursor: pointer;
+}
+code.syntax-highlight div.code div.syntax p span.attribute,
+code.syntax-highlight div.code div.syntax p span.attribute-clickable,
+div.syntax-highlight div.code div.syntax p span.attribute,
+div.syntax-highlight div.code div.syntax p span.attribute-clickable {
+  font-weight: 700;
+  color: var(--color-attribute);
+}
+code.syntax-highlight div.code div.syntax p span.attribute-clickable:hover,
+code.syntax-highlight div.code div.syntax p span.no-highlight-attribute-clickable:hover,
+div.syntax-highlight div.code div.syntax p span.attribute-clickable:hover,
+div.syntax-highlight div.code div.syntax p span.no-highlight-attribute-clickable:hover {
+  color: var(--color-attribute-hover);
   transition: var(--transition);
   cursor: pointer;
 }
