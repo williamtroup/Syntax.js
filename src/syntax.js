@@ -36,6 +36,10 @@
         _elements_Original = {},
 
         // Variables: Temporary Caching
+        _cached_Keywords = {},
+        _cached_Keywords_Count = 0,
+        _cached_Values = {},
+        _cached_Values_Count = 0,
         _cached_Strings = {},
         _cached_Strings_Count = 0,
         _cached_Comments = {},
@@ -145,13 +149,19 @@
                                     }
                                 }
 
-                                if ( !language.isMarkUp ) {
-                                    innerHTML = renderElementKeywords( innerHTML, language, syntaxOptions );
-                                } else {
-                                    innerHTML = replaceMarkUpKeywords( innerHTML, language, syntaxOptions );
+                                if ( syntaxOptions.highlightKeywords ) {
+                                    if ( !language.isMarkUp ) {
+                                        innerHTML = renderElementKeywords( innerHTML, language, syntaxOptions );
+                                    } else {
+                                        innerHTML = replaceMarkUpKeywords( innerHTML, language, syntaxOptions );
+                                    }
                                 }
 
-                                innerHTML = renderElementValues( innerHTML, language, syntaxOptions );
+                                if ( syntaxOptions.highlightValues ) {
+                                    innerHTML = renderElementValues( innerHTML, language, syntaxOptions );
+                                }
+
+                                innerHTML = encodeMarkUpCharacters( innerHTML );
         
                                 if ( syntaxOptions.highlightComments ) {
                                     innerHTML = renderElementCommentsFromVariables( innerHTML, language );
@@ -159,6 +169,14 @@
                                 
                                 if ( syntaxOptions.highlightStrings ) {
                                     innerHTML = renderElementStringQuotesFromVariables( innerHTML );
+                                }
+
+                                if ( syntaxOptions.highlightKeywords ) {
+                                    innerHTML = renderElementVariables( innerHTML, _cached_Keywords );
+                                }
+
+                                if ( syntaxOptions.highlightValues ) {
+                                    innerHTML = renderElementVariables( innerHTML, _cached_Values );
                                 }
                                 
                             } else {
@@ -170,6 +188,10 @@
 
                             _elements.push( element );
 
+                            _cached_Keywords = {};
+                            _cached_Keywords_Count = 0;
+                            _cached_Values = {};
+                            _cached_Values_Count = 0;
                             _cached_Strings = {};
                             _cached_Strings_Count = 0;
                             _cached_Comments = {};
@@ -417,21 +439,29 @@
         for ( var keywordIndex = 0; keywordIndex < keywordsLength; keywordIndex++ ) {
             var keyword = keywords[ keywordIndex ],
                 keywordDisplay = getDisplayTextTestCasing( keyword, keywordsCasing ),
+                keywordVariable = "KW" + _cached_Keywords_Count.toString() + ";",
+                keywordReplacement = null,
                 regExFlags = caseSensitive ? "g" : "gi",
                 regEx = new RegExp( "\\b" + keyword + "\\b", regExFlags );
 
             if ( syntaxOptions.highlightKeywords ) {
                 if ( isDefinedFunction( syntaxOptions.onKeywordClicked ) ) {
-                    innerHTML = innerHTML.replace( regEx, "<span class=\"keyword-clickable\">" + keywordDisplay + "</span>" );
+                    keywordReplacement = "<span class=\"keyword-clickable\">" + keywordDisplay + "</span>";
+                    innerHTML = innerHTML.replace( regEx, keywordVariable );
                 } else {
-                    innerHTML = innerHTML.replace( regEx, "<span class=\"keyword\">" + keywordDisplay + "</span>" );
+                    keywordReplacement = "<span class=\"keyword\">" + keywordDisplay + "</span>";
+                    innerHTML = innerHTML.replace( regEx, keywordVariable );
                 }
 
             } else {
                 if ( isDefinedFunction( syntaxOptions.onKeywordClicked ) ) {
-                    innerHTML = innerHTML.replace( regEx, "<span class=\"no-highlight-keyword-clickable\">" + keywordDisplay + "</span>" );
+                    keywordReplacement = "<span class=\"no-highlight-keyword-clickable\">" + keywordDisplay + "</span>";
+                    innerHTML = innerHTML.replace( regEx, keywordVariable );
                 }
             }
+
+            _cached_Keywords[ keywordVariable ] = keywordReplacement;
+            _cached_Keywords_Count++;
 
             fireCustomTrigger( syntaxOptions.onKeywordRender, keyword );
         }
@@ -445,8 +475,6 @@
             keywordsCasing = getKeywordCasing( language.keywordsCasing );
 
         var regEx = /(<([^>]+)>)/ig,
-            replacements = {},
-            replacementsNumber = 1,
             regExFlags = caseSensitive ? "g" : "gi",
             regExResult = regEx.exec( innerHTML );
 
@@ -460,41 +488,31 @@
             tag = tag.split( _string.space )[ 0 ];
 
             if ( keywords.indexOf( tag ) > -1 ) {
-                var replacementVariable = "KW" + replacementsNumber.toString() + ";",
+                var keywordVariable = "KW" + _cached_Keywords_Count.toString() + ";",
                     regExReplace = new RegExp( "\\b" + tag + "\\b", regExFlags ),
-                    replacement = null,
+                    keywordReplacement = null,
                     replacementTagDisplay = getDisplayTextTestCasing( tag, keywordsCasing );
 
                 if ( syntaxOptions.highlightKeywords ) {
                     if ( isDefinedFunction( syntaxOptions.onKeywordClicked ) ) {
-                        replacement = "<span class=\"keyword-clickable\">" + replacementTagDisplay + "</span>";
+                        keywordReplacement = "<span class=\"keyword-clickable\">" + replacementTagDisplay + "</span>";
                     } else {
-                        replacement = "<span class=\"keyword\">" + replacementTagDisplay + "</span>";
+                        keywordReplacement = "<span class=\"keyword\">" + replacementTagDisplay + "</span>";
                     }
     
                 } else {
                     if ( isDefinedFunction( syntaxOptions.onKeywordClicked ) ) {
-                        replacement = "<span class=\"no-highlight-keyword-clickable\">" + replacementTagDisplay + "</span>";
+                        keywordReplacement = "<span class=\"no-highlight-keyword-clickable\">" + replacementTagDisplay + "</span>";
                     }
                 }
 
-                innerHTML = innerHTML.replace( regExReplace, replacementVariable );
+                innerHTML = innerHTML.replace( regExReplace, keywordVariable );
 
-                replacements[ replacementVariable ] = replacement;
-                replacementsNumber++;
+                _cached_Keywords[ keywordVariable ] = keywordReplacement;
+                _cached_Keywords_Count++;
             }
 
             regExResult = regEx.exec( innerHTML );
-        }
-
-        innerHTML = encodeMarkUpCharacters( innerHTML );
-
-        for ( var variable in replacements ) {
-            if ( replacements.hasOwnProperty( variable ) ) {
-                var regExHtmlReplace = new RegExp( variable, "g" );
-
-                innerHTML = innerHTML.replace( regExHtmlReplace, replacements[ variable ] );
-            }
         }
 
         return innerHTML;
@@ -509,21 +527,29 @@
 
         for ( var valueIndex = 0; valueIndex < valuesLength; valueIndex++ ) {
             var value = values[ valueIndex ],
+                valueVariable = "VAL" + _cached_Values_Count.toString() + ";",
+                valueReplacement = null,
                 regExFlags = caseSensitive ? "g" : "gi",
                 regEx = new RegExp( "\\b" + value + "\\b", regExFlags );
 
             if ( syntaxOptions.highlightValues ) {
                 if ( isDefinedFunction( syntaxOptions.onValueClicked ) ) {
-                    innerHTML = innerHTML.replace( regEx, "<span class=\"value-clickable\">" + value + "</span>" );
+                    valueReplacement = "<span class=\"value-clickable\">" + value + "</span>";
+                    innerHTML = innerHTML.replace( regEx, valueVariable );
                 } else {
-                    innerHTML = innerHTML.replace( regEx, "<span class=\"value\">" + value + "</span>" );
+                    valueReplacement = "<span class=\"value\">" + value + "</span>";
+                    innerHTML = innerHTML.replace( regEx, valueVariable );
                 }
 
             } else {
                 if ( isDefinedFunction( syntaxOptions.onValueClicked ) ) {
-                    innerHTML = innerHTML.replace( regEx, "<span class=\"no-highlight-value-clickable\">" + value + "</span>" );
+                    valueReplacement = "<span class=\"no-highlight-value-clickable\">" + value + "</span>";
+                    innerHTML = innerHTML.replace( regEx, valueVariable );
                 }
             }
+
+            _cached_Values[ valueVariable ] = valueReplacement;
+            _cached_Values_Count++;
 
             fireCustomTrigger( syntaxOptions.onValueRender, value );
         }
@@ -561,6 +587,18 @@
                 }
 
                 innerHTML = innerHTML.replace( commentVariable, replacement );
+            }
+        }
+
+        return innerHTML;
+    }
+
+    function renderElementVariables( innerHTML, variables ) {
+        for ( var variable in variables ) {
+            if ( variables.hasOwnProperty( variable ) ) {
+                var regExHtmlReplace = new RegExp( variable, "g" );
+
+                innerHTML = innerHTML.replace( regExHtmlReplace, variables[ variable ] );
             }
         }
 
