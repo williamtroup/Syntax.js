@@ -109,6 +109,7 @@ div.syntax-highlight div.code div.tabs div.tab-active {
   background-color: var(--tab-active-background-color);
   color: var(--tab-active-text-color);
   border: var(--border-size) solid var(--tab-active-border-color);
+  font-weight: 700;
 }
 code.syntax-highlight div.code div.tab-contents,
 div.syntax-highlight div.code div.tab-contents {

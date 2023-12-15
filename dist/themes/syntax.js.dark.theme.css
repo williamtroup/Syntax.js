@@ -29,7 +29,7 @@
         --tab-background-color: #F5F5F5;
         --tab-text-color: #3b3a3a;
         --tab-border-color: var(--tab-text-color);
-        --tab-active-background-color: var(--container-border-color-container);
+        --tab-active-background-color: var(--container-background-color-syntax);
         --tab-active-text-color: var(--tab-background-color);
         --tab-active-border-color: var(--tab-text-color);
 
