@@ -35,7 +35,7 @@
         _elements = [],
         _elements_Original = {},
 
-        // Variables: Temporary String Variables
+        // Variables: Temporary Caching
         _cached_Strings = {},
         _cached_Strings_Count = 0,
         _cached_Comments = {},
