@@ -153,6 +153,8 @@ Make sure you include the "DOCTYPE html" tag at the top of your HTML, as follows
 </code>
 ```
 
+To see a list of all the available binding languages you can use for "data-syntax-language", click [here](docs/BINDING_LANGUAGE.md).
+
 To see a list of all the available binding options you can use for "data-syntax-options", click [here](docs/BINDING_OPTIONS.md).
 
 To see a list of all the available custom triggers you can use for "data-syntax-options", click [here](docs/BINDING_OPTIONS_CUSTOM_TRIGGERS.md).
