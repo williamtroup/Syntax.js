@@ -40,6 +40,8 @@
         _cached_Keywords_Count = 0,
         _cached_Values = {},
         _cached_Values_Count = 0,
+        _cached_Attributes = {},
+        _cached_Attributes_Count = 0,
         _cached_Strings = {},
         _cached_Strings_Count = 0,
         _cached_Comments = {},
@@ -156,6 +158,11 @@
                                 }
                                 
                                 innerHTML = renderElementValues( innerHTML, language, syntaxOptions );
+
+                                if ( language.isMarkUp ) {
+                                    innerHTML = renderElementAttributes( innerHTML, language, syntaxOptions );
+                                }
+
                                 innerHTML = encodeMarkUpCharacters( innerHTML );
         
                                 if ( syntaxOptions.highlightComments ) {
@@ -173,6 +180,10 @@
                                 if ( syntaxOptions.highlightValues ) {
                                     innerHTML = renderElementVariables( innerHTML, _cached_Values );
                                 }
+
+                                if ( syntaxOptions.highlightAttributes && language.isMarkUp ) {
+                                    innerHTML = renderElementVariables( innerHTML, _cached_Attributes );
+                                }
                                 
                             } else {
                                 innerHTML = encodeMarkUpCharacters( innerHTML );
@@ -187,6 +198,8 @@
                             _cached_Keywords_Count = 0;
                             _cached_Values = {};
                             _cached_Values_Count = 0;
+                            _cached_Attributes = {};
+                            _cached_Attributes_Count = 0;
                             _cached_Strings = {};
                             _cached_Strings_Count = 0;
                             _cached_Comments = {};
@@ -547,6 +560,45 @@
             _cached_Values_Count++;
 
             fireCustomTrigger( syntaxOptions.onValueRender, value );
+        }
+
+        return innerHTML;
+    }
+
+    function renderElementAttributes( innerHTML, language, syntaxOptions ) {
+        var attributes = getDefaultStringOrArray( language.attributes, [] ),
+            attributesLength = attributes.length,
+            caseSensitive = language.caseSensitive;
+
+        sortArrayOfStringByLength( attributes );
+
+        for ( var attributeIndex = 0; attributeIndex < attributesLength; attributeIndex++ ) {
+            var attribute = attributes[ attributeIndex ],
+                attributeVariable = "ATTR" + _cached_Attributes_Count.toString() + ";",
+                attributeReplacement = null,
+                regExFlags = caseSensitive ? "g" : "gi",
+                regEx = new RegExp( "\\b" + attribute + "\\b", regExFlags );
+
+            if ( syntaxOptions.highlightAttributes ) {
+                if ( isDefinedFunction( syntaxOptions.onAttributeClicked ) ) {
+                    attributeReplacement = "<span class=\"attribute-clickable\">" + attribute + "</span>";
+                    innerHTML = innerHTML.replace( regEx, attributeVariable );
+                } else {
+                    attributeReplacement = "<span class=\"attribute\">" + attribute + "</span>";
+                    innerHTML = innerHTML.replace( regEx, attributeVariable );
+                }
+
+            } else {
+                if ( isDefinedFunction( syntaxOptions.onAttributeClicked ) ) {
+                    attributeReplacement = "<span class=\"no-highlight-attribute-clickable\">" + attribute + "</span>";
+                    innerHTML = innerHTML.replace( regEx, attributeVariable );
+                }
+            }
+
+            _cached_Attributes[ attributeVariable ] = attributeReplacement;
+            _cached_Attributes_Count++;
+
+            fireCustomTrigger( syntaxOptions.onAttributeRender, attribute );
         }
 
         return innerHTML;

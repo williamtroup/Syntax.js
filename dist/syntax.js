@@ -75,11 +75,24 @@
                   innerHTML = replaceMarkUpKeywords(innerHTML, language, syntaxOptions);
                 }
                 innerHTML = renderElementValues(innerHTML, language, syntaxOptions);
+                if (language.isMarkUp) {
+                  innerHTML = renderElementAttributes(innerHTML, language, syntaxOptions);
+                }
+                innerHTML = encodeMarkUpCharacters(innerHTML);
                 if (syntaxOptions.highlightComments) {
                   innerHTML = renderElementCommentsFromVariables(innerHTML, language);
                 }
                 if (syntaxOptions.highlightStrings) {
                   innerHTML = renderElementStringQuotesFromVariables(innerHTML);
+                }
+                if (syntaxOptions.highlightKeywords) {
+                  innerHTML = renderElementVariables(innerHTML, _cached_Keywords);
+                }
+                if (syntaxOptions.highlightValues) {
+                  innerHTML = renderElementVariables(innerHTML, _cached_Values);
+                }
+                if (syntaxOptions.highlightAttributes && language.isMarkUp) {
+                  innerHTML = renderElementVariables(innerHTML, _cached_Attributes);
                 }
               } else {
                 innerHTML = encodeMarkUpCharacters(innerHTML);
@@ -87,10 +100,16 @@
               renderElementCompletedHTML(element, numbers, syntax, innerHTML, syntaxOptions, isPreFormatted);
               fireCustomTrigger(syntaxOptions.onRenderComplete, element);
               _elements.push(element);
-              _strings_Cached = {};
-              _strings_Cached_Count = 0;
-              _comments_Cached = {};
-              _comments_Cached_Count = 0;
+              _cached_Keywords = {};
+              _cached_Keywords_Count = 0;
+              _cached_Values = {};
+              _cached_Values_Count = 0;
+              _cached_Attributes = {};
+              _cached_Attributes_Count = 0;
+              _cached_Strings = {};
+              _cached_Strings_Count = 0;
+              _cached_Comments = {};
+              _cached_Comments_Count = 0;
             } else {
               result = logError("No code is available available to render, skipping.");
             }
@@ -213,9 +232,9 @@
       var patternItemsIndex = 0;
       for (; patternItemsIndex < patternItemsLength; patternItemsIndex++) {
         var comment = patternItems[patternItemsIndex];
-        var commentVariable = "$C{" + _comments_Cached_Count.toString() + "}";
-        _comments_Cached[commentVariable] = '<span class="comment">' + comment + "</span>";
-        _comments_Cached_Count++;
+        var commentVariable = "$C{" + _cached_Comments_Count.toString() + "}";
+        _cached_Comments[commentVariable] = '<span class="comment">' + comment + "</span>";
+        _cached_Comments_Count++;
         innerHTML = innerHTML.replace(comment, commentVariable);
         fireCustomTrigger(syntaxOptions.onCommentRender, comment);
       }
@@ -238,10 +257,10 @@
             var commentCssClass = commentLinesLength === 1 ? "comment" : "multi-line-comment";
             var commentLineIndex = 0;
             for (; commentLineIndex < commentLinesLength; commentLineIndex++) {
-              var commentVariable = "$C{" + _comments_Cached_Count.toString() + "}";
+              var commentVariable = "$C{" + _cached_Comments_Count.toString() + "}";
               var commentLine = commentLines[commentLineIndex];
-              _comments_Cached[commentVariable] = '<span class="' + commentCssClass + '">' + commentLine + "</span>";
-              _comments_Cached_Count++;
+              _cached_Comments[commentVariable] = '<span class="' + commentCssClass + '">' + commentLine + "</span>";
+              _cached_Comments_Count++;
               innerHTML = innerHTML.replace(commentLine, commentVariable);
             }
             fireCustomTrigger(syntaxOptions.onCommentRender, comment);
@@ -263,9 +282,9 @@
         var stringLineIndex = 0;
         for (; stringLineIndex < stringLinesLength; stringLineIndex++) {
           var stringLine = stringLines[stringLineIndex];
-          var stringVariable = "$S{" + _strings_Cached_Count.toString() + "}";
-          _strings_Cached[stringVariable] = '<span class="' + stringCssClass + '">' + stringLine + "</span>";
-          _strings_Cached_Count++;
+          var stringVariable = "$S{" + _cached_Strings_Count.toString() + "}";
+          _cached_Strings[stringVariable] = '<span class="' + stringCssClass + '">' + stringLine + "</span>";
+          _cached_Strings_Count++;
           innerHTML = innerHTML.replace(stringLine, stringVariable);
         }
         fireCustomTrigger(syntaxOptions.onStringRender, string);
@@ -283,19 +302,26 @@
     for (; keywordIndex < keywordsLength; keywordIndex++) {
       var keyword = keywords[keywordIndex];
       var keywordDisplay = getDisplayTextTestCasing(keyword, keywordsCasing);
+      var keywordVariable = "KW" + _cached_Keywords_Count.toString() + ";";
+      var keywordReplacement = null;
       var regExFlags = caseSensitive ? "g" : "gi";
       var regEx = new RegExp("\\b" + keyword + "\\b", regExFlags);
       if (syntaxOptions.highlightKeywords) {
         if (isDefinedFunction(syntaxOptions.onKeywordClicked)) {
-          innerHTML = innerHTML.replace(regEx, '<span class="keyword-clickable">' + keywordDisplay + "</span>");
+          keywordReplacement = '<span class="keyword-clickable">' + keywordDisplay + "</span>";
+          innerHTML = innerHTML.replace(regEx, keywordVariable);
         } else {
-          innerHTML = innerHTML.replace(regEx, '<span class="keyword">' + keywordDisplay + "</span>");
+          keywordReplacement = '<span class="keyword">' + keywordDisplay + "</span>";
+          innerHTML = innerHTML.replace(regEx, keywordVariable);
         }
       } else {
         if (isDefinedFunction(syntaxOptions.onKeywordClicked)) {
-          innerHTML = innerHTML.replace(regEx, '<span class="no-highlight-keyword-clickable">' + keywordDisplay + "</span>");
+          keywordReplacement = '<span class="no-highlight-keyword-clickable">' + keywordDisplay + "</span>";
+          innerHTML = innerHTML.replace(regEx, keywordVariable);
         }
       }
+      _cached_Keywords[keywordVariable] = keywordReplacement;
+      _cached_Keywords_Count++;
       fireCustomTrigger(syntaxOptions.onKeywordRender, keyword);
     }
     return innerHTML;
@@ -305,8 +331,6 @@
     var caseSensitive = language.caseSensitive;
     var keywordsCasing = getKeywordCasing(language.keywordsCasing);
     var regEx = /(<([^>]+)>)/ig;
-    var replacements = {};
-    var replacementsNumber = 1;
     var regExFlags = caseSensitive ? "g" : "gi";
     var regExResult = regEx.exec(innerHTML);
     for (; regExResult;) {
@@ -317,34 +341,26 @@
       tag = tag.replace("</", _string.empty).replace("<", _string.empty).replace(">", _string.empty);
       tag = tag.split(_string.space)[0];
       if (keywords.indexOf(tag) > -1) {
-        var replacementVariable = "KW" + replacementsNumber.toString() + ";";
+        var keywordVariable = "KW" + _cached_Keywords_Count.toString() + ";";
         var regExReplace = new RegExp("\\b" + tag + "\\b", regExFlags);
-        var replacement = null;
+        var keywordReplacement = null;
         var replacementTagDisplay = getDisplayTextTestCasing(tag, keywordsCasing);
         if (syntaxOptions.highlightKeywords) {
           if (isDefinedFunction(syntaxOptions.onKeywordClicked)) {
-            replacement = '<span class="keyword-clickable">' + replacementTagDisplay + "</span>";
+            keywordReplacement = '<span class="keyword-clickable">' + replacementTagDisplay + "</span>";
           } else {
-            replacement = '<span class="keyword">' + replacementTagDisplay + "</span>";
+            keywordReplacement = '<span class="keyword">' + replacementTagDisplay + "</span>";
           }
         } else {
           if (isDefinedFunction(syntaxOptions.onKeywordClicked)) {
-            replacement = '<span class="no-highlight-keyword-clickable">' + replacementTagDisplay + "</span>";
+            keywordReplacement = '<span class="no-highlight-keyword-clickable">' + replacementTagDisplay + "</span>";
           }
         }
-        innerHTML = innerHTML.replace(regExReplace, replacementVariable);
-        replacements[replacementVariable] = replacement;
-        replacementsNumber++;
+        innerHTML = innerHTML.replace(regExReplace, keywordVariable);
+        _cached_Keywords[keywordVariable] = keywordReplacement;
+        _cached_Keywords_Count++;
       }
       regExResult = regEx.exec(innerHTML);
-    }
-    innerHTML = encodeMarkUpCharacters(innerHTML);
-    var variable;
-    for (variable in replacements) {
-      if (replacements.hasOwnProperty(variable)) {
-        var regExHtmlReplace = new RegExp(variable, "g");
-        innerHTML = innerHTML.replace(regExHtmlReplace, replacements[variable]);
-      }
     }
     return innerHTML;
   }
@@ -356,28 +372,67 @@
     var valueIndex = 0;
     for (; valueIndex < valuesLength; valueIndex++) {
       var value = values[valueIndex];
+      var valueVariable = "VAL" + _cached_Values_Count.toString() + ";";
+      var valueReplacement = null;
       var regExFlags = caseSensitive ? "g" : "gi";
       var regEx = new RegExp("\\b" + value + "\\b", regExFlags);
       if (syntaxOptions.highlightValues) {
         if (isDefinedFunction(syntaxOptions.onValueClicked)) {
-          innerHTML = innerHTML.replace(regEx, '<span class="value-clickable">' + value + "</span>");
+          valueReplacement = '<span class="value-clickable">' + value + "</span>";
+          innerHTML = innerHTML.replace(regEx, valueVariable);
         } else {
-          innerHTML = innerHTML.replace(regEx, '<span class="value">' + value + "</span>");
+          valueReplacement = '<span class="value">' + value + "</span>";
+          innerHTML = innerHTML.replace(regEx, valueVariable);
         }
       } else {
         if (isDefinedFunction(syntaxOptions.onValueClicked)) {
-          innerHTML = innerHTML.replace(regEx, '<span class="no-highlight-value-clickable">' + value + "</span>");
+          valueReplacement = '<span class="no-highlight-value-clickable">' + value + "</span>";
+          innerHTML = innerHTML.replace(regEx, valueVariable);
         }
       }
+      _cached_Values[valueVariable] = valueReplacement;
+      _cached_Values_Count++;
       fireCustomTrigger(syntaxOptions.onValueRender, value);
+    }
+    return innerHTML;
+  }
+  function renderElementAttributes(innerHTML, language, syntaxOptions) {
+    var attributes = getDefaultStringOrArray(language.attributes, []);
+    var attributesLength = attributes.length;
+    var caseSensitive = language.caseSensitive;
+    sortArrayOfStringByLength(attributes);
+    var attributeIndex = 0;
+    for (; attributeIndex < attributesLength; attributeIndex++) {
+      var attribute = attributes[attributeIndex];
+      var attributeVariable = "ATTR" + _cached_Attributes_Count.toString() + ";";
+      var attributeReplacement = null;
+      var regExFlags = caseSensitive ? "g" : "gi";
+      var regEx = new RegExp("\\b" + attribute + "\\b", regExFlags);
+      if (syntaxOptions.highlightAttributes) {
+        if (isDefinedFunction(syntaxOptions.onAttributeClicked)) {
+          attributeReplacement = '<span class="attribute-clickable">' + attribute + "</span>";
+          innerHTML = innerHTML.replace(regEx, attributeVariable);
+        } else {
+          attributeReplacement = '<span class="attribute">' + attribute + "</span>";
+          innerHTML = innerHTML.replace(regEx, attributeVariable);
+        }
+      } else {
+        if (isDefinedFunction(syntaxOptions.onAttributeClicked)) {
+          attributeReplacement = '<span class="no-highlight-attribute-clickable">' + attribute + "</span>";
+          innerHTML = innerHTML.replace(regEx, attributeVariable);
+        }
+      }
+      _cached_Attributes[attributeVariable] = attributeReplacement;
+      _cached_Attributes_Count++;
+      fireCustomTrigger(syntaxOptions.onAttributeRender, attribute);
     }
     return innerHTML;
   }
   function renderElementStringQuotesFromVariables(innerHTML) {
     var quoteVariable;
-    for (quoteVariable in _strings_Cached) {
-      if (_strings_Cached.hasOwnProperty(quoteVariable)) {
-        innerHTML = innerHTML.replace(quoteVariable, _strings_Cached[quoteVariable]);
+    for (quoteVariable in _cached_Strings) {
+      if (_cached_Strings.hasOwnProperty(quoteVariable)) {
+        innerHTML = innerHTML.replace(quoteVariable, _cached_Strings[quoteVariable]);
       }
     }
     return innerHTML;
@@ -391,14 +446,24 @@
       end = encodeMarkUpCharacters(multiLineComment[1]);
     }
     var commentVariable;
-    for (commentVariable in _comments_Cached) {
-      if (_comments_Cached.hasOwnProperty(commentVariable)) {
-        var replacement = _comments_Cached[commentVariable];
+    for (commentVariable in _cached_Comments) {
+      if (_cached_Comments.hasOwnProperty(commentVariable)) {
+        var replacement = _cached_Comments[commentVariable];
         if (language.isMarkUp && isDefinedString(start) && isDefinedString(end)) {
           replacement = replacement.replace(multiLineComment[0], start);
           replacement = replacement.replace(multiLineComment[1], end);
         }
         innerHTML = innerHTML.replace(commentVariable, replacement);
+      }
+    }
+    return innerHTML;
+  }
+  function renderElementVariables(innerHTML, variables) {
+    var variable;
+    for (variable in variables) {
+      if (variables.hasOwnProperty(variable)) {
+        var regExHtmlReplace = new RegExp(variable, "g");
+        innerHTML = innerHTML.replace(regExHtmlReplace, variables[variable]);
       }
     }
     return innerHTML;
@@ -539,6 +604,7 @@
     options.showLineNumbers = getDefaultBoolean(options.showLineNumbers, true);
     options.highlightKeywords = getDefaultBoolean(options.highlightKeywords, true);
     options.highlightValues = getDefaultBoolean(options.highlightValues, true);
+    options.highlightAttributes = getDefaultBoolean(options.highlightAttributes, true);
     options.highlightStrings = getDefaultBoolean(options.highlightStrings, true);
     options.highlightComments = getDefaultBoolean(options.highlightComments, true);
     options.showLanguageLabel = getDefaultBoolean(options.showLanguageLabel, true);
@@ -561,8 +627,10 @@
     options.onRenderComplete = getDefaultFunction(options.onRenderComplete, null);
     options.onKeywordClicked = getDefaultFunction(options.onKeywordClicked, null);
     options.onValueClicked = getDefaultFunction(options.onValueClicked, null);
+    options.onAttributeClicked = getDefaultFunction(options.onAttributeClicked, null);
     options.onKeywordRender = getDefaultFunction(options.onKeywordRender, null);
     options.onValueRender = getDefaultFunction(options.onValueRender, null);
+    options.onAttributeRender = getDefaultFunction(options.onAttributeRender, null);
     options.onStringRender = getDefaultFunction(options.onStringRender, null);
     options.onCommentRender = getDefaultFunction(options.onCommentRender, null);
     options.onPrint = getDefaultFunction(options.onPrint, null);
@@ -722,10 +790,16 @@
   var _elements_Type = {};
   var _elements = [];
   var _elements_Original = {};
-  var _strings_Cached = {};
-  var _strings_Cached_Count = 0;
-  var _comments_Cached = {};
-  var _comments_Cached_Count = 0;
+  var _cached_Keywords = {};
+  var _cached_Keywords_Count = 0;
+  var _cached_Values = {};
+  var _cached_Values_Count = 0;
+  var _cached_Attributes = {};
+  var _cached_Attributes_Count = 0;
+  var _cached_Strings = {};
+  var _cached_Strings_Count = 0;
+  var _cached_Comments = {};
+  var _cached_Comments_Count = 0;
   var _languages = {};
   var _languages_Unknown = "unknown";
   var _attribute_Name_Language = "data-syntax-language";

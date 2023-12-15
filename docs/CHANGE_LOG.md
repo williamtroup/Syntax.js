@@ -1,6 +1,18 @@
 # Syntax.js - Change Log:
 
 ## Version 1.9.0:
+
+#### **New Features:**
+- Added "Attributes" support for languages, which allows attributes (for markup languages only) to be rendered using a different CSS class.
+
+#### **Binding Options:**
+- Added a new binding option called "highlightAttributes", which states if attributes should be highlighted (defaults to true).
+
+#### **Binding Options - Custom Triggers:**
+- Added a new binding custom trigger called "onAttributeClicked", which states an event that should be triggered when a attribute is clicked.
+- Added a new binding custom trigger called "onAttributeRender", which states an event that should be triggered when a attribute is rendered.
+
+#### **Documentation:**
 - Fixed documentation errors in the "BINDING_OPTIONS_CUSTOM_TRIGGERS.md" file.
 
 <br>
