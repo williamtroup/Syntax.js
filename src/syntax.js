@@ -4,7 +4,7 @@
  * A lightweight, and easy-to-use, JavaScript library for code syntax highlighting!
  * 
  * @file        syntax.js
- * @version     v1.8.2
+ * @version     v1.9.0
  * @author      Bunoon
  * @license     MIT License
  * @copyright   Bunoon 2023
@@ -35,11 +35,17 @@
         _elements = [],
         _elements_Original = {},
 
-        // Variables: Temporary String Variables
-        _strings_Cached = {},
-        _strings_Cached_Count = 0,
-        _comments_Cached = {},
-        _comments_Cached_Count = 0,
+        // Variables: Temporary Caching
+        _cached_Keywords = {},
+        _cached_Keywords_Count = 0,
+        _cached_Values = {},
+        _cached_Values_Count = 0,
+        _cached_Attributes = {},
+        _cached_Attributes_Count = 0,
+        _cached_Strings = {},
+        _cached_Strings_Count = 0,
+        _cached_Comments = {},
+        _cached_Comments_Count = 0,
         
         // Variables: Languages
         _languages = {},
@@ -150,8 +156,14 @@
                                 } else {
                                     innerHTML = replaceMarkUpKeywords( innerHTML, language, syntaxOptions );
                                 }
-
+                                
                                 innerHTML = renderElementValues( innerHTML, language, syntaxOptions );
+
+                                if ( language.isMarkUp ) {
+                                    innerHTML = renderElementAttributes( innerHTML, language, syntaxOptions );
+                                }
+
+                                innerHTML = encodeMarkUpCharacters( innerHTML );
         
                                 if ( syntaxOptions.highlightComments ) {
                                     innerHTML = renderElementCommentsFromVariables( innerHTML, language );
@@ -159,6 +171,18 @@
                                 
                                 if ( syntaxOptions.highlightStrings ) {
                                     innerHTML = renderElementStringQuotesFromVariables( innerHTML );
+                                }
+
+                                if ( syntaxOptions.highlightKeywords ) {
+                                    innerHTML = renderElementVariables( innerHTML, _cached_Keywords );
+                                }
+
+                                if ( syntaxOptions.highlightValues ) {
+                                    innerHTML = renderElementVariables( innerHTML, _cached_Values );
+                                }
+
+                                if ( syntaxOptions.highlightAttributes && language.isMarkUp ) {
+                                    innerHTML = renderElementVariables( innerHTML, _cached_Attributes );
                                 }
                                 
                             } else {
@@ -170,10 +194,16 @@
 
                             _elements.push( element );
 
-                            _strings_Cached = {};
-                            _strings_Cached_Count = 0;
-                            _comments_Cached = {};
-                            _comments_Cached_Count = 0;
+                            _cached_Keywords = {};
+                            _cached_Keywords_Count = 0;
+                            _cached_Values = {};
+                            _cached_Values_Count = 0;
+                            _cached_Attributes = {};
+                            _cached_Attributes_Count = 0;
+                            _cached_Strings = {};
+                            _cached_Strings_Count = 0;
+                            _cached_Comments = {};
+                            _cached_Comments_Count = 0;
 
                         } else {
                             result = logError( "No code is available available to render, skipping." );
@@ -327,10 +357,10 @@
         
             for ( var patternItemsIndex = 0; patternItemsIndex < patternItemsLength; patternItemsIndex++ ) {
                 var comment = patternItems[ patternItemsIndex ],
-                    commentVariable = "$C{" + _comments_Cached_Count.toString() + "}";
+                    commentVariable = "$C{" + _cached_Comments_Count.toString() + "}";
 
-                _comments_Cached[ commentVariable ] = "<span class=\"comment\">" + comment + "</span>";
-                _comments_Cached_Count++;
+                _cached_Comments[ commentVariable ] = "<span class=\"comment\">" + comment + "</span>";
+                _cached_Comments_Count++;
     
                 innerHTML = innerHTML.replace( comment, commentVariable );
 
@@ -361,11 +391,11 @@
                             commentCssClass = commentLinesLength === 1 ? "comment" : "multi-line-comment";
                         
                         for ( var commentLineIndex = 0; commentLineIndex < commentLinesLength; commentLineIndex++ ) {
-                            var commentVariable = "$C{" + _comments_Cached_Count.toString() + "}",
+                            var commentVariable = "$C{" + _cached_Comments_Count.toString() + "}",
                                 commentLine = commentLines[ commentLineIndex ];
                             
-                            _comments_Cached[ commentVariable ] = "<span class=\"" + commentCssClass + "\">" + commentLine + "</span>";
-                            _comments_Cached_Count++;
+                            _cached_Comments[ commentVariable ] = "<span class=\"" + commentCssClass + "\">" + commentLine + "</span>";
+                            _cached_Comments_Count++;
                 
                             innerHTML = innerHTML.replace( commentLine, commentVariable );
                         }
@@ -391,10 +421,10 @@
 
                 for ( var stringLineIndex = 0; stringLineIndex < stringLinesLength; stringLineIndex++ ) {
                     var stringLine = stringLines[ stringLineIndex ],
-                        stringVariable = "$S{" + _strings_Cached_Count.toString() + "}";
+                        stringVariable = "$S{" + _cached_Strings_Count.toString() + "}";
 
-                    _strings_Cached[ stringVariable ] = "<span class=\"" + stringCssClass + "\">" + stringLine + "</span>";
-                    _strings_Cached_Count++;
+                    _cached_Strings[ stringVariable ] = "<span class=\"" + stringCssClass + "\">" + stringLine + "</span>";
+                    _cached_Strings_Count++;
         
                     innerHTML = innerHTML.replace( stringLine, stringVariable );
                 }
@@ -417,21 +447,29 @@
         for ( var keywordIndex = 0; keywordIndex < keywordsLength; keywordIndex++ ) {
             var keyword = keywords[ keywordIndex ],
                 keywordDisplay = getDisplayTextTestCasing( keyword, keywordsCasing ),
+                keywordVariable = "KW" + _cached_Keywords_Count.toString() + ";",
+                keywordReplacement = null,
                 regExFlags = caseSensitive ? "g" : "gi",
                 regEx = new RegExp( "\\b" + keyword + "\\b", regExFlags );
 
             if ( syntaxOptions.highlightKeywords ) {
                 if ( isDefinedFunction( syntaxOptions.onKeywordClicked ) ) {
-                    innerHTML = innerHTML.replace( regEx, "<span class=\"keyword-clickable\">" + keywordDisplay + "</span>" );
+                    keywordReplacement = "<span class=\"keyword-clickable\">" + keywordDisplay + "</span>";
+                    innerHTML = innerHTML.replace( regEx, keywordVariable );
                 } else {
-                    innerHTML = innerHTML.replace( regEx, "<span class=\"keyword\">" + keywordDisplay + "</span>" );
+                    keywordReplacement = "<span class=\"keyword\">" + keywordDisplay + "</span>";
+                    innerHTML = innerHTML.replace( regEx, keywordVariable );
                 }
 
             } else {
                 if ( isDefinedFunction( syntaxOptions.onKeywordClicked ) ) {
-                    innerHTML = innerHTML.replace( regEx, "<span class=\"no-highlight-keyword-clickable\">" + keywordDisplay + "</span>" );
+                    keywordReplacement = "<span class=\"no-highlight-keyword-clickable\">" + keywordDisplay + "</span>";
+                    innerHTML = innerHTML.replace( regEx, keywordVariable );
                 }
             }
+
+            _cached_Keywords[ keywordVariable ] = keywordReplacement;
+            _cached_Keywords_Count++;
 
             fireCustomTrigger( syntaxOptions.onKeywordRender, keyword );
         }
@@ -445,8 +483,6 @@
             keywordsCasing = getKeywordCasing( language.keywordsCasing );
 
         var regEx = /(<([^>]+)>)/ig,
-            replacements = {},
-            replacementsNumber = 1,
             regExFlags = caseSensitive ? "g" : "gi",
             regExResult = regEx.exec( innerHTML );
 
@@ -460,41 +496,31 @@
             tag = tag.split( _string.space )[ 0 ];
 
             if ( keywords.indexOf( tag ) > -1 ) {
-                var replacementVariable = "KW" + replacementsNumber.toString() + ";",
+                var keywordVariable = "KW" + _cached_Keywords_Count.toString() + ";",
                     regExReplace = new RegExp( "\\b" + tag + "\\b", regExFlags ),
-                    replacement = null,
+                    keywordReplacement = null,
                     replacementTagDisplay = getDisplayTextTestCasing( tag, keywordsCasing );
 
                 if ( syntaxOptions.highlightKeywords ) {
                     if ( isDefinedFunction( syntaxOptions.onKeywordClicked ) ) {
-                        replacement = "<span class=\"keyword-clickable\">" + replacementTagDisplay + "</span>";
+                        keywordReplacement = "<span class=\"keyword-clickable\">" + replacementTagDisplay + "</span>";
                     } else {
-                        replacement = "<span class=\"keyword\">" + replacementTagDisplay + "</span>";
+                        keywordReplacement = "<span class=\"keyword\">" + replacementTagDisplay + "</span>";
                     }
     
                 } else {
                     if ( isDefinedFunction( syntaxOptions.onKeywordClicked ) ) {
-                        replacement = "<span class=\"no-highlight-keyword-clickable\">" + replacementTagDisplay + "</span>";
+                        keywordReplacement = "<span class=\"no-highlight-keyword-clickable\">" + replacementTagDisplay + "</span>";
                     }
                 }
 
-                innerHTML = innerHTML.replace( regExReplace, replacementVariable );
+                innerHTML = innerHTML.replace( regExReplace, keywordVariable );
 
-                replacements[ replacementVariable ] = replacement;
-                replacementsNumber++;
+                _cached_Keywords[ keywordVariable ] = keywordReplacement;
+                _cached_Keywords_Count++;
             }
 
             regExResult = regEx.exec( innerHTML );
-        }
-
-        innerHTML = encodeMarkUpCharacters( innerHTML );
-
-        for ( var variable in replacements ) {
-            if ( replacements.hasOwnProperty( variable ) ) {
-                var regExHtmlReplace = new RegExp( variable, "g" );
-
-                innerHTML = innerHTML.replace( regExHtmlReplace, replacements[ variable ] );
-            }
         }
 
         return innerHTML;
@@ -509,21 +535,29 @@
 
         for ( var valueIndex = 0; valueIndex < valuesLength; valueIndex++ ) {
             var value = values[ valueIndex ],
+                valueVariable = "VAL" + _cached_Values_Count.toString() + ";",
+                valueReplacement = null,
                 regExFlags = caseSensitive ? "g" : "gi",
                 regEx = new RegExp( "\\b" + value + "\\b", regExFlags );
 
             if ( syntaxOptions.highlightValues ) {
                 if ( isDefinedFunction( syntaxOptions.onValueClicked ) ) {
-                    innerHTML = innerHTML.replace( regEx, "<span class=\"value-clickable\">" + value + "</span>" );
+                    valueReplacement = "<span class=\"value-clickable\">" + value + "</span>";
+                    innerHTML = innerHTML.replace( regEx, valueVariable );
                 } else {
-                    innerHTML = innerHTML.replace( regEx, "<span class=\"value\">" + value + "</span>" );
+                    valueReplacement = "<span class=\"value\">" + value + "</span>";
+                    innerHTML = innerHTML.replace( regEx, valueVariable );
                 }
 
             } else {
                 if ( isDefinedFunction( syntaxOptions.onValueClicked ) ) {
-                    innerHTML = innerHTML.replace( regEx, "<span class=\"no-highlight-value-clickable\">" + value + "</span>" );
+                    valueReplacement = "<span class=\"no-highlight-value-clickable\">" + value + "</span>";
+                    innerHTML = innerHTML.replace( regEx, valueVariable );
                 }
             }
+
+            _cached_Values[ valueVariable ] = valueReplacement;
+            _cached_Values_Count++;
 
             fireCustomTrigger( syntaxOptions.onValueRender, value );
         }
@@ -531,10 +565,49 @@
         return innerHTML;
     }
 
+    function renderElementAttributes( innerHTML, language, syntaxOptions ) {
+        var attributes = getDefaultStringOrArray( language.attributes, [] ),
+            attributesLength = attributes.length,
+            caseSensitive = language.caseSensitive;
+
+        sortArrayOfStringByLength( attributes );
+
+        for ( var attributeIndex = 0; attributeIndex < attributesLength; attributeIndex++ ) {
+            var attribute = attributes[ attributeIndex ],
+                attributeVariable = "ATTR" + _cached_Attributes_Count.toString() + ";",
+                attributeReplacement = null,
+                regExFlags = caseSensitive ? "g" : "gi",
+                regEx = new RegExp( "\\b" + attribute + "\\b", regExFlags );
+
+            if ( syntaxOptions.highlightAttributes ) {
+                if ( isDefinedFunction( syntaxOptions.onAttributeClicked ) ) {
+                    attributeReplacement = "<span class=\"attribute-clickable\">" + attribute + "</span>";
+                    innerHTML = innerHTML.replace( regEx, attributeVariable );
+                } else {
+                    attributeReplacement = "<span class=\"attribute\">" + attribute + "</span>";
+                    innerHTML = innerHTML.replace( regEx, attributeVariable );
+                }
+
+            } else {
+                if ( isDefinedFunction( syntaxOptions.onAttributeClicked ) ) {
+                    attributeReplacement = "<span class=\"no-highlight-attribute-clickable\">" + attribute + "</span>";
+                    innerHTML = innerHTML.replace( regEx, attributeVariable );
+                }
+            }
+
+            _cached_Attributes[ attributeVariable ] = attributeReplacement;
+            _cached_Attributes_Count++;
+
+            fireCustomTrigger( syntaxOptions.onAttributeRender, attribute );
+        }
+
+        return innerHTML;
+    }
+
     function renderElementStringQuotesFromVariables( innerHTML ) {
-        for ( var quoteVariable in _strings_Cached ) {
-            if ( _strings_Cached.hasOwnProperty( quoteVariable ) ) {
-                innerHTML = innerHTML.replace( quoteVariable, _strings_Cached[ quoteVariable ] );
+        for ( var quoteVariable in _cached_Strings ) {
+            if ( _cached_Strings.hasOwnProperty( quoteVariable ) ) {
+                innerHTML = innerHTML.replace( quoteVariable, _cached_Strings[ quoteVariable ] );
             }
         }
 
@@ -551,9 +624,9 @@
             end = encodeMarkUpCharacters( multiLineComment[ 1 ] );
         }
 
-        for ( var commentVariable in _comments_Cached ) {
-            if ( _comments_Cached.hasOwnProperty( commentVariable ) ) {
-                var replacement = _comments_Cached[ commentVariable ];
+        for ( var commentVariable in _cached_Comments ) {
+            if ( _cached_Comments.hasOwnProperty( commentVariable ) ) {
+                var replacement = _cached_Comments[ commentVariable ];
 
                 if ( language.isMarkUp && isDefinedString( start ) && isDefinedString( end ) ) {
                     replacement = replacement.replace( multiLineComment[ 0 ], start );
@@ -561,6 +634,18 @@
                 }
 
                 innerHTML = innerHTML.replace( commentVariable, replacement );
+            }
+        }
+
+        return innerHTML;
+    }
+
+    function renderElementVariables( innerHTML, variables ) {
+        for ( var variable in variables ) {
+            if ( variables.hasOwnProperty( variable ) ) {
+                var regExHtmlReplace = new RegExp( variable, "g" );
+
+                innerHTML = innerHTML.replace( regExHtmlReplace, variables[ variable ] );
             }
         }
 
@@ -744,6 +829,7 @@
         options.showLineNumbers = getDefaultBoolean( options.showLineNumbers, true );
         options.highlightKeywords = getDefaultBoolean( options.highlightKeywords, true );
         options.highlightValues = getDefaultBoolean( options.highlightValues, true );
+        options.highlightAttributes = getDefaultBoolean( options.highlightAttributes, true );
         options.highlightStrings = getDefaultBoolean( options.highlightStrings, true );
         options.highlightComments = getDefaultBoolean( options.highlightComments, true );
         options.showLanguageLabel = getDefaultBoolean( options.showLanguageLabel, true );
@@ -770,8 +856,10 @@
         options.onRenderComplete = getDefaultFunction( options.onRenderComplete, null );
         options.onKeywordClicked = getDefaultFunction( options.onKeywordClicked, null );
         options.onValueClicked = getDefaultFunction( options.onValueClicked, null );
+        options.onAttributeClicked = getDefaultFunction( options.onAttributeClicked, null );
         options.onKeywordRender = getDefaultFunction( options.onKeywordRender, null );
         options.onValueRender = getDefaultFunction( options.onValueRender, null );
+        options.onAttributeRender = getDefaultFunction( options.onAttributeRender, null );
         options.onStringRender = getDefaultFunction( options.onStringRender, null );
         options.onCommentRender = getDefaultFunction( options.onCommentRender, null );
         options.onPrint = getDefaultFunction( options.onPrint, null );
@@ -1403,7 +1491,7 @@
      * @returns     {string}                                                The version number.
      */
     this.getVersion = function() {
-        return "1.8.2";
+        return "1.9.0";
     };
 
 

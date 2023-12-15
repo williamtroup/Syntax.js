@@ -1,4 +1,4 @@
-/*! Syntax.js v1.8.2 | (c) Bunoon | MIT License */
+/*! Syntax.js v1.9.0 | (c) Bunoon | MIT License */
 $syntax.addLanguage( "html", {
     friendlyName: "HTML",
     keywords: [
@@ -125,6 +125,32 @@ $syntax.addLanguage( "html", {
         "var",
         "video",
         "wbr"
+    ],
+    attributes: [
+        "accesskey",
+        "align",
+        "background",
+        "bgcolor",
+        "class",
+        "contenteditable",
+        "contextmenu",
+        "draggable",
+        "height",
+        "hidden",
+        "id",
+        "item",
+        "itemprop",
+        "spellcheck",
+        "style",
+        "subject",
+        "tabindex",
+        "title",
+        "valign",
+        "width",
+        "name",
+        "value",
+        "type",
+        "multiple"
     ],
     multiLineComment: [ "<!--", "-->" ],
     caseSensitive: true,
