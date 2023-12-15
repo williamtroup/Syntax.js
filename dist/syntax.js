@@ -10,15 +10,71 @@
       var elementsLength = elements.length;
       var elementIndex = 0;
       for (; elementIndex < elementsLength; elementIndex++) {
-        if (!renderElement(elements[elementIndex])) {
+        var element = elements[elementIndex];
+        var elementBreak = false;
+        if (element.hasAttribute(_attribute_Name_Language) && element.getAttribute(_attribute_Name_Language).toLowerCase() === _languages_Tabbed) {
+          var divElements = [].slice.call(element.children);
+          var divElementsLength = divElements.length;
+          var tabElements = [];
+          var tabContentElements = [];
+          element.removeAttribute(_attribute_Name_Language);
+          element.className = element.className === _string.empty ? "syntax-highlight" : element.className + " syntax-highlight";
+          element.innerHTML = _string.empty;
+          var codeContainer = createElement("div", "code custom-scroll-bars");
+          element.appendChild(codeContainer);
+          var tabs = createElement("div", "tabs");
+          codeContainer.appendChild(tabs);
+          var divElementIndex = 0;
+          for (; divElementIndex < divElementsLength; divElementIndex++) {
+            var renderResult = renderElement(divElements[divElementIndex], codeContainer);
+            if (!renderResult.rendered) {
+              elementBreak = true;
+            } else {
+              renderTab(tabs, tabElements, tabContentElements, renderResult, divElementIndex);
+            }
+          }
+        } else {
+          if (!renderElement(element).rendered) {
+            elementBreak = true;
+          }
+        }
+        if (elementBreak) {
           break;
         }
       }
     }
   }
-  function renderElement(element) {
+  function renderTab(tabs, tabElements, tabContentElements, renderResult, divElementIndex) {
+    var tab = createElement("div", "tab");
+    tab.innerHTML = renderResult.tabTitle;
+    tabs.appendChild(tab);
+    tabElements.push(tab);
+    tabContentElements.push(renderResult.tabContents);
+    tab.onclick = function() {
+      var tabElementsLength = tabElements.length;
+      var tabContentElementsLength = tabContentElements.length;
+      var tabElementsIndex = 0;
+      for (; tabElementsIndex < tabElementsLength; tabElementsIndex++) {
+        tabElements[tabElementsIndex].className = "tab";
+      }
+      var tabContentElementsIndex = 0;
+      for (; tabContentElementsIndex < tabContentElementsLength; tabContentElementsIndex++) {
+        tabContentElements[tabContentElementsIndex].style.display = "none";
+      }
+      tab.className = "tab-active";
+      renderResult.tabContents.style.display = "flex";
+    };
+    if (divElementIndex > 0) {
+      renderResult.tabContents.style.display = "none";
+    } else {
+      tab.className = "tab-active";
+    }
+  }
+  function renderElement(element, codeContainer) {
     var result = true;
-    if (isDefined(element) && element.hasAttribute(_attribute_Name_Language)) {
+    var tabTitle = null;
+    var tabContents = null;
+    if (isDefined(element) && element.hasAttribute(_attribute_Name_Language) && (!element.hasAttribute(_attribute_Name_TabContents) || isDefined(codeContainer))) {
       var syntaxLanguage = element.getAttribute(_attribute_Name_Language);
       if (isDefinedString(syntaxLanguage)) {
         var language = getLanguage(syntaxLanguage);
@@ -44,16 +100,22 @@
               element.removeAttribute(_attribute_Name_Language);
               element.removeAttribute(_attribute_Name_Options);
               element.id = elementId;
-              element.className = element.className === _string.empty ? "syntax-highlight" : element.className + " syntax-highlight";
-              element.innerHTML = _string.empty;
-              var code = createElement("div", "code custom-scroll-bars");
-              element.appendChild(code);
+              if (!isDefined(codeContainer)) {
+                element.className = element.className === _string.empty ? "syntax-highlight" : element.className + " syntax-highlight";
+                element.innerHTML = _string.empty;
+                codeContainer = createElement("div", "code custom-scroll-bars");
+                element.appendChild(codeContainer);
+              } else {
+                tabTitle = getFriendlyLanguageName(syntaxLanguage);
+              }
+              tabContents = createElement("div", "tab-contents");
+              codeContainer.appendChild(tabContents);
               if (syntaxOptions.showLineNumbers) {
                 numbers = createElement("div", "numbers");
-                code.appendChild(numbers);
+                tabContents.appendChild(numbers);
               }
               var syntax = createElement("div", "syntax");
-              code.appendChild(syntax);
+              tabContents.appendChild(syntax);
               renderElementButtons(syntax, syntaxOptions, syntaxLanguage, syntaxButtonsParsed, innerHTMLCopy);
               if (syntaxLanguage.toLowerCase() !== _languages_Unknown) {
                 if (!language.isMarkUp) {
@@ -123,7 +185,7 @@
         result = logError("The attribute '" + _attribute_Name_Language + "' has not been set correctly.");
       }
     }
-    return result;
+    return {rendered:result, tabContents:tabContents, tabTitle:tabTitle};
   }
   function renderElementButtons(syntax, syntaxOptions, syntaxLanguage, syntaxButtonsParsed, innerHTMLCopy) {
     if (syntaxOptions.showLanguageLabel || syntaxOptions.showCopyButton || syntaxOptions.showPrintButton || syntaxButtonsParsed.parsed) {
@@ -802,9 +864,11 @@
   var _cached_Comments_Count = 0;
   var _languages = {};
   var _languages_Unknown = "unknown";
+  var _languages_Tabbed = "tabbed";
   var _attribute_Name_Language = "data-syntax-language";
   var _attribute_Name_Options = "data-syntax-options";
   var _attribute_Name_Buttons = "data-syntax-buttons";
+  var _attribute_Name_TabContents = "data-syntax-tab-contents";
   this.highlightAll = function() {
     render();
     return this;

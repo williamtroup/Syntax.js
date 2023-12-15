@@ -23,6 +23,7 @@
 - Language aliases.
 - Custom action buttons (via a binding attribute), with opening/closing support.
 - Unknown language support (renders the display, but does not highlight any syntax).
+- Tabbing (allows multiple languages to be shown in one tabbed container, which is great for code examples).
 
 
 ## What browsers are supported?
@@ -79,6 +80,7 @@ Make sure you include the "DOCTYPE html" tag at the top of your HTML, as follows
 <link rel="stylesheet" href="dist/syntax.js.css" />
 <script src="dist/syntax.js"></script>
 <script src="dist/languages/syntax.javascript.js"></script>
+<script src="dist/languages/syntax.html.js"></script>
 ```
 
 ### 3. Create DOM Container:
@@ -106,6 +108,33 @@ Make sure you include the "DOCTYPE html" tag at the top of your HTML, as follows
             comment */
         }
     </pre>
+</code>
+
+<code data-syntax-language="tabbed">
+    <div data-syntax-language="javascript" data-syntax-tab-contents="true">
+        <pre>
+            var something = true;
+
+            if ( something ) {
+                console.log( "Output is written." ); // Comment
+                
+                /* Multi-line
+                comment */
+            }
+        </pre>
+    </div>
+
+    <div data-syntax-language="html" data-syntax-tab-contents="true">
+        <pre>
+            <div class="header">
+                <!--This is a comment.-->
+                <h1 id="header">Syntax.js - Basic</h1>
+                <p>This is a basic example of how to use Syntax.js to highlight code inside a DOM element.</p>
+                <!--This is a 
+                    multi-line comment.-->
+            </div>
+        </pre>
+    </div>
 </code>
 ```
 

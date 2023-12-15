@@ -50,11 +50,13 @@
         // Variables: Languages
         _languages = {},
         _languages_Unknown = "unknown",
+        _languages_Tabbed = "tabbed",
 
         // Variables: Attribute Names
         _attribute_Name_Language = "data-syntax-language",
         _attribute_Name_Options = "data-syntax-options",
-        _attribute_Name_Buttons = "data-syntax-buttons";
+        _attribute_Name_Buttons = "data-syntax-buttons",
+        _attribute_Name_TabContents = "data-syntax-tab-contents";
 
     
     /*
@@ -73,17 +75,86 @@
                 elementsLength = elements.length;
 
             for ( var elementIndex = 0; elementIndex < elementsLength; elementIndex++ ) {
-                if ( !renderElement( elements[ elementIndex ] ) ) {
+                var element = elements[ elementIndex ],
+                    elementBreak = false;
+
+                if ( element.hasAttribute( _attribute_Name_Language ) && element.getAttribute( _attribute_Name_Language ).toLowerCase() === _languages_Tabbed ) {
+                    var divElements = [].slice.call( element.children ),
+                        divElementsLength = divElements.length,
+                        tabElements = [],
+                        tabContentElements = [];
+
+                    element.removeAttribute( _attribute_Name_Language );
+                    element.className = element.className === _string.empty ? "syntax-highlight" : element.className + " syntax-highlight";
+                    element.innerHTML = _string.empty;
+
+                    var codeContainer = createElement( "div", "code custom-scroll-bars" );
+                    element.appendChild( codeContainer );
+
+                    var tabs = createElement( "div", "tabs" );
+                    codeContainer.appendChild( tabs );
+
+                    for ( var divElementIndex = 0; divElementIndex < divElementsLength; divElementIndex++ ) {
+                        var renderResult = renderElement( divElements[ divElementIndex ], codeContainer );
+
+                        if ( !renderResult.rendered ) {
+                            elementBreak = true;
+
+                        } else {
+                            renderTab( tabs, tabElements, tabContentElements, renderResult, divElementIndex );
+                        }
+                    }
+                    
+                } else {
+                    if ( !renderElement( element ).rendered ) {
+                        elementBreak = true;
+                    }
+                }
+
+                if ( elementBreak ) {
                     break;
                 }
             }
         }
     }
 
-    function renderElement( element ) {
-        var result = true;
+    function renderTab( tabs, tabElements, tabContentElements, renderResult, divElementIndex ) {
+        var tab = createElement( "div", "tab" );
+        tab.innerHTML = renderResult.tabTitle;
+        tabs.appendChild( tab );
 
-        if ( isDefined( element ) && element.hasAttribute( _attribute_Name_Language ) ) {
+        tabElements.push( tab );
+        tabContentElements.push( renderResult.tabContents );
+
+        tab.onclick = function() {
+            var tabElementsLength = tabElements.length,
+                tabContentElementsLength = tabContentElements.length;
+
+            for ( var tabElementsIndex = 0; tabElementsIndex < tabElementsLength; tabElementsIndex++ ) {
+                tabElements[ tabElementsIndex ].className = "tab";
+            }
+
+            for ( var tabContentElementsIndex = 0; tabContentElementsIndex < tabContentElementsLength; tabContentElementsIndex++ ) {
+                tabContentElements[ tabContentElementsIndex ].style.display = "none";
+            }
+
+            tab.className = "tab-active";
+            renderResult.tabContents.style.display = "flex";
+        };
+
+        if ( divElementIndex > 0 ) {
+            renderResult.tabContents.style.display = "none";
+        } else {
+            tab.className = "tab-active";
+        }
+    }
+
+    function renderElement( element, codeContainer ) {
+        var result = true,
+            tabTitle = null,
+            tabContents = null;
+
+        if ( isDefined( element ) && element.hasAttribute( _attribute_Name_Language ) && ( !element.hasAttribute( _attribute_Name_TabContents ) || isDefined( codeContainer ) ) ) {
             var syntaxLanguage = element.getAttribute( _attribute_Name_Language );
 
             if ( isDefinedString( syntaxLanguage ) ) {
@@ -117,19 +188,28 @@
                             element.removeAttribute( _attribute_Name_Language );
                             element.removeAttribute( _attribute_Name_Options );
                             element.id = elementId;
-                            element.className = element.className === _string.empty ? "syntax-highlight" : element.className + " syntax-highlight";
-                            element.innerHTML = _string.empty;
 
-                            var code = createElement( "div", "code custom-scroll-bars" );
-                            element.appendChild( code );
+                            if ( !isDefined( codeContainer ) ) {
+                                element.className = element.className === _string.empty ? "syntax-highlight" : element.className + " syntax-highlight";
+                                element.innerHTML = _string.empty;
+
+                                codeContainer = createElement( "div", "code custom-scroll-bars" );
+                                element.appendChild( codeContainer );
+
+                            } else {
+                                tabTitle = getFriendlyLanguageName( syntaxLanguage );
+                            }
+
+                            tabContents = createElement( "div", "tab-contents" );
+                            codeContainer.appendChild( tabContents );
 
                             if ( syntaxOptions.showLineNumbers ) {
                                 numbers = createElement( "div", "numbers" );
-                                code.appendChild( numbers );
+                                tabContents.appendChild( numbers );
                             }
                 
                             var syntax = createElement( "div", "syntax" );
-                            code.appendChild( syntax );
+                            tabContents.appendChild( syntax );
 
                             renderElementButtons( syntax, syntaxOptions, syntaxLanguage, syntaxButtonsParsed, innerHTMLCopy );
 
@@ -222,7 +302,11 @@
             }
         }
 
-        return result;
+        return {
+            rendered: result,
+            tabContents: tabContents,
+            tabTitle: tabTitle
+        };
     }
 
     function renderElementButtons( syntax, syntaxOptions, syntaxLanguage, syntaxButtonsParsed, innerHTMLCopy ) {

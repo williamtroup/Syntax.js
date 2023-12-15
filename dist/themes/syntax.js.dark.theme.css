@@ -25,6 +25,14 @@
         --container-background-color-numbers: #24292e;
         --container-border-color-numbers: var(--container-border-color-container);
 
+        /* Tabs */
+        --tab-background-color: #F5F5F5;
+        --tab-text-color: #3b3a3a;
+        --tab-border-color: var(--tab-text-color);
+        --tab-active-background-color: var(--container-border-color-container);
+        --tab-active-text-color: var(--tab-background-color);
+        --tab-active-border-color: var(--tab-text-color);
+
         /* Buttons */
         --button-background-color: #F5F5F5;
         --button-text-color: #3b3a3a;

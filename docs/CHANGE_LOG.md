@@ -1,7 +1,9 @@
 # Syntax.js - Change Log:
 
 ## Version 2.0.0:
--
+
+#### **New Features:**
+- Added tabbing support! This feature allows you to render language under one tabbed container (which is great for showing code examples).
 
 <br>
 

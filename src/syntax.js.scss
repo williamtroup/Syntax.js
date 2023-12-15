@@ -38,6 +38,14 @@
     --container-background-color-numbers: #dddddd;
     --container-border-color-numbers: var(--color-gray);
 
+    // Tabs
+    --tab-background-color: var(--color-white);
+    --tab-text-color: var(--color-black);
+    --tab-border-color: var(--color-black);
+    --tab-active-background-color: var(--color-black);
+    --tab-active-text-color: var(--color-white);
+    --tab-active-border-color: var(--color-black);
+
     // Buttons
     --button-background-color: var(--color-black);
     --button-text-color: var(--color-white);
@@ -64,7 +72,6 @@ div.syntax-highlight {
     font-size: 0.8rem;
 
     div.code {
-        display: flex;
         background-color: var(--container-background-color-container);
         border-radius: var(--border-radius);
         padding: 15px;
@@ -74,156 +81,202 @@ div.syntax-highlight {
         border: var(--border-size) solid var(--container-border-color-container);
         color: var(--color-black);
 
-        pre {
-            margin: 0 !important;
-        }
-
-        div.numbers {
-            margin-right: 15px;
-            background-color: var(--container-background-color-numbers);
-            padding: 10px;
-            padding-left: 15px;
-            padding-right: 15px;
-            border-radius: var(--border-radius);
-            text-align: right;
-            font-weight: 800 !important;
-            border: var(--border-size) solid var(--container-border-color-numbers);
-            display: none;
-            cursor: default;
+        div.tabs {
+            text-wrap: nowrap;
+            margin-bottom: 10px;
             -webkit-user-select: none;
             -ms-user-select: none;
             user-select: none;
+            
+            div.tab,
+            div.tab-active {
+                display: inline-block;
+                padding: 10px;
+                padding-left: 15px;
+                padding-right: 15px;
+                border-radius: var(--border-radius);
+                margin-right: 10px;
+                cursor: default;
 
-            p {
-                margin: 0;
-                text-wrap: nowrap;
-                color: var(--color-black);
+                &:last-child {
+                    margin-right: 0;
+                }
             }
 
-            @media (min-width: 768px) { 
-                display: block;
-            }
-        }
+            div.tab {
+                background-color: var(--tab-background-color);
+                color: var(--tab-text-color);
+                border: var(--border-size) solid var(--tab-border-color);
 
-        div.syntax {
-            flex-grow: 1;
-            padding: 10px;
-            border-radius: var(--border-radius);
-            background-color: var(--container-background-color-syntax);
-            border: var(--border-size) solid var(--container-border-color-syntax);
-            position: relative;
-            overflow: hidden;
-
-            div.buttons {
-                position: absolute;
-                top: 0;
-                right: 0;
-                -webkit-user-select: none;
-                -ms-user-select: none;
-                user-select: none;
-                text-wrap: nowrap;
-    
-                div.button,
-                div.label {
-                    color: var(--button-text-color);
-                    background-color: var(--button-background-color);
-                    padding: 7px;
-                    padding-left: 10px;
-                    padding-right: 10px;
-                    display: inline-block;
-                    border: none;
-                    border-right: 1px dotted var(--color-gray);
-                    font-size: small;
-    
-                    &:first-child {
-                        border-bottom-left-radius: var(--border-radius);
-                    }
-    
-                    &:last-child {
-                        border-top-right-radius: var(--border-radius);
-                        border-right: none;
-                    }
-                }
-
-                div.button-opener {
-                    font-weight: 900 !important;
-                }
-
-                div.label {
-                    cursor: default;
-                    color: var(--color-gray);
-                    font-weight: 700;
-                }
-    
-                div.button:hover {
+                &:hover {
                     cursor: pointer;
                     opacity: 0.7;
                     transition: var(--transition);
                 }
             }
 
-            p {
-                margin: 0;
-                text-wrap: initial;
-                color: var(--color-black);
+            div.tab-active {
+                background-color: var(--tab-active-background-color);
+                color: var(--tab-active-text-color);
+                border: var(--border-size) solid var(--tab-active-border-color);
+            }
+        }
 
-                @media (min-width: 768px) { 
+        div.tab-contents {
+            display: flex;
+            width: 100%;
+
+            pre {
+                margin: 0 !important;
+            }
+    
+            div.numbers {
+                margin-right: 15px;
+                background-color: var(--container-background-color-numbers);
+                padding: 10px;
+                padding-left: 15px;
+                padding-right: 15px;
+                border-radius: var(--border-radius);
+                text-align: right;
+                font-weight: 800 !important;
+                border: var(--border-size) solid var(--container-border-color-numbers);
+                display: none;
+                cursor: default;
+                -webkit-user-select: none;
+                -ms-user-select: none;
+                user-select: none;
+    
+                p {
+                    margin: 0;
                     text-wrap: nowrap;
+                    color: var(--color-black);
                 }
-
-                span.keyword,
-                span.keyword-clickable {
-                    font-weight: 700;
-                    color: var(--color-keyword);
+    
+                @media (min-width: 768px) { 
+                    display: block;
                 }
-
-                span.keyword-clickable:hover,
-                span.no-highlight-keyword-clickable:hover {
-                    color: var(--color-keyword-hover);
-                    transition: var(--transition);
-                    cursor: pointer;
+            }
+    
+            div.syntax {
+                flex-grow: 1;
+                padding: 10px;
+                border-radius: var(--border-radius);
+                background-color: var(--container-background-color-syntax);
+                border: var(--border-size) solid var(--container-border-color-syntax);
+                position: relative;
+                overflow: hidden;
+    
+                div.buttons {
+                    position: absolute;
+                    top: 0;
+                    right: 0;
+                    -webkit-user-select: none;
+                    -ms-user-select: none;
+                    user-select: none;
+                    text-wrap: nowrap;
+        
+                    div.button,
+                    div.label {
+                        color: var(--button-text-color);
+                        background-color: var(--button-background-color);
+                        padding: 7px;
+                        padding-left: 10px;
+                        padding-right: 10px;
+                        display: inline-block;
+                        border: none;
+                        border-right: 1px dotted var(--color-gray);
+                        font-size: small;
+        
+                        &:first-child {
+                            border-bottom-left-radius: var(--border-radius);
+                        }
+        
+                        &:last-child {
+                            border-top-right-radius: var(--border-radius);
+                            border-right: none;
+                        }
+                    }
+    
+                    div.button-opener {
+                        font-weight: 900 !important;
+                    }
+    
+                    div.label {
+                        cursor: default;
+                        color: var(--color-gray);
+                        font-weight: 700;
+                    }
+        
+                    div.button:hover {
+                        cursor: pointer;
+                        opacity: 0.7;
+                        transition: var(--transition);
+                    }
                 }
-
-                span.value,
-                span.value-clickable {
-                    font-weight: 700;
-                    color: var(--color-value);
-                }
-
-                span.value-clickable:hover,
-                span.no-highlight-value-clickable:hover {
-                    color: var(--color-value-hover);
-                    transition: var(--transition);
-                    cursor: pointer;
-                }
-
-                span.attribute,
-                span.attribute-clickable {
-                    font-weight: 700;
-                    color: var(--color-attribute);
-                }
-
-                span.attribute-clickable:hover,
-                span.no-highlight-attribute-clickable:hover {
-                    color: var(--color-attribute-hover);
-                    transition: var(--transition);
-                    cursor: pointer;
-                }
-
-                span.comment {
-                    color: var(--color-comment);
-                }
-
-                span.multi-line-comment {
-                    color: var(--color-multi-line-comment);
-                }
-
-                span.string {
-                    color: var(--color-string);
-                }
-
-                span.multi-line-string {
-                    color: var(--color-multi-line-string);
+    
+                p {
+                    margin: 0;
+                    text-wrap: initial;
+                    color: var(--color-black);
+    
+                    @media (min-width: 768px) { 
+                        text-wrap: nowrap;
+                    }
+    
+                    span.keyword,
+                    span.keyword-clickable {
+                        font-weight: 700;
+                        color: var(--color-keyword);
+                    }
+    
+                    span.keyword-clickable:hover,
+                    span.no-highlight-keyword-clickable:hover {
+                        color: var(--color-keyword-hover);
+                        transition: var(--transition);
+                        cursor: pointer;
+                    }
+    
+                    span.value,
+                    span.value-clickable {
+                        font-weight: 700;
+                        color: var(--color-value);
+                    }
+    
+                    span.value-clickable:hover,
+                    span.no-highlight-value-clickable:hover {
+                        color: var(--color-value-hover);
+                        transition: var(--transition);
+                        cursor: pointer;
+                    }
+    
+                    span.attribute,
+                    span.attribute-clickable {
+                        font-weight: 700;
+                        color: var(--color-attribute);
+                    }
+    
+                    span.attribute-clickable:hover,
+                    span.no-highlight-attribute-clickable:hover {
+                        color: var(--color-attribute-hover);
+                        transition: var(--transition);
+                        cursor: pointer;
+                    }
+    
+                    span.comment {
+                        color: var(--color-comment);
+                    }
+    
+                    span.multi-line-comment {
+                        color: var(--color-multi-line-comment);
+                    }
+    
+                    span.string {
+                        color: var(--color-string);
+                    }
+    
+                    span.multi-line-string {
+                        color: var(--color-multi-line-string);
+                    }
                 }
             }
         }
