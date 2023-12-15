@@ -149,18 +149,13 @@
                                     }
                                 }
 
-                                if ( syntaxOptions.highlightKeywords ) {
-                                    if ( !language.isMarkUp ) {
-                                        innerHTML = renderElementKeywords( innerHTML, language, syntaxOptions );
-                                    } else {
-                                        innerHTML = replaceMarkUpKeywords( innerHTML, language, syntaxOptions );
-                                    }
+                                if ( !language.isMarkUp ) {
+                                    innerHTML = renderElementKeywords( innerHTML, language, syntaxOptions );
+                                } else {
+                                    innerHTML = replaceMarkUpKeywords( innerHTML, language, syntaxOptions );
                                 }
-
-                                if ( syntaxOptions.highlightValues ) {
-                                    innerHTML = renderElementValues( innerHTML, language, syntaxOptions );
-                                }
-
+                                
+                                innerHTML = renderElementValues( innerHTML, language, syntaxOptions );
                                 innerHTML = encodeMarkUpCharacters( innerHTML );
         
                                 if ( syntaxOptions.highlightComments ) {
