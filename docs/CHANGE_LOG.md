@@ -8,6 +8,7 @@
 #### **Languages:**
 - Added support for the Powershell programming language (importable file).
 - Added support for the Dart programming language (importable file).
+- Added support for the Delphi programming language (importable file).
 
 ### **CSS:**
 - All buttons (and tabs) are now rendered as buttons instead of divs (this includes minor CSS changes).
