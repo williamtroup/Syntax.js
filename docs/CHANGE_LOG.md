@@ -12,6 +12,8 @@
 
 ### **CSS:**
 - All buttons (and tabs) are now rendered as buttons instead of divs (this includes minor CSS changes).
+- Added new ":root" variable "--button-hover-background-color", which states the background color to use for the buttons when hovered (including custom ones, unless overridden).
+- Added new ":root" variable "--button-hover-text-color", which states the text color to use for the buttons when hovered (including custom ones, unless overridden).
 
 #### **Documentation:**
 - Added a new documentation file "BINDING_LANGUAGE.md", which states how the "data-syntax-language" binding attribute is used.

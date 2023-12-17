@@ -36,6 +36,8 @@
         /* Buttons */
         --button-background-color: #F5F5F5;
         --button-text-color: #3b3a3a;
+        --button-hover-background-color: var(--color-lighter-gray);
+        --button-hover-text-color: var(--button-text-color);
 
         /* Borders */
         --border-radius: 0.5rem;

@@ -39,6 +39,8 @@
   --tab-active-border-color: var(--color-black);
   --button-background-color: var(--color-black);
   --button-text-color: var(--color-white);
+  --button-hover-background-color: var(--color-dark-gray);
+  --button-hover-text-color: var(--color-white);
   --border-radius: 0.5rem;
   --border-style-scrollbar: inset 0 0 6px --color-dark-gray;
   --border-size: 0.5px;
@@ -215,7 +217,8 @@ div.syntax-highlight div.code div.tab-contents div.syntax div.buttons div.label 
 code.syntax-highlight div.code div.tab-contents div.syntax div.buttons button.button:hover,
 div.syntax-highlight div.code div.tab-contents div.syntax div.buttons button.button:hover {
   cursor: pointer;
-  opacity: 0.7;
+  background-color: var(--button-hover-background-color);
+  color: var(--button-hover-text-color);
   transition: var(--transition);
 }
 code.syntax-highlight div.code div.tab-contents div.syntax p,
