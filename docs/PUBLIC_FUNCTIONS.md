@@ -5,7 +5,7 @@ Below is a list of all the public functions that can be called from the Syntax.j
 <br>
 
 
-<h1>Highlighting:</h1>
+## Highlighting:
 
 ### **highlightAll()**:
 Finds all new code elements and renders them.
@@ -34,10 +34,10 @@ Returns the code inside a specific element (without rendering colors).
 ***Parameter: elementId***: '*string*' - The element ID.
 <br>
 ***Returns***: '*string*' - The code in the element.
-
-
 <br>
-<h1>Destroying:</h1>
+
+
+## Destroying:
 
 ### **destroy( *elementId* )**:
 Reverts a Syntax element back to its original state (without render attributes).
@@ -50,10 +50,10 @@ Reverts a Syntax element back to its original state (without render attributes).
 Reverts all rendered Syntax elements back to their original state (without render attributes).
 <br>
 ***Returns***: '*Object*' - The Syntax.js class instance.
-
-
 <br>
-<h1>Languages:</h1>
+
+
+## Languages:
 
 ### **addLanguage( *name*, *languageDetails*, *[triggerRender]* )**:
 Adds a new language that can be rendered.
@@ -86,10 +86,10 @@ Returns the language details (by name) that can be rendered.
 Returns all the languages that can be rendered.
 <br>
 ***Returns***: '*Object*' - The object that contains the languages.
-
-
 <br>
-<h1>Language Aliases:</h1>
+
+
+## Language Aliases:
 
 ### **addAlias( *alias*, *language*, *[triggerRender]* )**:
 Adds a new language alias.
@@ -122,10 +122,10 @@ Returns a language alias.
 Returns all the language aliases.
 <br>
 ***Returns***: '*Object*' - The object that contains the aliases.
-
-
 <br>
-<h1>Configuration:</h1>
+
+
+## Configuration:
 
 ### **setConfiguration( *newOptions* )**:
 Sets the specific configuration options that should be used.
@@ -135,12 +135,23 @@ Sets the specific configuration options that should be used.
 ***Parameter: newOptions***: '*Options*' - All the configuration options that should be set (refer to ["Configuration Options"](CONFIGURATION_OPTIONS.md) documentation for properties).
 <br>
 ***Returns***: '*Object*' - The Syntax.js class instance.
-
-
 <br>
-<h1>Additional Data:</h1>
+
+
+## Additional Data:
 
 ### **getVersion()**:
 Returns the version of Syntax.js.
 <br>
 ***Returns***: '*string*' - The version number.
+<br>
+
+
+## Example:
+<br/>
+
+```markdown
+<script> 
+    var version = $syntax.getVersion();
+</script>
+```

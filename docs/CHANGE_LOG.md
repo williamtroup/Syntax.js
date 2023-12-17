@@ -15,6 +15,7 @@
 
 #### **Documentation:**
 - Added a new documentation file "BINDING_LANGUAGE.md", which states how the "data-syntax-language" binding attribute is used.
+- Examples are now shown on all documentation pages to make things easier when starting with Syntax.js.
 
 <br>
 

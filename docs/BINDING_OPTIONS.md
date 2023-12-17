@@ -3,7 +3,7 @@
 Below are all the JSON properties that can be passed in the "data-syntax-options" binding attribute for a DOM element.
 
 
-### Standard Options:
+## Standard Options:
 <br/>
 
 | Type: | Name: | Description: |
@@ -27,10 +27,23 @@ Below are all the JSON properties that can be passed in the "data-syntax-options
 <br/>
 
 
-### Translatable String Options:
+## Translatable String Options:
 <br/>
 
 | Type: | Name: | Description: |
 | --- | --- | --- |
 | *string* | copyButtonText | The text that should be displayed for the "Copy" button. |
 | *string* | printButtonText | The text that should be displayed for the "Print" button. |
+<br/>
+
+
+## Binding Example:
+<br/>
+
+```markdown
+<code data-syntax-language="javascript" data-syntax-options="{ 'showCopyButton': false }">
+    <pre>
+        var something = true;
+    </pre>
+</code>
+```

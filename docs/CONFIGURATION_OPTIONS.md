@@ -12,3 +12,16 @@ Below are all the configuration options that can be passed to the "setConfigurat
 | *Object* | highlightAllDomElementTypes | The DOM element types to lookup (can be either an array of strings, or a space separated string, and defaults to "div" and "code"). |
 | *string* | buttonsOpenerText | States the text that should be used for the open buttons button (defaults to "<"). |
 | *string* | buttonsCloserText | States the text that should be used for the close buttons button (defaults to ">"). |
+<br/>
+
+
+## Example:
+<br/>
+
+```markdown
+<script> 
+  $syntax.setConfiguration( {
+      safeMode: false
+  } );
+</script>
+```

@@ -5,7 +5,7 @@ Below is a list of all the custom triggers supported in the "data-syntax-options
 <br>
 
 
-<h1>For Rendering:</h1>
+## For Rendering:
 
 ### options.onRenderComplete( *element* ):
 Fires when the rendering of the syntax for an element is complete.
@@ -39,7 +39,8 @@ Fires when a comment is rendered.
 
 
 <br>
-<h1>For Code:</h1>
+
+## For Code:
 
 ### options.onCopy( *code* ):
 Fires when the "Copy" button is pressed.
@@ -65,3 +66,17 @@ Fires when a attribute is clicked in the code syntax.
 Fires when the "Print" button is pressed.
 <br>
 ***Parameter:*** code: '*string*' - The string that was sent to the printer.
+
+<br/>
+
+
+## Binding Example:
+<br/>
+
+```markdown
+<code data-syntax-language="javascript" data-syntax-options="{ 'onPrint': yourCustomJsFunction }">
+    <pre>
+        var something = true;
+    </pre>
+</code>
+```
