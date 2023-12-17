@@ -3,7 +3,7 @@
 ## Version 2.0.0:
 
 #### **New Features:**
-- Added tabbing support! This feature allows you to render language under one tabbed container (which is great for showing code examples).
+- Added tabbing support! This feature allows you to render languages under one tabbed container (which is great for showing code examples).
 
 #### **Languages:**
 - Added support for the Powershell programming language (importable file).
