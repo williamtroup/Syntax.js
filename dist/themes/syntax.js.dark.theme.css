@@ -32,6 +32,10 @@
         --tab-active-background-color: var(--container-background-color-syntax);
         --tab-active-text-color: var(--tab-background-color);
         --tab-active-border-color: var(--container-border-color-syntax);
+        
+        --tab-hover-background-color: var(--color-lighter-gray);
+        --tab-hover-text-color: var(--tab-text-color);
+        --tab-hover-border-color: var(--tab-text-color);
 
         /* Buttons */
         --button-background-color: #F5F5F5;

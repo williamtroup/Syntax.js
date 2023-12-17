@@ -45,6 +45,9 @@
     --tab-active-background-color: var(--color-black);
     --tab-active-text-color: var(--color-white);
     --tab-active-border-color: var(--color-black);
+    --tab-hover-background-color: var(--container-background-color-numbers);
+    --tab-hover-text-color: var(--color-black);
+    --tab-hover-border-color: var(--color-black);
 
     // Buttons
     --button-background-color: var(--color-black);
@@ -114,7 +117,9 @@ div.syntax-highlight {
 
                 &:hover {
                     cursor: pointer;
-                    opacity: 0.7;
+                    background-color: var(--tab-hover-background-color);
+                    color: var(--tab-hover-text-color);
+                    border: var(--border-size) solid var(--tab-hover-border-color);
                     transition: var(--transition);
                 }
             }
