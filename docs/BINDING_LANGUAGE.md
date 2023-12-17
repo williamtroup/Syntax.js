@@ -22,3 +22,37 @@ Below are all the options that can be used for the "data-syntax-language" bindin
     </pre>
 </code>
 ```
+<br/>
+
+
+## Binding Example: Unknown
+<br/>
+
+```markdown
+<code data-syntax-language="unknown">
+    <pre>
+        var something = true;
+    </pre>
+</code>
+```
+<br/>
+
+
+## Binding Example: Tabbed
+<br/>
+
+```markdown
+<code data-syntax-language="tabbed">
+    <div data-syntax-language="javascript" data-syntax-tab-contents="true">
+        <pre>
+            var something = true;
+        </pre>
+    </div>
+
+    <div data-syntax-language="html" data-syntax-tab-contents="true">
+        <pre>
+            <div class="header"></div>
+        </pre>
+    </div>
+</code>
+```
