@@ -14,6 +14,8 @@ Syntax.js
 <br />
 
 ![Syntax.js](docs/images/main.png)
+![Syntax.js - Tabbed](docs/images/main-tabbed.png)
+![Syntax.js - Tabbed - Dark](docs/images/main-tabbed-dark.png)
 <br>
 <br>
 
