@@ -12,7 +12,7 @@ Below are all the options that can be used for the "data-syntax-language" bindin
 <br/>
 
 
-## Binding Example:
+## Binding Example: *language*:
 <br/>
 
 ```markdown
