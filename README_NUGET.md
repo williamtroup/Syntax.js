@@ -1,8 +1,8 @@
-# Syntax.js v1.9.0
+# Syntax.js v2.0.0
 
 [![Tweet](https://img.shields.io/twitter/url/http/shields.io.svg?style=social)](https://twitter.com/intent/tweet?text=Syntax.js%2C%20a%20free%20JavaScript%20syntax%20highlighter&url=https://github.com/williamtroup/Syntax.js&hashtags=javascript,syntax,highlighter)
-[![npm](https://img.shields.io/badge/npmjs-v1.9.0-blue)](https://www.npmjs.com/package/jsyntax.js)
-[![nuget](https://img.shields.io/badge/nuget-v1.9.0-purple)](https://www.nuget.org/packages/jSyntax.js/)
+[![npm](https://img.shields.io/badge/npmjs-v2.0.0-blue)](https://www.npmjs.com/package/jsyntax.js)
+[![nuget](https://img.shields.io/badge/nuget-v2.0.0-purple)](https://www.nuget.org/packages/jSyntax.js/)
 [![license](https://img.shields.io/badge/license-MIT-green)](https://github.com/williamtroup/Syntax.js/blob/main/LICENSE.txt)
 [![discussions Welcome](https://img.shields.io/badge/discussions-Welcome-red)](https://github.com/williamtroup/Syntax.js/discussions)
 [![coded by William Troup](https://img.shields.io/badge/coded_by-William_Troup-yellow)](https://github.com/williamtroup)
@@ -19,10 +19,11 @@
 - Full CSS theme support (using :root variables, with a default dark-mode theme).
 - Coping and Printing support is available via action buttons.
 - Custom triggers for actions (when elements are rendered, keywords are clicked, etc).
-- 22 of the most popular languages built in by default (with public function support to add more).
+- 26 of the most popular languages built in by default (with public function support to add more).
 - Language aliases.
 - Custom action buttons (via a binding attribute), with opening/closing support.
 - Unknown language support (renders the display, but does not highlight any syntax).
+- Tabbing (allows multiple languages to be shown in one tabbed container, which is great for code examples).
 
 
 ## What browsers are supported?
@@ -41,16 +42,20 @@ To see a list of all the most recent changes, click [here](https://github.com/wi
 - C++
 - C#
 - C
+- Dart
+- Delphi
 - F#
 - GO
 - HTML
 - Java
 - JavaScript
 - Kotlin
+- Lua
 - Matlab
 - Microsoft SQL
 - Perl
 - PHP
+- Powershell
 - Python
 - R
 - Ruby
@@ -79,6 +84,7 @@ Make sure you include the "DOCTYPE html" tag at the top of your HTML, as follows
 <link rel="stylesheet" href="dist/syntax.js.css" />
 <script src="dist/syntax.js"></script>
 <script src="dist/languages/syntax.javascript.js"></script>
+<script src="dist/languages/syntax.html.js"></script>
 ```
 
 ### 3. Create DOM Container:
@@ -107,7 +113,36 @@ Make sure you include the "DOCTYPE html" tag at the top of your HTML, as follows
         }
     </pre>
 </code>
+
+<code data-syntax-language="tabbed">
+    <div data-syntax-language="javascript" data-syntax-tab-contents="true">
+        <pre>
+            var something = true;
+
+            if ( something ) {
+                console.log( "Output is written." ); // Comment
+                
+                /* Multi-line
+                comment */
+            }
+        </pre>
+    </div>
+
+    <div data-syntax-language="html" data-syntax-tab-contents="true">
+        <pre>
+            <div class="header">
+                <!--This is a comment.-->
+                <h1 id="header">Syntax.js - Basic</h1>
+                <p>This is a basic example of how to use Syntax.js to highlight code inside a DOM element.</p>
+                <!--This is a 
+                    multi-line comment.-->
+            </div>
+        </pre>
+    </div>
+</code>
 ```
+
+To see a list of all the available binding languages you can use for "data-syntax-language", click [here](https://github.com/williamtroup/Syntax.js/blob/main/docs/BINDING_LANGUAGE.md).
 
 To see a list of all the available binding options you can use for "data-syntax-options", click [here](https://github.com/williamtroup/Syntax.js/blob/main/docs/BINDING_OPTIONS.md).
 

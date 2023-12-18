@@ -9,3 +9,16 @@ Below are all the JSON properties that can be passed in the "data-syntax-buttons
 | *string* | text | States the text that should be shown on the button. |
 | *Object* | onClick | States the custom event that should be triggered when the button is clicked (the code is passed to the event). |
 | *string* | className | States a CSS class name to apply to the button (optional). |
+<br/>
+
+
+## Binding Example:
+<br/>
+
+```markdown
+<code data-syntax-language="javascript" data-syntax-buttons="[ { 'text': 'Button 1', 'onClick': yourJsFunction } ]">
+    <pre>
+        var something = true;
+    </pre>
+</code>
+```

@@ -1,5 +1,28 @@
 # Syntax.js - Change Log:
 
+## Version 2.0.0:
+
+#### **New Features:**
+- Added tabbing support! This feature allows you to render languages under one tabbed container (which is great for showing code examples).
+
+#### **Languages:**
+- Added support for the Powershell programming language (importable file).
+- Added support for the Dart programming language (importable file).
+- Added support for the Delphi programming language (importable file).
+- Added support for the Lua programming language (importable file).
+
+### **CSS:**
+- All buttons (and tabs) are now rendered as buttons instead of divs (this includes minor CSS changes).
+- Added new ":root" variable "--button-hover-background-color", which states the background color to use for the buttons when hovered (including custom ones, unless overridden).
+- Added new ":root" variable "--button-hover-text-color", which states the text color to use for the buttons when hovered (including custom ones, unless overridden).
+
+#### **Documentation:**
+- Added a new documentation file "BINDING_LANGUAGE.md", which states how the "data-syntax-language" binding attribute is used.
+- Examples are now shown on all documentation pages to make things easier when starting with Syntax.js.
+
+<br>
+
+
 ## Version 1.9.0:
 
 #### **New Features:**

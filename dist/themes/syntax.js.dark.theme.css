@@ -25,9 +25,23 @@
         --container-background-color-numbers: #24292e;
         --container-border-color-numbers: var(--container-border-color-container);
 
+        /* Tabs */
+        --tab-background-color: #F5F5F5;
+        --tab-text-color: #3b3a3a;
+        --tab-border-color: var(--tab-text-color);
+        --tab-active-background-color: var(--container-background-color-syntax);
+        --tab-active-text-color: var(--tab-background-color);
+        --tab-active-border-color: var(--container-border-color-syntax);
+        
+        --tab-hover-background-color: var(--color-lighter-gray);
+        --tab-hover-text-color: var(--tab-text-color);
+        --tab-hover-border-color: var(--tab-text-color);
+
         /* Buttons */
         --button-background-color: #F5F5F5;
         --button-text-color: #3b3a3a;
+        --button-hover-background-color: var(--color-lighter-gray);
+        --button-hover-text-color: var(--button-text-color);
 
         /* Borders */
         --border-radius: 0.5rem;
