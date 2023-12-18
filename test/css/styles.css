@@ -52,6 +52,6 @@ code pre {
     color: black;
 }
 
-div.customButtonClass {
+button.customButtonClass {
     background-color: black !important;
 }
