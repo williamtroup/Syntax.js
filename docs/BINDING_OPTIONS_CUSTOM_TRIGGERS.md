@@ -1,4 +1,4 @@
-# Syntax.js - Binging Options - Custom Triggers:
+# Syntax.js - Binding Options - Custom Triggers:
 
 Below is a list of all the custom triggers supported in the "data-syntax-options" binding attribute for DOM elements.
 <br>
