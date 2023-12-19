@@ -87,7 +87,7 @@ Make sure you include the "DOCTYPE html" tag at the top of your HTML, as follows
 <script src="dist/languages/syntax.html.js"></script>
 ```
 
-### 3. Create DOM Container:
+### 3. DOM Element Binding:
 
 ```markdown
 <div data-syntax-language="javascript">
