@@ -1,6 +1,7 @@
 # Syntax.js - Change Log:
 
 ## Version 2.0.2:
+- Minor documentation improvements.
 - 
 
 <br>
