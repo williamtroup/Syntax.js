@@ -235,57 +235,7 @@
                             renderElementButtons( syntax, syntaxOptions, syntaxLanguage, syntaxButtonsParsed, innerHTMLCopy );
 
                             if ( syntaxLanguage.toLowerCase() !== _languages_Unknown ) {
-                                if ( !language.isMarkUp ) {
-                                    innerHTML = encodeMarkUpCharacters( innerHTML );
-                                }
-
-                                if ( syntaxOptions.highlightComments ) {
-                                    innerHTML = renderElementMultiLineCommentVariables( innerHTML, language, syntaxOptions );
-                                    innerHTML = renderElementCommentVariables( innerHTML, language, syntaxOptions );
-                                }
-        
-                                if ( syntaxOptions.highlightStrings ) {
-                                    innerHTML = renderElementStringPatternVariables( innerHTML, innerHTML.match( /"((?:\\.|[^"\\])*)"/g ), syntaxOptions );
-        
-                                    if ( language.comment !== "'" ) {
-                                        innerHTML = renderElementStringPatternVariables( innerHTML, innerHTML.match( /'((?:\\.|[^"\\])*)'/g ), syntaxOptions );
-                                    }
-                                }
-
-                                if ( !language.isMarkUp ) {
-                                    innerHTML = renderElementKeywords( innerHTML, language, syntaxOptions );
-                                } else {
-                                    innerHTML = replaceMarkUpKeywords( innerHTML, language, syntaxOptions );
-                                }
-                                
-                                innerHTML = renderElementValues( innerHTML, language, syntaxOptions );
-
-                                if ( language.isMarkUp ) {
-                                    innerHTML = renderElementAttributes( innerHTML, language, syntaxOptions );
-                                }
-
-                                innerHTML = encodeMarkUpCharacters( innerHTML );
-        
-                                if ( syntaxOptions.highlightComments ) {
-                                    innerHTML = renderElementCommentsFromVariables( innerHTML, language );
-                                }
-                                
-                                if ( syntaxOptions.highlightStrings ) {
-                                    innerHTML = renderElementStringQuotesFromVariables( innerHTML );
-                                }
-
-                                if ( syntaxOptions.highlightKeywords ) {
-                                    innerHTML = renderElementVariables( innerHTML, _cached_Keywords );
-                                }
-
-                                if ( syntaxOptions.highlightValues ) {
-                                    innerHTML = renderElementVariables( innerHTML, _cached_Values );
-                                }
-
-                                if ( syntaxOptions.highlightAttributes && language.isMarkUp ) {
-                                    innerHTML = renderElementVariables( innerHTML, _cached_Attributes );
-                                }
-                                
+                                innerHTML = renderHTML( innerHTML, language, syntaxOptions );
                             } else {
                                 innerHTML = encodeMarkUpCharacters( innerHTML );
                             }
@@ -330,6 +280,61 @@
             tabBindingOptions: tabBindingOptions,
             syntaxLanguage: syntaxLanguage
         };
+    }
+
+    function renderHTML( innerHTML, language, syntaxOptions ) {
+        if ( !language.isMarkUp ) {
+            innerHTML = encodeMarkUpCharacters( innerHTML );
+        }
+
+        if ( syntaxOptions.highlightComments ) {
+            innerHTML = renderElementMultiLineCommentVariables( innerHTML, language, syntaxOptions );
+            innerHTML = renderElementCommentVariables( innerHTML, language, syntaxOptions );
+        }
+
+        if ( syntaxOptions.highlightStrings ) {
+            innerHTML = renderElementStringPatternVariables( innerHTML, innerHTML.match( /"((?:\\.|[^"\\])*)"/g ), syntaxOptions );
+
+            if ( language.comment !== "'" ) {
+                innerHTML = renderElementStringPatternVariables( innerHTML, innerHTML.match( /'((?:\\.|[^"\\])*)'/g ), syntaxOptions );
+            }
+        }
+
+        if ( !language.isMarkUp ) {
+            innerHTML = renderElementKeywords( innerHTML, language, syntaxOptions );
+        } else {
+            innerHTML = replaceMarkUpKeywords( innerHTML, language, syntaxOptions );
+        }
+        
+        innerHTML = renderElementValues( innerHTML, language, syntaxOptions );
+
+        if ( language.isMarkUp ) {
+            innerHTML = renderElementAttributes( innerHTML, language, syntaxOptions );
+        }
+
+        innerHTML = encodeMarkUpCharacters( innerHTML );
+
+        if ( syntaxOptions.highlightComments ) {
+            innerHTML = renderElementCommentsFromVariables( innerHTML, language );
+        }
+        
+        if ( syntaxOptions.highlightStrings ) {
+            innerHTML = renderElementStringQuotesFromVariables( innerHTML );
+        }
+
+        if ( syntaxOptions.highlightKeywords ) {
+            innerHTML = renderElementVariables( innerHTML, _cached_Keywords );
+        }
+
+        if ( syntaxOptions.highlightValues ) {
+            innerHTML = renderElementVariables( innerHTML, _cached_Values );
+        }
+
+        if ( syntaxOptions.highlightAttributes && language.isMarkUp ) {
+            innerHTML = renderElementVariables( innerHTML, _cached_Attributes );
+        }
+
+        return innerHTML;
     }
 
     function renderElementButtons( syntax, syntaxOptions, syntaxLanguage, syntaxButtonsParsed, innerHTMLCopy ) {

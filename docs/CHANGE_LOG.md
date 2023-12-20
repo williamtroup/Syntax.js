@@ -20,6 +20,9 @@
 - Added new binding documentation file "binding/tabs/CUSTOM_TRIGGERS.md".
 - Some of the documentation has been renamed and moved into category folders (the filenames were getting confusing).
 
+#### **General Improvements:**
+- Code cleanups and refactoring to make things clearer.
+
 <br>
 
 
