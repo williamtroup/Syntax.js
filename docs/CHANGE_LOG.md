@@ -11,6 +11,7 @@
 #### **Documentation:**
 - Minor documentation improvements.
 - Added new binding documentation file "BINDING_TAB_CONTENT_OPTIONS.md".
+- Some of the documentation has been renamed and moved into category folders (the filenames were getting confusing).
 
 <br>
 

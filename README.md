@@ -159,15 +159,15 @@ Make sure you include the "DOCTYPE html" tag at the top of your HTML, as follows
 </code>
 ```
 
-To see a list of all the available binding languages you can use for "data-syntax-language", click [here](docs/BINDING_LANGUAGE.md).
+To see a list of all the available binding languages you can use for "data-syntax-language", click [here](docs/binding/language/LANGUAGE.md).
 
-To see a list of all the available binding options you can use for "data-syntax-options", click [here](docs/BINDING_OPTIONS.md).
+To see a list of all the available binding options you can use for "data-syntax-options", click [here](docs/binding/options/OPTIONS.md).
 
-To see a list of all the available custom triggers you can use for "data-syntax-options", click [here](docs/BINDING_OPTIONS_CUSTOM_TRIGGERS.md).
+To see a list of all the available custom triggers you can use for "data-syntax-options", click [here](docs/binding/options/CUSTOM_TRIGGERS.md).
 
-To see a list of all the available binding options you can use for "data-syntax-buttons", click [here](docs/BINDING_BUTTONS.md).
+To see a list of all the available binding options you can use for "data-syntax-buttons", click [here](docs/binding/buttons/BUTTONS.md).
 
-To see a list of all the available binding options you can use for "data-syntax-tab-contents", click [here](docs/BINDING_TAB_CONTENT_OPTIONS.md).
+To see a list of all the available binding options you can use for "data-syntax-tab-contents", click [here](docs/binding/tabs/TAB_CONTENTS.md).
 
 <br>
 
