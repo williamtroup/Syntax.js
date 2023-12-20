@@ -250,7 +250,7 @@
         buttonsElements.push(printButton);
       }
       if (syntaxOptions.showLanguageLabel) {
-        var languageLabel = createElement("div", "label");
+        var languageLabel = createElement("div", "language-label");
         languageLabel.innerHTML = getFriendlyLanguageName(syntaxLanguage, syntaxOptions.languageLabelCasing);
         buttons.appendChild(languageLabel);
       }

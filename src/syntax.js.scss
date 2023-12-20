@@ -187,7 +187,7 @@ div.syntax-highlight {
                     display: flex;
         
                     button.button,
-                    div.label {
+                    div.language-label {
                         color: var(--button-text-color);
                         background-color: var(--button-background-color);
                         padding: 7px;
@@ -214,7 +214,7 @@ div.syntax-highlight {
                         font-weight: 900 !important;
                     }
     
-                    div.label {
+                    div.language-label {
                         cursor: default;
                         color: var(--color-gray);
                         font-weight: 700;
