@@ -1,6 +1,6 @@
 # Syntax.js - Change Log:
 
-## Version 2.0.2:
+## Version 2.1.0:
 - Minor documentation improvements.
 - Renamed the CSS class "label" to "language-label" (much clearer).
 - 
