@@ -6,7 +6,7 @@
 - Added full binding support for "data-syntax-tab-contents", which allows some configuration to be set per tab.
 
 #### **Binding Options Tab Contents:**
-- Added a new binding option called "title", which states the title to use for a Tab (defaults to null, which forces the language name ot be used).
+- Added a new binding option called "title", which states the title to use for a Tab (defaults to null, which forces the language name to be used).
 
 #### **Binding Options Tab Contents - Custom Triggers:**
 - Added a new binding custom trigger called "onOpen", which states an event that should be triggered when a tab is opened (passes to the language to the event).
