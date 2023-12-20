@@ -115,7 +115,7 @@
               } else {
                 if (element.hasAttribute(_attribute_Name_TabContents) && element.getAttribute(_attribute_Name_TabContents).toLowerCase() !== "true") {
                   var syntaxTabOptions = getObjectFromString(element.getAttribute(_attribute_Name_TabContents));
-                  if (syntaxTabOptions.parsed) {
+                  if (syntaxTabOptions.parsed && isDefinedObject(syntaxTabOptions.result)) {
                     tabBindingOptions = getBindingTabContentOptions(syntaxTabOptions.result);
                     if (isDefinedString(tabBindingOptions.title)) {
                       tabTitle = tabBindingOptions.title;
