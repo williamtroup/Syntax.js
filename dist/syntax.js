@@ -30,7 +30,7 @@
             if (!renderResult.rendered) {
               elementBreak = true;
             } else {
-              renderTab(tabs, tabElements, tabContentElements, renderResult, divElementIndex);
+              renderTab(tabs, tabElements, tabContentElements, renderResult, divElementIndex, renderResult.tabBindingOptions, renderResult.syntaxLanguage);
             }
           }
         } else {
@@ -44,7 +44,7 @@
       }
     }
   }
-  function renderTab(tabs, tabElements, tabContentElements, renderResult, divElementIndex) {
+  function renderTab(tabs, tabElements, tabContentElements, renderResult, divElementIndex, tabBindingOptions, syntaxLanguage) {
     var tab = createElement("button", "tab");
     tab.innerHTML = renderResult.tabTitle;
     tabs.appendChild(tab);
@@ -64,6 +64,9 @@
         }
         tab.className = "tab-active";
         renderResult.tabContents.style.display = "flex";
+        if (isDefinedObject(tabBindingOptions)) {
+          fireCustomTrigger(tabBindingOptions.onOpen, syntaxLanguage);
+        }
       }
     };
     if (divElementIndex > 0) {
@@ -76,8 +79,10 @@
     var result = true;
     var tabTitle = null;
     var tabContents = null;
+    var tabBindingOptions = null;
+    var syntaxLanguage = null;
     if (isDefined(element) && element.hasAttribute(_attribute_Name_Language) && (!element.hasAttribute(_attribute_Name_TabContents) || isDefined(codeContainer))) {
-      var syntaxLanguage = element.getAttribute(_attribute_Name_Language);
+      syntaxLanguage = element.getAttribute(_attribute_Name_Language);
       if (isDefinedString(syntaxLanguage)) {
         var language = getLanguage(syntaxLanguage);
         if (isDefined(language) || syntaxLanguage.toLowerCase() === _languages_Unknown) {
@@ -111,9 +116,9 @@
                 if (element.hasAttribute(_attribute_Name_TabContents) && element.getAttribute(_attribute_Name_TabContents).toLowerCase() !== "true") {
                   var syntaxTabOptions = getObjectFromString(element.getAttribute(_attribute_Name_TabContents));
                   if (syntaxTabOptions.parsed) {
-                    syntaxTabOptions = getBindingTabContentOptions(syntaxTabOptions.result);
-                    if (isDefinedString(syntaxTabOptions.title)) {
-                      tabTitle = syntaxTabOptions.title;
+                    tabBindingOptions = getBindingTabContentOptions(syntaxTabOptions.result);
+                    if (isDefinedString(tabBindingOptions.title)) {
+                      tabTitle = tabBindingOptions.title;
                     }
                   }
                 } else {
@@ -197,7 +202,7 @@
         result = logError("The attribute '" + _attribute_Name_Language + "' has not been set correctly.");
       }
     }
-    return {rendered:result, tabContents:tabContents, tabTitle:tabTitle};
+    return {rendered:result, tabContents:tabContents, tabTitle:tabTitle, tabBindingOptions:tabBindingOptions, syntaxLanguage:syntaxLanguage};
   }
   function renderElementButtons(syntax, syntaxOptions, syntaxLanguage, syntaxButtonsParsed, innerHTMLCopy) {
     if (syntaxOptions.showLanguageLabel || syntaxOptions.showCopyButton || syntaxOptions.showPrintButton || syntaxButtonsParsed.parsed) {
@@ -713,10 +718,15 @@
   function getBindingTabContentOptions(newOptions) {
     var options = !isDefinedObject(newOptions) ? {} : newOptions;
     options = buildBindingTabContentAttributeOptionStrings(options);
+    options = buildBindingTabContentAttributeOptionCustomTriggers(options);
     return options;
   }
   function buildBindingTabContentAttributeOptionStrings(options) {
     options.title = getDefaultString(options.title, null);
+    return options;
+  }
+  function buildBindingTabContentAttributeOptionCustomTriggers(options) {
+    options.onOpen = getDefaultFunction(options.onOpen, null);
     return options;
   }
   function isDefined(value) {

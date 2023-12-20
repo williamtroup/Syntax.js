@@ -101,7 +101,7 @@
                             elementBreak = true;
 
                         } else {
-                            renderTab( tabs, tabElements, tabContentElements, renderResult, divElementIndex );
+                            renderTab( tabs, tabElements, tabContentElements, renderResult, divElementIndex, renderResult.tabBindingOptions, renderResult.syntaxLanguage );
                         }
                     }
                     
@@ -118,7 +118,7 @@
         }
     }
 
-    function renderTab( tabs, tabElements, tabContentElements, renderResult, divElementIndex ) {
+    function renderTab( tabs, tabElements, tabContentElements, renderResult, divElementIndex, tabBindingOptions, syntaxLanguage ) {
         var tab = createElement( "button", "tab" );
         tab.innerHTML = renderResult.tabTitle;
         tabs.appendChild( tab );
@@ -141,6 +141,10 @@
 
                 tab.className = "tab-active";
                 renderResult.tabContents.style.display = "flex";
+
+                if ( isDefinedObject( tabBindingOptions ) ) {
+                    fireCustomTrigger( tabBindingOptions.onOpen, syntaxLanguage );
+                }
             }
         };
 
@@ -154,10 +158,12 @@
     function renderElement( element, codeContainer ) {
         var result = true,
             tabTitle = null,
-            tabContents = null;
+            tabContents = null,
+            tabBindingOptions = null,
+            syntaxLanguage = null;
 
         if ( isDefined( element ) && element.hasAttribute( _attribute_Name_Language ) && ( !element.hasAttribute( _attribute_Name_TabContents ) || isDefined( codeContainer ) ) ) {
-            var syntaxLanguage = element.getAttribute( _attribute_Name_Language );
+            syntaxLanguage = element.getAttribute( _attribute_Name_Language );
 
             if ( isDefinedString( syntaxLanguage ) ) {
                 var language = getLanguage( syntaxLanguage );
@@ -203,10 +209,10 @@
                                     var syntaxTabOptions = getObjectFromString( element.getAttribute( _attribute_Name_TabContents ) );
 
                                     if ( syntaxTabOptions.parsed ) {
-                                        syntaxTabOptions = getBindingTabContentOptions( syntaxTabOptions.result );
+                                        tabBindingOptions = getBindingTabContentOptions( syntaxTabOptions.result );
 
-                                        if ( isDefinedString( syntaxTabOptions.title ) ) {
-                                            tabTitle = syntaxTabOptions.title;
+                                        if ( isDefinedString( tabBindingOptions.title ) ) {
+                                            tabTitle = tabBindingOptions.title;
                                         }
                                     }
 
@@ -320,7 +326,9 @@
         return {
             rendered: result,
             tabContents: tabContents,
-            tabTitle: tabTitle
+            tabTitle: tabTitle,
+            tabBindingOptions: tabBindingOptions,
+            syntaxLanguage: syntaxLanguage
         };
     }
 
@@ -977,12 +985,19 @@
         var options = !isDefinedObject( newOptions ) ? {} : newOptions;
 
         options = buildBindingTabContentAttributeOptionStrings( options );
+        options = buildBindingTabContentAttributeOptionCustomTriggers( options );
 
         return options;
     }
 
     function buildBindingTabContentAttributeOptionStrings( options ) {
         options.title = getDefaultString( options.title, null );
+
+        return options;
+    }
+
+    function buildBindingTabContentAttributeOptionCustomTriggers( options ) {
+        options.onOpen = getDefaultFunction( options.onOpen, null );
 
         return options;
     }
