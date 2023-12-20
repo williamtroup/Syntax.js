@@ -1,4 +1,4 @@
-/*! Syntax.js v2.0.1 | (c) Bunoon | MIT License */
+/*! Syntax.js v2.1.0 | (c) Bunoon | MIT License */
 $syntax.addLanguage( "php", {
     friendlyName: "PHP",
     keywords: [

@@ -43,6 +43,21 @@
                         </div>
                     </pre>
                 </div>
+
+                <div data-syntax-language="unknown" data-syntax-tab-contents="{ 'title': 'Unknown Language', 'onOpen': onTabOpen }">
+                    <pre>
+                        div.syntax-highlight div.code {
+                            background-color: var(--container-background-color-container);
+                            border-radius: var(--border-radius);
+                            padding: 15px;
+                            overflow-x: auto;
+                            overflow-y: hidden;
+                            position: relative;
+                            border: var(--border-size) solid var(--container-border-color-container);
+                            color: var(--color-black);
+                          }
+                    </pre>
+                </div>
             </code>
         </div>
     </body>
@@ -50,5 +65,9 @@
     <script>
         document.title += " v" + $syntax.getVersion();
         document.getElementById( "header" ).innerText += " - v" + $syntax.getVersion();
+
+        function onTabOpen( language ) {
+            console.log( "Tab opened for language: " + language );
+        }
     </script>
 </html>

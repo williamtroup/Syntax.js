@@ -1,4 +1,4 @@
-# Calendar.js - Language:
+# Syntax.js - Language:
 
 Below is the format that is expected for a language object when calling "addLanguage()".
 

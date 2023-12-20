@@ -1,8 +1,8 @@
-# Syntax.js v2.0.1
+# Syntax.js v2.1.0
 
 [![Tweet](https://img.shields.io/twitter/url/http/shields.io.svg?style=social)](https://twitter.com/intent/tweet?text=Syntax.js%2C%20a%20free%20JavaScript%20syntax%20highlighter&url=https://github.com/williamtroup/Syntax.js&hashtags=javascript,syntax,highlighter)
-[![npm](https://img.shields.io/badge/npmjs-v2.0.1-blue)](https://www.npmjs.com/package/jsyntax.js)
-[![nuget](https://img.shields.io/badge/nuget-v2.0.1-purple)](https://www.nuget.org/packages/jSyntax.js/)
+[![npm](https://img.shields.io/badge/npmjs-v2.1.0-blue)](https://www.npmjs.com/package/jsyntax.js)
+[![nuget](https://img.shields.io/badge/nuget-v2.1.0-purple)](https://www.nuget.org/packages/jSyntax.js/)
 [![license](https://img.shields.io/badge/license-MIT-green)](https://github.com/williamtroup/Syntax.js/blob/main/LICENSE.txt)
 [![discussions Welcome](https://img.shields.io/badge/discussions-Welcome-red)](https://github.com/williamtroup/Syntax.js/discussions)
 [![coded by William Troup](https://img.shields.io/badge/coded_by-William_Troup-yellow)](https://github.com/williamtroup)
@@ -128,7 +128,7 @@ Make sure you include the "DOCTYPE html" tag at the top of your HTML, as follows
         </pre>
     </div>
 
-    <div data-syntax-language="html" data-syntax-tab-contents="true">
+    <div data-syntax-language="html" data-syntax-tab-contents="{ 'title': 'HTML Language' }">
         <pre>
             <div class="header">
                 <!--This is a comment.-->
@@ -142,13 +142,15 @@ Make sure you include the "DOCTYPE html" tag at the top of your HTML, as follows
 </code>
 ```
 
-To see a list of all the available binding languages you can use for "data-syntax-language", click [here](https://github.com/williamtroup/Syntax.js/blob/main/docs/BINDING_LANGUAGE.md).
+To see a list of all the available binding languages you can use for "data-syntax-language", click [here](https://github.com/williamtroup/Syntax.js/blob/main/docs/binding/language/LANGUAGE.md).
 
-To see a list of all the available binding options you can use for "data-syntax-options", click [here](https://github.com/williamtroup/Syntax.js/blob/main/docs/BINDING_OPTIONS.md).
+To see a list of all the available binding options you can use for "data-syntax-options", click [here](https://github.com/williamtroup/Syntax.js/blob/main/docs/binding/options/OPTIONS.md).
 
-To see a list of all the available custom triggers you can use for "data-syntax-options", click [here](https://github.com/williamtroup/Syntax.js/blob/main/docs/BINDING_OPTIONS_CUSTOM_TRIGGERS.md).
+To see a list of all the available custom triggers you can use for "data-syntax-options", click [here](https://github.com/williamtroup/Syntax.js/blob/main/docs/binding/options/CUSTOM_TRIGGERS.md).
 
-To see a list of all the available binding options you can use for "data-syntax-buttons", click [here](https://github.com/williamtroup/Syntax.js/blob/main/docs/BINDING_BUTTONS.md).
+To see a list of all the available binding options you can use for "data-syntax-buttons", click [here](https://github.com/williamtroup/Syntax.js/blob/main/docs/binding/buttons/BUTTONS.md).
+
+To see a list of all the available binding options you can use for "data-syntax-tab-contents", click [here](https://github.com/williamtroup/Syntax.js/blob/main/docs/binding/tabs/TAB_CONTENTS.md).
 
 
 ### 4. Finishing Up:

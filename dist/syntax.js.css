@@ -1,5 +1,5 @@
 /*
- * Syntax.js Library v2.0.1
+ * Syntax.js Library v2.1.0
  *
  * Copyright 2023 Bunoon
  * Released under the MIT License
@@ -180,9 +180,9 @@ div.syntax-highlight div.code div.tab-contents div.syntax div.buttons {
   display: flex;
 }
 code.syntax-highlight div.code div.tab-contents div.syntax div.buttons button.button,
-code.syntax-highlight div.code div.tab-contents div.syntax div.buttons div.label,
+code.syntax-highlight div.code div.tab-contents div.syntax div.buttons div.language-label,
 div.syntax-highlight div.code div.tab-contents div.syntax div.buttons button.button,
-div.syntax-highlight div.code div.tab-contents div.syntax div.buttons div.label {
+div.syntax-highlight div.code div.tab-contents div.syntax div.buttons div.language-label {
   color: var(--button-text-color);
   background-color: var(--button-background-color);
   padding: 7px;
@@ -196,15 +196,15 @@ div.syntax-highlight div.code div.tab-contents div.syntax div.buttons div.label 
   outline: none !important;
 }
 code.syntax-highlight div.code div.tab-contents div.syntax div.buttons button.button:first-child,
-code.syntax-highlight div.code div.tab-contents div.syntax div.buttons div.label:first-child,
+code.syntax-highlight div.code div.tab-contents div.syntax div.buttons div.language-label:first-child,
 div.syntax-highlight div.code div.tab-contents div.syntax div.buttons button.button:first-child,
-div.syntax-highlight div.code div.tab-contents div.syntax div.buttons div.label:first-child {
+div.syntax-highlight div.code div.tab-contents div.syntax div.buttons div.language-label:first-child {
   border-bottom-left-radius: var(--border-radius);
 }
 code.syntax-highlight div.code div.tab-contents div.syntax div.buttons button.button:last-child,
-code.syntax-highlight div.code div.tab-contents div.syntax div.buttons div.label:last-child,
+code.syntax-highlight div.code div.tab-contents div.syntax div.buttons div.language-label:last-child,
 div.syntax-highlight div.code div.tab-contents div.syntax div.buttons button.button:last-child,
-div.syntax-highlight div.code div.tab-contents div.syntax div.buttons div.label:last-child {
+div.syntax-highlight div.code div.tab-contents div.syntax div.buttons div.language-label:last-child {
   border-top-right-radius: var(--border-radius);
   border-right: none;
 }
@@ -212,8 +212,8 @@ code.syntax-highlight div.code div.tab-contents div.syntax div.buttons button.bu
 div.syntax-highlight div.code div.tab-contents div.syntax div.buttons button.button-opener {
   font-weight: 900 !important;
 }
-code.syntax-highlight div.code div.tab-contents div.syntax div.buttons div.label,
-div.syntax-highlight div.code div.tab-contents div.syntax div.buttons div.label {
+code.syntax-highlight div.code div.tab-contents div.syntax div.buttons div.language-label,
+div.syntax-highlight div.code div.tab-contents div.syntax div.buttons div.language-label {
   cursor: default;
   color: var(--color-gray);
   font-weight: 700;

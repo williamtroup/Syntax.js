@@ -1,5 +1,31 @@
 # Syntax.js - Change Log:
 
+## Version 2.1.0:
+
+#### **New Features:**
+- Added full binding support for "data-syntax-tab-contents", which allows some configuration to be set per tab.
+
+#### **Binding Options Tab Contents:**
+- Added a new binding option called "title", which states the title to use for a Tab (defaults to null, which forces the language name to be used).
+
+#### **Binding Options Tab Contents - Custom Triggers:**
+- Added a new binding custom trigger called "onOpen", which states an event that should be triggered when a tab is opened (passes to the language to the event).
+
+### **CSS:**
+- Renamed the CSS class "label" to "language-label" (much clearer).
+
+#### **Documentation:**
+- Minor documentation improvements.
+- Added new binding documentation file "binding/tabs/TAB_CONTENTS.md".
+- Added new binding documentation file "binding/tabs/CUSTOM_TRIGGERS.md".
+- Some of the documentation has been renamed and moved into category folders (the filenames were getting confusing).
+
+#### **General Improvements:**
+- Code cleanups and refactoring to make things clearer.
+
+<br>
+
+
 ## Version 2.0.1:
 - Minor documentation improvements.
 
