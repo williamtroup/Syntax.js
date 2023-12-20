@@ -108,7 +108,17 @@
                 codeContainer = createElement("div", "code custom-scroll-bars");
                 element.appendChild(codeContainer);
               } else {
-                tabTitle = getFriendlyLanguageName(syntaxLanguage);
+                if (element.hasAttribute(_attribute_Name_TabContents) && element.getAttribute(_attribute_Name_TabContents).toLowerCase() !== "true") {
+                  var syntaxTabOptions = getObjectFromString(element.getAttribute(_attribute_Name_TabContents));
+                  if (syntaxTabOptions.parsed) {
+                    syntaxTabOptions = getBindingTabContentOptions(syntaxTabOptions.result);
+                    if (isDefinedString(syntaxTabOptions.title)) {
+                      tabTitle = syntaxTabOptions.title;
+                    }
+                  }
+                } else {
+                  tabTitle = getFriendlyLanguageName(syntaxLanguage);
+                }
               }
               tabContents = createElement("div", "tab-contents");
               codeContainer.appendChild(tabContents);
@@ -698,6 +708,15 @@
     options.onStringRender = getDefaultFunction(options.onStringRender, null);
     options.onCommentRender = getDefaultFunction(options.onCommentRender, null);
     options.onPrint = getDefaultFunction(options.onPrint, null);
+    return options;
+  }
+  function getBindingTabContentOptions(newOptions) {
+    var options = !isDefinedObject(newOptions) ? {} : newOptions;
+    options = buildBindingTabContentAttributeOptionStrings(options);
+    return options;
+  }
+  function buildBindingTabContentAttributeOptionStrings(options) {
+    options.title = getDefaultString(options.title, null);
     return options;
   }
   function isDefined(value) {

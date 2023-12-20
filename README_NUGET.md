@@ -128,7 +128,7 @@ Make sure you include the "DOCTYPE html" tag at the top of your HTML, as follows
         </pre>
     </div>
 
-    <div data-syntax-language="html" data-syntax-tab-contents="true">
+    <div data-syntax-language="html" data-syntax-tab-contents="{ 'title': 'HTML Language' }">
         <pre>
             <div class="header">
                 <!--This is a comment.-->
@@ -149,6 +149,8 @@ To see a list of all the available binding options you can use for "data-syntax-
 To see a list of all the available custom triggers you can use for "data-syntax-options", click [here](https://github.com/williamtroup/Syntax.js/blob/main/docs/BINDING_OPTIONS_CUSTOM_TRIGGERS.md).
 
 To see a list of all the available binding options you can use for "data-syntax-buttons", click [here](https://github.com/williamtroup/Syntax.js/blob/main/docs/BINDING_BUTTONS.md).
+
+To see a list of all the available binding options you can use for "data-syntax-tab-contents", click [here](https://github.com/williamtroup/Syntax.js/blob/main/docs/BINDING_TAB_CONTENT_OPTIONS.md).
 
 
 ### 4. Finishing Up:

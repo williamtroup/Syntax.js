@@ -1,9 +1,16 @@
 # Syntax.js - Change Log:
 
 ## Version 2.1.0:
-- Minor documentation improvements.
+
+#### **New Features:**
+- Added full binding support for "data-syntax-tab-contents", which allows some configuration to be set per tab.
+
+### **CSS:**
 - Renamed the CSS class "label" to "language-label" (much clearer).
-- 
+
+#### **Documentation:**
+- Minor documentation improvements.
+- Added new binding documentation file "BINDING_TAB_CONTENT_OPTIONS.md".
 
 <br>
 

@@ -27,7 +27,7 @@ Below are all the JSON properties that can be passed in the "data-syntax-options
 <br/>
 
 
-## Translatable String Options:
+## String Options:
 <br/>
 
 | Type: | Name: | Description: |
