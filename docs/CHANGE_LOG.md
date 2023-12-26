@@ -2,7 +2,6 @@
 
 ## Version 2.1.1:
 - Added an extra check when processing the attribute "data-syntax-tab-contents" options.
-- 
 
 <br>
 
