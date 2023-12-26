@@ -1,5 +1,11 @@
 # Syntax.js - Change Log:
 
+## Version 2.1.1:
+- Added an extra check when processing the attribute "data-syntax-tab-contents" options.
+
+<br>
+
+
 ## Version 2.1.0:
 
 #### **New Features:**

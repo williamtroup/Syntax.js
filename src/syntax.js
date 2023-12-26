@@ -4,7 +4,7 @@
  * A lightweight, and easy-to-use, JavaScript library for code syntax highlighting!
  * 
  * @file        syntax.js
- * @version     v2.1.0
+ * @version     v2.1.1
  * @author      Bunoon
  * @license     MIT License
  * @copyright   Bunoon 2023
@@ -208,7 +208,7 @@
                                 if ( element.hasAttribute( _attribute_Name_TabContents ) && element.getAttribute( _attribute_Name_TabContents ).toLowerCase() !== "true" ) {
                                     var syntaxTabOptions = getObjectFromString( element.getAttribute( _attribute_Name_TabContents ) );
 
-                                    if ( syntaxTabOptions.parsed ) {
+                                    if ( syntaxTabOptions.parsed && isDefinedObject( syntaxTabOptions.result ) ) {
                                         tabBindingOptions = getBindingTabContentOptions( syntaxTabOptions.result );
 
                                         if ( isDefinedString( tabBindingOptions.title ) ) {
@@ -1631,7 +1631,7 @@
      * @returns     {string}                                                The version number.
      */
     this.getVersion = function() {
-        return "2.1.0";
+        return "2.1.1";
     };
 
 

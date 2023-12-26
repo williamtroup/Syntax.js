@@ -1,4 +1,4 @@
-/*! Syntax.js v2.1.0 | (c) Bunoon | MIT License */
+/*! Syntax.js v2.1.1 | (c) Bunoon | MIT License */
 (function() {
   function render() {
     var tagTypes = _configuration.highlightAllDomElementTypes;
@@ -115,7 +115,7 @@
               } else {
                 if (element.hasAttribute(_attribute_Name_TabContents) && element.getAttribute(_attribute_Name_TabContents).toLowerCase() !== "true") {
                   var syntaxTabOptions = getObjectFromString(element.getAttribute(_attribute_Name_TabContents));
-                  if (syntaxTabOptions.parsed) {
+                  if (syntaxTabOptions.parsed && isDefinedObject(syntaxTabOptions.result)) {
                     tabBindingOptions = getBindingTabContentOptions(syntaxTabOptions.result);
                     if (isDefinedString(tabBindingOptions.title)) {
                       tabTitle = tabBindingOptions.title;
@@ -1035,7 +1035,7 @@
     return this;
   };
   this.getVersion = function() {
-    return "2.1.0";
+    return "2.1.1";
   };
   (function(documentObject, navigatorObject, windowObject) {
     _parameter_Document = documentObject;
