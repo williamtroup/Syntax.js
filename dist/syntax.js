@@ -8,6 +8,9 @@
       var domElements = _parameter_Document.getElementsByTagName(tagTypes[tagTypeIndex]);
       var elements = [].slice.call(domElements);
       var elementsLength = elements.length;
+      if (elementsLength > 0) {
+        fireCustomTrigger(_configuration.onBeforeRender);
+      }
       var elementIndex = 0;
       for (; elementIndex < elementsLength; elementIndex++) {
         var element = elements[elementIndex];
@@ -41,6 +44,9 @@
         if (elementBreak) {
           break;
         }
+      }
+      if (elementsLength > 0) {
+        fireCustomTrigger(_configuration.onAfterRender);
       }
     }
   }
@@ -880,8 +886,16 @@
   function buildDefaultConfiguration() {
     _configuration.safeMode = getDefaultBoolean(_configuration.safeMode, true);
     _configuration.highlightAllDomElementTypes = getDefaultStringOrArray(_configuration.highlightAllDomElementTypes, ["div", "code"]);
+    buildDefaultConfigurationStrings();
+    buildDefaultConfigurationCustomTriggers();
+  }
+  function buildDefaultConfigurationStrings() {
     _configuration.buttonsOpenerText = getDefaultString(_configuration.buttonsOpenerText, "<");
     _configuration.buttonsCloserText = getDefaultString(_configuration.buttonsCloserText, ">");
+  }
+  function buildDefaultConfigurationCustomTriggers() {
+    _configuration.onBeforeRender = getDefaultFunction(_configuration.onBeforeRender, null);
+    _configuration.onAfterRender = getDefaultFunction(_configuration.onAfterRender, null);
   }
   var _parameter_Document = null;
   var _parameter_Navigator = null;

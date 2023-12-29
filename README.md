@@ -203,4 +203,6 @@ Configuration options allow you to customize how Syntax.js will function.  You c
 </script>
 ```
 
-To see a list of all the available configuration options you can use, click [here](docs/CONFIGURATION_OPTIONS.md).
+To see a list of all the available configuration options you can use, click [here](docs/configuration/OPTIONS.md).
+
+To see a list of all the available configuration options custom triggers you can use, click [here](docs/configuration/CUSTOM_TRIGGERS.md).

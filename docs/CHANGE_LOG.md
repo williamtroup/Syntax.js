@@ -7,6 +7,13 @@
 - The JSON property "comment" is now optional.
 - The RegEx used for searching for keywords, values, attributes, and tags, is now much more accurate.
 
+#### **Configuration Options - Custom Triggers:**
+- Added a new configuration custom trigger called "onBeforeRender", which states an event that should be triggered before any DOM elements are rendered (when found).
+- Added a new configuration custom trigger called "onAfterRender", which states an event that should be triggered after any DOM elements are rendered (when found).
+
+#### **Documentation:**
+- Some more of the documentation has been renamed and moved into category folders (the filenames were getting confusing).
+
 <br>
 
 

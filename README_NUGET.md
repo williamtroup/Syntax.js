@@ -181,4 +181,6 @@ Configuration options allow you to customize how Syntax.js will function.  You c
 </script>
 ```
 
-To see a list of all the available configuration options you can use, click [here](https://github.com/williamtroup/Syntax.js/blob/main/docs/CONFIGURATION_OPTIONS.md).
+To see a list of all the available configuration options you can use, click [here](https://github.com/williamtroup/Syntax.js/blob/main/docs/OPTIONS.md).
+
+To see a list of all the available configuration options custom triggers you can use, click [here](https://github.com/williamtroup/Syntax.js/blob/main/docs/CUSTOM_TRIGGERS.md).

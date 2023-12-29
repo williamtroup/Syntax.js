@@ -74,6 +74,10 @@
                 elements = [].slice.call( domElements ),
                 elementsLength = elements.length;
 
+            if ( elementsLength > 0 ) {
+                fireCustomTrigger( _configuration.onBeforeRender );
+            }
+
             for ( var elementIndex = 0; elementIndex < elementsLength; elementIndex++ ) {
                 var element = elements[ elementIndex ],
                     elementBreak = false;
@@ -114,6 +118,10 @@
                 if ( elementBreak ) {
                     break;
                 }
+            }
+
+            if ( elementsLength > 0 ) {
+                fireCustomTrigger( _configuration.onAfterRender );
             }
         }
     }
@@ -1617,8 +1625,19 @@
     function buildDefaultConfiguration() {
         _configuration.safeMode = getDefaultBoolean( _configuration.safeMode, true );
         _configuration.highlightAllDomElementTypes = getDefaultStringOrArray( _configuration.highlightAllDomElementTypes, [ "div", "code" ] );
+
+        buildDefaultConfigurationStrings();
+        buildDefaultConfigurationCustomTriggers();
+    }
+
+    function buildDefaultConfigurationStrings() {
         _configuration.buttonsOpenerText = getDefaultString( _configuration.buttonsOpenerText, "<" );
         _configuration.buttonsCloserText = getDefaultString( _configuration.buttonsCloserText, ">" );
+    }
+
+    function buildDefaultConfigurationCustomTriggers() {
+        _configuration.onBeforeRender = getDefaultFunction( _configuration.onBeforeRender, null );
+        _configuration.onAfterRender = getDefaultFunction( _configuration.onAfterRender, null );
     }
 
 
