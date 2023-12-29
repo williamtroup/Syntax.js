@@ -1,5 +1,29 @@
 # Syntax.js - Change Log:
 
+## Version 2.2.0:
+
+#### **New Features:**
+- Added "description" support for the binding attribute "data-syntax-tab-contents" options.  When set, this will show a description panel next to the code.
+
+#### **Languages:**
+- Added support for the CSS styling language (importable file).
+- The JSON property "comment" is now optional.
+- The RegEx used for searching for keywords, values, attributes, and tags, is now much more accurate.
+
+#### **Configuration Options - Custom Triggers:**
+- Added a new configuration custom trigger called "onBeforeRender", which states an event that should be triggered before any DOM elements are rendered (when found).
+- Added a new configuration custom trigger called "onAfterRender", which states an event that should be triggered after any DOM elements are rendered (when found).
+
+### **CSS:**
+- Added new ":root" variable "--container-background-color-description", which states the background color to use for the description panel (for tabs).
+- Added new ":root" variable "--container-border-color-description", which states the border color to use for the description panel (for tabs).
+
+#### **Documentation:**
+- Some more of the documentation has been renamed and moved into category folders (the filenames were getting confusing).
+
+<br>
+
+
 ## Version 2.1.1:
 - Added an extra check when processing the attribute "data-syntax-tab-contents" options.
 

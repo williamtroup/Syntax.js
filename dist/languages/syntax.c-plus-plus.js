@@ -1,4 +1,4 @@
-/*! Syntax.js v2.1.1 | (c) Bunoon | MIT License */
+/*! Syntax.js v2.2.0 | (c) Bunoon | MIT License */
 $syntax.addLanguage( "c-plus-plus", {
     friendlyName: "C++",
     keywords: [

@@ -1,4 +1,4 @@
-/*! Syntax.js v2.1.1 | (c) Bunoon | MIT License */
+/*! Syntax.js v2.2.0 | (c) Bunoon | MIT License */
 (function() {
   function render() {
     var tagTypes = _configuration.highlightAllDomElementTypes;
@@ -8,6 +8,9 @@
       var domElements = _parameter_Document.getElementsByTagName(tagTypes[tagTypeIndex]);
       var elements = [].slice.call(domElements);
       var elementsLength = elements.length;
+      if (elementsLength > 0) {
+        fireCustomTrigger(_configuration.onBeforeRender);
+      }
       var elementIndex = 0;
       for (; elementIndex < elementsLength; elementIndex++) {
         var element = elements[elementIndex];
@@ -41,6 +44,9 @@
         if (elementBreak) {
           break;
         }
+      }
+      if (elementsLength > 0) {
+        fireCustomTrigger(_configuration.onAfterRender);
       }
     }
   }
@@ -93,6 +99,7 @@
               var innerHTML = element.innerHTML;
               var syntaxOptions = getBindingOptions(syntaxOptionsParsed.result);
               var isPreFormatted = false;
+              var descriptionText = null;
               if (element.children.length > 0 && element.children[0].nodeName.toLowerCase() === "pre") {
                 innerHTML = element.children[0].innerHTML;
                 isPreFormatted = true;
@@ -117,6 +124,7 @@
                   var syntaxTabOptions = getObjectFromString(element.getAttribute(_attribute_Name_TabContents));
                   if (syntaxTabOptions.parsed && isDefinedObject(syntaxTabOptions.result)) {
                     tabBindingOptions = getBindingTabContentOptions(syntaxTabOptions.result);
+                    descriptionText = tabBindingOptions.description;
                     if (isDefinedString(tabBindingOptions.title)) {
                       tabTitle = tabBindingOptions.title;
                     }
@@ -127,6 +135,11 @@
               }
               tabContents = createElement("div", "tab-contents");
               codeContainer.appendChild(tabContents);
+              if (isDefinedString(descriptionText)) {
+                var description = createElement("div", "description");
+                description.innerHTML = descriptionText;
+                tabContents.appendChild(description);
+              }
               if (syntaxOptions.showLineNumbers) {
                 numbers = createElement("div", "numbers");
                 tabContents.appendChild(numbers);
@@ -309,17 +322,19 @@
   }
   function renderElementCommentVariables(innerHTML, language, syntaxOptions) {
     var lookup = language.comment;
-    var patternItems = innerHTML.match(new RegExp(lookup + ".*", "g"));
-    if (patternItems !== null) {
-      var patternItemsLength = patternItems.length;
-      var patternItemsIndex = 0;
-      for (; patternItemsIndex < patternItemsLength; patternItemsIndex++) {
-        var comment = patternItems[patternItemsIndex];
-        var commentVariable = "$C{" + _cached_Comments_Count.toString() + "}";
-        _cached_Comments[commentVariable] = '<span class="comment">' + comment + "</span>";
-        _cached_Comments_Count++;
-        innerHTML = innerHTML.replace(comment, commentVariable);
-        fireCustomTrigger(syntaxOptions.onCommentRender, comment);
+    if (isDefinedString(lookup)) {
+      var patternItems = innerHTML.match(new RegExp(lookup + ".*", "g"));
+      if (patternItems !== null) {
+        var patternItemsLength = patternItems.length;
+        var patternItemsIndex = 0;
+        for (; patternItemsIndex < patternItemsLength; patternItemsIndex++) {
+          var comment = patternItems[patternItemsIndex];
+          var commentVariable = "$C{" + _cached_Comments_Count.toString() + "}";
+          _cached_Comments[commentVariable] = '<span class="comment">' + comment + "</span>";
+          _cached_Comments_Count++;
+          innerHTML = innerHTML.replace(comment, commentVariable);
+          fireCustomTrigger(syntaxOptions.onCommentRender, comment);
+        }
       }
     }
     return innerHTML;
@@ -388,7 +403,7 @@
       var keywordVariable = "KW" + _cached_Keywords_Count.toString() + ";";
       var keywordReplacement = null;
       var regExFlags = caseSensitive ? "g" : "gi";
-      var regEx = new RegExp("\\b" + keyword + "\\b", regExFlags);
+      var regEx = new RegExp(getWordRegEx(keyword), regExFlags);
       if (syntaxOptions.highlightKeywords) {
         if (isDefinedFunction(syntaxOptions.onKeywordClicked)) {
           keywordReplacement = '<span class="keyword-clickable">' + keywordDisplay + "</span>";
@@ -425,7 +440,7 @@
       tag = tag.split(_string.space)[0];
       if (keywords.indexOf(tag) > -1) {
         var keywordVariable = "KW" + _cached_Keywords_Count.toString() + ";";
-        var regExReplace = new RegExp("\\b" + tag + "\\b", regExFlags);
+        var regExReplace = new RegExp(getWordRegEx(tag), regExFlags);
         var keywordReplacement = null;
         var replacementTagDisplay = getDisplayTextTestCasing(tag, keywordsCasing);
         if (syntaxOptions.highlightKeywords) {
@@ -458,7 +473,7 @@
       var valueVariable = "VAL" + _cached_Values_Count.toString() + ";";
       var valueReplacement = null;
       var regExFlags = caseSensitive ? "g" : "gi";
-      var regEx = new RegExp("\\b" + value + "\\b", regExFlags);
+      var regEx = new RegExp(getWordRegEx(value), regExFlags);
       if (syntaxOptions.highlightValues) {
         if (isDefinedFunction(syntaxOptions.onValueClicked)) {
           valueReplacement = '<span class="value-clickable">' + value + "</span>";
@@ -490,7 +505,7 @@
       var attributeVariable = "ATTR" + _cached_Attributes_Count.toString() + ";";
       var attributeReplacement = null;
       var regExFlags = caseSensitive ? "g" : "gi";
-      var regEx = new RegExp("\\b" + attribute + "\\b", regExFlags);
+      var regEx = new RegExp(getWordRegEx(attribute), regExFlags);
       if (syntaxOptions.highlightAttributes) {
         if (isDefinedFunction(syntaxOptions.onAttributeClicked)) {
           attributeReplacement = '<span class="attribute-clickable">' + attribute + "</span>";
@@ -674,6 +689,9 @@
     }
     return keyword;
   }
+  function getWordRegEx(word) {
+    return "(?<=^|[^-])\\b" + word + "\\b(?=[^-]|$)";
+  }
   function getBindingOptions(newOptions) {
     var options = !isDefinedObject(newOptions) ? {} : newOptions;
     options = buildBindingAttributeOptions(options);
@@ -727,6 +745,7 @@
   }
   function buildBindingTabContentAttributeOptionStrings(options) {
     options.title = getDefaultString(options.title, null);
+    options.description = getDefaultString(options.description, null);
     return options;
   }
   function buildBindingTabContentAttributeOptionCustomTriggers(options) {
@@ -875,8 +894,16 @@
   function buildDefaultConfiguration() {
     _configuration.safeMode = getDefaultBoolean(_configuration.safeMode, true);
     _configuration.highlightAllDomElementTypes = getDefaultStringOrArray(_configuration.highlightAllDomElementTypes, ["div", "code"]);
+    buildDefaultConfigurationStrings();
+    buildDefaultConfigurationCustomTriggers();
+  }
+  function buildDefaultConfigurationStrings() {
     _configuration.buttonsOpenerText = getDefaultString(_configuration.buttonsOpenerText, "<");
     _configuration.buttonsCloserText = getDefaultString(_configuration.buttonsCloserText, ">");
+  }
+  function buildDefaultConfigurationCustomTriggers() {
+    _configuration.onBeforeRender = getDefaultFunction(_configuration.onBeforeRender, null);
+    _configuration.onAfterRender = getDefaultFunction(_configuration.onAfterRender, null);
   }
   var _parameter_Document = null;
   var _parameter_Navigator = null;
@@ -1035,7 +1062,7 @@
     return this;
   };
   this.getVersion = function() {
-    return "2.1.1";
+    return "2.2.0";
   };
   (function(documentObject, navigatorObject, windowObject) {
     _parameter_Document = documentObject;

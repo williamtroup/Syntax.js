@@ -9,6 +9,7 @@ Below are all the JSON properties that can be passed in the "data-syntax-tab-con
 | Type: | Name: | Description: |
 | --- | --- | --- |
 | *string* | title | The title that should be used for the tab (defaults to null, which will use the default language name). |
+| *string* | description | The description that should be displayed under the tabs, and above the code (defaults to null). |
 <br/>
 
 

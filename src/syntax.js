@@ -4,7 +4,7 @@
  * A lightweight, and easy-to-use, JavaScript library for code syntax highlighting!
  * 
  * @file        syntax.js
- * @version     v2.1.1
+ * @version     v2.2.0
  * @author      Bunoon
  * @license     MIT License
  * @copyright   Bunoon 2023
@@ -74,6 +74,10 @@
                 elements = [].slice.call( domElements ),
                 elementsLength = elements.length;
 
+            if ( elementsLength > 0 ) {
+                fireCustomTrigger( _configuration.onBeforeRender );
+            }
+
             for ( var elementIndex = 0; elementIndex < elementsLength; elementIndex++ ) {
                 var element = elements[ elementIndex ],
                     elementBreak = false;
@@ -114,6 +118,10 @@
                 if ( elementBreak ) {
                     break;
                 }
+            }
+
+            if ( elementsLength > 0 ) {
+                fireCustomTrigger( _configuration.onAfterRender );
             }
         }
     }
@@ -176,7 +184,8 @@
                         if ( element.innerHTML.trim() !== _string.empty ) {
                             var innerHTML = element.innerHTML,
                                 syntaxOptions = getBindingOptions( syntaxOptionsParsed.result ),
-                                isPreFormatted = false;
+                                isPreFormatted = false,
+                                descriptionText = null;
 
                             if ( element.children.length > 0 && element.children[ 0 ].nodeName.toLowerCase() === "pre" ) {
                                 innerHTML = element.children[ 0 ].innerHTML;
@@ -210,6 +219,7 @@
 
                                     if ( syntaxTabOptions.parsed && isDefinedObject( syntaxTabOptions.result ) ) {
                                         tabBindingOptions = getBindingTabContentOptions( syntaxTabOptions.result );
+                                        descriptionText = tabBindingOptions.description;
 
                                         if ( isDefinedString( tabBindingOptions.title ) ) {
                                             tabTitle = tabBindingOptions.title;
@@ -223,6 +233,12 @@
 
                             tabContents = createElement( "div", "tab-contents" );
                             codeContainer.appendChild( tabContents );
+
+                            if ( isDefinedString( descriptionText ) ) {
+                                var description = createElement( "div", "description" );
+                                description.innerHTML = descriptionText;
+                                tabContents.appendChild( description );
+                            }
 
                             if ( syntaxOptions.showLineNumbers ) {
                                 numbers = createElement( "div", "numbers" );
@@ -461,25 +477,28 @@
     }
 
     function renderElementCommentVariables( innerHTML, language, syntaxOptions ) {
-        var lookup = language.comment,
-            patternItems = innerHTML.match( new RegExp( lookup + ".*", "g" ) );
+        var lookup = language.comment;
 
-        if ( patternItems !== null ) {
-            var patternItemsLength = patternItems.length;
-        
-            for ( var patternItemsIndex = 0; patternItemsIndex < patternItemsLength; patternItemsIndex++ ) {
-                var comment = patternItems[ patternItemsIndex ],
-                    commentVariable = "$C{" + _cached_Comments_Count.toString() + "}";
+        if ( isDefinedString( lookup ) ) {
+            var patternItems = innerHTML.match( new RegExp( lookup + ".*", "g" ) );
 
-                _cached_Comments[ commentVariable ] = "<span class=\"comment\">" + comment + "</span>";
-                _cached_Comments_Count++;
+            if ( patternItems !== null ) {
+                var patternItemsLength = patternItems.length;
+            
+                for ( var patternItemsIndex = 0; patternItemsIndex < patternItemsLength; patternItemsIndex++ ) {
+                    var comment = patternItems[ patternItemsIndex ],
+                        commentVariable = "$C{" + _cached_Comments_Count.toString() + "}";
     
-                innerHTML = innerHTML.replace( comment, commentVariable );
-
-                fireCustomTrigger( syntaxOptions.onCommentRender, comment );
+                    _cached_Comments[ commentVariable ] = "<span class=\"comment\">" + comment + "</span>";
+                    _cached_Comments_Count++;
+        
+                    innerHTML = innerHTML.replace( comment, commentVariable );
+    
+                    fireCustomTrigger( syntaxOptions.onCommentRender, comment );
+                }
             }
         }
-
+        
         return innerHTML;
     }
 
@@ -562,7 +581,7 @@
                 keywordVariable = "KW" + _cached_Keywords_Count.toString() + ";",
                 keywordReplacement = null,
                 regExFlags = caseSensitive ? "g" : "gi",
-                regEx = new RegExp( "\\b" + keyword + "\\b", regExFlags );
+                regEx = new RegExp( getWordRegEx( keyword ), regExFlags );
 
             if ( syntaxOptions.highlightKeywords ) {
                 if ( isDefinedFunction( syntaxOptions.onKeywordClicked ) ) {
@@ -609,7 +628,7 @@
 
             if ( keywords.indexOf( tag ) > -1 ) {
                 var keywordVariable = "KW" + _cached_Keywords_Count.toString() + ";",
-                    regExReplace = new RegExp( "\\b" + tag + "\\b", regExFlags ),
+                    regExReplace = new RegExp( getWordRegEx( tag ), regExFlags ),
                     keywordReplacement = null,
                     replacementTagDisplay = getDisplayTextTestCasing( tag, keywordsCasing );
 
@@ -650,7 +669,7 @@
                 valueVariable = "VAL" + _cached_Values_Count.toString() + ";",
                 valueReplacement = null,
                 regExFlags = caseSensitive ? "g" : "gi",
-                regEx = new RegExp( "\\b" + value + "\\b", regExFlags );
+                regEx = new RegExp( getWordRegEx( value ), regExFlags );
 
             if ( syntaxOptions.highlightValues ) {
                 if ( isDefinedFunction( syntaxOptions.onValueClicked ) ) {
@@ -689,7 +708,7 @@
                 attributeVariable = "ATTR" + _cached_Attributes_Count.toString() + ";",
                 attributeReplacement = null,
                 regExFlags = caseSensitive ? "g" : "gi",
-                regEx = new RegExp( "\\b" + attribute + "\\b", regExFlags );
+                regEx = new RegExp( getWordRegEx( attribute ), regExFlags );
 
             if ( syntaxOptions.highlightAttributes ) {
                 if ( isDefinedFunction( syntaxOptions.onAttributeClicked ) ) {
@@ -918,6 +937,10 @@
         return keyword;
     }
 
+    function getWordRegEx( word ) {
+        return "(?<=^|[^-])\\b" + word + "\\b(?=[^-]|$)";
+    }
+
 
     /*
      * ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -997,6 +1020,7 @@
 
     function buildBindingTabContentAttributeOptionStrings( options ) {
         options.title = getDefaultString( options.title, null );
+        options.description = getDefaultString( options.description, null );
 
         return options;
     }
@@ -1610,8 +1634,19 @@
     function buildDefaultConfiguration() {
         _configuration.safeMode = getDefaultBoolean( _configuration.safeMode, true );
         _configuration.highlightAllDomElementTypes = getDefaultStringOrArray( _configuration.highlightAllDomElementTypes, [ "div", "code" ] );
+
+        buildDefaultConfigurationStrings();
+        buildDefaultConfigurationCustomTriggers();
+    }
+
+    function buildDefaultConfigurationStrings() {
         _configuration.buttonsOpenerText = getDefaultString( _configuration.buttonsOpenerText, "<" );
         _configuration.buttonsCloserText = getDefaultString( _configuration.buttonsCloserText, ">" );
+    }
+
+    function buildDefaultConfigurationCustomTriggers() {
+        _configuration.onBeforeRender = getDefaultFunction( _configuration.onBeforeRender, null );
+        _configuration.onAfterRender = getDefaultFunction( _configuration.onAfterRender, null );
     }
 
 
@@ -1631,7 +1666,7 @@
      * @returns     {string}                                                The version number.
      */
     this.getVersion = function() {
-        return "2.1.1";
+        return "2.2.0";
     };
 
 

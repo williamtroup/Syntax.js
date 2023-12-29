@@ -1,5 +1,5 @@
 /*
- * Syntax.js Library v2.1.1
+ * Syntax.js Library v2.2.0
  *
  * Copyright 2023 Bunoon
  * Released under the MIT License
@@ -31,6 +31,8 @@
   --container-border-color-syntax: #CCCCCC;
   --container-background-color-numbers: #dddddd;
   --container-border-color-numbers: var(--color-gray);
+  --container-background-color-description: var(--container-background-color-numbers);
+  --container-border-color-description: var(--container-border-color-numbers);
   --tab-background-color: var(--color-white);
   --tab-text-color: var(--color-black);
   --tab-border-color: var(--color-black);
@@ -128,6 +130,30 @@ div.syntax-highlight div.code div.tab-contents {
 code.syntax-highlight div.code div.tab-contents pre,
 div.syntax-highlight div.code div.tab-contents pre {
   margin: 0 !important;
+}
+code.syntax-highlight div.code div.tab-contents div.description,
+div.syntax-highlight div.code div.tab-contents div.description {
+  margin-right: 15px;
+  background-color: var(--container-background-color-description);
+  padding: 10px;
+  padding-left: 15px;
+  padding-right: 15px;
+  border-radius: var(--border-radius);
+  text-align: left;
+  border: var(--border-size) solid var(--container-border-color-description);
+  cursor: default;
+  color: var(--color-black);
+  -webkit-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  width: 150px;
+  display: none;
+}
+@media (min-width: 768px) {
+  code.syntax-highlight div.code div.tab-contents div.description,
+  div.syntax-highlight div.code div.tab-contents div.description {
+    display: block;
+  }
 }
 code.syntax-highlight div.code div.tab-contents div.numbers,
 div.syntax-highlight div.code div.tab-contents div.numbers {
