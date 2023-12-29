@@ -390,7 +390,7 @@
       var keywordVariable = "KW" + _cached_Keywords_Count.toString() + ";";
       var keywordReplacement = null;
       var regExFlags = caseSensitive ? "g" : "gi";
-      var regEx = new RegExp("\\b" + keyword + "\\b", regExFlags);
+      var regEx = new RegExp(getWordRegEx(keyword), regExFlags);
       if (syntaxOptions.highlightKeywords) {
         if (isDefinedFunction(syntaxOptions.onKeywordClicked)) {
           keywordReplacement = '<span class="keyword-clickable">' + keywordDisplay + "</span>";
@@ -427,7 +427,7 @@
       tag = tag.split(_string.space)[0];
       if (keywords.indexOf(tag) > -1) {
         var keywordVariable = "KW" + _cached_Keywords_Count.toString() + ";";
-        var regExReplace = new RegExp("\\b" + tag + "\\b", regExFlags);
+        var regExReplace = new RegExp(getWordRegEx(tag), regExFlags);
         var keywordReplacement = null;
         var replacementTagDisplay = getDisplayTextTestCasing(tag, keywordsCasing);
         if (syntaxOptions.highlightKeywords) {
@@ -460,7 +460,7 @@
       var valueVariable = "VAL" + _cached_Values_Count.toString() + ";";
       var valueReplacement = null;
       var regExFlags = caseSensitive ? "g" : "gi";
-      var regEx = new RegExp("\\b" + value + "\\b", regExFlags);
+      var regEx = new RegExp(getWordRegEx(value), regExFlags);
       if (syntaxOptions.highlightValues) {
         if (isDefinedFunction(syntaxOptions.onValueClicked)) {
           valueReplacement = '<span class="value-clickable">' + value + "</span>";
@@ -492,7 +492,7 @@
       var attributeVariable = "ATTR" + _cached_Attributes_Count.toString() + ";";
       var attributeReplacement = null;
       var regExFlags = caseSensitive ? "g" : "gi";
-      var regEx = new RegExp("\\b" + attribute + "\\b", regExFlags);
+      var regEx = new RegExp(getWordRegEx(attribute), regExFlags);
       if (syntaxOptions.highlightAttributes) {
         if (isDefinedFunction(syntaxOptions.onAttributeClicked)) {
           attributeReplacement = '<span class="attribute-clickable">' + attribute + "</span>";
@@ -675,6 +675,9 @@
       keyword = keyword.toLowerCase();
     }
     return keyword;
+  }
+  function getWordRegEx(word) {
+    return "(?<=^|[^-])\\b" + word + "\\b(?=[^-]|$)";
   }
   function getBindingOptions(newOptions) {
     var options = !isDefinedObject(newOptions) ? {} : newOptions;

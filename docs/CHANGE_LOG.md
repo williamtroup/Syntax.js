@@ -3,7 +3,9 @@
 ## Version 2.2.0:
 
 #### **Languages:**
+- Added support for the CSS styling language (importable file).
 - The JSON property "comment" is now optional.
+- The RegEx used for searching for keywords, values, attributes, and tags, is now much more accurate.
 
 <br>
 
