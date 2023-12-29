@@ -24,6 +24,8 @@
         --container-border-color-syntax: var(--container-border-color-container);
         --container-background-color-numbers: #24292e;
         --container-border-color-numbers: var(--container-border-color-container);
+        --container-background-color-description: var(--container-background-color-numbers);
+        --container-border-color-description: var(--container-border-color-numbers);
 
         /* Tabs */
         --tab-background-color: #F5F5F5;

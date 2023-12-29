@@ -99,6 +99,7 @@
               var innerHTML = element.innerHTML;
               var syntaxOptions = getBindingOptions(syntaxOptionsParsed.result);
               var isPreFormatted = false;
+              var descriptionText = null;
               if (element.children.length > 0 && element.children[0].nodeName.toLowerCase() === "pre") {
                 innerHTML = element.children[0].innerHTML;
                 isPreFormatted = true;
@@ -123,6 +124,7 @@
                   var syntaxTabOptions = getObjectFromString(element.getAttribute(_attribute_Name_TabContents));
                   if (syntaxTabOptions.parsed && isDefinedObject(syntaxTabOptions.result)) {
                     tabBindingOptions = getBindingTabContentOptions(syntaxTabOptions.result);
+                    descriptionText = tabBindingOptions.description;
                     if (isDefinedString(tabBindingOptions.title)) {
                       tabTitle = tabBindingOptions.title;
                     }
@@ -133,6 +135,11 @@
               }
               tabContents = createElement("div", "tab-contents");
               codeContainer.appendChild(tabContents);
+              if (isDefinedString(descriptionText)) {
+                var description = createElement("div", "description");
+                description.innerHTML = descriptionText;
+                tabContents.appendChild(description);
+              }
               if (syntaxOptions.showLineNumbers) {
                 numbers = createElement("div", "numbers");
                 tabContents.appendChild(numbers);
@@ -738,6 +745,7 @@
   }
   function buildBindingTabContentAttributeOptionStrings(options) {
     options.title = getDefaultString(options.title, null);
+    options.description = getDefaultString(options.description, null);
     return options;
   }
   function buildBindingTabContentAttributeOptionCustomTriggers(options) {

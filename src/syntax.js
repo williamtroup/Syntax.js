@@ -184,7 +184,8 @@
                         if ( element.innerHTML.trim() !== _string.empty ) {
                             var innerHTML = element.innerHTML,
                                 syntaxOptions = getBindingOptions( syntaxOptionsParsed.result ),
-                                isPreFormatted = false;
+                                isPreFormatted = false,
+                                descriptionText = null;
 
                             if ( element.children.length > 0 && element.children[ 0 ].nodeName.toLowerCase() === "pre" ) {
                                 innerHTML = element.children[ 0 ].innerHTML;
@@ -218,6 +219,7 @@
 
                                     if ( syntaxTabOptions.parsed && isDefinedObject( syntaxTabOptions.result ) ) {
                                         tabBindingOptions = getBindingTabContentOptions( syntaxTabOptions.result );
+                                        descriptionText = tabBindingOptions.description;
 
                                         if ( isDefinedString( tabBindingOptions.title ) ) {
                                             tabTitle = tabBindingOptions.title;
@@ -231,6 +233,12 @@
 
                             tabContents = createElement( "div", "tab-contents" );
                             codeContainer.appendChild( tabContents );
+
+                            if ( isDefinedString( descriptionText ) ) {
+                                var description = createElement( "div", "description" );
+                                description.innerHTML = descriptionText;
+                                tabContents.appendChild( description );
+                            }
 
                             if ( syntaxOptions.showLineNumbers ) {
                                 numbers = createElement( "div", "numbers" );
@@ -1012,6 +1020,7 @@
 
     function buildBindingTabContentAttributeOptionStrings( options ) {
         options.title = getDefaultString( options.title, null );
+        options.description = getDefaultString( options.description, null );
 
         return options;
     }
