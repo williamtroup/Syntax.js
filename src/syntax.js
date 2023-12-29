@@ -461,25 +461,28 @@
     }
 
     function renderElementCommentVariables( innerHTML, language, syntaxOptions ) {
-        var lookup = language.comment,
-            patternItems = innerHTML.match( new RegExp( lookup + ".*", "g" ) );
+        var lookup = language.comment;
 
-        if ( patternItems !== null ) {
-            var patternItemsLength = patternItems.length;
-        
-            for ( var patternItemsIndex = 0; patternItemsIndex < patternItemsLength; patternItemsIndex++ ) {
-                var comment = patternItems[ patternItemsIndex ],
-                    commentVariable = "$C{" + _cached_Comments_Count.toString() + "}";
+        if ( isDefinedString( lookup ) ) {
+            var patternItems = innerHTML.match( new RegExp( lookup + ".*", "g" ) );
 
-                _cached_Comments[ commentVariable ] = "<span class=\"comment\">" + comment + "</span>";
-                _cached_Comments_Count++;
+            if ( patternItems !== null ) {
+                var patternItemsLength = patternItems.length;
+            
+                for ( var patternItemsIndex = 0; patternItemsIndex < patternItemsLength; patternItemsIndex++ ) {
+                    var comment = patternItems[ patternItemsIndex ],
+                        commentVariable = "$C{" + _cached_Comments_Count.toString() + "}";
     
-                innerHTML = innerHTML.replace( comment, commentVariable );
-
-                fireCustomTrigger( syntaxOptions.onCommentRender, comment );
+                    _cached_Comments[ commentVariable ] = "<span class=\"comment\">" + comment + "</span>";
+                    _cached_Comments_Count++;
+        
+                    innerHTML = innerHTML.replace( comment, commentVariable );
+    
+                    fireCustomTrigger( syntaxOptions.onCommentRender, comment );
+                }
             }
         }
-
+        
         return innerHTML;
     }
 

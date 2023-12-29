@@ -1,7 +1,9 @@
 # Syntax.js - Change Log:
 
 ## Version 2.2.0:
-- 
+
+#### **Languages:**
+- The JSON property "comment" is now optional.
 
 <br>
 

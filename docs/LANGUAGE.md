@@ -7,7 +7,7 @@ Below is the format that is expected for a language object when calling "addLang
 | *Object* | keywords | The keywords of the language (can be either an array of strings, or a space separated string). |
 | *Object* | values | The values (assigning or conditions) of the language (can be either an array of strings, or a space separated string). |
 | *Object* | attributes | The values of the language (can be either an array of strings, or a space separated string) and are only set when "isMarkUp" is true. |
-| *string* | comment | The start character(s) use for a single line comment. |
+| *string* | comment | The start character(s) use for a single line comment (optional). |
 | *string[]* | multiLineComment | The start/end characters used to define multi-line comments (optional). |
 | *boolean* | caseSensitive | States if the lookups for keywords are case sensitive (defaults to true). |
 | *string* | friendlyName | The friendly name to show for the language (optional). |
