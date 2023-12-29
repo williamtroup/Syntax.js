@@ -565,7 +565,7 @@
                 keywordVariable = "KW" + _cached_Keywords_Count.toString() + ";",
                 keywordReplacement = null,
                 regExFlags = caseSensitive ? "g" : "gi",
-                regEx = new RegExp( "\\b" + keyword + "\\b", regExFlags );
+                regEx = new RegExp( "([^-])\\b" + keyword + "\\b", regExFlags );
 
             if ( syntaxOptions.highlightKeywords ) {
                 if ( isDefinedFunction( syntaxOptions.onKeywordClicked ) ) {
