@@ -15,8 +15,8 @@
 - Added a new configuration custom trigger called "onAfterRender", which states an event that should be triggered after any DOM elements are rendered (when found).
 
 ### **CSS:**
-- Added new ":root" variable "--container-background-color-description", which states the background color to use for description panel (for tabs).
-- Added new ":root" variable "--container-border-color-description", which states the border color to use for description panel (for tabs).
+- Added new ":root" variable "--container-background-color-description", which states the background color to use for the description panel (for tabs).
+- Added new ":root" variable "--container-border-color-description", which states the border color to use for the description panel (for tabs).
 
 #### **Documentation:**
 - Some more of the documentation has been renamed and moved into category folders (the filenames were getting confusing).
