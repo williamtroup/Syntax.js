@@ -565,7 +565,7 @@
                 keywordVariable = "KW" + _cached_Keywords_Count.toString() + ";",
                 keywordReplacement = null,
                 regExFlags = caseSensitive ? "g" : "gi",
-                regEx = new RegExp( "([^-])\\b" + keyword + "\\b", regExFlags );
+                regEx = new RegExp( getWordRegEx( keyword ), regExFlags );
 
             if ( syntaxOptions.highlightKeywords ) {
                 if ( isDefinedFunction( syntaxOptions.onKeywordClicked ) ) {
@@ -612,7 +612,7 @@
 
             if ( keywords.indexOf( tag ) > -1 ) {
                 var keywordVariable = "KW" + _cached_Keywords_Count.toString() + ";",
-                    regExReplace = new RegExp( "\\b" + tag + "\\b", regExFlags ),
+                    regExReplace = new RegExp( getWordRegEx( tag ), regExFlags ),
                     keywordReplacement = null,
                     replacementTagDisplay = getDisplayTextTestCasing( tag, keywordsCasing );
 
@@ -653,7 +653,7 @@
                 valueVariable = "VAL" + _cached_Values_Count.toString() + ";",
                 valueReplacement = null,
                 regExFlags = caseSensitive ? "g" : "gi",
-                regEx = new RegExp( "\\b" + value + "\\b", regExFlags );
+                regEx = new RegExp( getWordRegEx( value ), regExFlags );
 
             if ( syntaxOptions.highlightValues ) {
                 if ( isDefinedFunction( syntaxOptions.onValueClicked ) ) {
@@ -692,7 +692,7 @@
                 attributeVariable = "ATTR" + _cached_Attributes_Count.toString() + ";",
                 attributeReplacement = null,
                 regExFlags = caseSensitive ? "g" : "gi",
-                regEx = new RegExp( "\\b" + attribute + "\\b", regExFlags );
+                regEx = new RegExp( getWordRegEx( attribute ), regExFlags );
 
             if ( syntaxOptions.highlightAttributes ) {
                 if ( isDefinedFunction( syntaxOptions.onAttributeClicked ) ) {
@@ -919,6 +919,10 @@
             keyword = keyword.toLowerCase();
         }
         return keyword;
+    }
+
+    function getWordRegEx( word ) {
+        return "(?<=^|[^-])\\b" + word + "\\b(?=[^-]|$)";
     }
 
 
