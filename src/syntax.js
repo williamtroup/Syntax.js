@@ -935,6 +935,7 @@
         } else if ( keywordsCasing === "lowercase" ) {
             keyword = keyword.toLowerCase();
         }
+        
         return keyword;
     }
 
