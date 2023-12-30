@@ -128,8 +128,9 @@
 
     function renderTab( tabs, tabElements, tabContentElements, renderResult, divElementIndex, tabBindingOptions, syntaxLanguage ) {
         var tab = createElement( "button", "tab" );
-        tab.innerHTML = renderResult.tabTitle;
         tabs.appendChild( tab );
+
+        setNodeText( tab, renderResult.tabTitle );
 
         tabElements.push( tab );
         tabContentElements.push( renderResult.tabContents );
@@ -236,8 +237,9 @@
 
                             if ( isDefinedString( descriptionText ) ) {
                                 var description = createElement( "div", "description" );
-                                description.innerHTML = descriptionText;
                                 tabContents.appendChild( description );
+
+                                setNodeText( description, descriptionText );
                             }
 
                             if ( syntaxOptions.showLineNumbers ) {
@@ -375,9 +377,10 @@
 
             if ( syntaxOptions.showCopyButton ) {
                 var copyButton = createElement( "button", "button" );
-                copyButton.innerHTML = syntaxOptions.copyButtonText;
                 copyButton.style.display = syntaxOptions.buttonsVisible ? "inline-block" : "none";
                 buttons.appendChild( copyButton );
+
+                setNodeText( copyButton, syntaxOptions.copyButtonText );
 
                 copyButton.onclick = function() {
                     _parameter_Navigator.clipboard.writeText( innerHTMLCopy );
@@ -390,9 +393,10 @@
 
             if ( syntaxOptions.showPrintButton ) {
                 var printButton = createElement( "button", "button" );
-                printButton.innerHTML = syntaxOptions.printButtonText;
                 printButton.style.display = syntaxOptions.buttonsVisible ? "inline-block" : "none";
                 buttons.appendChild( printButton );
+
+                setNodeText( printButton, syntaxOptions.printButtonText );
 
                 printButton.onclick = function() {
                     var newWindow = window.open( _string.empty, "PRINT", "height=400,width=600" ),
@@ -430,8 +434,9 @@
 
             if ( syntaxOptions.showLanguageLabel ) {
                 var languageLabel = createElement( "div", "language-label" );
-                languageLabel.innerHTML = getFriendlyLanguageName( syntaxLanguage, syntaxOptions.languageLabelCasing );
                 buttons.appendChild( languageLabel );
+
+                setNodeText( languageLabel, getFriendlyLanguageName( syntaxLanguage, syntaxOptions.languageLabelCasing ) );
             }
 
             var buttonsElementsLength = buttonsElements.length;
@@ -461,9 +466,10 @@
 
     function renderElementButton( customButton, buttonsElements, buttons, innerHTMLCopy, syntaxOptions ) {
         var newCustomButton = createElement( "button", "button" );
-        newCustomButton.innerHTML = customButton.text;
         newCustomButton.style.display = syntaxOptions.buttonsVisible ? "inline-block" : "none";
         buttons.appendChild( newCustomButton );
+
+        setNodeText( newCustomButton, customButton.text );
 
         newCustomButton.onclick = function() {
             customButton.onClick( innerHTMLCopy );
@@ -833,9 +839,9 @@
                             var numberCode = createElement( "p" );
     
                             if ( syntaxOptions.padLineNumbers ) {
-                                numberCode.innerHTML = padNumber( lineNumber.toString(), linesLengthStringLength );
+                                numberCode.innerText = padNumber( lineNumber.toString(), linesLengthStringLength );
                             } else {
-                                numberCode.innerHTML = lineNumber.toString();
+                                numberCode.innerText = lineNumber.toString();
                             }
     
                             numberContainer.appendChild( numberCode );
@@ -1103,6 +1109,17 @@
 
             _parameter_Window.getSelection().removeAllRanges();
             _parameter_Window.getSelection().addRange( range );
+        }
+    }
+
+    function setNodeText( element, text ) {
+        if ( !_configuration.allowHtmlInTextDisplay ) {
+            var div = createElement( "div" );
+            div.innerHTML = text;
+
+            element.innerText = div.innerText;
+        } else {
+            element.innerHTML = text;
         }
     }
 
@@ -1634,6 +1651,7 @@
     function buildDefaultConfiguration() {
         _configuration.safeMode = getDefaultBoolean( _configuration.safeMode, true );
         _configuration.highlightAllDomElementTypes = getDefaultStringOrArray( _configuration.highlightAllDomElementTypes, [ "div", "code" ] );
+        _configuration.allowHtmlInTextDisplay = getDefaultBoolean( _configuration.allowHtmlInTextDisplay, true );
 
         buildDefaultConfigurationStrings();
         buildDefaultConfigurationCustomTriggers();

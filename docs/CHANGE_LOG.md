@@ -1,7 +1,9 @@
 # Syntax.js - Change Log:
 
 ## Version 2.3.0:
-- 
+
+#### **Configuration Options:**
+- Added new configuration option "allowHtmlInTextDisplay" (defaults to true), which states if HTML can be used in the text displays (buttons, tabs, descriptions, etc).
 
 <br>
 
