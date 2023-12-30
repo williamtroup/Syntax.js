@@ -31,14 +31,14 @@
     --color-lighter-gray: #C0C0C0;
 
     // Containers
-    --container-background-color-container: #e8e6e6;
-    --container-border-color-container: var(--color-black);
-    --container-background-color-syntax: #EEEEEE;
-    --container-border-color-syntax: #CCCCCC;
-    --container-background-color-numbers: #dddddd;
-    --container-border-color-numbers: var(--color-gray);
-    --container-background-color-description: var(--container-background-color-numbers);
-    --container-border-color-description: var(--container-border-color-numbers);
+    --container-background-color: #e8e6e6;
+    --container-border-color: var(--color-black);
+    --container-syntax-background-color: #EEEEEE;
+    --container-syntax-border-color: #CCCCCC;
+    --container-numbers-background-color: #dddddd;
+    --container-numbers-border-color: var(--color-gray);
+    --container-description-background-color: var(--container-numbers-background-color);
+    --container-description-border-color: var(--container-numbers-border-color);
 
     // Tabs
     --tab-background-color: var(--color-white);
@@ -47,7 +47,7 @@
     --tab-active-background-color: var(--color-black);
     --tab-active-text-color: var(--color-white);
     --tab-active-border-color: var(--color-black);
-    --tab-hover-background-color: var(--container-background-color-numbers);
+    --tab-hover-background-color: var(--container-numbers-background-color);
     --tab-hover-text-color: var(--color-black);
     --tab-hover-border-color: var(--color-black);
 
@@ -79,13 +79,13 @@ div.syntax-highlight {
     font-size: 0.8rem;
 
     div.code {
-        background-color: var(--container-background-color-container);
+        background-color: var(--container-background-color);
         border-radius: var(--border-radius);
         padding: 15px;
         overflow-x: auto;
         overflow-y: hidden;
         position: relative;
-        border: var(--border-size) solid var(--container-border-color-container);
+        border: var(--border-size) solid var(--container-border-color);
         color: var(--color-black);
 
         div.tabs {
@@ -144,13 +144,13 @@ div.syntax-highlight {
 
             div.description {
                 margin-right: 15px;
-                background-color: var(--container-background-color-description);
+                background-color: var(--container-description-background-color);
                 padding: 10px;
                 padding-left: 15px;
                 padding-right: 15px;
                 border-radius: var(--border-radius);
                 text-align: left;
-                border: var(--border-size) solid var(--container-border-color-description);
+                border: var(--border-size) solid var(--container-description-border-color);
                 cursor: default;
                 color: var(--color-black);
                 -webkit-user-select: none;
@@ -166,14 +166,14 @@ div.syntax-highlight {
     
             div.numbers {
                 margin-right: 15px;
-                background-color: var(--container-background-color-numbers);
+                background-color: var(--container-numbers-background-color);
                 padding: 10px;
                 padding-left: 15px;
                 padding-right: 15px;
                 border-radius: var(--border-radius);
                 text-align: right;
                 font-weight: 800 !important;
-                border: var(--border-size) solid var(--container-border-color-numbers);
+                border: var(--border-size) solid var(--container-numbers-border-color);
                 display: none;
                 cursor: default;
                 -webkit-user-select: none;
@@ -195,8 +195,8 @@ div.syntax-highlight {
                 flex-grow: 1;
                 padding: 10px;
                 border-radius: var(--border-radius);
-                background-color: var(--container-background-color-syntax);
-                border: var(--border-size) solid var(--container-border-color-syntax);
+                background-color: var(--container-syntax-background-color);
+                border: var(--border-size) solid var(--container-syntax-border-color);
                 position: relative;
                 overflow: hidden;
     
