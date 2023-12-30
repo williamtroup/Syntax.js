@@ -6,7 +6,7 @@
 - Added a new JSON property called "wordRegEx", which states the Regular Expression that is used for looking up keywords, values, attributes, and tags (optional, use %word% to state the lookup).
 
 #### **Binding Options - Custom Triggers:**
-- Added a new binding custom trigger called "onBeforeRenderComplete", which states an event that should be trigger before an element is rendered.
+- Added a new binding custom trigger called "onBeforeRenderComplete", which states an event that should be triggered before an element is rendered.
 
 #### **Configuration Options:**
 - Added new configuration option "allowHtmlInTextDisplay" (defaults to true), which states if HTML can be used in the text displays (buttons, tabs, descriptions, etc).
@@ -15,11 +15,11 @@
 - Double-clicking in the description container (when tabs are used) will now select all the code (if the setting is turned on).
 
 ### **CSS:**
-- Renamed some of the ":root" variables to they are easier to read.
-- Improved browser support for the no text selection CSS.
+- Renamed some of the ":root" variables so they are easier to read.
+- Improved browser support for the no-text selection CSS.
 
 #### **Fixes:**
-- Fixed a fault that prevent non-highlighted keywords and values from rendered correctly when "highlightKeywords" and "highlightValues" are set to false.
+- Fixed a fault that prevented non-highlighted keywords and values from being rendered correctly when "highlightKeywords" and "highlightValues" were set to false.
 - Fixed a fault that caused the custom scroll bars to now show the right border color.
 
 <br>
