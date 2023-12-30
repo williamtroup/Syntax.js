@@ -16,6 +16,7 @@
 
 ### **CSS:**
 - Renamed some of the ":root" variables to they are easier to read.
+- Improved browser support for the no text selection CSS.
 
 #### **Fixes:**
 - Fixed a fault that prevent non-highlighted keywords and values from rendered correctly when "highlightKeywords" and "highlightValues" are set to false.

@@ -6,11 +6,7 @@
  */
 
 
-/*
-    -------------------------------------------------------------------------
-    Syntax.js - Variables
-    -------------------------------------------------------------------------
-*/
+ @import "foundation/styles";
 
 :root {
     // Colors
@@ -89,11 +85,9 @@ div.syntax-highlight {
         color: var(--color-black);
 
         div.tabs {
+            @include no-selection-allowed;
             text-wrap: nowrap;
             margin-bottom: 10px;
-            -webkit-user-select: none;
-            -ms-user-select: none;
-            user-select: none;
             
             button.tab,
             button.tab-active {
@@ -143,6 +137,7 @@ div.syntax-highlight {
             }
 
             div.description {
+                @include no-selection-allowed;
                 margin-right: 15px;
                 background-color: var(--container-description-background-color);
                 padding: 10px;
@@ -151,20 +146,17 @@ div.syntax-highlight {
                 border-radius: var(--border-radius);
                 text-align: left;
                 border: var(--border-size) solid var(--container-description-border-color);
-                cursor: default;
                 color: var(--color-black);
-                -webkit-user-select: none;
-                -ms-user-select: none;
-                user-select: none;
                 width: 150px;
                 display: none;
 
-                @media (min-width: 768px) { 
+                @media (min-width: $minimum-width) { 
                     display: block;
                 }
             }
     
             div.numbers {
+                @include no-selection-allowed;
                 margin-right: 15px;
                 background-color: var(--container-numbers-background-color);
                 padding: 10px;
@@ -175,10 +167,6 @@ div.syntax-highlight {
                 font-weight: 800 !important;
                 border: var(--border-size) solid var(--container-numbers-border-color);
                 display: none;
-                cursor: default;
-                -webkit-user-select: none;
-                -ms-user-select: none;
-                user-select: none;
     
                 p {
                     margin: 0;
@@ -186,7 +174,7 @@ div.syntax-highlight {
                     color: var(--color-black);
                 }
     
-                @media (min-width: 768px) { 
+                @media (min-width: $minimum-width) { 
                     display: block;
                 }
             }
@@ -201,12 +189,10 @@ div.syntax-highlight {
                 overflow: hidden;
     
                 div.buttons {
+                    @include no-selection-allowed;
                     position: absolute;
                     top: 0;
                     right: 0;
-                    -webkit-user-select: none;
-                    -ms-user-select: none;
-                    user-select: none;
                     text-wrap: nowrap;
                     display: flex;
         
@@ -258,7 +244,7 @@ div.syntax-highlight {
                     text-wrap: initial;
                     color: var(--color-black);
     
-                    @media (min-width: 768px) { 
+                    @media (min-width: $minimum-width) { 
                         text-wrap: nowrap;
                     }
     

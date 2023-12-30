@@ -4,11 +4,6 @@
  * Copyright 2023 Bunoon
  * Released under the MIT License
  */
-/*
-    -------------------------------------------------------------------------
-    Syntax.js - Variables
-    -------------------------------------------------------------------------
-*/
 :root {
   --color-keyword: #A71500;
   --color-value: #F28C28;
@@ -75,11 +70,14 @@ div.syntax-highlight div.code {
 }
 code.syntax-highlight div.code div.tabs,
 div.syntax-highlight div.code div.tabs {
-  text-wrap: nowrap;
-  margin-bottom: 10px;
+  -moz-user-select: none;
   -webkit-user-select: none;
   -ms-user-select: none;
+  -o-user-select: none;
   user-select: none;
+  cursor: default;
+  text-wrap: nowrap;
+  margin-bottom: 10px;
 }
 code.syntax-highlight div.code div.tabs button.tab,
 code.syntax-highlight div.code div.tabs button.tab-active,
@@ -133,6 +131,12 @@ div.syntax-highlight div.code div.tab-contents pre {
 }
 code.syntax-highlight div.code div.tab-contents div.description,
 div.syntax-highlight div.code div.tab-contents div.description {
+  -moz-user-select: none;
+  -webkit-user-select: none;
+  -ms-user-select: none;
+  -o-user-select: none;
+  user-select: none;
+  cursor: default;
   margin-right: 15px;
   background-color: var(--container-description-background-color);
   padding: 10px;
@@ -141,11 +145,7 @@ div.syntax-highlight div.code div.tab-contents div.description {
   border-radius: var(--border-radius);
   text-align: left;
   border: var(--border-size) solid var(--container-description-border-color);
-  cursor: default;
   color: var(--color-black);
-  -webkit-user-select: none;
-  -ms-user-select: none;
-  user-select: none;
   width: 150px;
   display: none;
 }
@@ -157,6 +157,12 @@ div.syntax-highlight div.code div.tab-contents div.description {
 }
 code.syntax-highlight div.code div.tab-contents div.numbers,
 div.syntax-highlight div.code div.tab-contents div.numbers {
+  -moz-user-select: none;
+  -webkit-user-select: none;
+  -ms-user-select: none;
+  -o-user-select: none;
+  user-select: none;
+  cursor: default;
   margin-right: 15px;
   background-color: var(--container-numbers-background-color);
   padding: 10px;
@@ -167,10 +173,6 @@ div.syntax-highlight div.code div.tab-contents div.numbers {
   font-weight: 800 !important;
   border: var(--border-size) solid var(--container-numbers-border-color);
   display: none;
-  cursor: default;
-  -webkit-user-select: none;
-  -ms-user-select: none;
-  user-select: none;
 }
 code.syntax-highlight div.code div.tab-contents div.numbers p,
 div.syntax-highlight div.code div.tab-contents div.numbers p {
@@ -196,12 +198,15 @@ div.syntax-highlight div.code div.tab-contents div.syntax {
 }
 code.syntax-highlight div.code div.tab-contents div.syntax div.buttons,
 div.syntax-highlight div.code div.tab-contents div.syntax div.buttons {
+  -moz-user-select: none;
+  -webkit-user-select: none;
+  -ms-user-select: none;
+  -o-user-select: none;
+  user-select: none;
+  cursor: default;
   position: absolute;
   top: 0;
   right: 0;
-  -webkit-user-select: none;
-  -ms-user-select: none;
-  user-select: none;
   text-wrap: nowrap;
   display: flex;
 }
