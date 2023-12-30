@@ -340,15 +340,10 @@
             innerHTML = renderElementStringQuotesFromVariables( innerHTML );
         }
 
-        if ( syntaxOptions.highlightKeywords ) {
-            innerHTML = renderElementVariables( innerHTML, _cached_Keywords );
-        }
+        innerHTML = renderElementVariables( innerHTML, _cached_Keywords );
+        innerHTML = renderElementVariables( innerHTML, _cached_Values );
 
-        if ( syntaxOptions.highlightValues ) {
-            innerHTML = renderElementVariables( innerHTML, _cached_Values );
-        }
-
-        if ( syntaxOptions.highlightAttributes && language.isMarkUp ) {
+        if ( language.isMarkUp ) {
             innerHTML = renderElementVariables( innerHTML, _cached_Attributes );
         }
 

@@ -5,6 +5,9 @@
 #### **Configuration Options:**
 - Added new configuration option "allowHtmlInTextDisplay" (defaults to true), which states if HTML can be used in the text displays (buttons, tabs, descriptions, etc).
 
+#### **Fixes:**
+- Fixed a fault that prevent non-highlighted keywords and values from rendered correctly when "highlightKeywords" and "highlightValues" are set to false.
+
 <br>
 
 

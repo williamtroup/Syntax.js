@@ -210,13 +210,9 @@
     if (syntaxOptions.highlightStrings) {
       innerHTML = renderElementStringQuotesFromVariables(innerHTML);
     }
-    if (syntaxOptions.highlightKeywords) {
-      innerHTML = renderElementVariables(innerHTML, _cached_Keywords);
-    }
-    if (syntaxOptions.highlightValues) {
-      innerHTML = renderElementVariables(innerHTML, _cached_Values);
-    }
-    if (syntaxOptions.highlightAttributes && language.isMarkUp) {
+    innerHTML = renderElementVariables(innerHTML, _cached_Keywords);
+    innerHTML = renderElementVariables(innerHTML, _cached_Values);
+    if (language.isMarkUp) {
       innerHTML = renderElementVariables(innerHTML, _cached_Attributes);
     }
     return innerHTML;
