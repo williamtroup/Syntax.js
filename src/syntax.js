@@ -188,6 +188,8 @@
                                 isPreFormatted = false,
                                 descriptionText = null;
 
+                            fireCustomTrigger( syntaxOptions.onBeforeRenderComplete, element );
+
                             if ( element.children.length > 0 && element.children[ 0 ].nodeName.toLowerCase() === "pre" ) {
                                 innerHTML = element.children[ 0 ].innerHTML;
                                 isPreFormatted = true;
@@ -1006,6 +1008,7 @@
         options.onStringRender = getDefaultFunction( options.onStringRender, null );
         options.onCommentRender = getDefaultFunction( options.onCommentRender, null );
         options.onPrint = getDefaultFunction( options.onPrint, null );
+        options.onBeforeRenderComplete = getDefaultFunction( options.onBeforeRenderComplete, null );
 
         return options;
     }
