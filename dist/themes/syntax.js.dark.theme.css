@@ -18,23 +18,22 @@
         --color-lighter-gray: #C0C0C0;
 
         /* Containers */
-        --container-background-color-container: #1c2128;
-        --container-border-color-container: #454c56;
-        --container-background-color-syntax: #2d333b;
-        --container-border-color-syntax: var(--container-border-color-container);
-        --container-background-color-numbers: #24292e;
-        --container-border-color-numbers: var(--container-border-color-container);
-        --container-background-color-description: var(--container-background-color-numbers);
-        --container-border-color-description: var(--container-border-color-numbers);
+        --container-background-color: #1c2128;
+        --container-border-color: #454c56;
+        --container-syntax-background-color: #2d333b;
+        --container-syntax-border-color: var(--container-border-color);
+        --container-numbers-background-color: #24292e;
+        --container-numbers-border-color: var(--container-border-color);
+        --container-description-background-color: var(--container-numbers-background-color);
+        --container-description-border-color: var(--container-numbers-border-color);
 
         /* Tabs */
         --tab-background-color: #F5F5F5;
         --tab-text-color: #3b3a3a;
         --tab-border-color: var(--tab-text-color);
-        --tab-active-background-color: var(--container-background-color-syntax);
+        --tab-active-background-color: var(--container-syntax-background-color);
         --tab-active-text-color: var(--tab-background-color);
-        --tab-active-border-color: var(--container-border-color-syntax);
-        
+        --tab-active-border-color: var(--container-syntax-border-color);
         --tab-hover-background-color: var(--color-lighter-gray);
         --tab-hover-text-color: var(--tab-text-color);
         --tab-hover-border-color: var(--tab-text-color);
