@@ -59,7 +59,7 @@
 
     // Borders
     --border-radius: 0.5rem;
-    --border-style-scrollbar: inset 0 0 6px --color-dark-gray;
+    --border-style-scrollbar: inset 0 0 6px var(--color-dark-gray);
     --border-size: 0.5px;
 
     // Transitions

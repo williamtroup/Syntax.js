@@ -16,6 +16,7 @@
 
 #### **Fixes:**
 - Fixed a fault that prevent non-highlighted keywords and values from rendered correctly when "highlightKeywords" and "highlightValues" are set to false.
+- Fixed a fault that caused the custom scroll bars to now show the right border color.
 
 <br>
 
