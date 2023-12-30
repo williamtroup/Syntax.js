@@ -2,6 +2,9 @@
 
 ## Version 2.3.0:
 
+#### **Languages:**
+- Added a new JSON property called "wordRegEx", which states the Regular Expression that is used for looking up keywords, values, attributes, and tags (optional, use %word% to state the lookup).
+
 #### **Configuration Options:**
 - Added new configuration option "allowHtmlInTextDisplay" (defaults to true), which states if HTML can be used in the text displays (buttons, tabs, descriptions, etc).
 

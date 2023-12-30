@@ -13,7 +13,7 @@ Below is the format that is expected for a language object when calling "addLang
 | *string* | friendlyName | The friendly name to show for the language (optional). |
 | *string* | keywordsCasing | States what casing should be shown for the keywords when rendered (optional, defaults to "initial", accepts "uppercase" and "lowercase"). |
 | *boolean* | isMarkUp | States if the language is a markup based language (defaults to false). |
-
+| *string* | wordRegEx | The Regular Expression that is used for looking up keywords, values, attributes, and tags (optional, use %word% to state the lookup). |
 
 ## Example:
 <br/>

@@ -582,7 +582,7 @@
                 keywordVariable = "KW" + _cached_Keywords_Count.toString() + ";",
                 keywordReplacement = null,
                 regExFlags = caseSensitive ? "g" : "gi",
-                regEx = new RegExp( getWordRegEx( keyword ), regExFlags );
+                regEx = new RegExp( getWordRegEx( keyword, language ), regExFlags );
 
             if ( syntaxOptions.highlightKeywords ) {
                 if ( isDefinedFunction( syntaxOptions.onKeywordClicked ) ) {
@@ -629,7 +629,7 @@
 
             if ( keywords.indexOf( tag ) > -1 ) {
                 var keywordVariable = "KW" + _cached_Keywords_Count.toString() + ";",
-                    regExReplace = new RegExp( getWordRegEx( tag ), regExFlags ),
+                    regExReplace = new RegExp( getWordRegEx( tag, language ), regExFlags ),
                     keywordReplacement = null,
                     replacementTagDisplay = getDisplayTextTestCasing( tag, keywordsCasing );
 
@@ -670,7 +670,7 @@
                 valueVariable = "VAL" + _cached_Values_Count.toString() + ";",
                 valueReplacement = null,
                 regExFlags = caseSensitive ? "g" : "gi",
-                regEx = new RegExp( getWordRegEx( value ), regExFlags );
+                regEx = new RegExp( getWordRegEx( value, language ), regExFlags );
 
             if ( syntaxOptions.highlightValues ) {
                 if ( isDefinedFunction( syntaxOptions.onValueClicked ) ) {
@@ -709,7 +709,7 @@
                 attributeVariable = "ATTR" + _cached_Attributes_Count.toString() + ";",
                 attributeReplacement = null,
                 regExFlags = caseSensitive ? "g" : "gi",
-                regEx = new RegExp( getWordRegEx( attribute ), regExFlags );
+                regEx = new RegExp( getWordRegEx( attribute, language ), regExFlags );
 
             if ( syntaxOptions.highlightAttributes ) {
                 if ( isDefinedFunction( syntaxOptions.onAttributeClicked ) ) {
@@ -938,8 +938,14 @@
         return keyword;
     }
 
-    function getWordRegEx( word ) {
-        return "(?<=^|[^-])\\b" + word + "\\b(?=[^-]|$)";
+    function getWordRegEx( word, language ) {
+        var result = "(?<=^|[^-])\\b" + word + "\\b(?=[^-]|$)";
+
+        if ( isDefinedString( language.wordRegEx ) ) {
+            result = language.wordRegEx.replace( "%word%", word );
+        }
+
+        return result;
     }
 
 

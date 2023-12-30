@@ -399,7 +399,7 @@
       var keywordVariable = "KW" + _cached_Keywords_Count.toString() + ";";
       var keywordReplacement = null;
       var regExFlags = caseSensitive ? "g" : "gi";
-      var regEx = new RegExp(getWordRegEx(keyword), regExFlags);
+      var regEx = new RegExp(getWordRegEx(keyword, language), regExFlags);
       if (syntaxOptions.highlightKeywords) {
         if (isDefinedFunction(syntaxOptions.onKeywordClicked)) {
           keywordReplacement = '<span class="keyword-clickable">' + keywordDisplay + "</span>";
@@ -436,7 +436,7 @@
       tag = tag.split(_string.space)[0];
       if (keywords.indexOf(tag) > -1) {
         var keywordVariable = "KW" + _cached_Keywords_Count.toString() + ";";
-        var regExReplace = new RegExp(getWordRegEx(tag), regExFlags);
+        var regExReplace = new RegExp(getWordRegEx(tag, language), regExFlags);
         var keywordReplacement = null;
         var replacementTagDisplay = getDisplayTextTestCasing(tag, keywordsCasing);
         if (syntaxOptions.highlightKeywords) {
@@ -469,7 +469,7 @@
       var valueVariable = "VAL" + _cached_Values_Count.toString() + ";";
       var valueReplacement = null;
       var regExFlags = caseSensitive ? "g" : "gi";
-      var regEx = new RegExp(getWordRegEx(value), regExFlags);
+      var regEx = new RegExp(getWordRegEx(value, language), regExFlags);
       if (syntaxOptions.highlightValues) {
         if (isDefinedFunction(syntaxOptions.onValueClicked)) {
           valueReplacement = '<span class="value-clickable">' + value + "</span>";
@@ -501,7 +501,7 @@
       var attributeVariable = "ATTR" + _cached_Attributes_Count.toString() + ";";
       var attributeReplacement = null;
       var regExFlags = caseSensitive ? "g" : "gi";
-      var regEx = new RegExp(getWordRegEx(attribute), regExFlags);
+      var regEx = new RegExp(getWordRegEx(attribute, language), regExFlags);
       if (syntaxOptions.highlightAttributes) {
         if (isDefinedFunction(syntaxOptions.onAttributeClicked)) {
           attributeReplacement = '<span class="attribute-clickable">' + attribute + "</span>";
@@ -685,8 +685,12 @@
     }
     return keyword;
   }
-  function getWordRegEx(word) {
-    return "(?<=^|[^-])\\b" + word + "\\b(?=[^-]|$)";
+  function getWordRegEx(word, language) {
+    var result = "(?<=^|[^-])\\b" + word + "\\b(?=[^-]|$)";
+    if (isDefinedString(language.wordRegEx)) {
+      result = language.wordRegEx.replace("%word%", word);
+    }
+    return result;
   }
   function getBindingOptions(newOptions) {
     var options = !isDefinedObject(newOptions) ? {} : newOptions;
