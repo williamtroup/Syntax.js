@@ -197,6 +197,7 @@
                             
                             var innerHTMLCopy = innerHTML.trim(),
                                 numbers = null,
+                                description = null,
                                 elementId = element.id;
 
                             if ( !isDefinedString( elementId ) ) {
@@ -238,7 +239,7 @@
                             codeContainer.appendChild( tabContents );
 
                             if ( isDefinedString( descriptionText ) ) {
-                                var description = createElement( "div", "description" );
+                                description = createElement( "div", "description" );
                                 tabContents.appendChild( description );
 
                                 setNodeText( description, descriptionText );
@@ -260,7 +261,7 @@
                                 innerHTML = encodeMarkUpCharacters( innerHTML );
                             }
 
-                            renderElementCompletedHTML( element, numbers, syntax, innerHTML, syntaxOptions, isPreFormatted );
+                            renderElementCompletedHTML( element, description, numbers, syntax, innerHTML, syntaxOptions, isPreFormatted );
                             fireCustomTrigger( syntaxOptions.onRenderComplete, element );
 
                             _elements.push( element );
@@ -786,7 +787,7 @@
         return innerHTML;
     }
 
-    function renderElementCompletedHTML( element, numbers, syntax, innerHTML, syntaxOptions, isPreFormatted ) {
+    function renderElementCompletedHTML( element, description, numbers, syntax, innerHTML, syntaxOptions, isPreFormatted ) {
         var lines = innerHTML.split( _string.newLine ),
             linesLength = lines.length,
             linesLengthStringLength = linesLength.toString().length,
@@ -807,6 +808,12 @@
         }
 
         if ( syntaxOptions.doubleClickToSelectAll ) {
+            if ( isDefined( description ) ) {
+                description.ondblclick = function() {
+                    selectTextInElement( codeContainer );
+                };
+            }
+
             if ( isDefined( numbers ) ) {
                 numbers.ondblclick = function() {
                     selectTextInElement( codeContainer );

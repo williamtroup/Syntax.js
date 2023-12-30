@@ -11,6 +11,9 @@
 #### **Configuration Options:**
 - Added new configuration option "allowHtmlInTextDisplay" (defaults to true), which states if HTML can be used in the text displays (buttons, tabs, descriptions, etc).
 
+#### **General Improvements:**
+- Double-clicking in the description container (when tabs are used) will now select all the code (if the setting is turned on).
+
 ### **CSS:**
 - Renamed some of the ":root" variables to they are easier to read.
 

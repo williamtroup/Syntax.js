@@ -107,6 +107,7 @@
               }
               var innerHTMLCopy = innerHTML.trim();
               var numbers = null;
+              var description = null;
               var elementId = element.id;
               if (!isDefinedString(elementId)) {
                 elementId = newGuid();
@@ -137,7 +138,7 @@
               tabContents = createElement("div", "tab-contents");
               codeContainer.appendChild(tabContents);
               if (isDefinedString(descriptionText)) {
-                var description = createElement("div", "description");
+                description = createElement("div", "description");
                 tabContents.appendChild(description);
                 setNodeText(description, descriptionText);
               }
@@ -153,7 +154,7 @@
               } else {
                 innerHTML = encodeMarkUpCharacters(innerHTML);
               }
-              renderElementCompletedHTML(element, numbers, syntax, innerHTML, syntaxOptions, isPreFormatted);
+              renderElementCompletedHTML(element, description, numbers, syntax, innerHTML, syntaxOptions, isPreFormatted);
               fireCustomTrigger(syntaxOptions.onRenderComplete, element);
               _elements.push(element);
               _cached_Keywords = {};
@@ -563,7 +564,7 @@
     }
     return innerHTML;
   }
-  function renderElementCompletedHTML(element, numbers, syntax, innerHTML, syntaxOptions, isPreFormatted) {
+  function renderElementCompletedHTML(element, description, numbers, syntax, innerHTML, syntaxOptions, isPreFormatted) {
     var lines = innerHTML.split(_string.newLine);
     var linesLength = lines.length;
     var linesLengthStringLength = linesLength.toString().length;
@@ -581,6 +582,11 @@
       }
     }
     if (syntaxOptions.doubleClickToSelectAll) {
+      if (isDefined(description)) {
+        description.ondblclick = function() {
+          selectTextInElement(codeContainer);
+        };
+      }
       if (isDefined(numbers)) {
         numbers.ondblclick = function() {
           selectTextInElement(codeContainer);
