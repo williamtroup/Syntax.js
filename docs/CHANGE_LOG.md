@@ -1,6 +1,7 @@
 # Syntax.js - Change Log:
 
 ## Version 2.3.1:
+- Comments are now italic by default.
 - 
 
 <br>

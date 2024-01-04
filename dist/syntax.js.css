@@ -316,10 +316,12 @@ div.syntax-highlight div.code div.tab-contents div.syntax p span.no-highlight-at
 }
 code.syntax-highlight div.code div.tab-contents div.syntax p span.comment,
 div.syntax-highlight div.code div.tab-contents div.syntax p span.comment {
+  font-style: italic;
   color: var(--color-comment);
 }
 code.syntax-highlight div.code div.tab-contents div.syntax p span.multi-line-comment,
 div.syntax-highlight div.code div.tab-contents div.syntax p span.multi-line-comment {
+  font-style: italic;
   color: var(--color-multi-line-comment);
 }
 code.syntax-highlight div.code div.tab-contents div.syntax p span.string,
