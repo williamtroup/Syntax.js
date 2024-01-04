@@ -72,11 +72,21 @@ Fires when the "Print" button is pressed.
 <br>
 ***Parameter:*** code: '*string*' - The string that was sent to the printer.
 
+
+<br>
+
+## For Buttons:
+
+### options.onButtonsClosed():
+Fires when the buttons are closed.
+
+### options.onButtonsOpened():
+Fires when the buttons are opened.
+
 <br/>
 
 
 ## Binding Example:
-<br/>
 
 ```markdown
 <code data-syntax-language="javascript" data-syntax-options="{ 'onPrint': yourCustomJsFunction }">

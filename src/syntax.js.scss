@@ -1,5 +1,5 @@
 /*
- * Syntax.js Library v2.3.0
+ * Syntax.js Library v2.3.1
  *
  * Copyright 2023 Bunoon
  * Released under the MIT License
@@ -288,10 +288,12 @@ div.syntax-highlight {
                     }
     
                     span.comment {
+                        font-style: italic;
                         color: var(--color-comment);
                     }
     
                     span.multi-line-comment {
+                        font-style: italic;
                         color: var(--color-multi-line-comment);
                     }
     

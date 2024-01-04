@@ -14,7 +14,6 @@ Fires when a tab is opened.
 
 
 ## Binding Example:
-<br/>
 
 ```markdown
 <code data-syntax-language="tabbed">

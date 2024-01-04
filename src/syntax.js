@@ -4,7 +4,7 @@
  * A lightweight, and easy-to-use, JavaScript library for code syntax highlighting!
  * 
  * @file        syntax.js
- * @version     v2.3.0
+ * @version     v2.3.1
  * @author      Bunoon
  * @license     MIT License
  * @copyright   Bunoon 2023
@@ -452,6 +452,12 @@
                     }
 
                     openButton.innerText = areButtonsVisible ? _configuration.buttonsOpenerText : _configuration.buttonsCloserText;
+
+                    if ( areButtonsVisible ) {
+                        fireCustomTrigger( syntaxOptions.onButtonsClosed );
+                    } else {
+                        fireCustomTrigger( syntaxOptions.onButtonsOpened );
+                    }
                 };
 
             } else if ( !syntaxOptions.buttonsVisible && buttonsElementsLength <= syntaxOptions.maximumButtons ) {
@@ -1016,6 +1022,8 @@
         options.onCommentRender = getDefaultFunction( options.onCommentRender, null );
         options.onPrint = getDefaultFunction( options.onPrint, null );
         options.onBeforeRenderComplete = getDefaultFunction( options.onBeforeRenderComplete, null );
+        options.onButtonsOpened = getDefaultFunction( options.onButtonsOpened, null );
+        options.onButtonsClosed = getDefaultFunction( options.onButtonsClosed, null );
 
         return options;
     }
@@ -1696,7 +1704,7 @@
      * @returns     {string}                                                The version number.
      */
     this.getVersion = function() {
-        return "2.3.0";
+        return "2.3.1";
     };
 
 

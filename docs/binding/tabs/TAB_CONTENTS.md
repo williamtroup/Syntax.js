@@ -14,7 +14,6 @@ Below are all the JSON properties that can be passed in the "data-syntax-tab-con
 
 
 ## Binding Example: Without Options:
-<br/>
 
 ```markdown
 <code data-syntax-language="tabbed">
@@ -35,7 +34,6 @@ Below are all the JSON properties that can be passed in the "data-syntax-tab-con
 
 
 ## Binding Example: With Options
-<br/>
 
 ```markdown
 <code data-syntax-language="tabbed">
