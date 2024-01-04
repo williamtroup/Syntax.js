@@ -35,6 +35,7 @@ Returns the code inside a specific element (without rendering colors).
 <br>
 ***Returns***: '*string*' - The code in the element.
 <br>
+<br>
 
 
 ## Destroying:
@@ -50,6 +51,7 @@ Reverts a Syntax element back to its original state (without render attributes).
 Reverts all rendered Syntax elements back to their original state (without render attributes).
 <br>
 ***Returns***: '*Object*' - The Syntax.js class instance.
+<br>
 <br>
 
 
@@ -87,6 +89,7 @@ Returns all the languages that can be rendered.
 <br>
 ***Returns***: '*Object*' - The object that contains the languages.
 <br>
+<br>
 
 
 ## Language Aliases:
@@ -123,6 +126,7 @@ Returns all the language aliases.
 <br>
 ***Returns***: '*Object*' - The object that contains the aliases.
 <br>
+<br>
 
 
 ## Configuration:
@@ -134,6 +138,7 @@ Sets the specific configuration options that should be used.
 <br>
 ***Returns***: '*Object*' - The Syntax.js class instance.
 <br>
+<br>
 
 
 ## Additional Data:
@@ -143,10 +148,10 @@ Returns the version of Syntax.js.
 <br>
 ***Returns***: '*string*' - The version number.
 <br>
+<br>
 
 
 ## Example:
-<br/>
 
 ```markdown
 <script> 

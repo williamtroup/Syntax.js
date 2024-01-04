@@ -2,7 +2,9 @@
 
 ## Version 2.3.1:
 - Comments are now italic by default.
-- 
+- Added a new binding custom trigger called "onButtonsClosed", which states an event that should be triggered when the buttons are closed.
+- Added a new binding custom trigger called "onButtonsOpened", which states an event that should be triggered when the buttons are closed.
+- Minor documentation improvements.
 
 <br>
 

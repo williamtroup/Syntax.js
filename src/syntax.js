@@ -452,6 +452,12 @@
                     }
 
                     openButton.innerText = areButtonsVisible ? _configuration.buttonsOpenerText : _configuration.buttonsCloserText;
+
+                    if ( areButtonsVisible ) {
+                        fireCustomTrigger( syntaxOptions.onButtonsClosed );
+                    } else {
+                        fireCustomTrigger( syntaxOptions.onButtonsOpened );
+                    }
                 };
 
             } else if ( !syntaxOptions.buttonsVisible && buttonsElementsLength <= syntaxOptions.maximumButtons ) {
@@ -1016,6 +1022,8 @@
         options.onCommentRender = getDefaultFunction( options.onCommentRender, null );
         options.onPrint = getDefaultFunction( options.onPrint, null );
         options.onBeforeRenderComplete = getDefaultFunction( options.onBeforeRenderComplete, null );
+        options.onButtonsOpened = getDefaultFunction( options.onButtonsOpened, null );
+        options.onButtonsClosed = getDefaultFunction( options.onButtonsClosed, null );
 
         return options;
     }
