@@ -87,7 +87,6 @@ Fires when the buttons are opened.
 
 
 ## Binding Example:
-<br/>
 
 ```markdown
 <code data-syntax-language="javascript" data-syntax-options="{ 'onPrint': yourCustomJsFunction }">

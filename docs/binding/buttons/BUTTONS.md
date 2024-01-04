@@ -13,7 +13,6 @@ Below are all the JSON properties that can be passed in the "data-syntax-buttons
 
 
 ## Binding Example:
-<br/>
 
 ```markdown
 <code data-syntax-language="javascript" data-syntax-buttons="[ { 'text': 'Button 1', 'onClick': yourJsFunction } ]">

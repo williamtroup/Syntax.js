@@ -13,7 +13,6 @@ Below are all the options that can be used for the "data-syntax-language" bindin
 
 
 ## Binding Example: *language*:
-<br/>
 
 ```markdown
 <code data-syntax-language="javascript">
@@ -26,7 +25,6 @@ Below are all the options that can be used for the "data-syntax-language" bindin
 
 
 ## Binding Example: Unknown
-<br/>
 
 ```markdown
 <code data-syntax-language="unknown">
@@ -39,7 +37,6 @@ Below are all the options that can be used for the "data-syntax-language" bindin
 
 
 ## Binding Example: Tabbed
-<br/>
 
 ```markdown
 <code data-syntax-language="tabbed">
