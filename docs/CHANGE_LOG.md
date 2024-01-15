@@ -1,7 +1,7 @@
 # Syntax.js - Change Log:
 
 ## Version 2.4.0:
--
+- BREAKING: All ":root" variables now start with "--syntax-js-", which will prevent collisions with other libraries.
 
 <br>
 
