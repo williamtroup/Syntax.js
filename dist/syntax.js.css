@@ -1,50 +1,50 @@
 /*
- * Syntax.js Library v2.3.1
+ * Syntax.js Library v2.4.0
  *
  * Copyright 2023 Bunoon
  * Released under the MIT License
  */
 :root {
-  --color-keyword: #A71500;
-  --color-value: #F28C28;
-  --color-attribute: #730dd9;
-  --color-keyword-hover: #FF0000;
-  --color-value-hover: #FFAC1C;
-  --color-attribute-hover: #a656f5;
-  --color-comment: #78b13f;
-  --color-multi-line-comment: var(--color-comment);
-  --color-string: #484dd2;
-  --color-multi-line-string: var(--color-string);
-  --color-black: #3b3a3a;
-  --color-white: #F5F5F5;
-  --color-dark-gray: #808080;
-  --color-gray: #BBBBBB;
-  --color-lighter-gray: #C0C0C0;
-  --container-background-color: #e8e6e6;
-  --container-border-color: var(--color-black);
-  --container-syntax-background-color: #EEEEEE;
-  --container-syntax-border-color: #CCCCCC;
-  --container-numbers-background-color: #dddddd;
-  --container-numbers-border-color: var(--color-gray);
-  --container-description-background-color: var(--container-numbers-background-color);
-  --container-description-border-color: var(--container-numbers-border-color);
-  --tab-background-color: var(--color-white);
-  --tab-text-color: var(--color-black);
-  --tab-border-color: var(--color-black);
-  --tab-active-background-color: var(--color-black);
-  --tab-active-text-color: var(--color-white);
-  --tab-active-border-color: var(--color-black);
-  --tab-hover-background-color: var(--container-numbers-background-color);
-  --tab-hover-text-color: var(--color-black);
-  --tab-hover-border-color: var(--color-black);
-  --button-background-color: var(--color-black);
-  --button-text-color: var(--color-white);
-  --button-hover-background-color: var(--color-dark-gray);
-  --button-hover-text-color: var(--color-white);
-  --border-radius: 0.5rem;
-  --border-style-scrollbar: inset 0 0 6px var(--color-dark-gray);
-  --border-size: 0.5px;
-  --transition: all .3s;
+  --syntax-js-color-keyword: #A71500;
+  --syntax-js-color-value: #F28C28;
+  --syntax-js-color-attribute: #730dd9;
+  --syntax-js-color-keyword-hover: #FF0000;
+  --syntax-js-color-value-hover: #FFAC1C;
+  --syntax-js-color-attribute-hover: #a656f5;
+  --syntax-js-color-comment: #78b13f;
+  --syntax-js-color-multi-line-comment: var(--syntax-js-color-comment);
+  --syntax-js-color-string: #484dd2;
+  --syntax-js-color-multi-line-string: var(--syntax-js-color-string);
+  --syntax-js-color-black: #3b3a3a;
+  --syntax-js-color-white: #F5F5F5;
+  --syntax-js-color-dark-gray: #808080;
+  --syntax-js-color-gray: #BBBBBB;
+  --syntax-js-color-lighter-gray: #C0C0C0;
+  --syntax-js-container-background-color: #e8e6e6;
+  --syntax-js-container-border-color: var(--syntax-js-color-black);
+  --syntax-js-container-syntax-background-color: #EEEEEE;
+  --syntax-js-container-syntax-border-color: #CCCCCC;
+  --syntax-js-container-numbers-background-color: #dddddd;
+  --syntax-js-container-numbers-border-color: var(--syntax-js-color-gray);
+  --syntax-js-container-description-background-color: var(--syntax-js-container-numbers-background-color);
+  --syntax-js-container-description-border-color: var(--syntax-js-container-numbers-border-color);
+  --syntax-js-tab-background-color: var(--syntax-js-color-white);
+  --syntax-js-tab-text-color: var(--syntax-js-color-black);
+  --syntax-js-tab-border-color: var(--syntax-js-color-black);
+  --syntax-js-tab-active-background-color: var(--syntax-js-color-black);
+  --syntax-js-tab-active-text-color: var(--syntax-js-color-white);
+  --syntax-js-tab-active-border-color: var(--syntax-js-color-black);
+  --syntax-js-tab-hover-background-color: var(--syntax-js-container-numbers-background-color);
+  --syntax-js-tab-hover-text-color: var(--syntax-js-color-black);
+  --syntax-js-tab-hover-border-color: var(--syntax-js-color-black);
+  --syntax-js-button-background-color: var(--syntax-js-color-black);
+  --syntax-js-button-text-color: var(--syntax-js-color-white);
+  --syntax-js-button-hover-background-color: var(--syntax-js-color-dark-gray);
+  --syntax-js-button-hover-text-color: var(--syntax-js-color-white);
+  --syntax-js-border-radius: 0.5rem;
+  --syntax-js-border-style-scrollbar: inset 0 0 6px var(--syntax-js-color-dark-gray);
+  --syntax-js-border-size: 0.5px;
+  --syntax-js-transition: all .3s;
 }
 
 /*
@@ -59,14 +59,14 @@ div.syntax-highlight {
 }
 code.syntax-highlight div.code,
 div.syntax-highlight div.code {
-  background-color: var(--container-background-color);
-  border-radius: var(--border-radius);
+  background-color: var(--syntax-js-container-background-color);
+  border-radius: var(--syntax-js-border-radius);
   padding: 15px;
   overflow-x: auto;
   overflow-y: hidden;
   position: relative;
-  border: var(--border-size) solid var(--container-border-color);
-  color: var(--color-black);
+  border: var(--syntax-js-border-size) solid var(--syntax-js-container-border-color);
+  color: var(--syntax-js-color-black);
 }
 code.syntax-highlight div.code div.tabs,
 div.syntax-highlight div.code div.tabs {
@@ -87,7 +87,7 @@ div.syntax-highlight div.code div.tabs button.tab-active {
   padding: 10px;
   padding-left: 15px;
   padding-right: 15px;
-  border-radius: var(--border-radius);
+  border-radius: var(--syntax-js-border-radius);
   margin: 0 !important;
   margin-right: 10px !important;
   cursor: default;
@@ -101,23 +101,23 @@ div.syntax-highlight div.code div.tabs button.tab-active:last-child {
 }
 code.syntax-highlight div.code div.tabs button.tab,
 div.syntax-highlight div.code div.tabs button.tab {
-  background-color: var(--tab-background-color);
-  color: var(--tab-text-color);
-  border: var(--border-size) solid var(--tab-border-color);
+  background-color: var(--syntax-js-tab-background-color);
+  color: var(--syntax-js-tab-text-color);
+  border: var(--syntax-js-border-size) solid var(--syntax-js-tab-border-color);
 }
 code.syntax-highlight div.code div.tabs button.tab:hover,
 div.syntax-highlight div.code div.tabs button.tab:hover {
   cursor: pointer;
-  background-color: var(--tab-hover-background-color);
-  color: var(--tab-hover-text-color);
-  border: var(--border-size) solid var(--tab-hover-border-color);
-  transition: var(--transition);
+  background-color: var(--syntax-js-tab-hover-background-color);
+  color: var(--syntax-js-tab-hover-text-color);
+  border: var(--syntax-js-border-size) solid var(--syntax-js-tab-hover-border-color);
+  transition: var(--syntax-js-transition);
 }
 code.syntax-highlight div.code div.tabs button.tab-active,
 div.syntax-highlight div.code div.tabs button.tab-active {
-  background-color: var(--tab-active-background-color);
-  color: var(--tab-active-text-color);
-  border: var(--border-size) solid var(--tab-active-border-color);
+  background-color: var(--syntax-js-tab-active-background-color);
+  color: var(--syntax-js-tab-active-text-color);
+  border: var(--syntax-js-border-size) solid var(--syntax-js-tab-active-border-color);
   font-weight: 700;
 }
 code.syntax-highlight div.code div.tab-contents,
@@ -138,14 +138,14 @@ div.syntax-highlight div.code div.tab-contents div.description {
   user-select: none;
   cursor: default;
   margin-right: 15px;
-  background-color: var(--container-description-background-color);
+  background-color: var(--syntax-js-container-description-background-color);
   padding: 10px;
   padding-left: 15px;
   padding-right: 15px;
-  border-radius: var(--border-radius);
+  border-radius: var(--syntax-js-border-radius);
   text-align: left;
-  border: var(--border-size) solid var(--container-description-border-color);
-  color: var(--color-black);
+  border: var(--syntax-js-border-size) solid var(--syntax-js-container-description-border-color);
+  color: var(--syntax-js-color-black);
   width: 150px;
   display: none;
 }
@@ -164,21 +164,21 @@ div.syntax-highlight div.code div.tab-contents div.numbers {
   user-select: none;
   cursor: default;
   margin-right: 15px;
-  background-color: var(--container-numbers-background-color);
+  background-color: var(--syntax-js-container-numbers-background-color);
   padding: 10px;
   padding-left: 15px;
   padding-right: 15px;
-  border-radius: var(--border-radius);
+  border-radius: var(--syntax-js-border-radius);
   text-align: right;
   font-weight: 800 !important;
-  border: var(--border-size) solid var(--container-numbers-border-color);
+  border: var(--syntax-js-border-size) solid var(--syntax-js-container-numbers-border-color);
   display: none;
 }
 code.syntax-highlight div.code div.tab-contents div.numbers p,
 div.syntax-highlight div.code div.tab-contents div.numbers p {
   margin: 0;
   text-wrap: nowrap;
-  color: var(--color-black);
+  color: var(--syntax-js-color-black);
 }
 @media (min-width: 768px) {
   code.syntax-highlight div.code div.tab-contents div.numbers,
@@ -190,9 +190,9 @@ code.syntax-highlight div.code div.tab-contents div.syntax,
 div.syntax-highlight div.code div.tab-contents div.syntax {
   flex-grow: 1;
   padding: 10px;
-  border-radius: var(--border-radius);
-  background-color: var(--container-syntax-background-color);
-  border: var(--border-size) solid var(--container-syntax-border-color);
+  border-radius: var(--syntax-js-border-radius);
+  background-color: var(--syntax-js-container-syntax-background-color);
+  border: var(--syntax-js-border-size) solid var(--syntax-js-container-syntax-border-color);
   position: relative;
   overflow: hidden;
 }
@@ -214,14 +214,14 @@ code.syntax-highlight div.code div.tab-contents div.syntax div.buttons button.bu
 code.syntax-highlight div.code div.tab-contents div.syntax div.buttons div.language-label,
 div.syntax-highlight div.code div.tab-contents div.syntax div.buttons button.button,
 div.syntax-highlight div.code div.tab-contents div.syntax div.buttons div.language-label {
-  color: var(--button-text-color);
-  background-color: var(--button-background-color);
+  color: var(--syntax-js-button-text-color);
+  background-color: var(--syntax-js-button-background-color);
   padding: 7px;
   padding-left: 10px;
   padding-right: 10px;
   display: inline-block;
   border: none;
-  border-right: 1px dotted var(--color-gray);
+  border-right: 1px dotted var(--syntax-js-color-gray);
   font-size: small;
   margin: 0 !important;
   outline: none !important;
@@ -230,13 +230,13 @@ code.syntax-highlight div.code div.tab-contents div.syntax div.buttons button.bu
 code.syntax-highlight div.code div.tab-contents div.syntax div.buttons div.language-label:first-child,
 div.syntax-highlight div.code div.tab-contents div.syntax div.buttons button.button:first-child,
 div.syntax-highlight div.code div.tab-contents div.syntax div.buttons div.language-label:first-child {
-  border-bottom-left-radius: var(--border-radius);
+  border-bottom-left-radius: var(--syntax-js-border-radius);
 }
 code.syntax-highlight div.code div.tab-contents div.syntax div.buttons button.button:last-child,
 code.syntax-highlight div.code div.tab-contents div.syntax div.buttons div.language-label:last-child,
 div.syntax-highlight div.code div.tab-contents div.syntax div.buttons button.button:last-child,
 div.syntax-highlight div.code div.tab-contents div.syntax div.buttons div.language-label:last-child {
-  border-top-right-radius: var(--border-radius);
+  border-top-right-radius: var(--syntax-js-border-radius);
   border-right: none;
 }
 code.syntax-highlight div.code div.tab-contents div.syntax div.buttons button.button-opener,
@@ -246,22 +246,22 @@ div.syntax-highlight div.code div.tab-contents div.syntax div.buttons button.but
 code.syntax-highlight div.code div.tab-contents div.syntax div.buttons div.language-label,
 div.syntax-highlight div.code div.tab-contents div.syntax div.buttons div.language-label {
   cursor: default;
-  color: var(--color-gray);
+  color: var(--syntax-js-color-gray);
   font-weight: 700;
   flex: 1;
 }
 code.syntax-highlight div.code div.tab-contents div.syntax div.buttons button.button:hover,
 div.syntax-highlight div.code div.tab-contents div.syntax div.buttons button.button:hover {
   cursor: pointer;
-  background-color: var(--button-hover-background-color);
-  color: var(--button-hover-text-color);
-  transition: var(--transition);
+  background-color: var(--syntax-js-button-hover-background-color);
+  color: var(--syntax-js-button-hover-text-color);
+  transition: var(--syntax-js-transition);
 }
 code.syntax-highlight div.code div.tab-contents div.syntax p,
 div.syntax-highlight div.code div.tab-contents div.syntax p {
   margin: 0;
   text-wrap: initial;
-  color: var(--color-black);
+  color: var(--syntax-js-color-black);
 }
 @media (min-width: 768px) {
   code.syntax-highlight div.code div.tab-contents div.syntax p,
@@ -274,14 +274,14 @@ code.syntax-highlight div.code div.tab-contents div.syntax p span.keyword-clicka
 div.syntax-highlight div.code div.tab-contents div.syntax p span.keyword,
 div.syntax-highlight div.code div.tab-contents div.syntax p span.keyword-clickable {
   font-weight: 700;
-  color: var(--color-keyword);
+  color: var(--syntax-js-color-keyword);
 }
 code.syntax-highlight div.code div.tab-contents div.syntax p span.keyword-clickable:hover,
 code.syntax-highlight div.code div.tab-contents div.syntax p span.no-highlight-keyword-clickable:hover,
 div.syntax-highlight div.code div.tab-contents div.syntax p span.keyword-clickable:hover,
 div.syntax-highlight div.code div.tab-contents div.syntax p span.no-highlight-keyword-clickable:hover {
-  color: var(--color-keyword-hover);
-  transition: var(--transition);
+  color: var(--syntax-js-color-keyword-hover);
+  transition: var(--syntax-js-transition);
   cursor: pointer;
 }
 code.syntax-highlight div.code div.tab-contents div.syntax p span.value,
@@ -289,14 +289,14 @@ code.syntax-highlight div.code div.tab-contents div.syntax p span.value-clickabl
 div.syntax-highlight div.code div.tab-contents div.syntax p span.value,
 div.syntax-highlight div.code div.tab-contents div.syntax p span.value-clickable {
   font-weight: 700;
-  color: var(--color-value);
+  color: var(--syntax-js-color-value);
 }
 code.syntax-highlight div.code div.tab-contents div.syntax p span.value-clickable:hover,
 code.syntax-highlight div.code div.tab-contents div.syntax p span.no-highlight-value-clickable:hover,
 div.syntax-highlight div.code div.tab-contents div.syntax p span.value-clickable:hover,
 div.syntax-highlight div.code div.tab-contents div.syntax p span.no-highlight-value-clickable:hover {
-  color: var(--color-value-hover);
-  transition: var(--transition);
+  color: var(--syntax-js-color-value-hover);
+  transition: var(--syntax-js-transition);
   cursor: pointer;
 }
 code.syntax-highlight div.code div.tab-contents div.syntax p span.attribute,
@@ -304,33 +304,33 @@ code.syntax-highlight div.code div.tab-contents div.syntax p span.attribute-clic
 div.syntax-highlight div.code div.tab-contents div.syntax p span.attribute,
 div.syntax-highlight div.code div.tab-contents div.syntax p span.attribute-clickable {
   font-weight: 700;
-  color: var(--color-attribute);
+  color: var(--syntax-js-color-attribute);
 }
 code.syntax-highlight div.code div.tab-contents div.syntax p span.attribute-clickable:hover,
 code.syntax-highlight div.code div.tab-contents div.syntax p span.no-highlight-attribute-clickable:hover,
 div.syntax-highlight div.code div.tab-contents div.syntax p span.attribute-clickable:hover,
 div.syntax-highlight div.code div.tab-contents div.syntax p span.no-highlight-attribute-clickable:hover {
-  color: var(--color-attribute-hover);
-  transition: var(--transition);
+  color: var(--syntax-js-color-attribute-hover);
+  transition: var(--syntax-js-transition);
   cursor: pointer;
 }
 code.syntax-highlight div.code div.tab-contents div.syntax p span.comment,
 div.syntax-highlight div.code div.tab-contents div.syntax p span.comment {
   font-style: italic;
-  color: var(--color-comment);
+  color: var(--syntax-js-color-comment);
 }
 code.syntax-highlight div.code div.tab-contents div.syntax p span.multi-line-comment,
 div.syntax-highlight div.code div.tab-contents div.syntax p span.multi-line-comment {
   font-style: italic;
-  color: var(--color-multi-line-comment);
+  color: var(--syntax-js-color-multi-line-comment);
 }
 code.syntax-highlight div.code div.tab-contents div.syntax p span.string,
 div.syntax-highlight div.code div.tab-contents div.syntax p span.string {
-  color: var(--color-string);
+  color: var(--syntax-js-color-string);
 }
 code.syntax-highlight div.code div.tab-contents div.syntax p span.multi-line-string,
 div.syntax-highlight div.code div.tab-contents div.syntax p span.multi-line-string {
-  color: var(--color-multi-line-string);
+  color: var(--syntax-js-color-multi-line-string);
 }
 
 /*
@@ -342,17 +342,17 @@ div.syntax-highlight div.code div.tab-contents div.syntax p span.multi-line-stri
   width: 12px;
 }
 .custom-scroll-bars::-webkit-scrollbar-track {
-  -webkit-box-shadow: var(--border-style-scrollbar);
-  box-shadow: var(--border-style-scrollbar);
+  -webkit-box-shadow: var(--syntax-js-border-style-scrollbar);
+  box-shadow: var(--syntax-js-border-style-scrollbar);
 }
 .custom-scroll-bars::-webkit-scrollbar-thumb {
-  -webkit-box-shadow: var(--border-style-scrollbar);
-  box-shadow: var(--border-style-scrollbar);
-  background: var(--color-white);
+  -webkit-box-shadow: var(--syntax-js-border-style-scrollbar);
+  box-shadow: var(--syntax-js-border-style-scrollbar);
+  background: var(--syntax-js-color-white);
 }
 .custom-scroll-bars::-webkit-scrollbar-thumb:hover {
-  background-color: var(--color-white);
+  background-color: var(--syntax-js-color-white);
 }
 .custom-scroll-bars::-webkit-scrollbar-thumb:active {
-  background-color: var(--color-lighter-gray);
+  background-color: var(--syntax-js-color-lighter-gray);
 }/*# sourceMappingURL=syntax.js.css.map */
