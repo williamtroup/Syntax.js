@@ -6,7 +6,7 @@
         <title>Syntax.js</title>
         <description>A lightweight, and easy-to-use, JavaScript library for code syntax highlighting!</description>
         <authors>William Troup</authors>
-        <projectUrl>https://github.com/williamtroup/Syntax.js</projectUrl>
+        <projectUrl>https://www.william-troup.com/syntax-js/</projectUrl>
         <repository type="git" url="https://github.com/williamtroup/Syntax.js" branch="main" />
         <readme>README_NUGET.md</readme>
         <license type="expression">MIT</license>

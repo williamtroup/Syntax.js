@@ -4,6 +4,7 @@
     "description": "A lightweight, and easy-to-use, JavaScript library for code syntax highlighting!",
     "version": "2.4.0",
     "main": "dist/syntax.js",
+    "homepage": "https://www.william-troup.com/syntax-js/",
     "author": {
       "name": "Bunoon"
     },
