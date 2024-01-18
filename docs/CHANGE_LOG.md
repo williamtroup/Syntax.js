@@ -1,6 +1,7 @@
 # Syntax.js - Change Log:
 
 ## Version 2.4.1:
+- Added correct year to all files, and added missing year to all minimized/dist files.
 - 
 
 <br>
