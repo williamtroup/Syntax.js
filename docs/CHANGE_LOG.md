@@ -1,5 +1,13 @@
 # Syntax.js - Change Log:
 
+## Version 2.4.1:
+- Added correct year to all files, and added missing year to all minimized/dist files.
+- Fixed HTML files using the wrong formatting for meta, and imports being missing.
+- Improved the documentation in the main README files.
+
+<br>
+
+
 ## Version 2.4.0:
 - BREAKING: All ":root" variables now start with "--syntax-js-", which will prevent collisions with other libraries.
 - Updated project homepage URL.

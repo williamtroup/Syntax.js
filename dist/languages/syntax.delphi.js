@@ -1,4 +1,4 @@
-/*! Syntax.js v2.4.0 | (c) Bunoon | MIT License */
+/*! Syntax.js v2.4.1 | (c) Bunoon 2024 | MIT License */
 $syntax.addLanguage( "delphi", {
     friendlyName: "Delphi",
     keywords: [
