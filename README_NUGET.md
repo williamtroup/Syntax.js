@@ -82,7 +82,7 @@ Make sure you include the "DOCTYPE html" tag at the top of your HTML, as follows
 ### 2. Include Files:
 
 ```markdown
-<link rel="stylesheet" href="dist/syntax.js.css" />
+<link rel="stylesheet" href="dist/syntax.js.css">
 <script src="dist/syntax.js"></script>
 <script src="dist/languages/syntax.javascript.js"></script>
 <script src="dist/languages/syntax.html.js"></script>
