@@ -1,4 +1,4 @@
-/*! Syntax.js v2.4.0 | (c) Bunoon | MIT License */
+/*! Syntax.js v2.4.1 | (c) Bunoon | MIT License */
 $syntax.addLanguage( "go", {
     friendlyName: "Go",
     keywords: [
