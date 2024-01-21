@@ -6,7 +6,7 @@ Syntax.js
 [![nuget](https://img.shields.io/badge/nuget-v2.4.2-purple)](https://www.nuget.org/packages/jSyntax.js/)
 [![license](https://img.shields.io/badge/license-MIT-green)](https://github.com/williamtroup/Syntax.js/blob/main/LICENSE.txt)
 [![discussions Welcome](https://img.shields.io/badge/discussions-Welcome-red)](https://github.com/williamtroup/Syntax.js/discussions)
-[![coded by William Troup](https://img.shields.io/badge/coded_by-William_Troup-yellow)](https://github.com/williamtroup)
+[![coded by William Troup](https://img.shields.io/badge/coded_by-William_Troup-yellow)](https://www.william-troup.com/)
 </h1>
 
 > <p align="center">A lightweight, and easy-to-use, JavaScript library for code syntax highlighting!</p>

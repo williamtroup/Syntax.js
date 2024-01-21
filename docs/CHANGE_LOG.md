@@ -2,7 +2,7 @@
 
 ## Version 2.4.2:
 - All hover transition effects now work for hovering, and not hovering, which results in a smoother display.
-- 
+- Minor updates to the documentation.
 
 <br>
 
