@@ -36,17 +36,20 @@ Syntax.js
 <br />
 <br />
 
+
 <h1>What browsers are supported?</h1>
 
 All modern browsers (such as Google Chrome, FireFox, and Opera) are fully supported.
 <br>
 <br>
 
+
 <h1>What are the most recent changes?</h1>
 
 To see a list of all the most recent changes, click [here](https://www.william-troup.com/syntax-js/documentation/recent-changes.html).
 <br>
 <br>
+
 
 <h1>What languages are supported by default?</h1>
 
@@ -79,6 +82,20 @@ To see a list of all the most recent changes, click [here](https://www.william-t
 - Visual Basic
 <br>
 <br>
+
+
+<h1>How do I install Syntax.js?</h1>
+
+You can install the library with npm into your local modules directory using the following command:
+
+```markdown
+npm install jsyntax.js
+```
+
+Or, you can download the latest zipped up version [here](https://www.william-troup.com/syntax-js/download.html).
+<br>
+<br>
+
 
 <h1>How do I get started?</h1>
 

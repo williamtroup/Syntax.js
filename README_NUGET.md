@@ -67,6 +67,17 @@ To see a list of all the most recent changes, click [here](https://www.william-t
 - Visual Basic
 
 
+## How do I install Syntax.js?
+
+You can install the library with npm into your local modules directory using the following command:
+
+```markdown
+npm install jsyntax.js
+```
+
+Or, you can download the latest zipped up version [here](https://www.william-troup.com/syntax-js/download.html).
+
+
 ## How do I get started?
 
 To get started using Syntax.js, do the following steps:

@@ -5,6 +5,7 @@
 - Minor updates to the documentation.
 - Added a new ":root" variable called "--syntax-js-default-font" (specifies the default font).
 - Fixed the "journey.js.nuspec" file including the ".github" folder when NuGet PACK is called.
+- Added install instructions into the main README files.
 
 <br>
 
