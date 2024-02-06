@@ -9,6 +9,9 @@
 @import "foundation/styles";
 
 :root {
+    // Fonts
+    --syntax-js-default-font: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", "Noto Sans", "Liberation Sans", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+
     // Colors
     --syntax-js-color-keyword: #A71500;
     --syntax-js-color-value: #F28C28;
@@ -71,7 +74,7 @@
 
 code.syntax-highlight,
 div.syntax-highlight {
-    font-family: 'Montserrat', sans-serif;
+    font-family: var(--syntax-js-default-font);
     font-size: 0.8rem;
 
     div.code {
