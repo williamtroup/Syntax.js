@@ -33,7 +33,7 @@ All modern browsers (such as Google Chrome, FireFox, and Opera) are fully suppor
 
 ## What are the most recent changes?
 
-To see a list of all the most recent changes, click [here](https://github.com/williamtroup/Syntax.js/blob/main/docs/CHANGE_LOG.md).
+To see a list of all the most recent changes, click [here](https://www.william-troup.com/syntax-js/documentation/recent-changes.html).
 
 
 ## What languages are supported by default?
@@ -145,13 +145,13 @@ Make sure you include the "DOCTYPE html" tag at the top of your HTML, as follows
 
 To see a list of all the available binding languages you can use for "data-syntax-language", click [here](https://github.com/williamtroup/Syntax.js/blob/main/docs/binding/language/LANGUAGE.md).
 
-To see a list of all the available binding options you can use for "data-syntax-options", click [here](https://github.com/williamtroup/Syntax.js/blob/main/docs/binding/options/OPTIONS.md).
+To see a list of all the available binding options you can use for "data-syntax-options", click [here](https://www.william-troup.com/syntax-js/documentation/binding-options.html).
 
-To see a list of all the available custom triggers you can use for "data-syntax-options", click [here](https://github.com/williamtroup/Syntax.js/blob/main/docs/binding/options/CUSTOM_TRIGGERS.md).
+To see a list of all the available custom triggers you can use for "data-syntax-options", click [here](https://www.william-troup.com/syntax-js/documentation/binding-options-custom-triggers.html).
 
-To see a list of all the available binding options you can use for "data-syntax-buttons", click [here](https://github.com/williamtroup/Syntax.js/blob/main/docs/binding/buttons/BUTTONS.md).
+To see a list of all the available binding options you can use for "data-syntax-buttons", click [here](https://www.william-troup.com/syntax-js/documentation/buttons.html).
 
-To see a list of all the available binding options you can use for "data-syntax-tab-contents", click [here](https://github.com/williamtroup/Syntax.js/blob/main/docs/binding/tabs/TAB_CONTENTS.md).
+To see a list of all the available binding options you can use for "data-syntax-tab-contents", click [here](https://www.william-troup.com/syntax-js/documentation/tabs.html).
 
 
 ### 4. Finishing Up:
@@ -166,7 +166,7 @@ To customize, and get more out of Syntax.js, please read through the following d
 
 ### 1. Public Functions:
 
-To see a list of all the public functions available, click [here](https://github.com/williamtroup/Syntax.js/blob/main/docs/PUBLIC_FUNCTIONS.md).
+To see a list of all the public functions available, click [here](https://www.william-troup.com/syntax-js/documentation/public-functions.html).
 
 
 ### 2. Configuration:
@@ -181,6 +181,6 @@ Configuration options allow you to customize how Syntax.js will function.  You c
 </script>
 ```
 
-To see a list of all the available configuration options you can use, click [here](https://github.com/williamtroup/Syntax.js/blob/main/docs/OPTIONS.md).
+To see a list of all the available configuration options you can use, click [here](https://www.william-troup.com/syntax-js/documentation/options.html).
 
-To see a list of all the available configuration options custom triggers you can use, click [here](https://github.com/williamtroup/Syntax.js/blob/main/docs/CUSTOM_TRIGGERS.md).
+To see a list of all the available configuration options custom triggers you can use, click [here](https://www.william-troup.com/syntax-js/documentation/custom-triggers.html).
