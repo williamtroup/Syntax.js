@@ -1,4 +1,4 @@
-/*! Syntax.js v2.4.1 | (c) Bunoon 2024 | MIT License */
+/*! Syntax.js v2.4.2 | (c) Bunoon 2024 | MIT License */
 (function() {
   function render() {
     var tagTypes = _configuration.highlightAllDomElementTypes;
@@ -858,7 +858,7 @@
     var result = null;
     try {
       if (isDefinedString(objectString)) {
-        result = JSON.parse(objectString);
+        result = _parameter_Json.parse(objectString);
       }
     } catch (e1) {
       try {
@@ -874,8 +874,8 @@
     return {parsed:parsed, result:result};
   }
   function getClonedObject(object) {
-    var json = JSON.stringify(object);
-    var result = JSON.parse(json);
+    var json = _parameter_Json.stringify(object);
+    var result = _parameter_Json.parse(json);
     return result;
   }
   function logError(error) {
@@ -893,7 +893,7 @@
       if (charIndex === 8 || charIndex === 12 || charIndex === 16 || charIndex === 20) {
         result.push("-");
       }
-      var character = Math.floor(Math.random() * 16).toString(16);
+      var character = _parameter_Math.floor(_parameter_Math.random() * 16).toString(16);
       result.push(character);
     }
     return result.join(_string.empty);
@@ -933,6 +933,8 @@
   var _parameter_Document = null;
   var _parameter_Navigator = null;
   var _parameter_Window = null;
+  var _parameter_Math = null;
+  var _parameter_Json = null;
   var _configuration = {};
   var _string = {empty:"", space:" ", newLine:"\n"};
   var _aliases_Rules = {};
@@ -1087,12 +1089,14 @@
     return this;
   };
   this.getVersion = function() {
-    return "2.4.1";
+    return "2.4.2";
   };
-  (function(documentObject, navigatorObject, windowObject) {
+  (function(documentObject, navigatorObject, windowObject, mathObject, jsonObject) {
     _parameter_Document = documentObject;
     _parameter_Navigator = navigatorObject;
     _parameter_Window = windowObject;
+    _parameter_Math = mathObject;
+    _parameter_Json = jsonObject;
     buildDefaultConfiguration();
     _parameter_Document.addEventListener("DOMContentLoaded", function() {
       render();
@@ -1100,5 +1104,5 @@
     if (!isDefined(_parameter_Window.$syntax)) {
       _parameter_Window.$syntax = this;
     }
-  })(document, navigator, window);
+  })(document, navigator, window, Math, JSON);
 })();

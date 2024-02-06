@@ -4,7 +4,7 @@
  * A lightweight, and easy-to-use, JavaScript library for code syntax highlighting!
  * 
  * @file        syntax.js
- * @version     v2.4.1
+ * @version     v2.4.2
  * @author      Bunoon
  * @license     MIT License
  * @copyright   Bunoon 2024
@@ -16,6 +16,8 @@
         _parameter_Document = null,
         _parameter_Navigator = null,
         _parameter_Window = null,
+        _parameter_Math = null,
+        _parameter_Json = null,
 
         // Variables: Configuration
         _configuration = {},
@@ -1204,7 +1206,7 @@
 
         try {
             if ( isDefinedString( objectString ) ) {
-                result = JSON.parse( objectString );
+                result = _parameter_Json.parse( objectString );
             }
 
         } catch ( e1 ) {
@@ -1229,8 +1231,8 @@
     }
 
     function getClonedObject( object ) {
-        var json = JSON.stringify( object ),
-            result = JSON.parse( json );
+        var json = _parameter_Json.stringify( object ),
+            result = _parameter_Json.parse( json );
 
         return result;
     }
@@ -1261,7 +1263,7 @@
                 result.push( "-" );
             }
 
-            var character = Math.floor( Math.random() * 16 ).toString( 16 );
+            var character = _parameter_Math.floor( _parameter_Math.random() * 16 ).toString( 16 );
             result.push( character );
         }
 
@@ -1704,7 +1706,7 @@
      * @returns     {string}                                                The version number.
      */
     this.getVersion = function() {
-        return "2.4.1";
+        return "2.4.2";
     };
 
 
@@ -1714,10 +1716,12 @@
      * ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
      */
 
-    ( function ( documentObject, navigatorObject, windowObject ) {
+    ( function ( documentObject, navigatorObject, windowObject, mathObject, jsonObject ) {
         _parameter_Document = documentObject;
         _parameter_Navigator = navigatorObject;
         _parameter_Window = windowObject;
+        _parameter_Math = mathObject;
+        _parameter_Json = jsonObject;
 
         buildDefaultConfiguration();
 
@@ -1729,5 +1733,5 @@
             _parameter_Window.$syntax = this;
         }
 
-    } ) ( document, navigator, window );
+    } ) ( document, navigator, window, Math, JSON );
 } )();

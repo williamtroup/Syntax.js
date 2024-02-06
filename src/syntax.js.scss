@@ -1,5 +1,5 @@
 /*
- * Syntax.js Library v2.4.1
+ * Syntax.js Library v2.4.2
  *
  * Copyright 2024 Bunoon
  * Released under the MIT License
@@ -9,6 +9,9 @@
 @import "foundation/styles";
 
 :root {
+    // Fonts
+    --syntax-js-default-font: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", "Noto Sans", "Liberation Sans", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+
     // Colors
     --syntax-js-color-keyword: #A71500;
     --syntax-js-color-value: #F28C28;
@@ -71,7 +74,7 @@
 
 code.syntax-highlight,
 div.syntax-highlight {
-    font-family: 'Montserrat', sans-serif;
+    font-family: var(--syntax-js-default-font);
     font-size: 0.8rem;
 
     div.code {
@@ -110,13 +113,13 @@ div.syntax-highlight {
                 background-color: var(--syntax-js-tab-background-color);
                 color: var(--syntax-js-tab-text-color);
                 border: var(--syntax-js-border-size) solid var(--syntax-js-tab-border-color);
+                transition: var(--syntax-js-transition);
 
                 &:hover {
                     cursor: pointer;
                     background-color: var(--syntax-js-tab-hover-background-color);
                     color: var(--syntax-js-tab-hover-text-color);
                     border: var(--syntax-js-border-size) solid var(--syntax-js-tab-hover-border-color);
-                    transition: var(--syntax-js-transition);
                 }
             }
 
@@ -219,6 +222,10 @@ div.syntax-highlight {
                             border-right: none;
                         }
                     }
+
+                    button.button {
+                        transition: var(--syntax-js-transition);
+                    }
     
                     button.button-opener {
                         font-weight: 900 !important;
@@ -235,7 +242,6 @@ div.syntax-highlight {
                         cursor: pointer;
                         background-color: var(--syntax-js-button-hover-background-color);
                         color: var(--syntax-js-button-hover-text-color);
-                        transition: var(--syntax-js-transition);
                     }
                 }
     
@@ -253,11 +259,16 @@ div.syntax-highlight {
                         font-weight: 700;
                         color: var(--syntax-js-color-keyword);
                     }
+
+                    span.keyword-clickable,
+                    span.no-highlight-keyword-clickable {
+                        transition: var(--syntax-js-transition);
+                    }
     
                     span.keyword-clickable:hover,
                     span.no-highlight-keyword-clickable:hover {
                         color: var(--syntax-js-color-keyword-hover);
-                        transition: var(--syntax-js-transition);
+                        
                         cursor: pointer;
                     }
     
@@ -266,11 +277,15 @@ div.syntax-highlight {
                         font-weight: 700;
                         color: var(--syntax-js-color-value);
                     }
+
+                    span.value-clickable,
+                    span.no-highlight-value-clickable {
+                        transition: var(--syntax-js-transition);
+                    }
     
                     span.value-clickable:hover,
                     span.no-highlight-value-clickable:hover {
                         color: var(--syntax-js-color-value-hover);
-                        transition: var(--syntax-js-transition);
                         cursor: pointer;
                     }
     
@@ -279,11 +294,15 @@ div.syntax-highlight {
                         font-weight: 700;
                         color: var(--syntax-js-color-attribute);
                     }
+
+                    span.attribute-clickable,
+                    span.no-highlight-attribute-clickable {
+                        transition: var(--syntax-js-transition);
+                    }
     
                     span.attribute-clickable:hover,
                     span.no-highlight-attribute-clickable:hover {
                         color: var(--syntax-js-color-attribute-hover);
-                        transition: var(--syntax-js-transition);
                         cursor: pointer;
                     }
     

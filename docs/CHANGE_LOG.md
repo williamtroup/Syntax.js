@@ -1,5 +1,17 @@
 # Syntax.js - Change Log:
 
+## Version 2.4.2:
+- All hover transition effects now work for hovering, and not hovering, which results in a smoother display.
+- Minor updates to the documentation.
+- Added a new ":root" variable called "--syntax-js-default-font" (specifies the default font).
+- Fixed the "journey.js.nuspec" file including the ".github" folder when NuGet PACK is called.
+- Added install instructions into the main README files.
+- Added Math injection directly into the main instance.
+- Added JSON injection directly into the main instance.
+
+<br>
+
+
 ## Version 2.4.1:
 - Added correct year to all files, and added missing year to all minimized/dist files.
 - Fixed HTML files using the wrong formatting for meta, and imports being missing.

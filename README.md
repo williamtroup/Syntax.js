@@ -2,15 +2,15 @@
 Syntax.js
 
 [![Tweet](https://img.shields.io/twitter/url/http/shields.io.svg?style=social)](https://twitter.com/intent/tweet?text=Syntax.js%2C%20a%20free%20JavaScript%20syntax%20highlighter&url=https://github.com/williamtroup/Syntax.js&hashtags=javascript,syntax,highlighter)
-[![npm](https://img.shields.io/badge/npmjs-v2.4.1-blue)](https://www.npmjs.com/package/jsyntax.js)
-[![nuget](https://img.shields.io/badge/nuget-v2.4.1-purple)](https://www.nuget.org/packages/jSyntax.js/)
+[![npm](https://img.shields.io/badge/npmjs-v2.4.2-blue)](https://www.npmjs.com/package/jsyntax.js)
+[![nuget](https://img.shields.io/badge/nuget-v2.4.2-purple)](https://www.nuget.org/packages/jSyntax.js/)
 [![license](https://img.shields.io/badge/license-MIT-green)](https://github.com/williamtroup/Syntax.js/blob/main/LICENSE.txt)
 [![discussions Welcome](https://img.shields.io/badge/discussions-Welcome-red)](https://github.com/williamtroup/Syntax.js/discussions)
-[![coded by William Troup](https://img.shields.io/badge/coded_by-William_Troup-yellow)](https://github.com/williamtroup)
+[![coded by William Troup](https://img.shields.io/badge/coded_by-William_Troup-yellow)](https://www.william-troup.com/)
 </h1>
 
 > <p align="center">A lightweight, and easy-to-use, JavaScript library for code syntax highlighting!</p>
-> <p align="center">v2.4.1</p>
+> <p align="center">v2.4.2</p>
 <br />
 
 ![Syntax.js](docs/images/main.png)
@@ -36,17 +36,20 @@ Syntax.js
 <br />
 <br />
 
+
 <h1>What browsers are supported?</h1>
 
 All modern browsers (such as Google Chrome, FireFox, and Opera) are fully supported.
 <br>
 <br>
 
+
 <h1>What are the most recent changes?</h1>
 
-To see a list of all the most recent changes, click [here](docs/CHANGE_LOG.md).
+To see a list of all the most recent changes, click [here](https://www.william-troup.com/syntax-js/documentation/recent-changes.html).
 <br>
 <br>
+
 
 <h1>What languages are supported by default?</h1>
 
@@ -79,6 +82,20 @@ To see a list of all the most recent changes, click [here](docs/CHANGE_LOG.md).
 - Visual Basic
 <br>
 <br>
+
+
+<h1>How do I install Syntax.js?</h1>
+
+You can install the library with npm into your local modules directory using the following command:
+
+```markdown
+npm install jsyntax.js
+```
+
+Or, you can download the latest zipped up version [here](https://www.william-troup.com/syntax-js/download.html).
+<br>
+<br>
+
 
 <h1>How do I get started?</h1>
 
@@ -162,13 +179,13 @@ Make sure you include the "DOCTYPE html" tag at the top of your HTML, as follows
 
 To see a list of all the available binding languages you can use for "data-syntax-language", click [here](docs/binding/language/LANGUAGE.md).
 
-To see a list of all the available binding options you can use for "data-syntax-options", click [here](docs/binding/options/OPTIONS.md).
+To see a list of all the available binding options you can use for "data-syntax-options", click [here](https://www.william-troup.com/syntax-js/documentation/binding-options.html).
 
-To see a list of all the available custom triggers you can use for "data-syntax-options", click [here](docs/binding/options/CUSTOM_TRIGGERS.md).
+To see a list of all the available custom triggers you can use for "data-syntax-options", click [here](https://www.william-troup.com/syntax-js/documentation/binding-options-custom-triggers.html).
 
-To see a list of all the available binding options you can use for "data-syntax-buttons", click [here](docs/binding/buttons/BUTTONS.md).
+To see a list of all the available binding options you can use for "data-syntax-buttons", click [here](https://www.william-troup.com/syntax-js/documentation/buttons.html).
 
-To see a list of all the available binding options you can use for "data-syntax-tab-contents", click [here](docs/binding/tabs/TAB_CONTENTS.md).
+To see a list of all the available binding options you can use for "data-syntax-tab-contents", click [here](https://www.william-troup.com/syntax-js/documentation/tabs.html).
 
 <br>
 
@@ -186,7 +203,7 @@ To customize, and get more out of Syntax.js, please read through the following d
 
 ### 1. Public Functions:
 
-To see a list of all the public functions available, click [here](docs/PUBLIC_FUNCTIONS.md).
+To see a list of all the public functions available, click [here](https://www.william-troup.com/syntax-js/documentation/public-functions.html).
 <br>
 <br>
 
@@ -203,6 +220,6 @@ Configuration options allow you to customize how Syntax.js will function.  You c
 </script>
 ```
 
-To see a list of all the available configuration options you can use, click [here](docs/configuration/OPTIONS.md).
+To see a list of all the available configuration options you can use, click [here](https://www.william-troup.com/syntax-js/documentation/options.html).
 
-To see a list of all the available configuration options custom triggers you can use, click [here](docs/configuration/CUSTOM_TRIGGERS.md).
+To see a list of all the available configuration options custom triggers you can use, click [here](https://www.william-troup.com/syntax-js/documentation/custom-triggers.html).
