@@ -1,6 +1,8 @@
 # Syntax.js - Change Log:
 
 ## Version 2.4.2:
+
+## Version 2.4.2:
 - All hover transition effects now work for hovering, and not hovering, which results in a smoother display.
 - Minor updates to the documentation.
 - Added a new ":root" variable called "--syntax-js-default-font" (specifies the default font).
