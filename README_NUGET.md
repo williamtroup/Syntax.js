@@ -26,6 +26,11 @@
 - Tabbing (allows multiple languages to be shown in one tabbed container, which is great for code examples).
 
 
+## Where can I find the documentation?
+
+All the documentation can be found [here](https://www.william-troup.com/syntax-js/documentation/index.html):  
+
+
 ## What browsers are supported?
 
 All modern browsers (such as Google Chrome, FireFox, and Opera) are fully supported.
