@@ -146,16 +146,16 @@
               _cached_Comments = {};
               _cached_Comments_Count = 0;
             } else {
-              result = logError("No code is available available to render, skipping.");
+              result = logError(_configuration.noCodeAvailableToRenderErrorText);
             }
           } else {
             result = !_configuration.safeMode;
           }
         } else {
-          result = logError("Language '" + syntaxLanguage + "' is not supported.");
+          result = logError(_configuration.languageNotSupportedErrorText.replace("{{language}}", syntaxLanguage));
         }
       } else {
-        result = logError("The attribute '" + _attribute_Name_Language + "' has not been set correctly.");
+        result = logError(_configuration.attributeNotSetErrorText.replace("{{attribute_name}}", _attribute_Name_Language));
       }
     }
     return {rendered:result, tabContents:tabContents, tabTitle:tabTitle, tabBindingOptions:tabBindingOptions, syntaxLanguage:syntaxLanguage};
@@ -775,7 +775,7 @@
           result = result();
         }
       } catch (e2) {
-        parsed = logError("Errors in object: " + e1.message + ", " + e2.message);
+        parsed = logError(_configuration.objectErrorText.replace("{{error_1}}", e1.message).replace("{{error_2}}", e2.message));
         result = null;
       }
     }
@@ -955,6 +955,10 @@
   function buildDefaultConfigurationStrings() {
     _configuration.buttonsOpenerText = getDefaultString(_configuration.buttonsOpenerText, "<");
     _configuration.buttonsCloserText = getDefaultString(_configuration.buttonsCloserText, ">");
+    _configuration.objectErrorText = getDefaultString(_configuration.objectErrorText, "Errors in object: {{error_1}}, {{error_2}}");
+    _configuration.attributeNotSetErrorText = getDefaultString(_configuration.attributeNotSetErrorText, "The attribute '{{attribute_name}}' has not been set correctly.");
+    _configuration.languageNotSupportedErrorText = getDefaultString(_configuration.languageNotSupportedErrorText, "Language '{{language}}' is not supported.");
+    _configuration.noCodeAvailableToRenderErrorText = getDefaultString(_configuration.noCodeAvailableToRenderErrorText, "No code is available available to render.");
   }
   function buildDefaultConfigurationCustomTriggers() {
     _configuration.onBeforeRender = getDefaultFunction(_configuration.onBeforeRender, null);
