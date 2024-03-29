@@ -1178,6 +1178,10 @@
         return isDefinedBoolean( value ) ? value : defaultValue;
     }
 
+    function getDefaultNumber( value, defaultValue ) {
+        return isDefinedNumber( value ) ? value : defaultValue;
+    }
+
     function getDefaultFunction( value, defaultValue ) {
         return isDefinedFunction( value ) ? value : defaultValue;
     }
@@ -1186,8 +1190,8 @@
         return isDefinedArray( value ) ? value : defaultValue;
     }
 
-    function getDefaultNumber( value, defaultValue ) {
-        return isDefinedNumber( value ) ? value : defaultValue;
+    function getDefaultObject( value, defaultValue ) {
+        return isDefinedObject( value ) ? value : defaultValue;
     }
 
     function getDefaultStringOrArray( value, defaultValue ) {
@@ -1476,7 +1480,7 @@
             lookup = name.toLowerCase();
 
         if ( !_languages.hasOwnProperty( lookup ) ) {
-            triggerRender = !isDefinedBoolean( triggerRender ) ? true : triggerRender;
+            triggerRender = getDefaultBoolean( triggerRender, true );
 
             _languages[ lookup ] = languageDetails;
             added = true;
@@ -1579,7 +1583,7 @@
         var added = false;
 
         if ( _languages.hasOwnProperty( language.toLowerCase() ) && !_aliases_Rules.hasOwnProperty( alias.toLowerCase() ) ) {
-            triggerRender = !isDefinedBoolean( triggerRender ) ? true : triggerRender;
+            triggerRender = getDefaultBoolean( triggerRender, true );
 
             _aliases_Rules[ alias.toLowerCase() ] = language.toLowerCase();
             added = true;
@@ -1668,7 +1672,7 @@
      * @returns     {Object}                                                The Syntax.js class instance.
      */
     _public.setConfiguration = function( newOptions ) {
-        _configuration = !isDefinedObject( newOptions ) ? {} : newOptions;
+        _configuration = getDefaultObject( newOptions, {} );
         
         buildDefaultConfiguration();
 

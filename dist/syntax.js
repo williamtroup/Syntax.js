@@ -739,14 +739,17 @@
   function getDefaultBoolean(value, defaultValue) {
     return isDefinedBoolean(value) ? value : defaultValue;
   }
+  function getDefaultNumber(value, defaultValue) {
+    return isDefinedNumber(value) ? value : defaultValue;
+  }
   function getDefaultFunction(value, defaultValue) {
     return isDefinedFunction(value) ? value : defaultValue;
   }
   function getDefaultArray(value, defaultValue) {
     return isDefinedArray(value) ? value : defaultValue;
   }
-  function getDefaultNumber(value, defaultValue) {
-    return isDefinedNumber(value) ? value : defaultValue;
+  function getDefaultObject(value, defaultValue) {
+    return isDefinedObject(value) ? value : defaultValue;
   }
   function getDefaultStringOrArray(value, defaultValue) {
     if (isDefinedString(value)) {
@@ -875,7 +878,7 @@
   _public.addLanguage = function(name, languageDetails, triggerRender) {
     var added = false, lookup = name.toLowerCase();
     if (!_languages.hasOwnProperty(lookup)) {
-      triggerRender = !isDefinedBoolean(triggerRender) ? true : triggerRender;
+      triggerRender = getDefaultBoolean(triggerRender, true);
       _languages[lookup] = languageDetails;
       added = true;
       if (triggerRender) {
@@ -910,7 +913,7 @@
   _public.addAlias = function(alias, language, triggerRender) {
     var added = false;
     if (_languages.hasOwnProperty(language.toLowerCase()) && !_aliases_Rules.hasOwnProperty(alias.toLowerCase())) {
-      triggerRender = !isDefinedBoolean(triggerRender) ? true : triggerRender;
+      triggerRender = getDefaultBoolean(triggerRender, true);
       _aliases_Rules[alias.toLowerCase()] = language.toLowerCase();
       added = true;
       if (triggerRender) {
@@ -938,7 +941,7 @@
     return getClonedObject(_aliases_Rules);
   };
   _public.setConfiguration = function(newOptions) {
-    _configuration = !isDefinedObject(newOptions) ? {} : newOptions;
+    _configuration = getDefaultObject(newOptions, {});
     buildDefaultConfiguration();
     return _public;
   };
