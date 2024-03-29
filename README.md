@@ -60,33 +60,33 @@ To see a list of all the most recent changes, click [here](https://www.william-t
 
 <h1>What languages are supported by default?</h1>
 
-- Bash
-- C++
-- C#
-- C
-- CSS
-- Dart
-- Delphi
-- F#
-- GO
-- HTML
-- Java
-- JavaScript
-- Kotlin
-- Lua
-- Matlab
-- Microsoft SQL
-- Perl
-- PHP
-- Powershell
-- Python
-- R
-- Ruby
-- Rust
-- Scala
-- Swift
-- TypeScript
-- Visual Basic
+- `bash` Bash
+- `c-plus-plus` C++
+- `c-sharp` C#
+- `c` C
+- `css` CSS
+- `dart` Dart
+- `delphi` Delphi
+- `f-sharp` F#
+- `go` GO
+- `html` HTML
+- `java` Java
+- `javascript` JavaScript
+- `kotlin` Kotlin
+- `lua` Lua
+- `matlab` Matlab
+- `ms-sql` Microsoft SQL
+- `perl` Perl
+- `php` PHP
+- `powershell` Powershell
+- `python` Python
+- `r` R
+- `ruby` Ruby
+- `rust` Rust
+- `scala` Scala
+- `swift` Swift
+- `typescript` TypeScript
+- `visual-basic` Visual Basic
 <br>
 <br>
 
