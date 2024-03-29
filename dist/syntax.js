@@ -958,7 +958,7 @@
     _configuration.objectErrorText = getDefaultString(_configuration.objectErrorText, "Errors in object: {{error_1}}, {{error_2}}");
     _configuration.attributeNotSetErrorText = getDefaultString(_configuration.attributeNotSetErrorText, "The attribute '{{attribute_name}}' has not been set correctly.");
     _configuration.languageNotSupportedErrorText = getDefaultString(_configuration.languageNotSupportedErrorText, "Language '{{language}}' is not supported.");
-    _configuration.noCodeAvailableToRenderErrorText = getDefaultString(_configuration.noCodeAvailableToRenderErrorText, "No code is available available to render.");
+    _configuration.noCodeAvailableToRenderErrorText = getDefaultString(_configuration.noCodeAvailableToRenderErrorText, "No code is available to render.");
   }
   function buildDefaultConfigurationCustomTriggers() {
     _configuration.onBeforeRender = getDefaultFunction(_configuration.onBeforeRender, null);
