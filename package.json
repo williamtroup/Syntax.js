@@ -1,29 +1,29 @@
 {
-    "name": "jsyntax.js",
-    "title": "Syntax.js",
-    "description": "A lightweight, and easy-to-use, JavaScript library for code syntax highlighting!",
-    "version": "2.4.3",
-    "main": "dist/syntax.js",
-    "homepage": "https://www.william-troup.com/syntax-js/",
-    "author": {
-      "name": "Bunoon"
-    },
-    "repository": {
-      "type": "git",
-      "url": "https://github.com/williamtroup/Syntax.js"
-    },
-    "keywords": [
-      "javascript",
-      "css",
-      "highlight",
-      "syntax-highlighting",
-      "html5",
-      "code",
-      "code-highlighter",
-      "Syntax.js"
-    ],
-    "bugs": {
-      "url": "https://github.com/williamtroup/Syntax.js/issues"
-    },
-    "license": "MIT"
-  }
+  "name": "jsyntax.js",
+  "title": "Syntax.js",
+  "description": "A lightweight, and easy-to-use, JavaScript library for code syntax highlighting!",
+  "version": "2.5.0",
+  "main": "dist/syntax.js",
+  "homepage": "https://www.william-troup.com/syntax-js/",
+  "author": {
+    "name": "Bunoon"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/williamtroup/Syntax.js"
+  },
+  "keywords": [
+    "javascript",
+    "css",
+    "highlight",
+    "syntax-highlighting",
+    "html5",
+    "code",
+    "code-highlighter",
+    "Syntax.js"
+  ],
+  "bugs": {
+    "url": "https://github.com/williamtroup/Syntax.js/issues"
+  },
+  "license": "MIT"
+}

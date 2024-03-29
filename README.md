@@ -2,15 +2,15 @@
 Syntax.js
 
 [![Tweet](https://img.shields.io/twitter/url/http/shields.io.svg?style=social)](https://twitter.com/intent/tweet?text=Syntax.js%2C%20a%20free%20JavaScript%20syntax%20highlighter&url=https://github.com/williamtroup/Syntax.js&hashtags=javascript,syntax,highlighter)
-[![npm](https://img.shields.io/badge/npmjs-v2.4.3-blue)](https://www.npmjs.com/package/jsyntax.js)
-[![nuget](https://img.shields.io/badge/nuget-v2.4.3-purple)](https://www.nuget.org/packages/jSyntax.js/)
+[![npm](https://img.shields.io/badge/npmjs-v2.5.0-blue)](https://www.npmjs.com/package/jsyntax.js)
+[![nuget](https://img.shields.io/badge/nuget-v2.5.0-purple)](https://www.nuget.org/packages/jSyntax.js/)
 [![license](https://img.shields.io/badge/license-MIT-green)](https://github.com/williamtroup/Syntax.js/blob/main/LICENSE.txt)
 [![discussions Welcome](https://img.shields.io/badge/discussions-Welcome-red)](https://github.com/williamtroup/Syntax.js/discussions)
 [![coded by William Troup](https://img.shields.io/badge/coded_by-William_Troup-yellow)](https://www.william-troup.com/)
 </h1>
 
 > <p align="center">A lightweight, and easy-to-use, JavaScript library for code syntax highlighting!</p>
-> <p align="center">v2.4.3</p>
+> <p align="center">v2.5.0</p>
 <br />
 
 ![Syntax.js](docs/images/main.png)
@@ -60,33 +60,33 @@ To see a list of all the most recent changes, click [here](https://www.william-t
 
 <h1>What languages are supported by default?</h1>
 
-- Bash
-- C++
-- C#
-- C
-- CSS
-- Dart
-- Delphi
-- F#
-- GO
-- HTML
-- Java
-- JavaScript
-- Kotlin
-- Lua
-- Matlab
-- Microsoft SQL
-- Perl
-- PHP
-- Powershell
-- Python
-- R
-- Ruby
-- Rust
-- Scala
-- Swift
-- TypeScript
-- Visual Basic
+- `bash` Bash
+- `c-plus-plus` C++
+- `c-sharp` C#
+- `c` C
+- `css` CSS
+- `dart` Dart
+- `delphi` Delphi
+- `f-sharp` F#
+- `go` GO
+- `html` HTML
+- `java` Java
+- `javascript` JavaScript
+- `kotlin` Kotlin
+- `lua` Lua
+- `matlab` Matlab
+- `ms-sql` Microsoft SQL
+- `perl` Perl
+- `php` PHP
+- `powershell` Powershell
+- `python` Python
+- `r` R
+- `ruby` Ruby
+- `rust` Rust
+- `scala` Scala
+- `swift` Swift
+- `typescript` TypeScript
+- `visual-basic` Visual Basic
 <br>
 <br>
 

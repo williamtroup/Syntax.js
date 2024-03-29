@@ -1,25 +1,18 @@
-/*! Syntax.js v2.4.3 | (c) Bunoon 2024 | MIT License */
+/*! Syntax.js v2.5.0 | (c) Bunoon 2024 | MIT License */
 (function() {
+  var _parameter_Document = null, _parameter_Navigator = null, _parameter_Window = null, _parameter_Math = null, _parameter_Json = null, _public = {}, _configuration = {}, _string = {empty:"", space:" ", newLine:"\n"}, _aliases_Rules = {}, _elements_Type = {}, _elements = [], _elements_Original = {}, _cached_Keywords = {}, _cached_Keywords_Count = 0, _cached_Values = {}, _cached_Values_Count = 0, _cached_Attributes = {}, _cached_Attributes_Count = 0, _cached_Strings = {}, _cached_Strings_Count = 
+  0, _cached_Comments = {}, _cached_Comments_Count = 0, _languages = {}, _languages_Unknown = "unknown", _languages_Tabbed = "tabbed", _attribute_Name_Language = "data-syntax-language", _attribute_Name_Options = "data-syntax-options", _attribute_Name_Buttons = "data-syntax-buttons", _attribute_Name_TabContents = "data-syntax-tab-contents";
   function render() {
-    var tagTypes = _configuration.highlightAllDomElementTypes;
-    var tagTypesLength = tagTypes.length;
-    var tagTypeIndex = 0;
-    for (; tagTypeIndex < tagTypesLength; tagTypeIndex++) {
-      var domElements = _parameter_Document.getElementsByTagName(tagTypes[tagTypeIndex]);
-      var elements = [].slice.call(domElements);
-      var elementsLength = elements.length;
+    var tagTypes = _configuration.highlightAllDomElementTypes, tagTypesLength = tagTypes.length;
+    for (var tagTypeIndex = 0; tagTypeIndex < tagTypesLength; tagTypeIndex++) {
+      var domElements = _parameter_Document.getElementsByTagName(tagTypes[tagTypeIndex]), elements = [].slice.call(domElements), elementsLength = elements.length;
       if (elementsLength > 0) {
         fireCustomTrigger(_configuration.onBeforeRender);
       }
-      var elementIndex = 0;
-      for (; elementIndex < elementsLength; elementIndex++) {
-        var element = elements[elementIndex];
-        var elementBreak = false;
+      for (var elementIndex = 0; elementIndex < elementsLength; elementIndex++) {
+        var element = elements[elementIndex], elementBreak = false;
         if (element.hasAttribute(_attribute_Name_Language) && element.getAttribute(_attribute_Name_Language).toLowerCase() === _languages_Tabbed) {
-          var divElements = [].slice.call(element.children);
-          var divElementsLength = divElements.length;
-          var tabElements = [];
-          var tabContentElements = [];
+          var divElements = [].slice.call(element.children), divElementsLength = divElements.length, tabElements = [], tabContentElements = [];
           element.removeAttribute(_attribute_Name_Language);
           element.className = element.className === _string.empty ? "syntax-highlight" : element.className + " syntax-highlight";
           element.innerHTML = _string.empty;
@@ -27,8 +20,7 @@
           element.appendChild(codeContainer);
           var tabs = createElement("div", "tabs");
           codeContainer.appendChild(tabs);
-          var divElementIndex = 0;
-          for (; divElementIndex < divElementsLength; divElementIndex++) {
+          for (var divElementIndex = 0; divElementIndex < divElementsLength; divElementIndex++) {
             var renderResult = renderElement(divElements[divElementIndex], codeContainer);
             if (!renderResult.rendered) {
               elementBreak = true;
@@ -58,14 +50,11 @@
     tabContentElements.push(renderResult.tabContents);
     tab.onclick = function() {
       if (tab.className !== "tab-active") {
-        var tabElementsLength = tabElements.length;
-        var tabContentElementsLength = tabContentElements.length;
-        var tabElementsIndex = 0;
-        for (; tabElementsIndex < tabElementsLength; tabElementsIndex++) {
+        var tabElementsLength = tabElements.length, tabContentElementsLength = tabContentElements.length;
+        for (var tabElementsIndex = 0; tabElementsIndex < tabElementsLength; tabElementsIndex++) {
           tabElements[tabElementsIndex].className = "tab";
         }
-        var tabContentElementsIndex = 0;
-        for (; tabContentElementsIndex < tabContentElementsLength; tabContentElementsIndex++) {
+        for (var tabContentElementsIndex = 0; tabContentElementsIndex < tabContentElementsLength; tabContentElementsIndex++) {
           tabContentElements[tabContentElementsIndex].style.display = "none";
         }
         tab.className = "tab-active";
@@ -82,33 +71,22 @@
     }
   }
   function renderElement(element, codeContainer) {
-    var result = true;
-    var tabTitle = null;
-    var tabContents = null;
-    var tabBindingOptions = null;
-    var syntaxLanguage = null;
+    var result = true, tabTitle = null, tabContents = null, tabBindingOptions = null, syntaxLanguage = null;
     if (isDefined(element) && element.hasAttribute(_attribute_Name_Language) && (!element.hasAttribute(_attribute_Name_TabContents) || isDefined(codeContainer))) {
       syntaxLanguage = element.getAttribute(_attribute_Name_Language);
       if (isDefinedString(syntaxLanguage)) {
         var language = getLanguage(syntaxLanguage);
         if (isDefined(language) || syntaxLanguage.toLowerCase() === _languages_Unknown) {
-          var syntaxOptionsParsed = getObjectFromString(element.getAttribute(_attribute_Name_Options));
-          var syntaxButtonsParsed = getObjectFromString(element.getAttribute(_attribute_Name_Buttons));
+          var syntaxOptionsParsed = getObjectFromString(element.getAttribute(_attribute_Name_Options)), syntaxButtonsParsed = getObjectFromString(element.getAttribute(_attribute_Name_Buttons));
           if (syntaxOptionsParsed.parsed) {
             if (element.innerHTML.trim() !== _string.empty) {
-              var innerHTML = element.innerHTML;
-              var syntaxOptions = getBindingOptions(syntaxOptionsParsed.result);
-              var isPreFormatted = false;
-              var descriptionText = null;
+              var innerHTML = element.innerHTML, syntaxOptions = getBindingOptions(syntaxOptionsParsed.result), isPreFormatted = false, descriptionText = null;
               fireCustomTrigger(syntaxOptions.onBeforeRenderComplete, element);
               if (element.children.length > 0 && element.children[0].nodeName.toLowerCase() === "pre") {
                 innerHTML = element.children[0].innerHTML;
                 isPreFormatted = true;
               }
-              var innerHTMLCopy = innerHTML.trim();
-              var numbers = null;
-              var description = null;
-              var elementId = element.id;
+              var innerHTMLCopy = innerHTML.trim(), numbers = null, description = null, elementId = element.id;
               if (!isDefinedString(elementId)) {
                 elementId = newGuid();
               }
@@ -168,16 +146,16 @@
               _cached_Comments = {};
               _cached_Comments_Count = 0;
             } else {
-              result = logError("No code is available available to render, skipping.");
+              result = logError(_configuration.noCodeAvailableToRenderErrorText);
             }
           } else {
             result = !_configuration.safeMode;
           }
         } else {
-          result = logError("Language '" + syntaxLanguage + "' is not supported.");
+          result = logError(_configuration.languageNotSupportedErrorText.replace("{{language}}", syntaxLanguage));
         }
       } else {
-        result = logError("The attribute '" + _attribute_Name_Language + "' has not been set correctly.");
+        result = logError(_configuration.attributeNotSetErrorText.replace("{{attribute_name}}", _attribute_Name_Language));
       }
     }
     return {rendered:result, tabContents:tabContents, tabTitle:tabTitle, tabBindingOptions:tabBindingOptions, syntaxLanguage:syntaxLanguage};
@@ -221,14 +199,11 @@
   }
   function renderElementButtons(syntax, syntaxOptions, syntaxLanguage, syntaxButtonsParsed, innerHTMLCopy) {
     if (syntaxOptions.showLanguageLabel || syntaxOptions.showCopyButton || syntaxOptions.showPrintButton || syntaxButtonsParsed.parsed) {
-      var buttons = createElement("div", "buttons");
-      var buttonsElements = [];
+      var buttons = createElement("div", "buttons"), buttonsElements = [];
       syntax.appendChild(buttons);
       if (syntaxButtonsParsed.parsed && isDefinedArray(syntaxButtonsParsed.result)) {
-        var customButtons = syntaxButtonsParsed.result;
-        var customButtonsLength = customButtons.length;
-        var customButtonsIndex = 0;
-        for (; customButtonsIndex < customButtonsLength; customButtonsIndex++) {
+        var customButtons = syntaxButtonsParsed.result, customButtonsLength = customButtons.length;
+        for (var customButtonsIndex = 0; customButtonsIndex < customButtonsLength; customButtonsIndex++) {
           var customButton = customButtons[customButtonsIndex];
           if (isDefined(customButton.text) && isDefinedFunction(customButton.onClick)) {
             renderElementButton(customButton, buttonsElements, buttons, innerHTMLCopy, syntaxOptions);
@@ -252,9 +227,7 @@
         buttons.appendChild(printButton);
         setNodeText(printButton, syntaxOptions.printButtonText);
         printButton.onclick = function() {
-          var newWindow = window.open(_string.empty, "PRINT", "height=400,width=600");
-          var newElementForPrint = syntax.cloneNode(true);
-          var newTitleElement = createElement("div");
+          var newWindow = window.open(_string.empty, "PRINT", "height=400,width=600"), newElementForPrint = syntax.cloneNode(true), newTitleElement = createElement("div");
           newElementForPrint.removeChild(newElementForPrint.children[0]);
           newTitleElement.innerHTML = getFriendlyLanguageName(syntaxLanguage);
           newWindow.document.write("<html>");
@@ -291,8 +264,7 @@
         buttons.insertBefore(openButton, buttons.children[0]);
         openButton.onclick = function() {
           var areButtonsVisible = openButton.innerText === _configuration.buttonsCloserText;
-          var buttonsElementIndex = 0;
-          for (; buttonsElementIndex < buttonsElementsLength; buttonsElementIndex++) {
+          for (var buttonsElementIndex = 0; buttonsElementIndex < buttonsElementsLength; buttonsElementIndex++) {
             buttonsElements[buttonsElementIndex].style.display = areButtonsVisible ? "none" : "inline-block";
           }
           openButton.innerText = areButtonsVisible ? _configuration.buttonsOpenerText : _configuration.buttonsCloserText;
@@ -303,8 +275,7 @@
           }
         };
       } else if (!syntaxOptions.buttonsVisible && buttonsElementsLength <= syntaxOptions.maximumButtons) {
-        var buttonsElementIndex = 0;
-        for (; buttonsElementIndex < buttonsElementsLength; buttonsElementIndex++) {
+        for (var buttonsElementIndex = 0; buttonsElementIndex < buttonsElementsLength; buttonsElementIndex++) {
           buttonsElements[buttonsElementIndex].style.display = "inline-block";
         }
       }
@@ -329,10 +300,8 @@
       var patternItems = innerHTML.match(new RegExp(lookup + ".*", "g"));
       if (patternItems !== null) {
         var patternItemsLength = patternItems.length;
-        var patternItemsIndex = 0;
-        for (; patternItemsIndex < patternItemsLength; patternItemsIndex++) {
-          var comment = patternItems[patternItemsIndex];
-          var commentVariable = "$C{" + _cached_Comments_Count.toString() + "}";
+        for (var patternItemsIndex = 0; patternItemsIndex < patternItemsLength; patternItemsIndex++) {
+          var comment = patternItems[patternItemsIndex], commentVariable = "$C{" + _cached_Comments_Count.toString() + "}";
           _cached_Comments[commentVariable] = '<span class="comment">' + comment + "</span>";
           _cached_Comments_Count++;
           innerHTML = innerHTML.replace(comment, commentVariable);
@@ -345,21 +314,15 @@
   function renderElementMultiLineCommentVariables(innerHTML, language, syntaxOptions) {
     var multiLineComment = language.multiLineComment;
     if (isDefinedArray(multiLineComment) && multiLineComment.length === 2) {
-      var startIndex = 0;
-      var endIndex = 0;
-      for (; startIndex >= 0 && endIndex >= 0;) {
+      var startIndex = 0, endIndex = 0;
+      while (startIndex >= 0 && endIndex >= 0) {
         startIndex = innerHTML.indexOf(multiLineComment[0], endIndex);
         if (startIndex > -1) {
           endIndex = innerHTML.indexOf(multiLineComment[1], startIndex + multiLineComment[0].length);
           if (endIndex > -1) {
-            var comment = innerHTML.substring(startIndex, endIndex + multiLineComment[1].length);
-            var commentLines = comment.split(_string.newLine);
-            var commentLinesLength = commentLines.length;
-            var commentCssClass = commentLinesLength === 1 ? "comment" : "multi-line-comment";
-            var commentLineIndex = 0;
-            for (; commentLineIndex < commentLinesLength; commentLineIndex++) {
-              var commentVariable = "$C{" + _cached_Comments_Count.toString() + "}";
-              var commentLine = commentLines[commentLineIndex];
+            var comment = innerHTML.substring(startIndex, endIndex + multiLineComment[1].length), commentLines = comment.split(_string.newLine), commentLinesLength = commentLines.length, commentCssClass = commentLinesLength === 1 ? "comment" : "multi-line-comment";
+            for (var commentLineIndex = 0; commentLineIndex < commentLinesLength; commentLineIndex++) {
+              var commentVariable = "$C{" + _cached_Comments_Count.toString() + "}", commentLine = commentLines[commentLineIndex];
               _cached_Comments[commentVariable] = '<span class="' + commentCssClass + '">' + commentLine + "</span>";
               _cached_Comments_Count++;
               innerHTML = innerHTML.replace(commentLine, commentVariable);
@@ -374,16 +337,10 @@
   function renderElementStringPatternVariables(innerHTML, patternItems, syntaxOptions) {
     if (patternItems !== null) {
       var patternItemsLength = patternItems.length;
-      var patternItemsIndex = 0;
-      for (; patternItemsIndex < patternItemsLength; patternItemsIndex++) {
-        var string = patternItems[patternItemsIndex];
-        var stringLines = string.split(_string.newLine);
-        var stringLinesLength = stringLines.length;
-        var stringCssClass = stringLinesLength === 1 ? "string" : "multi-line-string";
-        var stringLineIndex = 0;
-        for (; stringLineIndex < stringLinesLength; stringLineIndex++) {
-          var stringLine = stringLines[stringLineIndex];
-          var stringVariable = "$S{" + _cached_Strings_Count.toString() + "}";
+      for (var patternItemsIndex = 0; patternItemsIndex < patternItemsLength; patternItemsIndex++) {
+        var string = patternItems[patternItemsIndex], stringLines = string.split(_string.newLine), stringLinesLength = stringLines.length, stringCssClass = stringLinesLength === 1 ? "string" : "multi-line-string";
+        for (var stringLineIndex = 0; stringLineIndex < stringLinesLength; stringLineIndex++) {
+          var stringLine = stringLines[stringLineIndex], stringVariable = "$S{" + _cached_Strings_Count.toString() + "}";
           _cached_Strings[stringVariable] = '<span class="' + stringCssClass + '">' + stringLine + "</span>";
           _cached_Strings_Count++;
           innerHTML = innerHTML.replace(stringLine, stringVariable);
@@ -394,19 +351,10 @@
     return innerHTML;
   }
   function renderElementKeywords(innerHTML, language, syntaxOptions) {
-    var keywords = getDefaultStringOrArray(language.keywords, []);
-    var keywordsLength = keywords.length;
-    var caseSensitive = language.caseSensitive;
-    var keywordsCasing = getKeywordCasing(language.keywordsCasing);
+    var keywords = getDefaultStringOrArray(language.keywords, []), keywordsLength = keywords.length, caseSensitive = language.caseSensitive, keywordsCasing = getKeywordCasing(language.keywordsCasing);
     sortArrayOfStringByLength(keywords);
-    var keywordIndex = 0;
-    for (; keywordIndex < keywordsLength; keywordIndex++) {
-      var keyword = keywords[keywordIndex];
-      var keywordDisplay = getDisplayTextTestCasing(keyword, keywordsCasing);
-      var keywordVariable = "KW" + _cached_Keywords_Count.toString() + ";";
-      var keywordReplacement = null;
-      var regExFlags = caseSensitive ? "g" : "gi";
-      var regEx = new RegExp(getWordRegEx(keyword, language), regExFlags);
+    for (var keywordIndex = 0; keywordIndex < keywordsLength; keywordIndex++) {
+      var keyword = keywords[keywordIndex], keywordDisplay = getDisplayTextTestCasing(keyword, keywordsCasing), keywordVariable = "KW" + _cached_Keywords_Count.toString() + ";", keywordReplacement = null, regExFlags = caseSensitive ? "g" : "gi", regEx = new RegExp(getWordRegEx(keyword, language), regExFlags);
       if (syntaxOptions.highlightKeywords) {
         if (isDefinedFunction(syntaxOptions.onKeywordClicked)) {
           keywordReplacement = '<span class="keyword-clickable">' + keywordDisplay + "</span>";
@@ -428,13 +376,9 @@
     return innerHTML;
   }
   function replaceMarkUpKeywords(innerHTML, language, syntaxOptions) {
-    var keywords = getDefaultStringOrArray(language.keywords, []);
-    var caseSensitive = language.caseSensitive;
-    var keywordsCasing = getKeywordCasing(language.keywordsCasing);
-    var regEx = /(<([^>]+)>)/ig;
-    var regExFlags = caseSensitive ? "g" : "gi";
-    var regExResult = regEx.exec(innerHTML);
-    for (; regExResult;) {
+    var keywords = getDefaultStringOrArray(language.keywords, []), caseSensitive = language.caseSensitive, keywordsCasing = getKeywordCasing(language.keywordsCasing);
+    var regEx = /(<([^>]+)>)/ig, regExFlags = caseSensitive ? "g" : "gi", regExResult = regEx.exec(innerHTML);
+    while (regExResult) {
       if (regExResult.index === regEx.lastIndex) {
         regEx.lastIndex++;
       }
@@ -442,10 +386,7 @@
       tag = tag.replace("</", _string.empty).replace("<", _string.empty).replace(">", _string.empty);
       tag = tag.split(_string.space)[0];
       if (keywords.indexOf(tag) > -1) {
-        var keywordVariable = "KW" + _cached_Keywords_Count.toString() + ";";
-        var regExReplace = new RegExp(getWordRegEx(tag, language), regExFlags);
-        var keywordReplacement = null;
-        var replacementTagDisplay = getDisplayTextTestCasing(tag, keywordsCasing);
+        var keywordVariable = "KW" + _cached_Keywords_Count.toString() + ";", regExReplace = new RegExp(getWordRegEx(tag, language), regExFlags), keywordReplacement = null, replacementTagDisplay = getDisplayTextTestCasing(tag, keywordsCasing);
         if (syntaxOptions.highlightKeywords) {
           if (isDefinedFunction(syntaxOptions.onKeywordClicked)) {
             keywordReplacement = '<span class="keyword-clickable">' + replacementTagDisplay + "</span>";
@@ -466,17 +407,10 @@
     return innerHTML;
   }
   function renderElementValues(innerHTML, language, syntaxOptions) {
-    var values = getDefaultStringOrArray(language.values, []);
-    var valuesLength = values.length;
-    var caseSensitive = language.caseSensitive;
+    var values = getDefaultStringOrArray(language.values, []), valuesLength = values.length, caseSensitive = language.caseSensitive;
     sortArrayOfStringByLength(values);
-    var valueIndex = 0;
-    for (; valueIndex < valuesLength; valueIndex++) {
-      var value = values[valueIndex];
-      var valueVariable = "VAL" + _cached_Values_Count.toString() + ";";
-      var valueReplacement = null;
-      var regExFlags = caseSensitive ? "g" : "gi";
-      var regEx = new RegExp(getWordRegEx(value, language), regExFlags);
+    for (var valueIndex = 0; valueIndex < valuesLength; valueIndex++) {
+      var value = values[valueIndex], valueVariable = "VAL" + _cached_Values_Count.toString() + ";", valueReplacement = null, regExFlags = caseSensitive ? "g" : "gi", regEx = new RegExp(getWordRegEx(value, language), regExFlags);
       if (syntaxOptions.highlightValues) {
         if (isDefinedFunction(syntaxOptions.onValueClicked)) {
           valueReplacement = '<span class="value-clickable">' + value + "</span>";
@@ -498,17 +432,10 @@
     return innerHTML;
   }
   function renderElementAttributes(innerHTML, language, syntaxOptions) {
-    var attributes = getDefaultStringOrArray(language.attributes, []);
-    var attributesLength = attributes.length;
-    var caseSensitive = language.caseSensitive;
+    var attributes = getDefaultStringOrArray(language.attributes, []), attributesLength = attributes.length, caseSensitive = language.caseSensitive;
     sortArrayOfStringByLength(attributes);
-    var attributeIndex = 0;
-    for (; attributeIndex < attributesLength; attributeIndex++) {
-      var attribute = attributes[attributeIndex];
-      var attributeVariable = "ATTR" + _cached_Attributes_Count.toString() + ";";
-      var attributeReplacement = null;
-      var regExFlags = caseSensitive ? "g" : "gi";
-      var regEx = new RegExp(getWordRegEx(attribute, language), regExFlags);
+    for (var attributeIndex = 0; attributeIndex < attributesLength; attributeIndex++) {
+      var attribute = attributes[attributeIndex], attributeVariable = "ATTR" + _cached_Attributes_Count.toString() + ";", attributeReplacement = null, regExFlags = caseSensitive ? "g" : "gi", regEx = new RegExp(getWordRegEx(attribute, language), regExFlags);
       if (syntaxOptions.highlightAttributes) {
         if (isDefinedFunction(syntaxOptions.onAttributeClicked)) {
           attributeReplacement = '<span class="attribute-clickable">' + attribute + "</span>";
@@ -530,8 +457,7 @@
     return innerHTML;
   }
   function renderElementStringQuotesFromVariables(innerHTML) {
-    var quoteVariable;
-    for (quoteVariable in _cached_Strings) {
+    for (var quoteVariable in _cached_Strings) {
       if (_cached_Strings.hasOwnProperty(quoteVariable)) {
         innerHTML = innerHTML.replace(quoteVariable, _cached_Strings[quoteVariable]);
       }
@@ -539,15 +465,12 @@
     return innerHTML;
   }
   function renderElementCommentsFromVariables(innerHTML, language) {
-    var multiLineComment = language.multiLineComment;
-    var start = null;
-    var end = null;
+    var multiLineComment = language.multiLineComment, start = null, end = null;
     if (isDefinedArray(multiLineComment) && multiLineComment.length === 2) {
       start = encodeMarkUpCharacters(multiLineComment[0]);
       end = encodeMarkUpCharacters(multiLineComment[1]);
     }
-    var commentVariable;
-    for (commentVariable in _cached_Comments) {
+    for (var commentVariable in _cached_Comments) {
       if (_cached_Comments.hasOwnProperty(commentVariable)) {
         var replacement = _cached_Comments[commentVariable];
         if (language.isMarkUp && isDefinedString(start) && isDefinedString(end)) {
@@ -560,8 +483,7 @@
     return innerHTML;
   }
   function renderElementVariables(innerHTML, variables) {
-    var variable;
-    for (variable in variables) {
+    for (var variable in variables) {
       if (variables.hasOwnProperty(variable)) {
         var regExHtmlReplace = new RegExp(variable, "g");
         innerHTML = innerHTML.replace(regExHtmlReplace, variables[variable]);
@@ -570,14 +492,7 @@
     return innerHTML;
   }
   function renderElementCompletedHTML(element, description, numbers, syntax, innerHTML, syntaxOptions, isPreFormatted) {
-    var lines = innerHTML.split(_string.newLine);
-    var linesLength = lines.length;
-    var linesLengthStringLength = linesLength.toString().length;
-    var numberContainer = numbers;
-    var codeContainer = syntax;
-    var replaceWhitespace = null;
-    var lineNumber = 1;
-    var lastLineWasBlank = false;
+    var lines = innerHTML.split(_string.newLine), linesLength = lines.length, linesLengthStringLength = linesLength.toString().length, numberContainer = numbers, codeContainer = syntax, replaceWhitespace = null, lineNumber = 1, lastLineWasBlank = false;
     if (isPreFormatted) {
       codeContainer = createElement("pre");
       syntax.appendChild(codeContainer);
@@ -601,8 +516,7 @@
         selectTextInElement(codeContainer);
       };
     }
-    var lineIndex = 0;
-    for (; lineIndex < linesLength; lineIndex++) {
+    for (var lineIndex = 0; lineIndex < linesLength; lineIndex++) {
       var line = lines[lineIndex];
       if (line.trim() !== _string.empty && replaceWhitespace === null) {
         replaceWhitespace = line.substring(0, line.match(/^\s*/)[0].length);
@@ -625,9 +539,7 @@
             if (replaceWhitespace !== null) {
               line = line.replace(replaceWhitespace, _string.empty);
               if (!isPreFormatted) {
-                var remainingStartWhitespaceCount = line.match(/^\s*/)[0].length;
-                var remainingStartWhitespace = line.substring(0, remainingStartWhitespaceCount);
-                var whitespaceReplacement = Array(remainingStartWhitespaceCount).join("&nbsp;");
+                var remainingStartWhitespaceCount = line.match(/^\s*/)[0].length, remainingStartWhitespace = line.substring(0, remainingStartWhitespaceCount), whitespaceReplacement = Array(remainingStartWhitespaceCount).join("&nbsp;");
                 line = line.replace(remainingStartWhitespace, whitespaceReplacement);
               }
             }
@@ -643,10 +555,8 @@
   }
   function renderElementClickEvents(element, customTrigger, className) {
     if (isDefinedFunction(customTrigger)) {
-      var elements = element.getElementsByClassName(className);
-      var elementsLength = elements.length;
-      var elementIndex = 0;
-      for (; elementIndex < elementsLength; elementIndex++) {
+      var elements = element.getElementsByClassName(className), elementsLength = elements.length;
+      for (var elementIndex = 0; elementIndex < elementsLength; elementIndex++) {
         renderElementClickEvent(elements[elementIndex], customTrigger);
       }
     }
@@ -658,8 +568,7 @@
     };
   }
   function getFriendlyLanguageName(syntaxLanguage, languageLabelCasing) {
-    var result = null;
-    var language = getLanguage(syntaxLanguage);
+    var result = null, language = getLanguage(syntaxLanguage);
     if (isDefined(language) && isDefinedString(language.friendlyName)) {
       result = language.friendlyName;
     } else {
@@ -669,8 +578,7 @@
     return result;
   }
   function getLanguage(syntaxLanguage) {
-    var result = null;
-    var language = syntaxLanguage.toLowerCase();
+    var result = null, language = syntaxLanguage.toLowerCase();
     if (_languages.hasOwnProperty(language)) {
       result = _languages[language];
     } else {
@@ -789,9 +697,7 @@
     return isDefinedObject(object) && object instanceof Array;
   }
   function createElement(type, className) {
-    var result = null;
-    var nodeType = type.toLowerCase();
-    var isText = nodeType === "text";
+    var result = null, nodeType = type.toLowerCase(), isText = nodeType === "text";
     if (!_elements_Type.hasOwnProperty(nodeType)) {
       _elements_Type[nodeType] = isText ? _parameter_Document.createTextNode(_string.empty) : _parameter_Document.createElement(nodeType);
     }
@@ -833,14 +739,17 @@
   function getDefaultBoolean(value, defaultValue) {
     return isDefinedBoolean(value) ? value : defaultValue;
   }
+  function getDefaultNumber(value, defaultValue) {
+    return isDefinedNumber(value) ? value : defaultValue;
+  }
   function getDefaultFunction(value, defaultValue) {
     return isDefinedFunction(value) ? value : defaultValue;
   }
   function getDefaultArray(value, defaultValue) {
     return isDefinedArray(value) ? value : defaultValue;
   }
-  function getDefaultNumber(value, defaultValue) {
-    return isDefinedNumber(value) ? value : defaultValue;
+  function getDefaultObject(value, defaultValue) {
+    return isDefinedObject(value) ? value : defaultValue;
   }
   function getDefaultStringOrArray(value, defaultValue) {
     if (isDefinedString(value)) {
@@ -854,8 +763,7 @@
     return value;
   }
   function getObjectFromString(objectString) {
-    var parsed = true;
-    var result = null;
+    var parsed = true, result = null;
     try {
       if (isDefinedString(objectString)) {
         result = _parameter_Json.parse(objectString);
@@ -867,15 +775,14 @@
           result = result();
         }
       } catch (e2) {
-        parsed = logError("Errors in object: " + e1.message + ", " + e2.message);
+        parsed = logError(_configuration.objectErrorText.replace("{{error_1}}", e1.message).replace("{{error_2}}", e2.message));
         result = null;
       }
     }
     return {parsed:parsed, result:result};
   }
   function getClonedObject(object) {
-    var json = _parameter_Json.stringify(object);
-    var result = _parameter_Json.parse(json);
+    var json = _parameter_Json.stringify(object), result = _parameter_Json.parse(json);
     return result;
   }
   function logError(error) {
@@ -888,8 +795,7 @@
   }
   function newGuid() {
     var result = [];
-    var charIndex = 0;
-    for (; charIndex < 32; charIndex++) {
+    for (var charIndex = 0; charIndex < 32; charIndex++) {
       if (charIndex === 8 || charIndex === 12 || charIndex === 16 || charIndex === 20) {
         result.push("-");
       }
@@ -900,7 +806,7 @@
   }
   function padNumber(number, length) {
     var result = number;
-    for (; result.length < length;) {
+    while (result.length < length) {
       result = "0" + result;
     }
     return result;
@@ -915,6 +821,130 @@
       return b.length - a.length;
     });
   }
+  _public.highlightAll = function() {
+    render();
+    return _public;
+  };
+  _public.highlightElement = function(elementOrId) {
+    var element = elementOrId;
+    if (isDefinedString(element)) {
+      element = _parameter_Document.getElementById(element);
+    }
+    if (isDefined(element)) {
+      renderElement(element);
+    }
+    return _public;
+  };
+  _public.getElementsHighlighted = function() {
+    return [].slice.call(_elements);
+  };
+  _public.getCode = function(elementId) {
+    var result = null;
+    if (_elements_Original.hasOwnProperty(elementId)) {
+      result = _elements_Original[elementId];
+    }
+    return result;
+  };
+  _public.destroyAll = function() {
+    for (var elementId in _elements_Original) {
+      if (_elements_Original.hasOwnProperty(elementId)) {
+        var renderedElement = _parameter_Document.getElementById(elementId);
+        if (isDefined(renderedElement)) {
+          renderedElement.innerHTML = _elements_Original[elementId];
+        }
+      }
+    }
+    _elements_Original = {};
+    _elements = [];
+    return _public;
+  };
+  _public.destroy = function(elementId) {
+    if (_elements_Original.hasOwnProperty(elementId.toLowerCase())) {
+      var renderedElement = _parameter_Document.getElementById(elementId);
+      if (isDefined(renderedElement)) {
+        renderedElement.innerHTML = _elements_Original[elementId.toLowerCase()];
+        delete _elements_Original[elementId.toLowerCase()];
+        var elementsLength = _elements.length;
+        for (var elementIndex = 0; elementIndex < elementsLength; elementIndex++) {
+          if (_elements[elementIndex].id === elementId) {
+            delete _elements[elementIndex];
+            break;
+          }
+        }
+      }
+    }
+    return _public;
+  };
+  _public.addLanguage = function(name, languageDetails, triggerRender) {
+    var added = false, lookup = name.toLowerCase();
+    if (!_languages.hasOwnProperty(lookup)) {
+      triggerRender = getDefaultBoolean(triggerRender, true);
+      _languages[lookup] = languageDetails;
+      added = true;
+      if (triggerRender) {
+        render();
+      }
+    }
+    return added;
+  };
+  _public.removeLanguage = function(name) {
+    var removed = false, lookup = name.toLowerCase();
+    if (_languages.hasOwnProperty(lookup)) {
+      delete _languages[lookup];
+      for (var alias in _aliases_Rules) {
+        if (_aliases_Rules.hasOwnProperty(alias) && _aliases_Rules[alias] === lookup) {
+          delete _aliases_Rules[alias];
+        }
+      }
+      removed = true;
+    }
+    return removed;
+  };
+  _public.getLanguage = function(name) {
+    var details = null, lookup = name.toLowerCase();
+    if (_languages.hasOwnProperty(lookup)) {
+      details = getClonedObject(lookup);
+    }
+    return details;
+  };
+  _public.getLanguages = function() {
+    return getClonedObject(_languages);
+  };
+  _public.addAlias = function(alias, language, triggerRender) {
+    var added = false;
+    if (_languages.hasOwnProperty(language.toLowerCase()) && !_aliases_Rules.hasOwnProperty(alias.toLowerCase())) {
+      triggerRender = getDefaultBoolean(triggerRender, true);
+      _aliases_Rules[alias.toLowerCase()] = language.toLowerCase();
+      added = true;
+      if (triggerRender) {
+        render();
+      }
+    }
+    return added;
+  };
+  _public.removeAlias = function(alias) {
+    var removed = false;
+    if (_aliases_Rules.hasOwnProperty(alias.toLowerCase())) {
+      delete _aliases_Rules[alias.toLowerCase()];
+      removed = true;
+    }
+    return removed;
+  };
+  _public.getAlias = function(alias) {
+    var result = null;
+    if (_aliases_Rules.hasOwnProperty(alias.toLowerCase())) {
+      result = _aliases_Rules[alias.toLowerCase()];
+    }
+    return result;
+  };
+  _public.getAliases = function() {
+    return getClonedObject(_aliases_Rules);
+  };
+  _public.setConfiguration = function(newOptions) {
+    _configuration = getDefaultObject(newOptions, {});
+    buildDefaultConfiguration();
+    return _public;
+  };
   function buildDefaultConfiguration() {
     _configuration.safeMode = getDefaultBoolean(_configuration.safeMode, true);
     _configuration.highlightAllDomElementTypes = getDefaultStringOrArray(_configuration.highlightAllDomElementTypes, ["div", "code"]);
@@ -925,171 +955,17 @@
   function buildDefaultConfigurationStrings() {
     _configuration.buttonsOpenerText = getDefaultString(_configuration.buttonsOpenerText, "<");
     _configuration.buttonsCloserText = getDefaultString(_configuration.buttonsCloserText, ">");
+    _configuration.objectErrorText = getDefaultString(_configuration.objectErrorText, "Errors in object: {{error_1}}, {{error_2}}");
+    _configuration.attributeNotSetErrorText = getDefaultString(_configuration.attributeNotSetErrorText, "The attribute '{{attribute_name}}' has not been set correctly.");
+    _configuration.languageNotSupportedErrorText = getDefaultString(_configuration.languageNotSupportedErrorText, "Language '{{language}}' is not supported.");
+    _configuration.noCodeAvailableToRenderErrorText = getDefaultString(_configuration.noCodeAvailableToRenderErrorText, "No code is available to render.");
   }
   function buildDefaultConfigurationCustomTriggers() {
     _configuration.onBeforeRender = getDefaultFunction(_configuration.onBeforeRender, null);
     _configuration.onAfterRender = getDefaultFunction(_configuration.onAfterRender, null);
   }
-  var _parameter_Document = null;
-  var _parameter_Navigator = null;
-  var _parameter_Window = null;
-  var _parameter_Math = null;
-  var _parameter_Json = null;
-  var _configuration = {};
-  var _string = {empty:"", space:" ", newLine:"\n"};
-  var _aliases_Rules = {};
-  var _elements_Type = {};
-  var _elements = [];
-  var _elements_Original = {};
-  var _cached_Keywords = {};
-  var _cached_Keywords_Count = 0;
-  var _cached_Values = {};
-  var _cached_Values_Count = 0;
-  var _cached_Attributes = {};
-  var _cached_Attributes_Count = 0;
-  var _cached_Strings = {};
-  var _cached_Strings_Count = 0;
-  var _cached_Comments = {};
-  var _cached_Comments_Count = 0;
-  var _languages = {};
-  var _languages_Unknown = "unknown";
-  var _languages_Tabbed = "tabbed";
-  var _attribute_Name_Language = "data-syntax-language";
-  var _attribute_Name_Options = "data-syntax-options";
-  var _attribute_Name_Buttons = "data-syntax-buttons";
-  var _attribute_Name_TabContents = "data-syntax-tab-contents";
-  this.highlightAll = function() {
-    render();
-    return this;
-  };
-  this.highlightElement = function(elementOrId) {
-    var element = elementOrId;
-    if (isDefinedString(element)) {
-      element = _parameter_Document.getElementById(element);
-    }
-    if (isDefined(element)) {
-      renderElement(element);
-    }
-    return this;
-  };
-  this.getElementsHighlighted = function() {
-    return [].slice.call(_elements);
-  };
-  this.getCode = function(elementId) {
-    var result = null;
-    if (_elements_Original.hasOwnProperty(elementId)) {
-      result = _elements_Original[elementId];
-    }
-    return result;
-  };
-  this.destroyAll = function() {
-    var elementId;
-    for (elementId in _elements_Original) {
-      if (_elements_Original.hasOwnProperty(elementId)) {
-        var renderedElement = _parameter_Document.getElementById(elementId);
-        if (isDefined(renderedElement)) {
-          renderedElement.innerHTML = _elements_Original[elementId];
-        }
-      }
-    }
-    _elements_Original = {};
-    _elements = [];
-    return this;
-  };
-  this.destroy = function(elementId) {
-    if (_elements_Original.hasOwnProperty(elementId.toLowerCase())) {
-      var renderedElement = _parameter_Document.getElementById(elementId);
-      if (isDefined(renderedElement)) {
-        renderedElement.innerHTML = _elements_Original[elementId.toLowerCase()];
-        delete _elements_Original[elementId.toLowerCase()];
-        var elementsLength = _elements.length;
-        var elementIndex = 0;
-        for (; elementIndex < elementsLength; elementIndex++) {
-          if (_elements[elementIndex].id === elementId) {
-            delete _elements[elementIndex];
-            break;
-          }
-        }
-      }
-    }
-    return this;
-  };
-  this.addLanguage = function(name, languageDetails, triggerRender) {
-    var added = false;
-    var lookup = name.toLowerCase();
-    if (!_languages.hasOwnProperty(lookup)) {
-      triggerRender = !isDefinedBoolean(triggerRender) ? true : triggerRender;
-      _languages[lookup] = languageDetails;
-      added = true;
-      if (triggerRender) {
-        render();
-      }
-    }
-    return added;
-  };
-  this.removeLanguage = function(name) {
-    var removed = false;
-    var lookup = name.toLowerCase();
-    if (_languages.hasOwnProperty(lookup)) {
-      delete _languages[lookup];
-      var alias;
-      for (alias in _aliases_Rules) {
-        if (_aliases_Rules.hasOwnProperty(alias) && _aliases_Rules[alias] === lookup) {
-          delete _aliases_Rules[alias];
-        }
-      }
-      removed = true;
-    }
-    return removed;
-  };
-  this.getLanguage = function(name) {
-    var details = null;
-    var lookup = name.toLowerCase();
-    if (_languages.hasOwnProperty(lookup)) {
-      details = getClonedObject(lookup);
-    }
-    return details;
-  };
-  this.getLanguages = function() {
-    return getClonedObject(_languages);
-  };
-  this.addAlias = function(alias, language, triggerRender) {
-    var added = false;
-    if (_languages.hasOwnProperty(language.toLowerCase()) && !_aliases_Rules.hasOwnProperty(alias.toLowerCase())) {
-      triggerRender = !isDefinedBoolean(triggerRender) ? true : triggerRender;
-      _aliases_Rules[alias.toLowerCase()] = language.toLowerCase();
-      added = true;
-      if (triggerRender) {
-        render();
-      }
-    }
-    return added;
-  };
-  this.removeAlias = function(alias) {
-    var removed = false;
-    if (_aliases_Rules.hasOwnProperty(alias.toLowerCase())) {
-      delete _aliases_Rules[alias.toLowerCase()];
-      removed = true;
-    }
-    return removed;
-  };
-  this.getAlias = function(alias) {
-    var result = null;
-    if (_aliases_Rules.hasOwnProperty(alias.toLowerCase())) {
-      result = _aliases_Rules[alias.toLowerCase()];
-    }
-    return result;
-  };
-  this.getAliases = function() {
-    return getClonedObject(_aliases_Rules);
-  };
-  this.setConfiguration = function(newOptions) {
-    _configuration = !isDefinedObject(newOptions) ? {} : newOptions;
-    buildDefaultConfiguration();
-    return this;
-  };
-  this.getVersion = function() {
-    return "2.4.3";
+  _public.getVersion = function() {
+    return "2.5.0";
   };
   (function(documentObject, navigatorObject, windowObject, mathObject, jsonObject) {
     _parameter_Document = documentObject;
@@ -1102,7 +978,7 @@
       render();
     });
     if (!isDefined(_parameter_Window.$syntax)) {
-      _parameter_Window.$syntax = this;
+      _parameter_Window.$syntax = _public;
     }
   })(document, navigator, window, Math, JSON);
 })();
