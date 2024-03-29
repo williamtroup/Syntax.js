@@ -1,4 +1,4 @@
-/*! Syntax.js v2.4.3 | (c) Bunoon 2024 | MIT License */
+/*! Syntax.js v2.5.0 | (c) Bunoon 2024 | MIT License */
 $syntax.addLanguage( "rust", {
     friendlyName: "Rust",
     keywords: [
