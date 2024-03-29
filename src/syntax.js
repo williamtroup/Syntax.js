@@ -12,12 +12,17 @@
 
 
 ( function() {
+    "use strict";
+
     var // Variables: Constructor Parameters
         _parameter_Document = null,
         _parameter_Navigator = null,
         _parameter_Window = null,
         _parameter_Math = null,
         _parameter_Json = null,
+
+        // Variables: Public Scope
+        _public = {},
 
         // Variables: Configuration
         _configuration = {},
@@ -1310,10 +1315,10 @@
      * 
      * @returns     {Object}                                                The Syntax.js class instance.
      */
-    this.highlightAll = function() {
+    _public.highlightAll = function() {
         render();
 
-        return this;
+        return _public;
     };
 
     /**
@@ -1328,7 +1333,7 @@
      * 
      * @returns     {Object}                                                The Syntax.js class instance.
      */
-    this.highlightElement = function( elementOrId ) {
+    _public.highlightElement = function( elementOrId ) {
         var element = elementOrId;
 
         if ( isDefinedString( element ) ) {
@@ -1339,7 +1344,7 @@
             renderElement( element );
         }
 
-        return this;
+        return _public;
     };
 
     /**
@@ -1352,7 +1357,7 @@
      * @returns     {Object[]}                                              An array containing the rendered DOM elements.
      */
 
-    this.getElementsHighlighted = function() {
+    _public.getElementsHighlighted = function() {
         return [].slice.call( _elements );
     };
 
@@ -1368,7 +1373,7 @@
      * @returns     {string}                                                The code in the element.
      */
 
-    this.getCode = function( elementId ) {
+    _public.getCode = function( elementId ) {
         var result = null;
 
         if ( _elements_Original.hasOwnProperty( elementId ) ) {
@@ -1394,7 +1399,7 @@
      * 
      * @returns     {Object}                                                The Syntax.js class instance.
      */
-    this.destroyAll = function() {
+    _public.destroyAll = function() {
         for ( var elementId in _elements_Original ) {
             if ( _elements_Original.hasOwnProperty( elementId ) ) {
                 var renderedElement = _parameter_Document.getElementById( elementId );
@@ -1408,7 +1413,7 @@
         _elements_Original = {};
         _elements = [];
 
-        return this;
+        return _public;
     };
 
     /**
@@ -1422,7 +1427,7 @@
      * 
      * @returns     {Object}                                                The Syntax.js class instance.
      */
-    this.destroy = function( elementId ) {
+    _public.destroy = function( elementId ) {
         if ( _elements_Original.hasOwnProperty( elementId.toLowerCase() ) ) {
             var renderedElement = _parameter_Document.getElementById( elementId );
 
@@ -1442,7 +1447,7 @@
             }
         }
 
-        return this;
+        return _public;
     };
 
 
@@ -1466,7 +1471,7 @@
      * 
      * @returns     {boolean}                                               States if the language has been added.
      */
-    this.addLanguage = function( name, languageDetails, triggerRender ) {
+    _public.addLanguage = function( name, languageDetails, triggerRender ) {
         var added = false,
             lookup = name.toLowerCase();
 
@@ -1495,7 +1500,7 @@
      * 
      * @returns     {boolean}                                               States if the language has been removed.
      */
-    this.removeLanguage = function( name ) {
+    _public.removeLanguage = function( name ) {
         var removed = false,
             lookup = name.toLowerCase();
 
@@ -1525,7 +1530,7 @@
      * 
      * @returns     {Object}                                                The language details.
      */
-    this.getLanguage = function( name ) {
+    _public.getLanguage = function( name ) {
         var details = null,
             lookup = name.toLowerCase();
 
@@ -1545,7 +1550,7 @@
      * 
      * @returns     {Object}                                                The object that contains the languages.
      */
-    this.getLanguages = function() {
+    _public.getLanguages = function() {
         return getClonedObject( _languages );
     };
 
@@ -1570,7 +1575,7 @@
      * 
      * @returns     {boolean}                                               States if the alias has been added.
      */
-    this.addAlias = function( alias, language, triggerRender ) {
+    _public.addAlias = function( alias, language, triggerRender ) {
         var added = false;
 
         if ( _languages.hasOwnProperty( language.toLowerCase() ) && !_aliases_Rules.hasOwnProperty( alias.toLowerCase() ) ) {
@@ -1598,7 +1603,7 @@
      * 
      * @returns     {boolean}                                               States if the alias has been removed.
      */
-    this.removeAlias = function( alias ) {
+    _public.removeAlias = function( alias ) {
         var removed = false;
 
         if ( _aliases_Rules.hasOwnProperty( alias.toLowerCase() ) ) {
@@ -1621,7 +1626,7 @@
      * 
      * @returns     {string}                                                The name of the language.
      */
-    this.getAlias = function( alias ) {
+    _public.getAlias = function( alias ) {
         var result = null;
 
         if ( _aliases_Rules.hasOwnProperty( alias.toLowerCase() ) ) {
@@ -1640,7 +1645,7 @@
      * 
      * @returns     {Object}                                                The object that contains the aliases.
      */
-    this.getAliases = function() {
+    _public.getAliases = function() {
         return getClonedObject( _aliases_Rules );
     };
 
@@ -1662,12 +1667,12 @@
      * 
      * @returns     {Object}                                                The Syntax.js class instance.
      */
-    this.setConfiguration = function( newOptions ) {
+    _public.setConfiguration = function( newOptions ) {
         _configuration = !isDefinedObject( newOptions ) ? {} : newOptions;
         
         buildDefaultConfiguration();
 
-        return this;
+        return _public;
     };
 
     function buildDefaultConfiguration() {
@@ -1705,7 +1710,7 @@
      * 
      * @returns     {string}                                                The version number.
      */
-    this.getVersion = function() {
+    _public.getVersion = function() {
         return "2.5.0";
     };
 
@@ -1730,7 +1735,7 @@
         } );
 
         if ( !isDefined( _parameter_Window.$syntax ) ) {
-            _parameter_Window.$syntax = this;
+            _parameter_Window.$syntax = _public;
         }
 
     } ) ( document, navigator, window, Math, JSON );
