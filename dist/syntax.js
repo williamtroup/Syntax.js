@@ -1,4 +1,4 @@
-/*! Syntax.js v2.5.0 | (c) Bunoon 2024 | MIT License */
+/*! Syntax.js v2.6.0 | (c) Bunoon 2024 | MIT License */
 (function() {
   var _parameter_Document = null, _parameter_Navigator = null, _parameter_Window = null, _parameter_Math = null, _parameter_Json = null, _public = {}, _configuration = {}, _string = {empty:"", space:" ", newLine:"\n"}, _aliases_Rules = {}, _elements_Type = {}, _elements = [], _elements_Original = {}, _cached_Keywords = {}, _cached_Keywords_Count = 0, _cached_Values = {}, _cached_Values_Count = 0, _cached_Attributes = {}, _cached_Attributes_Count = 0, _cached_Strings = {}, _cached_Strings_Count = 
   0, _cached_Comments = {}, _cached_Comments_Count = 0, _languages = {}, _languages_Unknown = "unknown", _languages_Tabbed = "tabbed", _attribute_Name_Language = "data-syntax-language", _attribute_Name_Options = "data-syntax-options", _attribute_Name_Buttons = "data-syntax-buttons", _attribute_Name_TabContents = "data-syntax-tab-contents";
@@ -214,7 +214,7 @@
         var copyButton = createElement("button", "button");
         copyButton.style.display = syntaxOptions.buttonsVisible ? "inline-block" : "none";
         buttons.appendChild(copyButton);
-        setNodeText(copyButton, syntaxOptions.copyButtonText);
+        setNodeText(copyButton, _configuration.copyButtonText);
         copyButton.onclick = function() {
           _parameter_Navigator.clipboard.writeText(innerHTMLCopy);
           fireCustomTrigger(syntaxOptions.onCopy, innerHTMLCopy);
@@ -225,7 +225,7 @@
         var printButton = createElement("button", "button");
         printButton.style.display = syntaxOptions.buttonsVisible ? "inline-block" : "none";
         buttons.appendChild(printButton);
-        setNodeText(printButton, syntaxOptions.printButtonText);
+        setNodeText(printButton, _configuration.printButtonText);
         printButton.onclick = function() {
           var newWindow = window.open(_string.empty, "PRINT", "height=400,width=600"), newElementForPrint = syntax.cloneNode(true), newTitleElement = createElement("div");
           newElementForPrint.removeChild(newElementForPrint.children[0]);
@@ -615,7 +615,6 @@
   function getBindingOptions(newOptions) {
     var options = !isDefinedObject(newOptions) ? {} : newOptions;
     options = buildBindingAttributeOptions(options);
-    options = buildBindingAttributeOptionStrings(options);
     options = buildBindingAttributeOptionCustomTriggers(options);
     return options;
   }
@@ -636,11 +635,6 @@
     options.languageLabelCasing = getDefaultString(options.languageLabelCasing, "uppercase");
     options.buttonsVisible = getDefaultBoolean(options.buttonsVisible, true);
     options.maximumButtons = getDefaultNumber(options.maximumButtons, 2);
-    return options;
-  }
-  function buildBindingAttributeOptionStrings(options) {
-    options.copyButtonText = getDefaultString(options.copyButtonText, "Copy");
-    options.printButtonText = getDefaultString(options.printButtonText, "Print");
     return options;
   }
   function buildBindingAttributeOptionCustomTriggers(options) {
@@ -959,13 +953,15 @@
     _configuration.attributeNotSetErrorText = getDefaultString(_configuration.attributeNotSetErrorText, "The attribute '{{attribute_name}}' has not been set correctly.");
     _configuration.languageNotSupportedErrorText = getDefaultString(_configuration.languageNotSupportedErrorText, "Language '{{language}}' is not supported.");
     _configuration.noCodeAvailableToRenderErrorText = getDefaultString(_configuration.noCodeAvailableToRenderErrorText, "No code is available to render.");
+    _configuration.copyButtonText = getDefaultString(_configuration.copyButtonText, "Copy");
+    _configuration.printButtonText = getDefaultString(_configuration.printButtonText, "Print");
   }
   function buildDefaultConfigurationCustomTriggers() {
     _configuration.onBeforeRender = getDefaultFunction(_configuration.onBeforeRender, null);
     _configuration.onAfterRender = getDefaultFunction(_configuration.onAfterRender, null);
   }
   _public.getVersion = function() {
-    return "2.5.0";
+    return "2.6.0";
   };
   (function(documentObject, navigatorObject, windowObject, mathObject, jsonObject) {
     _parameter_Document = documentObject;

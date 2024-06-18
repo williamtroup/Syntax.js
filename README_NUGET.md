@@ -1,8 +1,8 @@
-# Syntax.js v2.5.0
+# Syntax.js v2.6.0
 
 [![Tweet](https://img.shields.io/twitter/url/http/shields.io.svg?style=social)](https://twitter.com/intent/tweet?text=Syntax.js%2C%20a%20free%20JavaScript%20syntax%20highlighter&url=https://github.com/williamtroup/Syntax.js&hashtags=javascript,syntax,highlighter)
-[![npm](https://img.shields.io/badge/npmjs-v2.5.0-blue)](https://www.npmjs.com/package/jsyntax.js)
-[![nuget](https://img.shields.io/badge/nuget-v2.5.0-purple)](https://www.nuget.org/packages/jSyntax.js/)
+[![npm](https://img.shields.io/badge/npmjs-v2.6.0-blue)](https://www.npmjs.com/package/jsyntax.js)
+[![nuget](https://img.shields.io/badge/nuget-v2.6.0-purple)](https://www.nuget.org/packages/jSyntax.js/)
 [![license](https://img.shields.io/badge/license-MIT-green)](https://github.com/williamtroup/Syntax.js/blob/main/LICENSE.txt)
 [![discussions Welcome](https://img.shields.io/badge/discussions-Welcome-red)](https://github.com/williamtroup/Syntax.js/discussions)
 [![coded by William Troup](https://img.shields.io/badge/coded_by-William_Troup-yellow)](https://www.william-troup.com/)
@@ -14,6 +14,7 @@
 
 - Zero-dependencies and extremely lightweight!
 - Highlights keywords, values, strings, and comments.
+- 51 language translations available!
 - Full API available via public functions.
 - Fully styled in CSS/SASS (including the buttons) and compatible with the Bootstrap library.
 - Full CSS theme support (using :root variables, with a default dark-mode theme).
@@ -36,12 +37,67 @@ All the documentation can be found [here](https://www.william-troup.com/syntax-j
 All modern browsers (such as Google Chrome, FireFox, and Opera) are fully supported.
 
 
+## What languages are supported?
+
+- `af` Afrikaans
+- `ar` Arabic
+- `hy` Armenian
+- `be` Belarusian
+- `bn` Bengali
+- `bg` Bulgarian
+- `ca` Catalan
+- `zh` Chinese (simplified)
+- `da` Danish
+- `nl` Dutch
+- `en` English (default)
+- `eo` Esperanto
+- `et` Estonian
+- `fa` Farsi
+- `fi` Finnish
+- `fr` French
+- `fy` Frisian
+- `gl` Galician
+- `ka` Georgian
+- `de` German
+- `el` Greek
+- `he` Hebrew
+- `hi` Hindi
+- `hu` Hungarian
+- `is` Icelandic
+- `id` Indonesian
+- `ga` Irish
+- `it` Italian
+- `ja` Japanese
+- `ko` Korean
+- `lv` Latvian
+- `lt` Lithuanian
+- `lb` Luxembourgish
+- `ms` Malay
+- `ne` Nepali
+- `no` Norwegian
+- `pl` Polish
+- `pt` Portuguese
+- `ro` Romanian
+- `si` Sinhalese
+- `sk` Slovak
+- `sl` Slovenian
+- `es` Spanish
+- `sv` Swedish
+- `tl` Tagalog
+- `ta` Tamil
+- `zh-tw` Taiwanese
+- `te` Telugu
+- `th` Thai
+- `tr` Turkish
+- `uk` Ukrainian
+
+
 ## What are the most recent changes?
 
 To see a list of all the most recent changes, click [here](https://www.william-troup.com/syntax-js/documentation/recent-changes.html).
 
 
-## What languages are supported by default?
+## What programming languages are supported by default?
 
 - `bash` Bash
 - `c-plus-plus` C++
