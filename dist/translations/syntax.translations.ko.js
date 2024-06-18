@@ -1,11 +1,11 @@
 /*! Syntax.js v2.6.0 - Korean | (c) Bunoon 2024 | MIT License */
 $syntax.setConfiguration( {
-        "backButtonText": "뒤쪽에",
-        "nextButtonText": "다음",
-        "finishButtonText": "마치다",
-        "closeButtonToolTipText": "닫다",
-        "doNotShowAgainText": "다시 표시하지 않습니다",
+        "buttonsOpenerText": "<",
+        "buttonsCloserText": ">",
         "objectErrorText": "개체 오류: {{error_1}}, {{error_2}}",
-        "attributeNotValidErrorText": "속성 '{{attribute_name}}'은(는) 유효한 개체가 아닙니다.",
-        "attributeNotSetErrorText": "속성 '{{attribute_name}}'가 올바르게 설정되지 않았습니다."
+        "attributeNotSetErrorText": "속성 '{{attribute_name}}'가 올바르게 설정되지 않았습니다.",
+        "languageNotSupportedErrorText": "언어 '{{language}}'는 지원되지 않습니다.",
+        "noCodeAvailableToRenderErrorText": "렌더링할 수 있는 코드가 없습니다.",
+        "copyButtonText": "복사",
+        "printButtonText": "인쇄"
 } );

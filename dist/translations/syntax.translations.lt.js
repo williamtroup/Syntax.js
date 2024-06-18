@@ -1,11 +1,11 @@
 /*! Syntax.js v2.6.0 - Lithuanian | (c) Bunoon 2024 | MIT License */
 $syntax.setConfiguration( {
-        "backButtonText": "Atgal",
-        "nextButtonText": "Kitas",
-        "finishButtonText": "Baigti",
-        "closeButtonToolTipText": "Uždaryti",
-        "doNotShowAgainText": "Daugiau neberodyti",
+        "buttonsOpenerText": "<",
+        "buttonsCloserText": ">",
         "objectErrorText": "Klaidos objekte: {{error_1}}, {{error_2}}",
-        "attributeNotValidErrorText": "atributas '{{attribute_name}}“ nėra tinkamas objektas.",
-        "attributeNotSetErrorText": "atributas '{{attribute_name}}“ nebuvo nustatytas teisingai."
+        "attributeNotSetErrorText": "atributas '{{attribute_name}}“ nebuvo nustatytas teisingai.",
+        "languageNotSupportedErrorText": "Kalba'{{language}}“ nepalaikomas.",
+        "noCodeAvailableToRenderErrorText": "Nėra kodo, kurį būtų galima pateikti.",
+        "copyButtonText": "Kopijuoti",
+        "printButtonText": "Spausdinti"
 } );

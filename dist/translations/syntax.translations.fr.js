@@ -1,11 +1,11 @@
 /*! Syntax.js v2.6.0 - French | (c) Bunoon 2024 | MIT License */
 $syntax.setConfiguration( {
-        "backButtonText": "Dos",
-        "nextButtonText": "Suivant",
-        "finishButtonText": "Finition",
-        "closeButtonToolTipText": "Fermer",
-        "doNotShowAgainText": "Ne pas montrer de nouveau",
+        "buttonsOpenerText": "<",
+        "buttonsCloserText": ">",
         "objectErrorText": "Erreurs dans l'objet : {{error_1}}, {{error_2}}",
-        "attributeNotValidErrorText": "L'attribut '{{attribute_name}}' n'est pas un objet valide.",
-        "attributeNotSetErrorText": "L'attribut '{{attribute_name}}' n'a pas été défini correctement."
+        "attributeNotSetErrorText": "L'attribut '{{attribute_name}}' n'a pas été défini correctement.",
+        "languageNotSupportedErrorText": "Langue '{{language}}' n'est pas pris en charge.",
+        "noCodeAvailableToRenderErrorText": "Aucun code n'est disponible pour le rendu.",
+        "copyButtonText": "Copie",
+        "printButtonText": "Imprimer"
 } );

@@ -1,11 +1,11 @@
 /*! Syntax.js v2.6.0 - Luxembourgish | (c) Bunoon 2024 | MIT License */
 $syntax.setConfiguration( {
-        "backButtonText": "Zréck",
-        "nextButtonText": "Nächst",
-        "finishButtonText": "Fäerdeg",
-        "closeButtonToolTipText": "Zoumaachen",
-        "doNotShowAgainText": "Net erëm weisen",
+        "buttonsOpenerText": "<",
+        "buttonsCloserText": ">",
         "objectErrorText": "Feeler am Objet: {{error_1}}, {{error_2}}",
-        "attributeNotValidErrorText": "Den Attribut'{{attribute_name}}' ass kee gültege Objet.",
-        "attributeNotSetErrorText": "Den Attribut'{{attribute_name}}' ass net richteg agestallt ginn."
+        "attributeNotSetErrorText": "Den Attribut'{{attribute_name}}' ass net richteg agestallt ginn.",
+        "languageNotSupportedErrorText": "Sprooch '{{language}}' gëtt net ënnerstëtzt.",
+        "noCodeAvailableToRenderErrorText": "Kee Code ass verfügbar fir ze maachen.",
+        "copyButtonText": "Kopie",
+        "printButtonText": "Drécken"
 } );

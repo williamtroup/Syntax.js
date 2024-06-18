@@ -1,11 +1,11 @@
 /*! Syntax.js v2.6.0 - Ukrainian | (c) Bunoon 2024 | MIT License */
 $syntax.setConfiguration( {
-        "backButtonText": "Назад",
-        "nextButtonText": "Далі",
-        "finishButtonText": "Закінчити",
-        "closeButtonToolTipText": "Закрити",
-        "doNotShowAgainText": "НЕ показувати знову",
+        "buttonsOpenerText": "<",
+        "buttonsCloserText": ">",
         "objectErrorText": "Помилки в об'єкті: {{error_1}}, {{error_2}}",
-        "attributeNotValidErrorText": "Атрибут '{{attribute_name}}' не є дійсним об'єктом.",
-        "attributeNotSetErrorText": "Атрибут '{{attribute_name}}' не встановлено правильно."
+        "attributeNotSetErrorText": "Атрибут '{{attribute_name}}' не встановлено правильно.",
+        "languageNotSupportedErrorText": "Мова '{{language}}' не підтримується.",
+        "noCodeAvailableToRenderErrorText": "Немає доступного коду для візуалізації.",
+        "copyButtonText": "Копія",
+        "printButtonText": "Роздрукувати"
 } );

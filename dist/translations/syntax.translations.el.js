@@ -1,11 +1,11 @@
 /*! Syntax.js v2.6.0 - Greek | (c) Bunoon 2024 | MIT License */
 $syntax.setConfiguration( {
-        "backButtonText": "Πίσω",
-        "nextButtonText": "Επόμενο",
-        "finishButtonText": "Φινίρισμα",
-        "closeButtonToolTipText": "Κλείσε",
-        "doNotShowAgainText": "Να μην εμφανιστεί ξανά",
+        "buttonsOpenerText": "<",
+        "buttonsCloserText": ">",
         "objectErrorText": "Σφάλματα στο αντικείμενο: {{error_1}}, {{error_2}}",
-        "attributeNotValidErrorText": "Η ιδιότητα '{{attribute_name}}' δεν είναι έγκυρο αντικείμενο.",
-        "attributeNotSetErrorText": "Η ιδιότητα '{{attribute_name}}' δεν έχει ρυθμιστεί σωστά."
+        "attributeNotSetErrorText": "Η ιδιότητα '{{attribute_name}}' δεν έχει ρυθμιστεί σωστά.",
+        "languageNotSupportedErrorText": "Γλώσσα '{{language}}' δεν υποστηρίζεται.",
+        "noCodeAvailableToRenderErrorText": "Δεν υπάρχει διαθέσιμος κωδικός για απόδοση.",
+        "copyButtonText": "αντίγραφο",
+        "printButtonText": "Τυπώνω"
 } );

@@ -1,11 +1,11 @@
 /*! Syntax.js v2.6.0 - Bengali | (c) Bunoon 2024 | MIT License */
 $syntax.setConfiguration( {
-        "backButtonText": "পেছনে",
-        "nextButtonText": "পরবর্তী",
-        "finishButtonText": "শেষ করুন",
-        "closeButtonToolTipText": "বন্ধ",
-        "doNotShowAgainText": "আবার প্রদর্শন করো না",
+        "buttonsOpenerText": "<",
+        "buttonsCloserText": ">",
         "objectErrorText": "বস্তুর ত্রুটি: {{error_1}}, {{error_2}}",
-        "attributeNotValidErrorText": "বৈশিষ্ট্য '{{attribute_name}}' একটি বৈধ বস্তু নয়।",
-        "attributeNotSetErrorText": "বৈশিষ্ট্য '{{attribute_name}}' সঠিকভাবে সেট করা হয়নি।"
+        "attributeNotSetErrorText": "বৈশিষ্ট্য '{{attribute_name}}' সঠিকভাবে সেট করা হয়নি।",
+        "languageNotSupportedErrorText": "ভাষা '{{language}}' সমর্থিত নয়.",
+        "noCodeAvailableToRenderErrorText": "রেন্ডার করার জন্য কোন কোড উপলব্ধ নেই।",
+        "copyButtonText": "কপি",
+        "printButtonText": "ছাপা"
 } );

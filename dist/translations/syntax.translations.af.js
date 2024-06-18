@@ -1,11 +1,11 @@
 /*! Syntax.js v2.6.0 - Afrikaans | (c) Bunoon 2024 | MIT License */
 $syntax.setConfiguration( {
-        "backButtonText": "Terug",
-        "nextButtonText": "Volgende",
-        "finishButtonText": "Voltooi",
-        "closeButtonToolTipText": "Naby",
-        "doNotShowAgainText": "Moet nie weer wys nie",
+        "buttonsOpenerText": "<",
+        "buttonsCloserText": ">",
         "objectErrorText": "Foute in voorwerp: {{error_1}}, {{error_2}}",
-        "attributeNotValidErrorText": "Die kenmerk '{{attribute_name}}' is nie 'n geldige voorwerp nie.",
-        "attributeNotSetErrorText": "Die kenmerk '{{attribute_name}}' is nie korrek ingestel nie."
+        "attributeNotSetErrorText": "Die eienskap '{{attribute_name}}' is nie korrek ingestel nie.",
+        "languageNotSupportedErrorText": "Taal '{{language}}' word nie ondersteun nie.",
+        "noCodeAvailableToRenderErrorText": "Geen kode is beskikbaar om weer te gee nie.",
+        "copyButtonText": "Kopieer",
+        "printButtonText": "Druk"
 } );
