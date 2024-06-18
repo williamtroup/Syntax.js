@@ -214,7 +214,7 @@
         var copyButton = createElement("button", "button");
         copyButton.style.display = syntaxOptions.buttonsVisible ? "inline-block" : "none";
         buttons.appendChild(copyButton);
-        setNodeText(copyButton, syntaxOptions.copyButtonText);
+        setNodeText(copyButton, _configuration.copyButtonText);
         copyButton.onclick = function() {
           _parameter_Navigator.clipboard.writeText(innerHTMLCopy);
           fireCustomTrigger(syntaxOptions.onCopy, innerHTMLCopy);
@@ -225,7 +225,7 @@
         var printButton = createElement("button", "button");
         printButton.style.display = syntaxOptions.buttonsVisible ? "inline-block" : "none";
         buttons.appendChild(printButton);
-        setNodeText(printButton, syntaxOptions.printButtonText);
+        setNodeText(printButton, _configuration.printButtonText);
         printButton.onclick = function() {
           var newWindow = window.open(_string.empty, "PRINT", "height=400,width=600"), newElementForPrint = syntax.cloneNode(true), newTitleElement = createElement("div");
           newElementForPrint.removeChild(newElementForPrint.children[0]);
@@ -615,7 +615,6 @@
   function getBindingOptions(newOptions) {
     var options = !isDefinedObject(newOptions) ? {} : newOptions;
     options = buildBindingAttributeOptions(options);
-    options = buildBindingAttributeOptionStrings(options);
     options = buildBindingAttributeOptionCustomTriggers(options);
     return options;
   }
@@ -636,11 +635,6 @@
     options.languageLabelCasing = getDefaultString(options.languageLabelCasing, "uppercase");
     options.buttonsVisible = getDefaultBoolean(options.buttonsVisible, true);
     options.maximumButtons = getDefaultNumber(options.maximumButtons, 2);
-    return options;
-  }
-  function buildBindingAttributeOptionStrings(options) {
-    options.copyButtonText = getDefaultString(options.copyButtonText, "Copy");
-    options.printButtonText = getDefaultString(options.printButtonText, "Print");
     return options;
   }
   function buildBindingAttributeOptionCustomTriggers(options) {
@@ -959,6 +953,8 @@
     _configuration.attributeNotSetErrorText = getDefaultString(_configuration.attributeNotSetErrorText, "The attribute '{{attribute_name}}' has not been set correctly.");
     _configuration.languageNotSupportedErrorText = getDefaultString(_configuration.languageNotSupportedErrorText, "Language '{{language}}' is not supported.");
     _configuration.noCodeAvailableToRenderErrorText = getDefaultString(_configuration.noCodeAvailableToRenderErrorText, "No code is available to render.");
+    _configuration.copyButtonText = getDefaultString(_configuration.copyButtonText, "Copy");
+    _configuration.printButtonText = getDefaultString(_configuration.printButtonText, "Print");
   }
   function buildDefaultConfigurationCustomTriggers() {
     _configuration.onBeforeRender = getDefaultFunction(_configuration.onBeforeRender, null);
