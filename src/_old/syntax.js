@@ -1282,8 +1282,8 @@
     }
 
     function encodeMarkUpCharacters( data ) {
-        data = data.replace(/</g, '&lt;');
-        data = data.replace(/>/g, '&gt;');
+        data = data.replace( /</g, "&lt;" );
+        data = data.replace( />/g, "&gt;" );
 
         return data;
     }
