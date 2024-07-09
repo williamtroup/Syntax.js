@@ -13,6 +13,7 @@
 ## What features does Syntax.js have?
 
 - Zero-dependencies and extremely lightweight!
+- Written in TypeScript, allowing greater support for React, Angular, and other libraries!
 - Highlights keywords, values, strings, and comments.
 - 51 language translations available!
 - Full API available via public functions.
@@ -137,6 +138,13 @@ npm install jsyntax.js
 ```
 
 Or, you can download the latest zipped up version [here](https://www.william-troup.com/syntax-js/download.html).
+
+Or, you can also use the following CDN links:
+
+```markdown
+https://cdn.jsdelivr.net/gh/williamtroup/Syntax.js@3.0.0/dist/syntax.min.js
+https://cdn.jsdelivr.net/gh/williamtroup/Syntax.js@3.0.0/dist/syntax.js.min.css
+```
 
 
 ## How do I get started?
