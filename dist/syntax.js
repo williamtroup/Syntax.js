@@ -1,4 +1,4 @@
-/*! Syntax.js v2.6.0 | (c) Bunoon 2024 | MIT License */
+/*! Syntax.js v3.0.0 | (c) Bunoon 2024 | MIT License */
 (function() {
   var _parameter_Document = null, _parameter_Navigator = null, _parameter_Window = null, _parameter_Math = null, _parameter_Json = null, _public = {}, _configuration = {}, _string = {empty:"", space:" ", newLine:"\n"}, _aliases_Rules = {}, _elements_Type = {}, _elements = [], _elements_Original = {}, _cached_Keywords = {}, _cached_Keywords_Count = 0, _cached_Values = {}, _cached_Values_Count = 0, _cached_Attributes = {}, _cached_Attributes_Count = 0, _cached_Strings = {}, _cached_Strings_Count = 
   0, _cached_Comments = {}, _cached_Comments_Count = 0, _languages = {}, _languages_Unknown = "unknown", _languages_Tabbed = "tabbed", _attribute_Name_Language = "data-syntax-language", _attribute_Name_Options = "data-syntax-options", _attribute_Name_Buttons = "data-syntax-buttons", _attribute_Name_TabContents = "data-syntax-tab-contents";
@@ -961,7 +961,7 @@
     _configuration.onAfterRender = getDefaultFunction(_configuration.onAfterRender, null);
   }
   _public.getVersion = function() {
-    return "2.6.0";
+    return "3.0.0";
   };
   (function(documentObject, navigatorObject, windowObject, mathObject, jsonObject) {
     _parameter_Document = documentObject;
