@@ -374,4 +374,6 @@ div.syntax-highlight div.code div.tab-contents div.syntax p span.multi-line-stri
 }
 .custom-scroll-bars::-webkit-scrollbar-thumb:active {
   background-color: var(--syntax-js-color-lighter-gray);
-}/*# sourceMappingURL=syntax.js.css.map */
+}
+
+/*# sourceMappingURL=syntax.js.css.map */
