@@ -78,3 +78,16 @@ export type BindingTabContentOptions = {
 export type BindingTabContentOptionEvents = {
     onOpen?: Function;
 };
+
+export type SyntaxLanguage = {
+    keywords?: string | string[];
+    values?: string | string[];
+    attributes?: string | string[];
+    comment?: string;
+    multiLineComment?: string[];
+    caseSensitive?: boolean;
+    friendlyName?: string;
+    keywordsCasing?: string;
+    isMarkUp?: boolean;
+    wordRegEx?: string;
+};
