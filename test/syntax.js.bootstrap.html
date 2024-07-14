@@ -4,11 +4,11 @@
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <title>Syntax.js - Bootstrap</title>
-        <link rel="stylesheet" href="../css/styles.css">
-        <link rel="stylesheet" href="../../dist/syntax.js.css">
+        <link rel="stylesheet" href="css/styles.css">
+        <link rel="stylesheet" href="../dist/syntax.js.min.css">
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
-        <script src="../../src/syntax.js"></script>
-        <script src="../../dist/languages/syntax.javascript.js"></script>
+        <script src="../dist/syntax.js"></script>
+        <script src="../dist/languages/syntax.javascript.js"></script>
     </head>
 
     <body>
@@ -17,8 +17,8 @@
             <p>This is a basic example of how to use Syntax.js to highlight code inside a DOM element alongside Bootstrap.</p>
         </div>
 
-        <div class="contents">
-            <code id="manual-destroy" data-syntax-language="javascript">
+        <div id="manual-destroy" class="contents">
+            <code data-syntax-language="javascript">
                 <pre>
                     var something = true;
     
@@ -38,8 +38,8 @@
                     int something_else = 1;
 
 
-    
                     
+    
                     if ( something ) {
                         Console.WriteLine( "Output is written." ); // Comment
 
@@ -139,7 +139,7 @@
         function onValueClickedCustomTrigger( value ) {
             console.log( "Value clicked: " + value );
         }
-        
+
         function setupConfiguration() {
             $syntax.setConfiguration( {
                 safeMode: false
@@ -156,7 +156,7 @@
                 'buttonsVisible': false
             };
         }
-
+        
         function customButtonAction1( code ) {
             console.log( "Custom action button 1 clicked: Code: " + code );
         }

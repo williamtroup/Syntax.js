@@ -3,20 +3,19 @@
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <title>Syntax.js - Theme</title>
-        <link rel="stylesheet" href="../css/styles.css">
-        <link rel="stylesheet" href="../../dist/syntax.js.css">
-        <link rel="stylesheet" href="../../dist/themes/syntax.js.dark.theme.css">
-        <script src="../../src/syntax.js"></script>
-        <script src="../../dist/languages/syntax.javascript.js"></script>
-        <script src="../../dist/languages/syntax.html.js"></script>
-        <script src="../../dist/languages/syntax.css.js"></script>
+        <title>Syntax.js - Tabs</title>
+        <link rel="stylesheet" href="css/styles.css">
+        <link rel="stylesheet" href="../dist/syntax.js.css">
+        <script src="../dist/syntax.js"></script>
+        <script src="../dist/languages/syntax.javascript.js"></script>
+        <script src="../dist/languages/syntax.html.js"></script>
+        <script src="../dist/languages/syntax.css.js"></script>
     </head>
 
     <body>
         <div class="header">
-            <h1 id="header">Syntax.js - Theme</h1>
-            <p>This is a basic example of how to use Syntax.js uses override Theme CSS files.</p>
+            <h1 id="header">Syntax.js - Tabs</h1>
+            <p>This is a basic example of how to use Syntax.js to highlight code inside multiple DOM elements, that will then be tabbed.</p>
         </div>
 
         <div class="contents">
@@ -46,7 +45,7 @@
                     </pre>
                 </div>
 
-                <div data-syntax-language="css" data-syntax-tab-contents="{ 'title': 'CSS', 'description': 'This is some CSS.' }">
+                <div data-syntax-language="css" data-syntax-tab-contents="{ 'title': 'CSS', 'onOpen': onTabOpen, 'description': 'This is some CSS.' }">
                     <pre>
                         div.syntax-highlight div.code {
                             background-color: var(--container-background-color-container);
@@ -67,5 +66,9 @@
     <script>
         document.title += " v" + $syntax.getVersion();
         document.getElementById( "header" ).innerText += " - v" + $syntax.getVersion();
+
+        function onTabOpen( language ) {
+            console.log( "Tab opened for language: " + language );
+        }
     </script>
 </html>
