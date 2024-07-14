@@ -448,7 +448,7 @@ var require_syntax = __commonJS({
                         const n = e.length;
                         for (let i = 0; i < n; i++) {
                             const n = e[i];
-                            if (Is.defined(n.text) && Is.definedFunction(n.onClick)) {
+                            if (Is.defined(n.text) && Is.definedFunction(n.events.onClick)) {
                                 renderElementButton(n, a, r, o, t);
                             }
                         }
@@ -532,7 +532,7 @@ var require_syntax = __commonJS({
                 n.appendChild(r);
                 DomElement.setNodeText(r, e.text, _configuration);
                 r.onclick = function() {
-                    e.onClick(i);
+                    e.events.onClick(i);
                 };
                 if (Is.defined(e.className)) {
                     r.className += " " + e.className;
@@ -848,11 +848,11 @@ var require_syntax = __commonJS({
             }
             function renderElementClickEvents(e, t, n) {
                 if (Is.definedFunction(t)) {
-                    const e = document.getElementsByTagName(n);
-                    const i = [].slice.call(e);
-                    const o = i.length;
-                    for (let e = 0; e < o; e++) {
-                        renderElementClickEvent(i[e], t);
+                    const i = e.getElementsByClassName(n);
+                    const o = [].slice.call(i);
+                    const r = o.length;
+                    for (let e = 0; e < r; e++) {
+                        renderElementClickEvent(o[e], t);
                     }
                 }
             }

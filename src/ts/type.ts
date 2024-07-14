@@ -98,5 +98,9 @@ export type SyntaxLanguage = {
 export type CustomButton = {
     text?: string;
     className?: string;
+    events?: CustomButtonEvent;
+};
+
+export type CustomButtonEvent = {
     onClick?: ( code: string ) => void;
 };

@@ -51,7 +51,7 @@
             </code>
             <br />
     
-            <div data-syntax-language="c-sharp" data-syntax-options="{ 'showCopyButton': false, 'removeBlankLines': false, 'showLineNumbers': false, 'showPrintButton': false }" data-syntax-buttons="[ { 'text': 'Custom Button 1', 'onClick': customButtonAction1, 'className': 'customButtonClass' }, { 'text': 'Custom Button 2', 'onClick': customButtonAction2 }, { 'text': 'Custom Button 3', 'onClick': customButtonAction3 } ]">
+            <div data-syntax-language="c-sharp" data-syntax-options="{ 'showCopyButton': false, 'removeBlankLines': false, 'showLineNumbers': false, 'showPrintButton': false }" data-syntax-buttons="[ { 'text': 'Custom Button 1', 'className': 'customButtonClass', 'events': { 'onClick': customButtonAction1 } }, { 'text': 'Custom Button 2', 'events': { 'onClick': customButtonAction2 } }, { 'text': 'Custom Button 3', 'events': { 'onClick': customButtonAction3 } } ]">
                 int something = 1;
 
                 if ( something >= 1 ) {
@@ -148,12 +148,14 @@
 
         function bindingSyntaxOptions() {
             return { 
-                'onCopy': onCopyCustomTrigger,
-                'onKeywordClicked': onKeywordClickedCustomTrigger,
-                'onValueClicked': onValueClickedCustomTrigger,
                 'showLanguageLabel': false,
                 'padLineNumbers': true,
-                'buttonsVisible': false
+                'buttonsVisible': false,
+                'events': {
+                    'onCopy': onCopyCustomTrigger,
+                    'onKeywordClicked': onKeywordClickedCustomTrigger,
+                    'onValueClicked': onValueClickedCustomTrigger,
+                }
             };
         }
         

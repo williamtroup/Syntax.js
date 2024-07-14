@@ -370,7 +370,7 @@ type RenderElementResult = {
                 for ( let customButtonsIndex: number = 0; customButtonsIndex < customButtonsLength; customButtonsIndex++ ) {
                     const customButton: CustomButton = customButtons[ customButtonsIndex ];
 
-                    if ( Is.defined( customButton.text ) && Is.definedFunction( customButton.onClick ) ) {
+                    if ( Is.defined( customButton.text ) && Is.definedFunction( customButton.events!.onClick! ) ) {
                         renderElementButton( customButton, buttonsElements, buttons, innerHTMLCopy, syntaxOptions );
                     }
                 }
@@ -479,7 +479,7 @@ type RenderElementResult = {
         DomElement.setNodeText( newCustomButton, customButton.text!, _configuration );
 
         newCustomButton.onclick = function() {
-            customButton.onClick!( innerHTMLCopy );
+            customButton.events!.onClick!( innerHTMLCopy );
         };
 
         if ( Is.defined( customButton.className ) ) {
@@ -887,7 +887,7 @@ type RenderElementResult = {
 
     function renderElementClickEvents( element: HTMLElement, customTrigger: Function, className: string ) : void {
         if ( Is.definedFunction( customTrigger ) ) {
-            const domElements: HTMLCollectionOf<Element> = document.getElementsByTagName( className );
+            const domElements: HTMLCollectionOf<Element> = element.getElementsByClassName( className );
             const elements: HTMLElement[] = [].slice.call( domElements );
             const elementsLength: number = elements.length;
 
