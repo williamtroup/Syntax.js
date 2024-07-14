@@ -35,14 +35,14 @@ var init_is = __esm({
                 return t(e) && typeof e === "boolean";
             }
             e.definedBoolean = i;
-            function r(e) {
+            function o(e) {
                 return t(e) && typeof e === "string";
             }
-            e.definedString = r;
-            function o(e) {
+            e.definedString = o;
+            function r(e) {
                 return t(e) && typeof e === "function";
             }
-            e.definedFunction = o;
+            e.definedFunction = r;
             function l(e) {
                 return t(e) && typeof e === "number";
             }
@@ -91,12 +91,12 @@ var init_data = __esm({
                     return e;
                 }
                 e.encodeMarkUpCharacters = i;
-                function r(e) {
+                function o(e) {
                     e.sort((function(e, t) {
                         return t.length - e.length;
                     }));
                 }
-                e.sortArrayOfStringByLength = r;
+                e.sortArrayOfStringByLength = o;
             })(t = e.String || (e.String = {}));
             function n(e, t) {
                 return typeof e === "string" ? e : t;
@@ -106,14 +106,14 @@ var init_data = __esm({
                 return Is.definedString(e) ? e : t;
             }
             e.getDefaultString = i;
-            function r(e, t) {
+            function o(e, t) {
                 return Is.definedBoolean(e) ? e : t;
             }
-            e.getDefaultBoolean = r;
-            function o(e, t) {
+            e.getDefaultBoolean = o;
+            function r(e, t) {
                 return Is.definedNumber(e) ? e : t;
             }
-            e.getDefaultNumber = o;
+            e.getDefaultNumber = r;
             function l(e, t) {
                 return Is.definedFunction(e) ? e : t;
             }
@@ -162,11 +162,11 @@ var init_dom = __esm({
             function t(e, t = "") {
                 const n = e.toLowerCase();
                 const i = n === "text";
-                let r = i ? document.createTextNode("") : document.createElement(n);
+                let o = i ? document.createTextNode("") : document.createElement(n);
                 if (Is.defined(t)) {
-                    r.className = t;
+                    o.className = t;
                 }
-                return r;
+                return o;
             }
             e.create = t;
             function n(e, n, i) {
@@ -212,18 +212,143 @@ var require_syntax = __commonJS({
             let _cached_Comments = {};
             let _cached_Comments_Count = 0;
             let _languages = {};
-            function renderElementButton(e, t, n, i, r) {
-                const o = DomElement.create("button", "button");
-                o.style.display = r.buttonsVisible ? "inline-block" : "none";
-                n.appendChild(o);
-                DomElement.setNodeText(o, e.text, _configuration);
-                o.onclick = function() {
+            function renderHTML(e, t, n) {
+                if (!t.isMarkUp) {
+                    e = Data.String.encodeMarkUpCharacters(e);
+                }
+                if (n.highlightComments) {
+                    e = renderElementMultiLineCommentVariables(e, t, n);
+                    e = renderElementCommentVariables(e, t, n);
+                }
+                if (n.highlightStrings) {
+                    e = renderElementStringPatternVariables(e, e.match(/"((?:\\.|[^"\\])*)"/g), n);
+                    if (t.comment !== "'") {
+                        e = renderElementStringPatternVariables(e, e.match(/'((?:\\.|[^"\\])*)'/g), n);
+                    }
+                }
+                if (!t.isMarkUp) {
+                    e = renderElementKeywords(e, t, n);
+                } else {
+                    e = replaceMarkUpKeywords(e, t, n);
+                }
+                e = renderElementValues(e, t, n);
+                if (t.isMarkUp) {
+                    e = renderElementAttributes(e, t, n);
+                }
+                e = Data.String.encodeMarkUpCharacters(e);
+                if (n.highlightComments) {
+                    e = renderElementCommentsFromVariables(e, t);
+                }
+                if (n.highlightStrings) {
+                    e = renderElementStringQuotesFromVariables(e);
+                }
+                e = renderElementVariables(e, _cached_Keywords);
+                e = renderElementVariables(e, _cached_Values);
+                if (t.isMarkUp) {
+                    e = renderElementVariables(e, _cached_Attributes);
+                }
+                return e;
+            }
+            function renderElementButtons(e, t, n, i, o) {
+                if (t.showLanguageLabel || t.showCopyButton || t.showPrintButton || i.parsed) {
+                    const r = DomElement.create("div", "buttons");
+                    const l = [];
+                    e.appendChild(r);
+                    if (i.parsed && Is.definedArray(i.object)) {
+                        const e = i.object;
+                        const n = e.length;
+                        for (let i = 0; i < n; i++) {
+                            const n = e[i];
+                            if (Is.defined(n.text) && Is.definedFunction(n.onClick)) {
+                                renderElementButton(n, l, r, o, t);
+                            }
+                        }
+                    }
+                    if (t.showCopyButton) {
+                        const e = DomElement.create("button", "button");
+                        e.style.display = t.buttonsVisible ? "inline-block" : "none";
+                        r.appendChild(e);
+                        DomElement.setNodeText(e, _configuration.text.copyButtonText, _configuration);
+                        e.onclick = function() {
+                            navigator.clipboard.writeText(o);
+                            fireCustomTriggerEvent(t.events.onCopy, o);
+                        };
+                        l.push(e);
+                    }
+                    if (t.showPrintButton) {
+                        const i = DomElement.create("button", "button");
+                        i.style.display = t.buttonsVisible ? "inline-block" : "none";
+                        r.appendChild(i);
+                        DomElement.setNodeText(i, _configuration.text.printButtonText, _configuration);
+                        i.onclick = function() {
+                            const i = window.open("", "PRINT", "height=400,width=600");
+                            const o = e.cloneNode(true);
+                            const r = DomElement.create("div");
+                            o.removeChild(o.children[0]);
+                            r.innerHTML = getFriendlyLanguageName(n);
+                            i.document.write("<html>");
+                            i.document.write("<head>");
+                            i.document.write("<title>");
+                            i.document.write(r.innerHTML);
+                            i.document.write("</title>");
+                            i.document.write("</head>");
+                            i.document.write("<body>");
+                            i.document.write("<code>");
+                            i.document.write("<pre>");
+                            i.document.write(o.innerHTML);
+                            i.document.write("</pre>");
+                            i.document.write("</code>");
+                            i.document.write("</body>");
+                            i.document.write("</html>");
+                            i.document.close();
+                            i.focus();
+                            i.print();
+                            i.close();
+                            fireCustomTriggerEvent(t.events.onPrint, o.innerHTML);
+                        };
+                        l.push(i);
+                    }
+                    if (t.showLanguageLabel) {
+                        const e = DomElement.create("div", "language-label");
+                        r.appendChild(e);
+                        DomElement.setNodeText(e, getFriendlyLanguageName(n, t.languageLabelCasing), _configuration);
+                    }
+                    const s = l.length;
+                    if (s > t.maximumButtons) {
+                        const e = DomElement.create("button", "button button-opener");
+                        e.innerText = t.buttonsVisible ? _configuration.text.buttonsCloserText : _configuration.text.buttonsOpenerText;
+                        r.insertBefore(e, r.children[0]);
+                        e.onclick = function() {
+                            const n = e.innerText === _configuration.text.buttonsCloserText;
+                            for (let e = 0; e < s; e++) {
+                                l[e].style.display = n ? "none" : "inline-block";
+                            }
+                            e.innerText = n ? _configuration.text.buttonsOpenerText : _configuration.text.buttonsCloserText;
+                            if (n) {
+                                fireCustomTriggerEvent(t.events.onButtonsClosed);
+                            } else {
+                                fireCustomTriggerEvent(t.events.onButtonsOpened);
+                            }
+                        };
+                    } else if (!t.buttonsVisible && s <= t.maximumButtons) {
+                        for (let e = 0; e < s; e++) {
+                            l[e].style.display = "inline-block";
+                        }
+                    }
+                }
+            }
+            function renderElementButton(e, t, n, i, o) {
+                const r = DomElement.create("button", "button");
+                r.style.display = o.buttonsVisible ? "inline-block" : "none";
+                n.appendChild(r);
+                DomElement.setNodeText(r, e.text, _configuration);
+                r.onclick = function() {
                     e.onClick(i);
                 };
                 if (Is.defined(e.className)) {
-                    o.className += " " + e.className;
+                    r.className += " " + e.className;
                 }
-                t.push(o);
+                t.push(r);
             }
             function renderElementCommentVariables(e, t, n) {
                 const i = t.comment;
@@ -231,12 +356,12 @@ var require_syntax = __commonJS({
                     const t = e.match(new RegExp(i + ".*", "g"));
                     if (t !== null) {
                         const i = t.length;
-                        for (let r = 0; r < i; r++) {
-                            const i = t[r];
-                            const o = "$C{" + _cached_Comments_Count.toString() + "}";
-                            _cached_Comments[o] = '<span class="comment">' + i + "</span>";
+                        for (let o = 0; o < i; o++) {
+                            const i = t[o];
+                            const r = "$C{" + _cached_Comments_Count.toString() + "}";
+                            _cached_Comments[r] = '<span class="comment">' + i + "</span>";
                             _cached_Comments_Count++;
-                            e = e.replace(i, o);
+                            e = e.replace(i, r);
                             fireCustomTriggerEvent(n.events.onCommentRender, i);
                         }
                     }
@@ -247,19 +372,19 @@ var require_syntax = __commonJS({
                 const i = t.multiLineComment;
                 if (Is.definedArray(i) && i.length === 2) {
                     let t = 0;
-                    let o = 0;
-                    while (t >= 0 && o >= 0) {
-                        t = e.indexOf(i[0], o);
+                    let r = 0;
+                    while (t >= 0 && r >= 0) {
+                        t = e.indexOf(i[0], r);
                         if (t > -1) {
-                            o = e.indexOf(i[1], t + i[0].length);
-                            if (o > -1) {
-                                const l = e.substring(t, o + i[1].length);
+                            r = e.indexOf(i[1], t + i[0].length);
+                            if (r > -1) {
+                                const l = e.substring(t, r + i[1].length);
                                 const s = l.split("\n");
                                 const a = s.length;
                                 const c = a === 1 ? "comment" : "multi-line-comment";
-                                for (var r = 0; r < a; r++) {
+                                for (var o = 0; o < a; o++) {
                                     const t = "$C{" + _cached_Comments_Count.toString() + "}";
-                                    const n = s[r];
+                                    const n = s[o];
                                     _cached_Comments[t] = '<span class="' + c + '">' + n + "</span>";
                                     _cached_Comments_Count++;
                                     e = e.replace(n, t);
@@ -274,13 +399,13 @@ var require_syntax = __commonJS({
             function renderElementStringPatternVariables(e, t, n) {
                 if (t !== null) {
                     const i = t.length;
-                    for (let r = 0; r < i; r++) {
-                        const i = t[r];
-                        const o = i.split("\n");
-                        const l = o.length;
+                    for (let o = 0; o < i; o++) {
+                        const i = t[o];
+                        const r = i.split("\n");
+                        const l = r.length;
                         const s = l === 1 ? "string" : "multi-line-string";
                         for (let t = 0; t < l; t++) {
-                            const n = o[t];
+                            const n = r[t];
                             const i = "$S{" + _cached_Strings_Count.toString() + "}";
                             _cached_Strings[i] = '<span class="' + s + '">' + n + "</span>";
                             _cached_Strings_Count++;
@@ -293,56 +418,56 @@ var require_syntax = __commonJS({
             }
             function renderElementKeywords(e, t, n) {
                 const i = Data.getDefaultStringOrArray(t.keywords, []);
-                const r = i.length;
-                const o = t.caseSensitive;
+                const o = i.length;
+                const r = t.caseSensitive;
                 const l = getKeywordCasing(t.keywordsCasing);
                 Data.String.sortArrayOfStringByLength(i);
-                for (let s = 0; s < r; s++) {
-                    const r = i[s];
-                    const a = getDisplayTextTestCasing(r, l);
+                for (let s = 0; s < o; s++) {
+                    const o = i[s];
+                    const a = getDisplayTextTestCasing(o, l);
                     const c = "KW" + _cached_Keywords_Count.toString() + ";";
                     let u = null;
-                    const g = o ? "g" : "gi";
-                    const d = new RegExp(getWordRegEx(r, t), g);
+                    const d = r ? "g" : "gi";
+                    const g = new RegExp(getWordRegEx(o, t), d);
                     if (n.highlightKeywords) {
                         if (Is.definedFunction(n.events.onKeywordClicked)) {
                             u = '<span class="keyword-clickable">' + a + "</span>";
-                            e = e.replace(d, c);
+                            e = e.replace(g, c);
                         } else {
                             u = '<span class="keyword">' + a + "</span>";
-                            e = e.replace(d, c);
+                            e = e.replace(g, c);
                         }
                     } else {
                         if (Is.definedFunction(n.events.onKeywordClicked)) {
                             u = '<span class="no-highlight-keyword-clickable">' + a + "</span>";
-                            e = e.replace(d, c);
+                            e = e.replace(g, c);
                         }
                     }
                     _cached_Keywords[c] = u;
                     _cached_Keywords_Count++;
-                    fireCustomTriggerEvent(n.events.onKeywordRender, r);
+                    fireCustomTriggerEvent(n.events.onKeywordRender, o);
                 }
                 return e;
             }
             function replaceMarkUpKeywords(e, t, n) {
                 const i = Data.getDefaultStringOrArray(t.keywords, []);
-                const r = t.caseSensitive;
-                const o = getKeywordCasing(t.keywordsCasing);
+                const o = t.caseSensitive;
+                const r = getKeywordCasing(t.keywordsCasing);
                 const l = /(<([^>]+)>)/gi;
-                const s = r ? "g" : "gi";
+                const s = o ? "g" : "gi";
                 let a = l.exec(e);
                 while (a) {
                     if (a.index === l.lastIndex) {
                         l.lastIndex++;
                     }
-                    let r = a[0];
-                    r = r.replace("</", "").replace("<", "").replace(">", "");
-                    r = r.split(" ")[0];
-                    if (i.indexOf(r) > -1) {
+                    let o = a[0];
+                    o = o.replace("</", "").replace("<", "").replace(">", "");
+                    o = o.split(" ")[0];
+                    if (i.indexOf(o) > -1) {
                         const i = "KW" + _cached_Keywords_Count.toString() + ";";
-                        const l = new RegExp(getWordRegEx(r, t), s);
+                        const l = new RegExp(getWordRegEx(o, t), s);
                         let a = null;
-                        let c = getDisplayTextTestCasing(r, o);
+                        let c = getDisplayTextTestCasing(o, r);
                         if (n.highlightKeywords) {
                             if (Is.definedFunction(n.events.onKeywordClicked)) {
                                 a = '<span class="keyword-clickable">' + c + "</span>";
@@ -364,63 +489,63 @@ var require_syntax = __commonJS({
             }
             function renderElementValues(e, t, n) {
                 const i = Data.getDefaultStringOrArray(t.values, []);
-                const r = i.length;
-                const o = t.caseSensitive;
+                const o = i.length;
+                const r = t.caseSensitive;
                 Data.String.sortArrayOfStringByLength(i);
-                for (let l = 0; l < r; l++) {
-                    const r = i[l];
+                for (let l = 0; l < o; l++) {
+                    const o = i[l];
                     const s = "VAL" + _cached_Values_Count.toString() + ";";
                     let a = null;
-                    const c = o ? "g" : "gi";
-                    const u = new RegExp(getWordRegEx(r, t), c);
+                    const c = r ? "g" : "gi";
+                    const u = new RegExp(getWordRegEx(o, t), c);
                     if (n.highlightValues) {
                         if (Is.definedFunction(n.events.onValueClicked)) {
-                            a = '<span class="value-clickable">' + r + "</span>";
+                            a = '<span class="value-clickable">' + o + "</span>";
                             e = e.replace(u, s);
                         } else {
-                            a = '<span class="value">' + r + "</span>";
+                            a = '<span class="value">' + o + "</span>";
                             e = e.replace(u, s);
                         }
                     } else {
                         if (Is.definedFunction(n.events.onValueClicked)) {
-                            a = '<span class="no-highlight-value-clickable">' + r + "</span>";
+                            a = '<span class="no-highlight-value-clickable">' + o + "</span>";
                             e = e.replace(u, s);
                         }
                     }
                     _cached_Values[s] = a;
                     _cached_Values_Count++;
-                    fireCustomTriggerEvent(n.events.onValueRender, r);
+                    fireCustomTriggerEvent(n.events.onValueRender, o);
                 }
                 return e;
             }
             function renderElementAttributes(e, t, n) {
                 const i = Data.getDefaultStringOrArray(t.attributes, []);
-                const r = i.length;
-                const o = t.caseSensitive;
+                const o = i.length;
+                const r = t.caseSensitive;
                 Data.String.sortArrayOfStringByLength(i);
-                for (let l = 0; l < r; l++) {
-                    const r = i[l];
+                for (let l = 0; l < o; l++) {
+                    const o = i[l];
                     const s = "ATTR" + _cached_Attributes_Count.toString() + ";";
                     let a = null;
-                    let c = o ? "g" : "gi";
-                    const u = new RegExp(getWordRegEx(r, t), c);
+                    let c = r ? "g" : "gi";
+                    const u = new RegExp(getWordRegEx(o, t), c);
                     if (n.highlightAttributes) {
                         if (Is.definedFunction(n.events.onAttributeClicked)) {
-                            a = '<span class="attribute-clickable">' + r + "</span>";
+                            a = '<span class="attribute-clickable">' + o + "</span>";
                             e = e.replace(u, s);
                         } else {
-                            a = '<span class="attribute">' + r + "</span>";
+                            a = '<span class="attribute">' + o + "</span>";
                             e = e.replace(u, s);
                         }
                     } else {
                         if (Is.definedFunction(n.events.onAttributeClicked)) {
-                            a = '<span class="no-highlight-attribute-clickable">' + r + "</span>";
+                            a = '<span class="no-highlight-attribute-clickable">' + o + "</span>";
                             e = e.replace(u, s);
                         }
                     }
                     _cached_Attributes[s] = a;
                     _cached_Attributes_Count++;
-                    fireCustomTriggerEvent(n.events.onAttributeRender, r);
+                    fireCustomTriggerEvent(n.events.onAttributeRender, o);
                 }
                 return e;
             }
@@ -435,19 +560,19 @@ var require_syntax = __commonJS({
             function renderElementCommentsFromVariables(e, t) {
                 const n = t.multiLineComment;
                 let i = null;
-                let r = null;
+                let o = null;
                 if (Is.definedArray(n) && n.length === 2) {
                     i = Data.String.encodeMarkUpCharacters(n[0]);
-                    r = Data.String.encodeMarkUpCharacters(n[1]);
+                    o = Data.String.encodeMarkUpCharacters(n[1]);
                 }
-                for (let o in _cached_Comments) {
-                    if (_cached_Comments.hasOwnProperty(o)) {
-                        let l = _cached_Comments[o];
-                        if (t.isMarkUp && Is.definedString(i) && Is.definedString(r)) {
+                for (let r in _cached_Comments) {
+                    if (_cached_Comments.hasOwnProperty(r)) {
+                        let l = _cached_Comments[r];
+                        if (t.isMarkUp && Is.definedString(i) && Is.definedString(o)) {
                             l = l.replace(n[0], i);
-                            l = l.replace(n[1], r);
+                            l = l.replace(n[1], o);
                         }
-                        e = e.replace(o, l);
+                        e = e.replace(r, l);
                     }
                 }
                 return e;
@@ -461,51 +586,51 @@ var require_syntax = __commonJS({
                 }
                 return e;
             }
-            function renderElementCompletedHTML(e, t, n, i, r, o, l) {
-                const s = r.split("\n");
+            function renderElementCompletedHTML(e, t, n, i, o, r, l) {
+                const s = o.split("\n");
                 const a = s.length;
                 const c = a.toString().length;
                 let u = n;
-                let g = i;
-                let d = null;
+                let d = i;
+                let g = null;
                 let f = 1;
                 let m = false;
                 if (l) {
-                    g = DomElement.create("pre");
-                    i.appendChild(g);
+                    d = DomElement.create("pre");
+                    i.appendChild(d);
                     if (Is.defined(n)) {
                         u = DomElement.create("pre");
                         n.appendChild(u);
                     }
                 }
-                if (o.doubleClickToSelectAll) {
+                if (r.doubleClickToSelectAll) {
                     if (Is.defined(t)) {
                         t.ondblclick = function() {
-                            DomElement.selectTextInElement(g);
+                            DomElement.selectTextInElement(d);
                         };
                     }
                     if (Is.defined(n)) {
                         n.ondblclick = function() {
-                            DomElement.selectTextInElement(g);
+                            DomElement.selectTextInElement(d);
                         };
                     }
                     i.ondblclick = function() {
-                        DomElement.selectTextInElement(g);
+                        DomElement.selectTextInElement(d);
                     };
                 }
                 for (let e = 0; e < a; e++) {
                     let t = s[e];
-                    if (t.trim() !== "" && d === null) {
-                        d = t.substring(0, t.match(/^\s*/)[0].length);
+                    if (t.trim() !== "" && g === null) {
+                        g = t.substring(0, t.match(/^\s*/)[0].length);
                     }
                     if (e !== 0 && e !== a - 1 || t.trim() !== "") {
-                        if (t.trim() !== "" || !o.removeBlankLines) {
+                        if (t.trim() !== "" || !r.removeBlankLines) {
                             const e = t.trim() === "";
-                            if (e && !m || !o.removeDuplicateBlankLines || !e) {
+                            if (e && !m || !r.removeDuplicateBlankLines || !e) {
                                 m = e;
                                 if (Is.defined(u)) {
                                     const e = DomElement.create("p");
-                                    if (o.padLineNumbers) {
+                                    if (r.padLineNumbers) {
                                         e.innerText = Data.String.padNumber(f.toString(), c);
                                     } else {
                                         e.innerText = f.toString();
@@ -513,8 +638,8 @@ var require_syntax = __commonJS({
                                     u.appendChild(e);
                                     f++;
                                 }
-                                if (d !== null) {
-                                    t = t.replace(d, "");
+                                if (g !== null) {
+                                    t = t.replace(g, "");
                                     if (!l) {
                                         const e = t.match(/^\s*/)[0].length;
                                         const n = t.substring(0, e);
@@ -524,20 +649,20 @@ var require_syntax = __commonJS({
                                 }
                                 const n = DomElement.create("p");
                                 n.innerHTML = t.trim() === "" ? "<br>" : t;
-                                g.appendChild(n);
+                                d.appendChild(n);
                             }
                         }
                     }
                 }
-                renderElementClickEvents(e, o.events.onKeywordClicked, "keyword-clickable");
-                renderElementClickEvents(e, o.events.onValueClicked, "value-clickable");
+                renderElementClickEvents(e, r.events.onKeywordClicked, "keyword-clickable");
+                renderElementClickEvents(e, r.events.onValueClicked, "value-clickable");
             }
             function renderElementClickEvents(e, t, n) {
                 if (Is.definedFunction(t)) {
                     const e = document.getElementsByTagName(n);
                     const i = [].slice.call(e);
-                    const r = i.length;
-                    for (let e = 0; e < r; e++) {
+                    const o = i.length;
+                    for (let e = 0; e < o; e++) {
                         renderElementClickEvent(i[e], t);
                     }
                 }
@@ -548,7 +673,7 @@ var require_syntax = __commonJS({
                     t(n);
                 };
             }
-            function getFriendlyLanguageName(e, t) {
+            function getFriendlyLanguageName(e, t = null) {
                 let n = null;
                 const i = getLanguage(e);
                 if (Is.defined(i) && Is.definedString(i.friendlyName)) {

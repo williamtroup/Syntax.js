@@ -67,6 +67,171 @@ type StringToJson = {
      * ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
      */
 
+    function renderHTML( innerHTML: string, language: SyntaxLanguage, syntaxOptions: BindingOptions ) : string {
+        if ( !language.isMarkUp ) {
+            innerHTML = Data.String.encodeMarkUpCharacters( innerHTML );
+        }
+
+        if ( syntaxOptions.highlightComments ) {
+            innerHTML = renderElementMultiLineCommentVariables( innerHTML, language, syntaxOptions );
+            innerHTML = renderElementCommentVariables( innerHTML, language, syntaxOptions );
+        }
+
+        if ( syntaxOptions.highlightStrings ) {
+            innerHTML = renderElementStringPatternVariables( innerHTML, innerHTML.match( /"((?:\\.|[^"\\])*)"/g )!, syntaxOptions );
+
+            if ( language.comment !== "'" ) {
+                innerHTML = renderElementStringPatternVariables( innerHTML, innerHTML.match( /'((?:\\.|[^"\\])*)'/g )!, syntaxOptions );
+            }
+        }
+
+        if ( !language.isMarkUp ) {
+            innerHTML = renderElementKeywords( innerHTML, language, syntaxOptions );
+        } else {
+            innerHTML = replaceMarkUpKeywords( innerHTML, language, syntaxOptions );
+        }
+        
+        innerHTML = renderElementValues( innerHTML, language, syntaxOptions );
+
+        if ( language.isMarkUp ) {
+            innerHTML = renderElementAttributes( innerHTML, language, syntaxOptions );
+        }
+
+        innerHTML = Data.String.encodeMarkUpCharacters( innerHTML );
+
+        if ( syntaxOptions.highlightComments ) {
+            innerHTML = renderElementCommentsFromVariables( innerHTML, language );
+        }
+        
+        if ( syntaxOptions.highlightStrings ) {
+            innerHTML = renderElementStringQuotesFromVariables( innerHTML );
+        }
+
+        innerHTML = renderElementVariables( innerHTML, _cached_Keywords );
+        innerHTML = renderElementVariables( innerHTML, _cached_Values );
+
+        if ( language.isMarkUp ) {
+            innerHTML = renderElementVariables( innerHTML, _cached_Attributes );
+        }
+
+        return innerHTML;
+    }
+
+    function renderElementButtons( syntax: HTMLElement, syntaxOptions: BindingOptions, syntaxLanguage: string, syntaxButtonsParsed: StringToJson, innerHTMLCopy: string ) : void {
+        if ( syntaxOptions.showLanguageLabel || syntaxOptions.showCopyButton || syntaxOptions.showPrintButton || syntaxButtonsParsed.parsed ) {
+            const buttons: HTMLElement = DomElement.create( "div", "buttons" );
+            const buttonsElements: HTMLElement[] = [];
+
+            syntax.appendChild( buttons );
+
+            if ( syntaxButtonsParsed.parsed && Is.definedArray( syntaxButtonsParsed.object ) ) {
+                const customButtons: CustomButton[] = syntaxButtonsParsed.object;
+                const customButtonsLength: number = customButtons.length;
+
+                for ( let customButtonsIndex: number = 0; customButtonsIndex < customButtonsLength; customButtonsIndex++ ) {
+                    const customButton: CustomButton = customButtons[ customButtonsIndex ];
+
+                    if ( Is.defined( customButton.text ) && Is.definedFunction( customButton.onClick ) ) {
+                        renderElementButton( customButton, buttonsElements, buttons, innerHTMLCopy, syntaxOptions );
+                    }
+                }
+            }
+
+            if ( syntaxOptions.showCopyButton ) {
+                const copyButton: HTMLButtonElement = DomElement.create( "button", "button" ) as HTMLButtonElement;
+                copyButton.style.display = syntaxOptions.buttonsVisible ? "inline-block" : "none";
+                buttons.appendChild( copyButton );
+
+                DomElement.setNodeText( copyButton, _configuration.text!.copyButtonText!, _configuration );
+
+                copyButton.onclick = function() {
+                    navigator.clipboard.writeText( innerHTMLCopy );
+
+                    fireCustomTriggerEvent( syntaxOptions.events!.onCopy!, innerHTMLCopy );
+                };
+
+                buttonsElements.push( copyButton );
+            }
+
+            if ( syntaxOptions.showPrintButton ) {
+                const printButton: HTMLButtonElement = DomElement.create( "button", "button" ) as HTMLButtonElement;
+                printButton.style.display = syntaxOptions.buttonsVisible ? "inline-block" : "none";
+                buttons.appendChild( printButton );
+
+                DomElement.setNodeText( printButton, _configuration.text!.printButtonText!, _configuration );
+
+                printButton.onclick = function() {
+                    const newWindow: WindowProxy = window.open( Char.empty, "PRINT", "height=400,width=600" )!;
+                    const newElementForPrint: HTMLElement = syntax.cloneNode( true ) as HTMLElement;
+                    const newTitleElement: HTMLElement = DomElement.create( "div" );
+
+                    newElementForPrint.removeChild( newElementForPrint.children[ 0 ] );
+                    newTitleElement.innerHTML = getFriendlyLanguageName( syntaxLanguage );
+
+                    newWindow.document.write( "<html>" );
+                    newWindow.document.write( "<head>" );
+                    newWindow.document.write( "<title>" );
+                    newWindow.document.write( newTitleElement.innerHTML );
+                    newWindow.document.write( "</title>" );
+                    newWindow.document.write( "</head>" );
+                    newWindow.document.write( "<body>" );
+                    newWindow.document.write( "<code>" );
+                    newWindow.document.write( "<pre>" );
+                    newWindow.document.write( newElementForPrint.innerHTML );
+                    newWindow.document.write( "</pre>" );
+                    newWindow.document.write( "</code>" );
+                    newWindow.document.write( "</body>" );
+                    newWindow.document.write( "</html>" );
+                
+                    newWindow.document.close();
+                    newWindow.focus();
+                    newWindow.print();
+                    newWindow.close();
+
+                    fireCustomTriggerEvent( syntaxOptions.events!.onPrint!, newElementForPrint.innerHTML );
+                };
+
+                buttonsElements.push( printButton );
+            }
+
+            if ( syntaxOptions.showLanguageLabel ) {
+                const languageLabel: HTMLElement = DomElement.create( "div", "language-label" );
+                buttons.appendChild( languageLabel );
+
+                DomElement.setNodeText( languageLabel, getFriendlyLanguageName( syntaxLanguage, syntaxOptions.languageLabelCasing! ), _configuration );
+            }
+
+            const buttonsElementsLength: number = buttonsElements.length;
+
+            if ( buttonsElementsLength > syntaxOptions.maximumButtons! ) {
+                const openButton: HTMLButtonElement = DomElement.create( "button", "button button-opener" ) as HTMLButtonElement;
+                openButton.innerText = syntaxOptions.buttonsVisible ? _configuration.text!.buttonsCloserText! : _configuration.text!.buttonsOpenerText!;
+                buttons.insertBefore( openButton, buttons.children[ 0 ] );
+
+                openButton.onclick = function() {
+                    const areButtonsVisible: boolean = openButton.innerText === _configuration.text!.buttonsCloserText;
+
+                    for ( let buttonsElementIndex: number = 0; buttonsElementIndex < buttonsElementsLength; buttonsElementIndex++ ) {
+                        buttonsElements[ buttonsElementIndex ].style.display = areButtonsVisible ? "none" : "inline-block";
+                    }
+
+                    openButton.innerText = areButtonsVisible ? _configuration.text!.buttonsOpenerText! : _configuration.text!.buttonsCloserText!;
+
+                    if ( areButtonsVisible ) {
+                        fireCustomTriggerEvent( syntaxOptions.events!.onButtonsClosed! );
+                    } else {
+                        fireCustomTriggerEvent( syntaxOptions.events!.onButtonsOpened! );
+                    }
+                };
+
+            } else if ( !syntaxOptions.buttonsVisible && buttonsElementsLength <= syntaxOptions.maximumButtons! ) {
+                for ( let buttonsElementIndex: number = 0; buttonsElementIndex < buttonsElementsLength; buttonsElementIndex++ ) {
+                    buttonsElements[ buttonsElementIndex ].style.display = "inline-block";
+                }
+            }
+        }
+    }
+
     function renderElementButton( customButton: CustomButton, buttonsElements: HTMLElement[], buttons: HTMLElement, innerHTMLCopy: string, syntaxOptions: BindingOptions ) : void {
         const newCustomButton: HTMLButtonElement = DomElement.create( "button", "button" ) as HTMLButtonElement;
         newCustomButton.style.display = syntaxOptions.buttonsVisible ? "inline-block" : "none";
@@ -501,7 +666,7 @@ type StringToJson = {
         };
     }
 
-    function getFriendlyLanguageName( syntaxLanguage: string, languageLabelCasing: string ) : string {
+    function getFriendlyLanguageName( syntaxLanguage: string, languageLabelCasing: string = null! ) : string {
         let result: string = null!;
         const language: SyntaxLanguage = getLanguage( syntaxLanguage );
 
