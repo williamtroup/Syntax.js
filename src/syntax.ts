@@ -549,7 +549,7 @@ type RenderElementResult = {
                         const commentLinesLength: number = commentLines.length;
                         const commentCssClass: string = commentLinesLength === 1 ? "comment" : "multi-line-comment";
                         
-                        for ( var commentLineIndex = 0; commentLineIndex < commentLinesLength; commentLineIndex++ ) {
+                        for ( let commentLineIndex: number = 0; commentLineIndex < commentLinesLength; commentLineIndex++ ) {
                             const commentVariable: string = `\$C{${_cached_Comments_Count.toString()}}`;
                             const commentLine: string = commentLines[ commentLineIndex ];
                             

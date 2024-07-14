@@ -574,24 +574,24 @@ var require_syntax = __commonJS({
                 const i = t.multiLineComment;
                 if (Is.definedArray(i) && i.length === 2) {
                     let t = 0;
-                    let o = 0;
-                    while (t >= 0 && o >= 0) {
-                        t = e.indexOf(i[0], o);
+                    let r = 0;
+                    while (t >= 0 && r >= 0) {
+                        t = e.indexOf(i[0], r);
                         if (t > -1) {
-                            o = e.indexOf(i[1], t + i[0].length);
-                            if (o > -1) {
-                                const a = e.substring(t, o + i[1].length);
-                                const s = a.split("\n");
-                                const l = s.length;
-                                const u = l === 1 ? "comment" : "multi-line-comment";
-                                for (var r = 0; r < l; r++) {
-                                    const t = `$C{${_cached_Comments_Count.toString()}}`;
-                                    const n = s[r];
-                                    _cached_Comments[t] = `<span class="${u}">${n}</span>`;
+                            r = e.indexOf(i[1], t + i[0].length);
+                            if (r > -1) {
+                                const o = e.substring(t, r + i[1].length);
+                                const a = o.split("\n");
+                                const s = a.length;
+                                const l = s === 1 ? "comment" : "multi-line-comment";
+                                for (let t = 0; t < s; t++) {
+                                    const n = `$C{${_cached_Comments_Count.toString()}}`;
+                                    const i = a[t];
+                                    _cached_Comments[n] = `<span class="${l}">${i}</span>`;
                                     _cached_Comments_Count++;
-                                    e = e.replace(n, t);
+                                    e = e.replace(i, n);
                                 }
-                                fireCustomTriggerEvent(n.events.onCommentRender, a);
+                                fireCustomTriggerEvent(n.events.onCommentRender, o);
                             }
                         }
                     }

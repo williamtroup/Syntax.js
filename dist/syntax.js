@@ -526,24 +526,24 @@ var DomElement;
         const i = t.multiLineComment;
         if (Is.definedArray(i) && i.length === 2) {
             let t = 0;
-            let r = 0;
-            while (t >= 0 && r >= 0) {
-                t = e.indexOf(i[0], r);
+            let o = 0;
+            while (t >= 0 && o >= 0) {
+                t = e.indexOf(i[0], o);
                 if (t > -1) {
-                    r = e.indexOf(i[1], t + i[0].length);
-                    if (r > -1) {
-                        const a = e.substring(t, r + i[1].length);
-                        const l = a.split("\n");
-                        const s = l.length;
-                        const u = s === 1 ? "comment" : "multi-line-comment";
-                        for (var o = 0; o < s; o++) {
-                            const t = `$C{${_cached_Comments_Count.toString()}}`;
-                            const n = l[o];
-                            _cached_Comments[t] = `<span class="${u}">${n}</span>`;
+                    o = e.indexOf(i[1], t + i[0].length);
+                    if (o > -1) {
+                        const r = e.substring(t, o + i[1].length);
+                        const a = r.split("\n");
+                        const l = a.length;
+                        const s = l === 1 ? "comment" : "multi-line-comment";
+                        for (let t = 0; t < l; t++) {
+                            const n = `$C{${_cached_Comments_Count.toString()}}`;
+                            const i = a[t];
+                            _cached_Comments[n] = `<span class="${s}">${i}</span>`;
                             _cached_Comments_Count++;
-                            e = e.replace(n, t);
+                            e = e.replace(i, n);
                         }
-                        fireCustomTriggerEvent(n.events.onCommentRender, a);
+                        fireCustomTriggerEvent(n.events.onCommentRender, r);
                     }
                 }
             }
