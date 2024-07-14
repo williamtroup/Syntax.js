@@ -270,8 +270,14 @@ type RenderElementResult = {
                                 innerHTML = Data.String.encodeMarkUpCharacters( innerHTML );
                             }
 
-                            renderElementCompletedHTML( element, description, numbers, syntax, innerHTML, syntaxOptions, isPreFormatted );
+                            renderElementCompletedHTML( description, numbers, syntax, innerHTML, syntaxOptions, isPreFormatted );
                             fireCustomTriggerEvent( syntaxOptions.events!.onRenderComplete!, element );
+
+                            if ( !Is.defined( result.tabContents ) ) {
+                                renderSyntaxCustomTriggers( element, syntaxOptions );
+                            } else {
+                                renderSyntaxCustomTriggers( result.tabContents, syntaxOptions );
+                            }
 
                             _elements.push( element );
 
@@ -304,6 +310,15 @@ type RenderElementResult = {
         }
 
         return result;
+    }
+
+    function renderSyntaxCustomTriggers( element: HTMLElement, syntaxOptions: BindingOptions ) {
+        renderElementClickEvents( element, syntaxOptions.events!.onKeywordClicked!, "keyword-clickable" );
+        renderElementClickEvents( element, syntaxOptions.events!.onKeywordClicked!, "no-highlight-keyword-clickable" );
+        renderElementClickEvents( element, syntaxOptions.events!.onValueClicked!, "value-clickable" );
+        renderElementClickEvents( element, syntaxOptions.events!.onValueClicked!, "no-highlight-value-clickable" );
+        renderElementClickEvents( element, syntaxOptions.events!.onAttributeClicked!, "attribute-clickable" );
+        renderElementClickEvents( element, syntaxOptions.events!.onAttributeClicked!, "no-highlight-attribute-clickable" );
     }
 
     function renderHTML( innerHTML: string, language: SyntaxLanguage, syntaxOptions: BindingOptions ) : string {
@@ -796,7 +811,7 @@ type RenderElementResult = {
         return innerHTML;
     }
 
-    function renderElementCompletedHTML( element: HTMLElement, description: HTMLElement, numbers: HTMLElement, syntax: HTMLElement, innerHTML: string, syntaxOptions: BindingOptions, isPreFormatted: boolean ) : void {
+    function renderElementCompletedHTML( description: HTMLElement, numbers: HTMLElement, syntax: HTMLElement, innerHTML: string, syntaxOptions: BindingOptions, isPreFormatted: boolean ) : void {
         const lines: string[] = innerHTML.split( Char.newLine );
         const linesLength: number = lines.length;
         const linesLengthStringLength: number = linesLength.toString().length;
@@ -880,9 +895,6 @@ type RenderElementResult = {
                 }
             }
         }
-
-        renderElementClickEvents( element, syntaxOptions.events!.onKeywordClicked!, "keyword-clickable" );
-        renderElementClickEvents( element, syntaxOptions.events!.onValueClicked!, "value-clickable" );
     }
 
     function renderElementClickEvents( element: HTMLElement, customTrigger: Function, className: string ) : void {

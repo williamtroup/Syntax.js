@@ -36,10 +36,10 @@ var Is;
         return t(e) && typeof e === "number";
     }
     e.definedNumber = a;
-    function s(e) {
+    function l(e) {
         return n(e) && e instanceof Array;
     }
-    e.definedArray = s;
+    e.definedArray = l;
 })(Is || (Is = {}));
 
 var Data;
@@ -100,14 +100,14 @@ var Data;
         return Is.definedFunction(e) ? e : t;
     }
     e.getDefaultFunction = a;
-    function s(e, t) {
+    function l(e, t) {
         return Is.definedArray(e) ? e : t;
     }
-    e.getDefaultArray = s;
-    function l(e, t) {
+    e.getDefaultArray = l;
+    function s(e, t) {
         return Is.definedObject(e) ? e : t;
     }
-    e.getDefaultObject = l;
+    e.getDefaultObject = s;
     function u(e, t) {
         let n = t;
         if (Is.definedString(e)) {
@@ -118,7 +118,7 @@ var Data;
                 n = i;
             }
         } else {
-            n = s(e, t);
+            n = l(e, t);
         }
         return n;
     }
@@ -202,14 +202,14 @@ var DomElement;
                     t.innerHTML = "";
                     const a = DomElement.create("div", "code custom-scroll-bars");
                     t.appendChild(a);
-                    const s = DomElement.create("div", "tabs");
-                    a.appendChild(s);
+                    const l = DomElement.create("div", "tabs");
+                    a.appendChild(l);
                     for (let t = 0; t < i; t++) {
                         const i = renderElement(e[t], a);
                         if (!i.rendered) {
                             n = true;
                         } else {
-                            renderTab(s, o, r, i, t, i.tabBindingOptions, i.syntaxLanguage);
+                            renderTab(l, o, r, i, t, i.tabBindingOptions, i.syntaxLanguage);
                         }
                     }
                 } else {
@@ -227,13 +227,13 @@ var DomElement;
         }
     }
     function renderTab(e, t, n, i, o, r, a) {
-        const s = DomElement.create("button", "tab");
-        e.appendChild(s);
-        DomElement.setNodeText(s, i.tabTitle, _configuration);
-        t.push(s);
+        const l = DomElement.create("button", "tab");
+        e.appendChild(l);
+        DomElement.setNodeText(l, i.tabTitle, _configuration);
+        t.push(l);
         n.push(i.tabContents);
-        s.onclick = function() {
-            if (s.className !== "tab-active") {
+        l.onclick = function() {
+            if (l.className !== "tab-active") {
                 const e = t.length;
                 const o = n.length;
                 for (let n = 0; n < e; n++) {
@@ -242,7 +242,7 @@ var DomElement;
                 for (let e = 0; e < o; e++) {
                     n[e].style.display = "none";
                 }
-                s.className = "tab-active";
+                l.className = "tab-active";
                 i.tabContents.style.display = "flex";
                 if (Is.definedObject(r)) {
                     fireCustomTriggerEvent(r.events.onOpen, a);
@@ -252,7 +252,7 @@ var DomElement;
         if (o > 0) {
             i.tabContents.style.display = "none";
         } else {
-            s.className = "tab-active";
+            l.className = "tab-active";
         }
     }
     function renderElement(e, t = null) {
@@ -268,13 +268,13 @@ var DomElement;
                     if (o.parsed) {
                         if (e.innerHTML.trim() !== "") {
                             let a = e.innerHTML;
-                            const s = getBindingOptions(o.object);
-                            let l = false;
+                            const l = getBindingOptions(o.object);
+                            let s = false;
                             let u = null;
-                            fireCustomTriggerEvent(s.events.onBeforeRenderComplete, e);
+                            fireCustomTriggerEvent(l.events.onBeforeRenderComplete, e);
                             if (e.children.length > 0 && e.children[0].nodeName.toLowerCase() === "pre") {
                                 a = e.children[0].innerHTML;
-                                l = true;
+                                s = true;
                             }
                             const c = a.trim();
                             let g = null;
@@ -313,20 +313,25 @@ var DomElement;
                                 n.tabContents.appendChild(d);
                                 DomElement.setNodeText(d, u, _configuration);
                             }
-                            if (s.showLineNumbers) {
+                            if (l.showLineNumbers) {
                                 g = DomElement.create("div", "numbers");
                                 n.tabContents.appendChild(g);
                             }
                             const m = DomElement.create("div", "syntax");
                             n.tabContents.appendChild(m);
-                            renderElementButtons(m, s, n.syntaxLanguage, r, c);
+                            renderElementButtons(m, l, n.syntaxLanguage, r, c);
                             if (n.syntaxLanguage.toLowerCase() !== "unknown") {
-                                a = renderHTML(a, i, s);
+                                a = renderHTML(a, i, l);
                             } else {
                                 a = Data.String.encodeMarkUpCharacters(a);
                             }
-                            renderElementCompletedHTML(e, d, g, m, a, s, l);
-                            fireCustomTriggerEvent(s.events.onRenderComplete, e);
+                            renderElementCompletedHTML(d, g, m, a, l, s);
+                            fireCustomTriggerEvent(l.events.onRenderComplete, e);
+                            if (!Is.defined(n.tabContents)) {
+                                renderSyntaxCustomTriggers(e, l);
+                            } else {
+                                renderSyntaxCustomTriggers(n.tabContents, l);
+                            }
                             _elements.push(e);
                             _cached_Keywords = {};
                             _cached_Keywords_Count = 0;
@@ -352,6 +357,14 @@ var DomElement;
             }
         }
         return n;
+    }
+    function renderSyntaxCustomTriggers(e, t) {
+        renderElementClickEvents(e, t.events.onKeywordClicked, "keyword-clickable");
+        renderElementClickEvents(e, t.events.onKeywordClicked, "no-highlight-keyword-clickable");
+        renderElementClickEvents(e, t.events.onValueClicked, "value-clickable");
+        renderElementClickEvents(e, t.events.onValueClicked, "no-highlight-value-clickable");
+        renderElementClickEvents(e, t.events.onAttributeClicked, "attribute-clickable");
+        renderElementClickEvents(e, t.events.onAttributeClicked, "no-highlight-attribute-clickable");
     }
     function renderHTML(e, t, n) {
         if (!t.isMarkUp) {
@@ -454,14 +467,14 @@ var DomElement;
                 r.appendChild(e);
                 DomElement.setNodeText(e, getFriendlyLanguageName(n, t.languageLabelCasing), _configuration);
             }
-            const s = a.length;
-            if (s > t.maximumButtons) {
+            const l = a.length;
+            if (l > t.maximumButtons) {
                 const e = DomElement.create("button", "button button-opener");
                 e.innerText = t.buttonsVisible ? _configuration.text.buttonsCloserText : _configuration.text.buttonsOpenerText;
                 r.insertBefore(e, r.children[0]);
                 e.onclick = function() {
                     const n = e.innerText === _configuration.text.buttonsCloserText;
-                    for (let e = 0; e < s; e++) {
+                    for (let e = 0; e < l; e++) {
                         a[e].style.display = n ? "none" : "inline-block";
                     }
                     e.innerText = n ? _configuration.text.buttonsOpenerText : _configuration.text.buttonsCloserText;
@@ -471,8 +484,8 @@ var DomElement;
                         fireCustomTriggerEvent(t.events.onButtonsOpened);
                     }
                 };
-            } else if (!t.buttonsVisible && s <= t.maximumButtons) {
-                for (let e = 0; e < s; e++) {
+            } else if (!t.buttonsVisible && l <= t.maximumButtons) {
+                for (let e = 0; e < l; e++) {
                     a[e].style.display = "inline-block";
                 }
             }
@@ -520,12 +533,12 @@ var DomElement;
                     r = e.indexOf(i[1], t + i[0].length);
                     if (r > -1) {
                         const a = e.substring(t, r + i[1].length);
-                        const s = a.split("\n");
-                        const l = s.length;
-                        const u = l === 1 ? "comment" : "multi-line-comment";
-                        for (var o = 0; o < l; o++) {
+                        const l = a.split("\n");
+                        const s = l.length;
+                        const u = s === 1 ? "comment" : "multi-line-comment";
+                        for (var o = 0; o < s; o++) {
                             const t = "$C{" + _cached_Comments_Count.toString() + "}";
-                            const n = s[o];
+                            const n = l[o];
                             _cached_Comments[t] = '<span class="' + u + '">' + n + "</span>";
                             _cached_Comments_Count++;
                             e = e.replace(n, t);
@@ -544,11 +557,11 @@ var DomElement;
                 const i = t[o];
                 const r = i.split("\n");
                 const a = r.length;
-                const s = a === 1 ? "string" : "multi-line-string";
+                const l = a === 1 ? "string" : "multi-line-string";
                 for (let t = 0; t < a; t++) {
                     const n = r[t];
                     const i = "$S{" + _cached_Strings_Count.toString() + "}";
-                    _cached_Strings[i] = '<span class="' + s + '">' + n + "</span>";
+                    _cached_Strings[i] = '<span class="' + l + '">' + n + "</span>";
                     _cached_Strings_Count++;
                     e = e.replace(n, i);
                 }
@@ -563,24 +576,24 @@ var DomElement;
         const r = t.caseSensitive;
         const a = getKeywordCasing(t.keywordsCasing);
         Data.String.sortArrayOfStringByLength(i);
-        for (let s = 0; s < o; s++) {
-            const o = i[s];
-            const l = getDisplayTextTestCasing(o, a);
+        for (let l = 0; l < o; l++) {
+            const o = i[l];
+            const s = getDisplayTextTestCasing(o, a);
             const u = "KW" + _cached_Keywords_Count.toString() + ";";
             let c = null;
             const g = r ? "g" : "gi";
             const d = new RegExp(getWordRegEx(o, t), g);
             if (n.highlightKeywords) {
                 if (Is.definedFunction(n.events.onKeywordClicked)) {
-                    c = '<span class="keyword-clickable">' + l + "</span>";
+                    c = '<span class="keyword-clickable">' + s + "</span>";
                     e = e.replace(d, u);
                 } else {
-                    c = '<span class="keyword">' + l + "</span>";
+                    c = '<span class="keyword">' + s + "</span>";
                     e = e.replace(d, u);
                 }
             } else {
                 if (Is.definedFunction(n.events.onKeywordClicked)) {
-                    c = '<span class="no-highlight-keyword-clickable">' + l + "</span>";
+                    c = '<span class="no-highlight-keyword-clickable">' + s + "</span>";
                     e = e.replace(d, u);
                 }
             }
@@ -595,36 +608,36 @@ var DomElement;
         const o = t.caseSensitive;
         const r = getKeywordCasing(t.keywordsCasing);
         const a = /(<([^>]+)>)/gi;
-        const s = o ? "g" : "gi";
-        let l = a.exec(e);
-        while (l) {
-            if (l.index === a.lastIndex) {
+        const l = o ? "g" : "gi";
+        let s = a.exec(e);
+        while (s) {
+            if (s.index === a.lastIndex) {
                 a.lastIndex++;
             }
-            let o = l[0];
+            let o = s[0];
             o = o.replace("</", "").replace("<", "").replace(">", "");
             o = o.split(" ")[0];
             if (i.indexOf(o) > -1) {
                 const i = "KW" + _cached_Keywords_Count.toString() + ";";
-                const a = new RegExp(getWordRegEx(o, t), s);
-                let l = null;
+                const a = new RegExp(getWordRegEx(o, t), l);
+                let s = null;
                 let u = getDisplayTextTestCasing(o, r);
                 if (n.highlightKeywords) {
                     if (Is.definedFunction(n.events.onKeywordClicked)) {
-                        l = '<span class="keyword-clickable">' + u + "</span>";
+                        s = '<span class="keyword-clickable">' + u + "</span>";
                     } else {
-                        l = '<span class="keyword">' + u + "</span>";
+                        s = '<span class="keyword">' + u + "</span>";
                     }
                 } else {
                     if (Is.definedFunction(n.events.onKeywordClicked)) {
-                        l = '<span class="no-highlight-keyword-clickable">' + u + "</span>";
+                        s = '<span class="no-highlight-keyword-clickable">' + u + "</span>";
                     }
                 }
                 e = e.replace(a, i);
-                _cached_Keywords[i] = l;
+                _cached_Keywords[i] = s;
                 _cached_Keywords_Count++;
             }
-            l = a.exec(e);
+            s = a.exec(e);
         }
         return e;
     }
@@ -635,25 +648,25 @@ var DomElement;
         Data.String.sortArrayOfStringByLength(i);
         for (let a = 0; a < o; a++) {
             const o = i[a];
-            const s = "VAL" + _cached_Values_Count.toString() + ";";
-            let l = null;
+            const l = "VAL" + _cached_Values_Count.toString() + ";";
+            let s = null;
             const u = r ? "g" : "gi";
             const c = new RegExp(getWordRegEx(o, t), u);
             if (n.highlightValues) {
                 if (Is.definedFunction(n.events.onValueClicked)) {
-                    l = '<span class="value-clickable">' + o + "</span>";
-                    e = e.replace(c, s);
+                    s = '<span class="value-clickable">' + o + "</span>";
+                    e = e.replace(c, l);
                 } else {
-                    l = '<span class="value">' + o + "</span>";
-                    e = e.replace(c, s);
+                    s = '<span class="value">' + o + "</span>";
+                    e = e.replace(c, l);
                 }
             } else {
                 if (Is.definedFunction(n.events.onValueClicked)) {
-                    l = '<span class="no-highlight-value-clickable">' + o + "</span>";
-                    e = e.replace(c, s);
+                    s = '<span class="no-highlight-value-clickable">' + o + "</span>";
+                    e = e.replace(c, l);
                 }
             }
-            _cached_Values[s] = l;
+            _cached_Values[l] = s;
             _cached_Values_Count++;
             fireCustomTriggerEvent(n.events.onValueRender, o);
         }
@@ -666,25 +679,25 @@ var DomElement;
         Data.String.sortArrayOfStringByLength(i);
         for (let a = 0; a < o; a++) {
             const o = i[a];
-            const s = "ATTR" + _cached_Attributes_Count.toString() + ";";
-            let l = null;
+            const l = "ATTR" + _cached_Attributes_Count.toString() + ";";
+            let s = null;
             let u = r ? "g" : "gi";
             const c = new RegExp(getWordRegEx(o, t), u);
             if (n.highlightAttributes) {
                 if (Is.definedFunction(n.events.onAttributeClicked)) {
-                    l = '<span class="attribute-clickable">' + o + "</span>";
-                    e = e.replace(c, s);
+                    s = '<span class="attribute-clickable">' + o + "</span>";
+                    e = e.replace(c, l);
                 } else {
-                    l = '<span class="attribute">' + o + "</span>";
-                    e = e.replace(c, s);
+                    s = '<span class="attribute">' + o + "</span>";
+                    e = e.replace(c, l);
                 }
             } else {
                 if (Is.definedFunction(n.events.onAttributeClicked)) {
-                    l = '<span class="no-highlight-attribute-clickable">' + o + "</span>";
-                    e = e.replace(c, s);
+                    s = '<span class="no-highlight-attribute-clickable">' + o + "</span>";
+                    e = e.replace(c, l);
                 }
             }
-            _cached_Attributes[s] = l;
+            _cached_Attributes[l] = s;
             _cached_Attributes_Count++;
             fireCustomTriggerEvent(n.events.onAttributeRender, o);
         }
@@ -727,61 +740,61 @@ var DomElement;
         }
         return e;
     }
-    function renderElementCompletedHTML(e, t, n, i, o, r, a) {
-        const s = o.split("\n");
-        const l = s.length;
-        const u = l.toString().length;
+    function renderElementCompletedHTML(e, t, n, i, o, r) {
+        const a = i.split("\n");
+        const l = a.length;
+        const s = l.toString().length;
+        let u = t;
         let c = n;
-        let g = i;
-        let d = null;
-        let f = 1;
-        let m = false;
-        if (a) {
-            g = DomElement.create("pre");
-            i.appendChild(g);
-            if (Is.defined(n)) {
-                c = DomElement.create("pre");
-                n.appendChild(c);
+        let g = null;
+        let d = 1;
+        let f = false;
+        if (r) {
+            c = DomElement.create("pre");
+            n.appendChild(c);
+            if (Is.defined(t)) {
+                u = DomElement.create("pre");
+                t.appendChild(u);
             }
         }
-        if (r.doubleClickToSelectAll) {
+        if (o.doubleClickToSelectAll) {
+            if (Is.defined(e)) {
+                e.ondblclick = function() {
+                    DomElement.selectTextInElement(c);
+                };
+            }
             if (Is.defined(t)) {
                 t.ondblclick = function() {
-                    DomElement.selectTextInElement(g);
+                    DomElement.selectTextInElement(c);
                 };
             }
-            if (Is.defined(n)) {
-                n.ondblclick = function() {
-                    DomElement.selectTextInElement(g);
-                };
-            }
-            i.ondblclick = function() {
-                DomElement.selectTextInElement(g);
+            n.ondblclick = function() {
+                DomElement.selectTextInElement(c);
             };
         }
         for (let e = 0; e < l; e++) {
-            let t = s[e];
-            if (t.trim() !== "" && d === null) {
-                d = t.substring(0, t.match(/^\s*/)[0].length);
+            let t = a[e];
+            if (t.trim() !== "" && g === null) {
+                g = t.substring(0, t.match(/^\s*/)[0].length);
             }
             if (e !== 0 && e !== l - 1 || t.trim() !== "") {
-                if (t.trim() !== "" || !r.removeBlankLines) {
+                if (t.trim() !== "" || !o.removeBlankLines) {
                     const e = t.trim() === "";
-                    if (e && !m || !r.removeDuplicateBlankLines || !e) {
-                        m = e;
-                        if (Is.defined(c)) {
+                    if (e && !f || !o.removeDuplicateBlankLines || !e) {
+                        f = e;
+                        if (Is.defined(u)) {
                             const e = DomElement.create("p");
-                            if (r.padLineNumbers) {
-                                e.innerText = Data.String.padNumber(f.toString(), u);
+                            if (o.padLineNumbers) {
+                                e.innerText = Data.String.padNumber(d.toString(), s);
                             } else {
-                                e.innerText = f.toString();
+                                e.innerText = d.toString();
                             }
-                            c.appendChild(e);
-                            f++;
+                            u.appendChild(e);
+                            d++;
                         }
-                        if (d !== null) {
-                            t = t.replace(d, "");
-                            if (!a) {
+                        if (g !== null) {
+                            t = t.replace(g, "");
+                            if (!r) {
                                 const e = t.match(/^\s*/)[0].length;
                                 const n = t.substring(0, e);
                                 const i = Array(e).join("&nbsp;");
@@ -790,13 +803,11 @@ var DomElement;
                         }
                         const n = DomElement.create("p");
                         n.innerHTML = t.trim() === "" ? "<br>" : t;
-                        g.appendChild(n);
+                        c.appendChild(n);
                     }
                 }
             }
         }
-        renderElementClickEvents(e, r.events.onKeywordClicked, "keyword-clickable");
-        renderElementClickEvents(e, r.events.onValueClicked, "value-clickable");
     }
     function renderElementClickEvents(e, t, n) {
         if (Is.definedFunction(t)) {

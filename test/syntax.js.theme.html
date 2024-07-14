@@ -21,7 +21,7 @@
 
         <div class="contents">
             <code data-syntax-language="tabbed">
-                <div data-syntax-language="javascript" data-syntax-tab-contents="true">
+                <div data-syntax-language="javascript" data-syntax-tab-contents="true" data-syntax-options="{ 'events': { 'onKeywordClicked': onKeywordClickedCustomTrigger, 'onValueClicked': onValueClickedCustomTrigger, 'onAttributeClicked': onAttributeClickedCustomTrigger } }">
                     <pre>
                         var something = true;
         
@@ -34,7 +34,7 @@
                     </pre>
                 </div>
 
-                <div data-syntax-language="html" data-syntax-tab-contents="true">
+                <div data-syntax-language="html" data-syntax-tab-contents="true" data-syntax-options="{ 'events': { 'onKeywordClicked': onKeywordClickedCustomTrigger, 'onValueClicked': onValueClickedCustomTrigger, 'onAttributeClicked': onAttributeClickedCustomTrigger } }">
                     <pre>
                         <div class="header">
                             <!--This is a comment.-->
@@ -46,7 +46,7 @@
                     </pre>
                 </div>
 
-                <div data-syntax-language="css" data-syntax-tab-contents="{ 'title': 'CSS', 'description': 'This is some CSS.' }">
+                <div data-syntax-language="css" data-syntax-tab-contents="{ 'title': 'CSS', 'description': 'This is some CSS.' }" data-syntax-options="{ 'events': { 'onKeywordClicked': onKeywordClickedCustomTrigger, 'onValueClicked': onValueClickedCustomTrigger, 'onAttributeClicked': onAttributeClickedCustomTrigger } }">
                     <pre>
                         div.syntax-highlight div.code {
                             background-color: var(--container-background-color-container);
@@ -67,5 +67,17 @@
     <script>
         document.title += " v" + $syntax.getVersion();
         document.getElementById( "header" ).innerText += " - v" + $syntax.getVersion();
+
+        function onKeywordClickedCustomTrigger( keyword ) {
+            console.log( "Keyword clicked: " + keyword );
+        }
+
+        function onValueClickedCustomTrigger( value ) {
+            console.log( "Value clicked: " + value );
+        }
+
+        function onAttributeClickedCustomTrigger( value ) {
+            console.log( "Attribute clicked: " + value );
+        }
     </script>
 </html>
