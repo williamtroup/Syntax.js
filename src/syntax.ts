@@ -101,7 +101,7 @@ type RenderElementResult = {
                     const tabContentElements: HTMLElement[] = [];
 
                     element.removeAttribute( Constants.SYNTAX_JS_ATTRIBUTE_NAME_LANGUAGE );
-                    element.className = element.className === Char.empty ? "syntax-highlight" : element.className + " syntax-highlight";
+                    element.className = element.className === Char.empty ? "syntax-highlight" : `${element.className} syntax-highlight`;
                     element.innerHTML = Char.empty;
 
                     const codeContainer: HTMLElement = DomElement.create( "div", "code custom-scroll-bars" );
@@ -220,7 +220,7 @@ type RenderElementResult = {
                             element.id = elementId;
 
                             if ( !Is.defined( codeContainer ) ) {
-                                element.className = element.className === Char.empty ? "syntax-highlight" : element.className + " syntax-highlight";
+                                element.className = element.className === Char.empty ? "syntax-highlight" : `${element.className} syntax-highlight`;
                                 element.innerHTML = Char.empty;
 
                                 codeContainer = DomElement.create( "div", "code custom-scroll-bars" );
@@ -508,16 +508,16 @@ type RenderElementResult = {
         const lookup: string = language.comment!;
 
         if ( Is.definedString( lookup ) ) {
-            const patternItems: RegExpMatchArray = innerHTML.match( new RegExp( lookup + ".*", "g" ) )!;
+            const patternItems: RegExpMatchArray = innerHTML.match( new RegExp( `${lookup}.*`, "g" ) )!;
 
             if ( patternItems !== null ) {
                 const patternItemsLength: number = patternItems.length;
             
                 for ( let patternItemsIndex: number = 0; patternItemsIndex < patternItemsLength; patternItemsIndex++ ) {
                     const comment: string = patternItems[ patternItemsIndex ];
-                    const commentVariable: string = "$C{" + _cached_Comments_Count.toString() + "}";
+                    const commentVariable: string = `\$C{${_cached_Comments_Count.toString()}}`;
     
-                    _cached_Comments[ commentVariable ] = "<span class=\"comment\">" + comment + "</span>";
+                    _cached_Comments[ commentVariable ] = `<span class=\"comment\">${comment}</span>`;
                     _cached_Comments_Count++;
         
                     innerHTML = innerHTML.replace( comment, commentVariable );
@@ -550,10 +550,10 @@ type RenderElementResult = {
                         const commentCssClass: string = commentLinesLength === 1 ? "comment" : "multi-line-comment";
                         
                         for ( var commentLineIndex = 0; commentLineIndex < commentLinesLength; commentLineIndex++ ) {
-                            const commentVariable: string = "$C{" + _cached_Comments_Count.toString() + "}";
+                            const commentVariable: string = `\$C{${_cached_Comments_Count.toString()}}`;
                             const commentLine: string = commentLines[ commentLineIndex ];
                             
-                            _cached_Comments[ commentVariable ] = "<span class=\"" + commentCssClass + "\">" + commentLine + "</span>";
+                            _cached_Comments[ commentVariable ] = `<span class=\"${commentCssClass}\">${commentLine}</span>`;
                             _cached_Comments_Count++;
                 
                             innerHTML = innerHTML.replace( commentLine, commentVariable );
@@ -580,9 +580,9 @@ type RenderElementResult = {
 
                 for ( let stringLineIndex: number = 0; stringLineIndex < stringLinesLength; stringLineIndex++ ) {
                     const stringLine: string = stringLines[ stringLineIndex ];
-                    const stringVariable: string = "$S{" + _cached_Strings_Count.toString() + "}";
+                    const stringVariable: string = `\$S{${_cached_Strings_Count.toString()}}`;
 
-                    _cached_Strings[ stringVariable ] = "<span class=\"" + stringCssClass + "\">" + stringLine + "</span>";
+                    _cached_Strings[ stringVariable ] = `<span class=\"${stringCssClass}\">${stringLine}</span>`;
                     _cached_Strings_Count++;
         
                     innerHTML = innerHTML.replace( stringLine, stringVariable );
@@ -606,23 +606,23 @@ type RenderElementResult = {
         for ( let keywordIndex: number = 0; keywordIndex < keywordsLength; keywordIndex++ ) {
             const keyword: string = keywords[ keywordIndex ];
             const keywordDisplay: string = getDisplayTextTestCasing( keyword, keywordsCasing );
-            const keywordVariable: string = "KW" + _cached_Keywords_Count.toString() + ";";
+            const keywordVariable: string = `KW${_cached_Keywords_Count.toString()};`;
             let keywordReplacement: string = null!;
             const regExFlags: string = caseSensitive ? "g" : "gi";
             const regEx: RegExp = new RegExp( getWordRegEx( keyword, language ), regExFlags );
 
             if ( syntaxOptions.highlightKeywords ) {
                 if ( Is.definedFunction( syntaxOptions.events!.onKeywordClicked ) ) {
-                    keywordReplacement = "<span class=\"keyword-clickable\">" + keywordDisplay + "</span>";
+                    keywordReplacement = `<span class=\"keyword-clickable\">${keywordDisplay}</span>`;
                     innerHTML = innerHTML.replace( regEx, keywordVariable );
                 } else {
-                    keywordReplacement = "<span class=\"keyword\">" + keywordDisplay + "</span>";
+                    keywordReplacement = `<span class=\"keyword\">${keywordDisplay}</span>`;
                     innerHTML = innerHTML.replace( regEx, keywordVariable );
                 }
 
             } else {
                 if ( Is.definedFunction( syntaxOptions.events!.onKeywordClicked ) ) {
-                    keywordReplacement = "<span class=\"no-highlight-keyword-clickable\">" + keywordDisplay + "</span>";
+                    keywordReplacement = `<span class=\"no-highlight-keyword-clickable\">${keywordDisplay}</span>`;
                     innerHTML = innerHTML.replace( regEx, keywordVariable );
                 }
             }
@@ -655,21 +655,21 @@ type RenderElementResult = {
             tag = tag.split( Char.space )[ 0 ];
 
             if ( keywords.indexOf( tag ) > -1 ) {
-                const keywordVariable: string = "KW" + _cached_Keywords_Count.toString() + ";";
+                const keywordVariable: string = `KW${_cached_Keywords_Count.toString()};`;
                 const regExReplace: RegExp = new RegExp( getWordRegEx( tag, language ), regExFlags );
                 let keywordReplacement: string = null!;
                 let replacementTagDisplay: string = getDisplayTextTestCasing( tag, keywordsCasing );
 
                 if ( syntaxOptions.highlightKeywords ) {
                     if ( Is.definedFunction( syntaxOptions.events!.onKeywordClicked ) ) {
-                        keywordReplacement = "<span class=\"keyword-clickable\">" + replacementTagDisplay + "</span>";
+                        keywordReplacement = `<span class=\"keyword-clickable\">${replacementTagDisplay}</span>`;
                     } else {
-                        keywordReplacement = "<span class=\"keyword\">" + replacementTagDisplay + "</span>";
+                        keywordReplacement = `<span class=\"keyword\">${replacementTagDisplay}</span>`;
                     }
     
                 } else {
                     if ( Is.definedFunction( syntaxOptions.events!.onKeywordClicked ) ) {
-                        keywordReplacement = "<span class=\"no-highlight-keyword-clickable\">" + replacementTagDisplay + "</span>";
+                        keywordReplacement = `<span class=\"no-highlight-keyword-clickable\">${replacementTagDisplay}</span>`;
                     }
                 }
 
@@ -694,23 +694,23 @@ type RenderElementResult = {
 
         for ( let valueIndex: number = 0; valueIndex < valuesLength; valueIndex++ ) {
             const value: string = values[ valueIndex ];
-            const valueVariable: string = "VAL" + _cached_Values_Count.toString() + ";";
+            const valueVariable: string = `VAL${_cached_Values_Count.toString()};`;
             let valueReplacement: string = null!;
             const regExFlags: string = caseSensitive ? "g" : "gi";
             const regEx: RegExp = new RegExp( getWordRegEx( value, language ), regExFlags );
 
             if ( syntaxOptions.highlightValues ) {
                 if ( Is.definedFunction( syntaxOptions.events!.onValueClicked! ) ) {
-                    valueReplacement = "<span class=\"value-clickable\">" + value + "</span>";
+                    valueReplacement = `<span class=\"value-clickable\">${value}</span>`;
                     innerHTML = innerHTML.replace( regEx, valueVariable );
                 } else {
-                    valueReplacement = "<span class=\"value\">" + value + "</span>";
+                    valueReplacement = `<span class=\"value\">${value}</span>`;
                     innerHTML = innerHTML.replace( regEx, valueVariable );
                 }
 
             } else {
                 if ( Is.definedFunction( syntaxOptions.events!.onValueClicked! ) ) {
-                    valueReplacement = "<span class=\"no-highlight-value-clickable\">" + value + "</span>";
+                    valueReplacement = `<span class=\"no-highlight-value-clickable\">${value}</span>`;
                     innerHTML = innerHTML.replace( regEx, valueVariable );
                 }
             }
@@ -733,23 +733,23 @@ type RenderElementResult = {
 
         for ( let attributeIndex: number = 0; attributeIndex < attributesLength; attributeIndex++ ) {
             const attribute: string = attributes[ attributeIndex ];
-            const attributeVariable: string = "ATTR" + _cached_Attributes_Count.toString() + ";";
+            const attributeVariable: string = `ATTR${_cached_Attributes_Count.toString()};`;
             let attributeReplacement: string = null!;
             let regExFlags: string = caseSensitive ? "g" : "gi";
             const regEx: RegExp = new RegExp( getWordRegEx( attribute, language ), regExFlags );
 
             if ( syntaxOptions.highlightAttributes ) {
                 if ( Is.definedFunction( syntaxOptions.events!.onAttributeClicked ) ) {
-                    attributeReplacement = "<span class=\"attribute-clickable\">" + attribute + "</span>";
+                    attributeReplacement = `<span class=\"attribute-clickable\">${attribute}</span>`;
                     innerHTML = innerHTML.replace( regEx, attributeVariable );
                 } else {
-                    attributeReplacement = "<span class=\"attribute\">" + attribute + "</span>";
+                    attributeReplacement = `<span class=\"attribute\">${attribute}</span>`;
                     innerHTML = innerHTML.replace( regEx, attributeVariable );
                 }
 
             } else {
                 if ( Is.definedFunction( syntaxOptions.events!.onAttributeClicked ) ) {
-                    attributeReplacement = "<span class=\"no-highlight-attribute-clickable\">" + attribute + "</span>";
+                    attributeReplacement = `<span class=\"no-highlight-attribute-clickable\">${attribute}</span>`;
                     innerHTML = innerHTML.replace( regEx, attributeVariable );
                 }
             }
@@ -971,7 +971,7 @@ type RenderElementResult = {
     }
 
     function getWordRegEx( word: string, language: SyntaxLanguage ) : string {
-        let result: string = "(?<=^|[^-])\\b" + word + "\\b(?=[^-]|$)";
+        let result: string = `(?<=^|[^-])\\b${word}\\b(?=[^-]|\$)`;
 
         if ( Is.definedString( language.wordRegEx ) ) {
             result = language.wordRegEx!.replace( "%word%", word );

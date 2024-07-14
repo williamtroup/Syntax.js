@@ -94,7 +94,7 @@ var init_data = __esm({
                 function n(e, t) {
                     let n = e;
                     while (n.length < t) {
-                        n = "0" + n;
+                        n = `0${n}`;
                     }
                     return n;
                 }
@@ -246,7 +246,7 @@ var require_syntax = __commonJS({
                             const r = [];
                             const o = [];
                             t.removeAttribute(Constants.SYNTAX_JS_ATTRIBUTE_NAME_LANGUAGE);
-                            t.className = t.className === "" ? "syntax-highlight" : t.className + " syntax-highlight";
+                            t.className = t.className === "" ? "syntax-highlight" : `${t.className} syntax-highlight`;
                             t.innerHTML = "";
                             const a = DomElement.create("div", "code custom-scroll-bars");
                             t.appendChild(a);
@@ -336,7 +336,7 @@ var require_syntax = __commonJS({
                                     e.removeAttribute(Constants.SYNTAX_JS_ATTRIBUTE_NAME_OPTIONS);
                                     e.id = f;
                                     if (!Is.defined(t)) {
-                                        e.className = e.className === "" ? "syntax-highlight" : e.className + " syntax-highlight";
+                                        e.className = e.className === "" ? "syntax-highlight" : `${e.className} syntax-highlight`;
                                         e.innerHTML = "";
                                         t = DomElement.create("div", "code custom-scroll-bars");
                                         e.appendChild(t);
@@ -555,13 +555,13 @@ var require_syntax = __commonJS({
             function renderElementCommentVariables(e, t, n) {
                 const i = t.comment;
                 if (Is.definedString(i)) {
-                    const t = e.match(new RegExp(i + ".*", "g"));
+                    const t = e.match(new RegExp(`${i}.*`, "g"));
                     if (t !== null) {
                         const i = t.length;
                         for (let r = 0; r < i; r++) {
                             const i = t[r];
-                            const o = "$C{" + _cached_Comments_Count.toString() + "}";
-                            _cached_Comments[o] = '<span class="comment">' + i + "</span>";
+                            const o = `$C{${_cached_Comments_Count.toString()}}`;
+                            _cached_Comments[o] = `<span class="comment">${i}</span>`;
                             _cached_Comments_Count++;
                             e = e.replace(i, o);
                             fireCustomTriggerEvent(n.events.onCommentRender, i);
@@ -585,9 +585,9 @@ var require_syntax = __commonJS({
                                 const l = s.length;
                                 const u = l === 1 ? "comment" : "multi-line-comment";
                                 for (var r = 0; r < l; r++) {
-                                    const t = "$C{" + _cached_Comments_Count.toString() + "}";
+                                    const t = `$C{${_cached_Comments_Count.toString()}}`;
                                     const n = s[r];
-                                    _cached_Comments[t] = '<span class="' + u + '">' + n + "</span>";
+                                    _cached_Comments[t] = `<span class="${u}">${n}</span>`;
                                     _cached_Comments_Count++;
                                     e = e.replace(n, t);
                                 }
@@ -608,8 +608,8 @@ var require_syntax = __commonJS({
                         const s = a === 1 ? "string" : "multi-line-string";
                         for (let t = 0; t < a; t++) {
                             const n = o[t];
-                            const i = "$S{" + _cached_Strings_Count.toString() + "}";
-                            _cached_Strings[i] = '<span class="' + s + '">' + n + "</span>";
+                            const i = `$S{${_cached_Strings_Count.toString()}}`;
+                            _cached_Strings[i] = `<span class="${s}">${n}</span>`;
                             _cached_Strings_Count++;
                             e = e.replace(n, i);
                         }
@@ -627,21 +627,21 @@ var require_syntax = __commonJS({
                 for (let s = 0; s < r; s++) {
                     const r = i[s];
                     const l = getDisplayTextTestCasing(r, a);
-                    const u = "KW" + _cached_Keywords_Count.toString() + ";";
+                    const u = `KW${_cached_Keywords_Count.toString()};`;
                     let c = null;
                     const g = o ? "g" : "gi";
                     const d = new RegExp(getWordRegEx(r, t), g);
                     if (n.highlightKeywords) {
                         if (Is.definedFunction(n.events.onKeywordClicked)) {
-                            c = '<span class="keyword-clickable">' + l + "</span>";
+                            c = `<span class="keyword-clickable">${l}</span>`;
                             e = e.replace(d, u);
                         } else {
-                            c = '<span class="keyword">' + l + "</span>";
+                            c = `<span class="keyword">${l}</span>`;
                             e = e.replace(d, u);
                         }
                     } else {
                         if (Is.definedFunction(n.events.onKeywordClicked)) {
-                            c = '<span class="no-highlight-keyword-clickable">' + l + "</span>";
+                            c = `<span class="no-highlight-keyword-clickable">${l}</span>`;
                             e = e.replace(d, u);
                         }
                     }
@@ -666,19 +666,19 @@ var require_syntax = __commonJS({
                     r = r.replace("</", "").replace("<", "").replace(">", "");
                     r = r.split(" ")[0];
                     if (i.indexOf(r) > -1) {
-                        const i = "KW" + _cached_Keywords_Count.toString() + ";";
+                        const i = `KW${_cached_Keywords_Count.toString()};`;
                         const a = new RegExp(getWordRegEx(r, t), s);
                         let l = null;
                         let u = getDisplayTextTestCasing(r, o);
                         if (n.highlightKeywords) {
                             if (Is.definedFunction(n.events.onKeywordClicked)) {
-                                l = '<span class="keyword-clickable">' + u + "</span>";
+                                l = `<span class="keyword-clickable">${u}</span>`;
                             } else {
-                                l = '<span class="keyword">' + u + "</span>";
+                                l = `<span class="keyword">${u}</span>`;
                             }
                         } else {
                             if (Is.definedFunction(n.events.onKeywordClicked)) {
-                                l = '<span class="no-highlight-keyword-clickable">' + u + "</span>";
+                                l = `<span class="no-highlight-keyword-clickable">${u}</span>`;
                             }
                         }
                         e = e.replace(a, i);
@@ -696,21 +696,21 @@ var require_syntax = __commonJS({
                 Data.String.sortArrayOfStringByLength(i);
                 for (let a = 0; a < r; a++) {
                     const r = i[a];
-                    const s = "VAL" + _cached_Values_Count.toString() + ";";
+                    const s = `VAL${_cached_Values_Count.toString()};`;
                     let l = null;
                     const u = o ? "g" : "gi";
                     const c = new RegExp(getWordRegEx(r, t), u);
                     if (n.highlightValues) {
                         if (Is.definedFunction(n.events.onValueClicked)) {
-                            l = '<span class="value-clickable">' + r + "</span>";
+                            l = `<span class="value-clickable">${r}</span>`;
                             e = e.replace(c, s);
                         } else {
-                            l = '<span class="value">' + r + "</span>";
+                            l = `<span class="value">${r}</span>`;
                             e = e.replace(c, s);
                         }
                     } else {
                         if (Is.definedFunction(n.events.onValueClicked)) {
-                            l = '<span class="no-highlight-value-clickable">' + r + "</span>";
+                            l = `<span class="no-highlight-value-clickable">${r}</span>`;
                             e = e.replace(c, s);
                         }
                     }
@@ -727,21 +727,21 @@ var require_syntax = __commonJS({
                 Data.String.sortArrayOfStringByLength(i);
                 for (let a = 0; a < r; a++) {
                     const r = i[a];
-                    const s = "ATTR" + _cached_Attributes_Count.toString() + ";";
+                    const s = `ATTR${_cached_Attributes_Count.toString()};`;
                     let l = null;
                     let u = o ? "g" : "gi";
                     const c = new RegExp(getWordRegEx(r, t), u);
                     if (n.highlightAttributes) {
                         if (Is.definedFunction(n.events.onAttributeClicked)) {
-                            l = '<span class="attribute-clickable">' + r + "</span>";
+                            l = `<span class="attribute-clickable">${r}</span>`;
                             e = e.replace(c, s);
                         } else {
-                            l = '<span class="attribute">' + r + "</span>";
+                            l = `<span class="attribute">${r}</span>`;
                             e = e.replace(c, s);
                         }
                     } else {
                         if (Is.definedFunction(n.events.onAttributeClicked)) {
-                            l = '<span class="no-highlight-attribute-clickable">' + r + "</span>";
+                            l = `<span class="no-highlight-attribute-clickable">${r}</span>`;
                             e = e.replace(c, s);
                         }
                     }
@@ -914,7 +914,7 @@ var require_syntax = __commonJS({
                 return e;
             }
             function getWordRegEx(e, t) {
-                let n = "(?<=^|[^-])\\b" + e + "\\b(?=[^-]|$)";
+                let n = `(?<=^|[^-])\\b${e}\\b(?=[^-]|$)`;
                 if (Is.definedString(t.wordRegEx)) {
                     n = t.wordRegEx.replace("%word%", e);
                 }

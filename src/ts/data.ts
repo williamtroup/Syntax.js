@@ -36,7 +36,7 @@ export namespace Data {
             let result: string = number;
     
             while ( result.length < length ) {
-                result = "0" + result;
+                result = `0${result}`;
             }
                 
             return result;

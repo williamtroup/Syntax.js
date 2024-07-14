@@ -62,7 +62,7 @@ var Data;
         function n(e, t) {
             let n = e;
             while (n.length < t) {
-                n = "0" + n;
+                n = `0${n}`;
             }
             return n;
         }
@@ -198,7 +198,7 @@ var DomElement;
                     const o = [];
                     const r = [];
                     t.removeAttribute(Constants.SYNTAX_JS_ATTRIBUTE_NAME_LANGUAGE);
-                    t.className = t.className === "" ? "syntax-highlight" : t.className + " syntax-highlight";
+                    t.className = t.className === "" ? "syntax-highlight" : `${t.className} syntax-highlight`;
                     t.innerHTML = "";
                     const a = DomElement.create("div", "code custom-scroll-bars");
                     t.appendChild(a);
@@ -288,7 +288,7 @@ var DomElement;
                             e.removeAttribute(Constants.SYNTAX_JS_ATTRIBUTE_NAME_OPTIONS);
                             e.id = f;
                             if (!Is.defined(t)) {
-                                e.className = e.className === "" ? "syntax-highlight" : e.className + " syntax-highlight";
+                                e.className = e.className === "" ? "syntax-highlight" : `${e.className} syntax-highlight`;
                                 e.innerHTML = "";
                                 t = DomElement.create("div", "code custom-scroll-bars");
                                 e.appendChild(t);
@@ -507,13 +507,13 @@ var DomElement;
     function renderElementCommentVariables(e, t, n) {
         const i = t.comment;
         if (Is.definedString(i)) {
-            const t = e.match(new RegExp(i + ".*", "g"));
+            const t = e.match(new RegExp(`${i}.*`, "g"));
             if (t !== null) {
                 const i = t.length;
                 for (let o = 0; o < i; o++) {
                     const i = t[o];
-                    const r = "$C{" + _cached_Comments_Count.toString() + "}";
-                    _cached_Comments[r] = '<span class="comment">' + i + "</span>";
+                    const r = `$C{${_cached_Comments_Count.toString()}}`;
+                    _cached_Comments[r] = `<span class="comment">${i}</span>`;
                     _cached_Comments_Count++;
                     e = e.replace(i, r);
                     fireCustomTriggerEvent(n.events.onCommentRender, i);
@@ -537,9 +537,9 @@ var DomElement;
                         const s = l.length;
                         const u = s === 1 ? "comment" : "multi-line-comment";
                         for (var o = 0; o < s; o++) {
-                            const t = "$C{" + _cached_Comments_Count.toString() + "}";
+                            const t = `$C{${_cached_Comments_Count.toString()}}`;
                             const n = l[o];
-                            _cached_Comments[t] = '<span class="' + u + '">' + n + "</span>";
+                            _cached_Comments[t] = `<span class="${u}">${n}</span>`;
                             _cached_Comments_Count++;
                             e = e.replace(n, t);
                         }
@@ -560,8 +560,8 @@ var DomElement;
                 const l = a === 1 ? "string" : "multi-line-string";
                 for (let t = 0; t < a; t++) {
                     const n = r[t];
-                    const i = "$S{" + _cached_Strings_Count.toString() + "}";
-                    _cached_Strings[i] = '<span class="' + l + '">' + n + "</span>";
+                    const i = `$S{${_cached_Strings_Count.toString()}}`;
+                    _cached_Strings[i] = `<span class="${l}">${n}</span>`;
                     _cached_Strings_Count++;
                     e = e.replace(n, i);
                 }
@@ -579,21 +579,21 @@ var DomElement;
         for (let l = 0; l < o; l++) {
             const o = i[l];
             const s = getDisplayTextTestCasing(o, a);
-            const u = "KW" + _cached_Keywords_Count.toString() + ";";
+            const u = `KW${_cached_Keywords_Count.toString()};`;
             let c = null;
             const g = r ? "g" : "gi";
             const d = new RegExp(getWordRegEx(o, t), g);
             if (n.highlightKeywords) {
                 if (Is.definedFunction(n.events.onKeywordClicked)) {
-                    c = '<span class="keyword-clickable">' + s + "</span>";
+                    c = `<span class="keyword-clickable">${s}</span>`;
                     e = e.replace(d, u);
                 } else {
-                    c = '<span class="keyword">' + s + "</span>";
+                    c = `<span class="keyword">${s}</span>`;
                     e = e.replace(d, u);
                 }
             } else {
                 if (Is.definedFunction(n.events.onKeywordClicked)) {
-                    c = '<span class="no-highlight-keyword-clickable">' + s + "</span>";
+                    c = `<span class="no-highlight-keyword-clickable">${s}</span>`;
                     e = e.replace(d, u);
                 }
             }
@@ -618,19 +618,19 @@ var DomElement;
             o = o.replace("</", "").replace("<", "").replace(">", "");
             o = o.split(" ")[0];
             if (i.indexOf(o) > -1) {
-                const i = "KW" + _cached_Keywords_Count.toString() + ";";
+                const i = `KW${_cached_Keywords_Count.toString()};`;
                 const a = new RegExp(getWordRegEx(o, t), l);
                 let s = null;
                 let u = getDisplayTextTestCasing(o, r);
                 if (n.highlightKeywords) {
                     if (Is.definedFunction(n.events.onKeywordClicked)) {
-                        s = '<span class="keyword-clickable">' + u + "</span>";
+                        s = `<span class="keyword-clickable">${u}</span>`;
                     } else {
-                        s = '<span class="keyword">' + u + "</span>";
+                        s = `<span class="keyword">${u}</span>`;
                     }
                 } else {
                     if (Is.definedFunction(n.events.onKeywordClicked)) {
-                        s = '<span class="no-highlight-keyword-clickable">' + u + "</span>";
+                        s = `<span class="no-highlight-keyword-clickable">${u}</span>`;
                     }
                 }
                 e = e.replace(a, i);
@@ -648,21 +648,21 @@ var DomElement;
         Data.String.sortArrayOfStringByLength(i);
         for (let a = 0; a < o; a++) {
             const o = i[a];
-            const l = "VAL" + _cached_Values_Count.toString() + ";";
+            const l = `VAL${_cached_Values_Count.toString()};`;
             let s = null;
             const u = r ? "g" : "gi";
             const c = new RegExp(getWordRegEx(o, t), u);
             if (n.highlightValues) {
                 if (Is.definedFunction(n.events.onValueClicked)) {
-                    s = '<span class="value-clickable">' + o + "</span>";
+                    s = `<span class="value-clickable">${o}</span>`;
                     e = e.replace(c, l);
                 } else {
-                    s = '<span class="value">' + o + "</span>";
+                    s = `<span class="value">${o}</span>`;
                     e = e.replace(c, l);
                 }
             } else {
                 if (Is.definedFunction(n.events.onValueClicked)) {
-                    s = '<span class="no-highlight-value-clickable">' + o + "</span>";
+                    s = `<span class="no-highlight-value-clickable">${o}</span>`;
                     e = e.replace(c, l);
                 }
             }
@@ -679,21 +679,21 @@ var DomElement;
         Data.String.sortArrayOfStringByLength(i);
         for (let a = 0; a < o; a++) {
             const o = i[a];
-            const l = "ATTR" + _cached_Attributes_Count.toString() + ";";
+            const l = `ATTR${_cached_Attributes_Count.toString()};`;
             let s = null;
             let u = r ? "g" : "gi";
             const c = new RegExp(getWordRegEx(o, t), u);
             if (n.highlightAttributes) {
                 if (Is.definedFunction(n.events.onAttributeClicked)) {
-                    s = '<span class="attribute-clickable">' + o + "</span>";
+                    s = `<span class="attribute-clickable">${o}</span>`;
                     e = e.replace(c, l);
                 } else {
-                    s = '<span class="attribute">' + o + "</span>";
+                    s = `<span class="attribute">${o}</span>`;
                     e = e.replace(c, l);
                 }
             } else {
                 if (Is.definedFunction(n.events.onAttributeClicked)) {
-                    s = '<span class="no-highlight-attribute-clickable">' + o + "</span>";
+                    s = `<span class="no-highlight-attribute-clickable">${o}</span>`;
                     e = e.replace(c, l);
                 }
             }
@@ -866,7 +866,7 @@ var DomElement;
         return e;
     }
     function getWordRegEx(e, t) {
-        let n = "(?<=^|[^-])\\b" + e + "\\b(?=[^-]|$)";
+        let n = `(?<=^|[^-])\\b${e}\\b(?=[^-]|$)`;
         if (Is.definedString(t.wordRegEx)) {
             n = t.wordRegEx.replace("%word%", e);
         }
