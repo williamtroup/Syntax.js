@@ -12,13 +12,12 @@
 
 
 import {
-    BindingOptions,
-    CustomButton,
+    type BindingOptions,
+    type CustomButton,
     type BindingTabContentOptionEvents,
     type BindingTabContentOptions,
     type Configuration,
-    type SyntaxLanguage
-} from "./ts/type";
+    type SyntaxLanguage } from "./ts/type";
 
 import { PublicApi } from "./ts/api";
 import { Constants } from "./ts/constant";
