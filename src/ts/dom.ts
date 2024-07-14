@@ -36,9 +36,17 @@ export namespace DomElement {
             div.innerHTML = text;
 
             element.innerText = div.innerText;
-            
+
         } else {
             element.innerHTML = text;
         }
+    }
+
+    function selectTextInElement( element: HTMLElement ) : void {
+        var range = document.createRange();
+        range.selectNode( element );
+
+        window.getSelection()!.removeAllRanges();
+        window.getSelection()!.addRange( range );
     }
 }
