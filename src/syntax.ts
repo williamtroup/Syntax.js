@@ -19,7 +19,8 @@ import {
     type Configuration,
     type SyntaxLanguage, 
     type ConfigurationText,
-    type ConfigurationEvents} from "./ts/type";
+    type ConfigurationEvents,
+    type BindingOptionEvents} from "./ts/type";
 
 import { PublicApi } from "./ts/api";
 import { Constants } from "./ts/constant";
@@ -1005,6 +1006,7 @@ type RenderElementResult = {
     }
 
     function buildBindingAttributeOptionCustomTriggers( options: BindingOptions ) : BindingOptions {
+        options.events = Data.getDefaultObject( options.events, {} as BindingOptionEvents );
         options.events!.onCopy = Data.getDefaultFunction( options.events!.onCopy, null! );
         options.events!.onRenderComplete = Data.getDefaultFunction( options.events!.onRenderComplete, null! );
         options.events!.onKeywordClicked = Data.getDefaultFunction( options.events!.onKeywordClicked, null! );

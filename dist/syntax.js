@@ -887,6 +887,7 @@ var DomElement;
         return e;
     }
     function buildBindingAttributeOptionCustomTriggers(e) {
+        e.events = Data.getDefaultObject(e.events, {});
         e.events.onCopy = Data.getDefaultFunction(e.events.onCopy, null);
         e.events.onRenderComplete = Data.getDefaultFunction(e.events.onRenderComplete, null);
         e.events.onKeywordClicked = Data.getDefaultFunction(e.events.onKeywordClicked, null);
