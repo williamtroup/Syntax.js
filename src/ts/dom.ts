@@ -13,6 +13,7 @@
 
 import { Char } from "./enum";
 import { Is } from "./is";
+import { type Configuration } from "./type";
 
 
 export namespace DomElement {
@@ -27,5 +28,17 @@ export namespace DomElement {
         }
 
         return result;
+    }
+
+    function setNodeText( element: HTMLElement, text: string, configuration: Configuration ) : void {
+        if ( !configuration.allowHtmlInTextDisplay ) {
+            const div: HTMLElement = create( "div" );
+            div.innerHTML = text;
+
+            element.innerText = div.innerText;
+            
+        } else {
+            element.innerHTML = text;
+        }
     }
 }

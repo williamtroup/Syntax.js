@@ -12,6 +12,9 @@
 
 
 export type Configuration = {
+    safeMode?: boolean;
+    highlightAllDomElementTypes?: string | string[];
+    allowHtmlInTextDisplay?: boolean;
     text?: ConfigurationText;
     events?: ConfigurationEvents;
 };

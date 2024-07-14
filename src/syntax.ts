@@ -11,9 +11,23 @@
  */
 
 
+import {
+    type BindingTabContentOptionEvents,
+    type BindingTabContentOptions,
+    type Configuration,
+    type SyntaxLanguage
+} from "./ts/type";
+
 import { PublicApi } from "./ts/api";
 import { Constants } from "./ts/constant";
-import { type Configuration, type SyntaxLanguage } from "./ts/type";
+import { Data } from "./ts/data";
+import { Is } from "./ts/is";
+
+
+type StringToJson = {
+    parsed: boolean;
+    object: any;
+};
 
 
 ( () => {
@@ -40,6 +54,98 @@ import { type Configuration, type SyntaxLanguage } from "./ts/type";
     let _cached_Comments_Count: number = 0;
 
 
+
+    /*
+     * ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+     * Binding Options - Tab Contents
+     * ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+     */
+
+    function getBindingTabContentOptions( newOptions: any ) : BindingTabContentOptions {
+        let options: BindingTabContentOptions = Data.getDefaultObject( newOptions, {} as BindingTabContentOptions );
+
+        options = buildBindingTabContentAttributeOptionStrings( options );
+        options = buildBindingTabContentAttributeOptionCustomTriggers( options );
+
+        return options;
+    }
+
+    function buildBindingTabContentAttributeOptionStrings( options: BindingTabContentOptions ) : BindingTabContentOptions {
+        options.title = Data.getDefaultString( options.title, null! );
+        options.description = Data.getDefaultString( options.description, null! );
+
+        return options;
+    }
+
+    function buildBindingTabContentAttributeOptionCustomTriggers( options: BindingTabContentOptions ) : BindingTabContentOptions {
+        options.events = Data.getDefaultFunction( options.events, {} as BindingTabContentOptionEvents );
+        options.events!.onOpen = Data.getDefaultFunction( options.events!.onOpen, null! );
+
+        return options;
+    }
+
+
+    /*
+     * ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+     * Triggering Custom Events
+     * ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+     */
+
+    function fireCustomTriggerEvent( triggerFunction: Function, ...args : any[] ) : void {
+        if ( Is.definedFunction( triggerFunction ) ) {
+            triggerFunction.apply( null, [].slice.call( args, 0 ) );
+        }
+    }
+
+
+    /*
+     * ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+     * Default Parameter/Option Handling
+     * ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+     */
+
+    function getObjectFromString( objectString: any ) : StringToJson {
+        const result: StringToJson = {
+            parsed: true,
+            object: null
+        } as StringToJson;
+
+        try {
+            if ( Is.definedString( objectString ) ) {
+                result.object = JSON.parse( objectString );
+            }
+
+        } catch ( e1: any ) {
+            try {
+                result.object = eval( `(${objectString})` );
+
+                if ( Is.definedFunction( result.object ) ) {
+                    result.object = result.object();
+                }
+                
+            } catch ( e2: any ) {
+                if ( !_configuration.safeMode ) {
+                    logError( _configuration.text!.objectErrorText!.replace( "{{error_1}}",  e1.message ).replace( "{{error_2}}",  e2.message ) );
+                    result.parsed = false;
+                }
+                
+                result.object = null;
+            }
+        }
+
+        return result;
+    }
+
+    function logError( error: string ) : boolean {
+        let result: boolean = true;
+
+        if ( !_configuration.safeMode ) {
+            console.error( error );
+            result = false;
+        }
+
+        return result;
+    }
 
 
 	/*
