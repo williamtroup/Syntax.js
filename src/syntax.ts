@@ -23,6 +23,8 @@ import { PublicApi } from "./ts/api";
 import { Constants } from "./ts/constant";
 import { Data } from "./ts/data";
 import { Is } from "./ts/is";
+import { Char } from "./ts/enum";
+import { DomElement } from "./ts/dom";
 
 
 type StringToJson = {
@@ -63,6 +65,222 @@ type StringToJson = {
      * Rendering
      * ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
      */
+
+
+    function renderElementValues( innerHTML: string, language: SyntaxLanguage, syntaxOptions: BindingOptions ) : string {
+        const values: string[] = Data.getDefaultStringOrArray( language.values, [] );
+        const valuesLength: number = values.length;
+        const caseSensitive: boolean = language.caseSensitive!;
+
+        Data.String.sortArrayOfStringByLength( values );
+
+        for ( let valueIndex: number = 0; valueIndex < valuesLength; valueIndex++ ) {
+            const value: string = values[ valueIndex ];
+            const valueVariable: string = "VAL" + _cached_Values_Count.toString() + ";";
+            let valueReplacement: string = null!;
+            const regExFlags: string = caseSensitive ? "g" : "gi";
+            const regEx: RegExp = new RegExp( getWordRegEx( value, language ), regExFlags );
+
+            if ( syntaxOptions.highlightValues ) {
+                if ( Is.definedFunction( syntaxOptions.events!.onValueClicked! ) ) {
+                    valueReplacement = "<span class=\"value-clickable\">" + value + "</span>";
+                    innerHTML = innerHTML.replace( regEx, valueVariable );
+                } else {
+                    valueReplacement = "<span class=\"value\">" + value + "</span>";
+                    innerHTML = innerHTML.replace( regEx, valueVariable );
+                }
+
+            } else {
+                if ( Is.definedFunction( syntaxOptions.events!.onValueClicked! ) ) {
+                    valueReplacement = "<span class=\"no-highlight-value-clickable\">" + value + "</span>";
+                    innerHTML = innerHTML.replace( regEx, valueVariable );
+                }
+            }
+
+            _cached_Values[ valueVariable ] = valueReplacement;
+            _cached_Values_Count++;
+
+            fireCustomTriggerEvent( syntaxOptions.events!.onValueRender!, value );
+        }
+
+        return innerHTML;
+    }
+
+    function renderElementAttributes( innerHTML: string, language: SyntaxLanguage, syntaxOptions: BindingOptions ) : string {
+        const attributes: string[] = Data.getDefaultStringOrArray( language.attributes, [] );
+        const attributesLength: number = attributes.length;
+        const caseSensitive: boolean = language.caseSensitive!;
+
+        Data.String.sortArrayOfStringByLength( attributes );
+
+        for ( let attributeIndex: number = 0; attributeIndex < attributesLength; attributeIndex++ ) {
+            const attribute: string = attributes[ attributeIndex ];
+            const attributeVariable: string = "ATTR" + _cached_Attributes_Count.toString() + ";";
+            let attributeReplacement: string = null!;
+            let regExFlags: string = caseSensitive ? "g" : "gi";
+            const regEx: RegExp = new RegExp( getWordRegEx( attribute, language ), regExFlags );
+
+            if ( syntaxOptions.highlightAttributes ) {
+                if ( Is.definedFunction( syntaxOptions.events!.onAttributeClicked ) ) {
+                    attributeReplacement = "<span class=\"attribute-clickable\">" + attribute + "</span>";
+                    innerHTML = innerHTML.replace( regEx, attributeVariable );
+                } else {
+                    attributeReplacement = "<span class=\"attribute\">" + attribute + "</span>";
+                    innerHTML = innerHTML.replace( regEx, attributeVariable );
+                }
+
+            } else {
+                if ( Is.definedFunction( syntaxOptions.events!.onAttributeClicked ) ) {
+                    attributeReplacement = "<span class=\"no-highlight-attribute-clickable\">" + attribute + "</span>";
+                    innerHTML = innerHTML.replace( regEx, attributeVariable );
+                }
+            }
+
+            _cached_Attributes[ attributeVariable ] = attributeReplacement;
+            _cached_Attributes_Count++;
+
+            fireCustomTriggerEvent( syntaxOptions.events!.onAttributeRender!, attribute );
+        }
+
+        return innerHTML;
+    }
+
+    function renderElementStringQuotesFromVariables( innerHTML: string ) : string {
+        for ( let quoteVariable in _cached_Strings ) {
+            if ( _cached_Strings.hasOwnProperty( quoteVariable ) ) {
+                innerHTML = innerHTML.replace( quoteVariable, _cached_Strings[ quoteVariable ] );
+            }
+        }
+
+        return innerHTML;
+    }
+
+    function renderElementCommentsFromVariables( innerHTML: string, language: SyntaxLanguage ) : string {
+        const multiLineComment: string[] = language.multiLineComment as string[];
+        let start: string = null!;
+        let end: string = null!;
+
+        if ( Is.definedArray( multiLineComment ) && multiLineComment.length === 2 ) {
+            start = Data.String.encodeMarkUpCharacters( multiLineComment[ 0 ] );
+            end = Data.String.encodeMarkUpCharacters( multiLineComment[ 1 ] );
+        }
+
+        for ( let commentVariable in _cached_Comments ) {
+            if ( _cached_Comments.hasOwnProperty( commentVariable ) ) {
+                let replacement: string = _cached_Comments[ commentVariable ];
+
+                if ( language.isMarkUp && Is.definedString( start ) && Is.definedString( end ) ) {
+                    replacement = replacement.replace( multiLineComment[ 0 ], start );
+                    replacement = replacement.replace( multiLineComment[ 1 ], end );
+                }
+
+                innerHTML = innerHTML.replace( commentVariable, replacement );
+            }
+        }
+
+        return innerHTML;
+    }
+
+    function renderElementVariables( innerHTML: string, variables: Record<string, string> ) : string {
+        for ( let variable in variables ) {
+            if ( variables.hasOwnProperty( variable ) ) {
+                const regExHtmlReplace: RegExp = new RegExp( variable, "g" );
+
+                innerHTML = innerHTML.replace( regExHtmlReplace, variables[ variable ] );
+            }
+        }
+
+        return innerHTML;
+    }
+
+    function renderElementCompletedHTML( element: HTMLElement, description: HTMLElement, numbers: HTMLElement, syntax: HTMLElement, innerHTML: string, syntaxOptions: BindingOptions, isPreFormatted: boolean ) : void {
+        const lines: string[] = innerHTML.split( Char.newLine );
+        const linesLength: number = lines.length;
+        const linesLengthStringLength: number = linesLength.toString().length;
+        let numberContainer: HTMLElement = numbers;
+        let codeContainer: HTMLElement = syntax;
+        let replaceWhitespace: string = null!;
+        let lineNumber: number = 1;
+        let lastLineWasBlank: boolean = false;
+
+        if ( isPreFormatted ) {
+            codeContainer = DomElement.create( "pre" );
+            syntax.appendChild( codeContainer );
+
+            if ( Is.defined( numbers ) ) {
+                numberContainer = DomElement.create( "pre" );
+                numbers.appendChild( numberContainer );
+            }
+        }
+
+        if ( syntaxOptions.doubleClickToSelectAll ) {
+            if ( Is.defined( description ) ) {
+                description.ondblclick = function() {
+                    DomElement.selectTextInElement( codeContainer );
+                };
+            }
+
+            if ( Is.defined( numbers ) ) {
+                numbers.ondblclick = function() {
+                    DomElement.selectTextInElement( codeContainer );
+                };
+            }
+    
+            syntax.ondblclick = function() {
+                DomElement.selectTextInElement( codeContainer );
+            };
+        }
+
+        for ( let lineIndex: number = 0; lineIndex < linesLength; lineIndex++ ) {
+            let line: string = lines[ lineIndex ];
+
+            if ( line.trim() !== Char.empty && replaceWhitespace === null ) {
+                replaceWhitespace = line.substring( 0, line.match( /^\s*/ )![ 0 ].length );
+            }
+
+            if ( ( lineIndex !== 0 && lineIndex !== linesLength - 1 ) || line.trim() !== Char.empty ) {
+                if ( line.trim() !== Char.empty || !syntaxOptions.removeBlankLines ) {
+                    const isBlank: boolean = line.trim() === Char.empty;
+
+                    if ( isBlank && !lastLineWasBlank || !syntaxOptions.removeDuplicateBlankLines || !isBlank ) {
+                        lastLineWasBlank = isBlank;
+
+                        if ( Is.defined( numberContainer ) ) {
+                            const numberCode: HTMLElement = DomElement.create( "p" );
+    
+                            if ( syntaxOptions.padLineNumbers ) {
+                                numberCode.innerText = Data.String.padNumber( lineNumber.toString(), linesLengthStringLength );
+                            } else {
+                                numberCode.innerText = lineNumber.toString();
+                            }
+    
+                            numberContainer.appendChild( numberCode );
+                            lineNumber++;
+                        }                    
+            
+                        if ( replaceWhitespace !== null ) {
+                            line = line.replace( replaceWhitespace, Char.empty );
+    
+                            if ( !isPreFormatted ) {
+                                const remainingStartWhitespaceCount: number = line.match( /^\s*/ )![ 0 ].length;
+                                const remainingStartWhitespace: string = line.substring( 0, remainingStartWhitespaceCount );
+                                const whitespaceReplacement: string = Array( remainingStartWhitespaceCount ).join( "&nbsp;" );
+    
+                                line = line.replace( remainingStartWhitespace, whitespaceReplacement );
+                            }
+                        }
+            
+                        const syntaxCode: HTMLElement = DomElement.create( "p" );
+                        syntaxCode.innerHTML = line.trim() === Char.empty ? "<br>" : line;
+                        codeContainer.appendChild( syntaxCode );
+                    }
+                }
+            }
+        }
+
+        renderElementClickEvents( element, syntaxOptions.events!.onKeywordClicked!, "keyword-clickable" );
+        renderElementClickEvents( element, syntaxOptions.events!.onValueClicked!, "value-clickable" );
+    }
 
     function renderElementClickEvents( element: HTMLElement, customTrigger: Function, className: string ) : void {
         if ( Is.definedFunction( customTrigger ) ) {

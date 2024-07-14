@@ -30,7 +30,7 @@ export namespace DomElement {
         return result;
     }
 
-    function setNodeText( element: HTMLElement, text: string, configuration: Configuration ) : void {
+    export function setNodeText( element: HTMLElement, text: string, configuration: Configuration ) : void {
         if ( !configuration.allowHtmlInTextDisplay ) {
             const div: HTMLElement = create( "div" );
             div.innerHTML = text;
@@ -42,7 +42,7 @@ export namespace DomElement {
         }
     }
 
-    function selectTextInElement( element: HTMLElement ) : void {
+    export function selectTextInElement( element: HTMLElement ) : void {
         var range = document.createRange();
         range.selectNode( element );
 
