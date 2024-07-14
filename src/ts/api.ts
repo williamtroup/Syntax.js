@@ -100,7 +100,7 @@ export type PublicApi = {
      * 
      * @returns     {Object}                                                The Syntax.js class instance.
      */
-    _destroy: ( elementId: string ) => PublicApi;
+    destroy: ( elementId: string ) => PublicApi;
 
 
     /*
