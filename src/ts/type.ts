@@ -94,3 +94,9 @@ export type SyntaxLanguage = {
     isMarkUp?: boolean;
     wordRegEx?: string;
 };
+
+export type CustomButton = {
+    text?: string;
+    className?: string;
+    onClick?: Function;
+};

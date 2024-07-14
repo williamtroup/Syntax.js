@@ -13,6 +13,7 @@
 
 import {
     BindingOptions,
+    CustomButton,
     type BindingTabContentOptionEvents,
     type BindingTabContentOptions,
     type Configuration,
@@ -66,6 +67,87 @@ type StringToJson = {
      * ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
      */
 
+    function renderElementButton( customButton: CustomButton, buttonsElements: HTMLElement[], buttons: HTMLElement, innerHTMLCopy: string, syntaxOptions: BindingOptions ) : void {
+        const newCustomButton: HTMLButtonElement = DomElement.create( "button", "button" ) as HTMLButtonElement;
+        newCustomButton.style.display = syntaxOptions.buttonsVisible ? "inline-block" : "none";
+        buttons.appendChild( newCustomButton );
+
+        DomElement.setNodeText( newCustomButton, customButton.text!, _configuration );
+
+        newCustomButton.onclick = function() {
+            customButton.onClick!( innerHTMLCopy );
+        };
+
+        if ( Is.defined( customButton.className ) ) {
+            newCustomButton.className += Char.space + customButton.className;
+        }
+
+        buttonsElements.push( newCustomButton );
+    }
+
+    function renderElementCommentVariables( innerHTML: string, language: SyntaxLanguage, syntaxOptions: BindingOptions ) : string {
+        const lookup: string = language.comment!;
+
+        if ( Is.definedString( lookup ) ) {
+            const patternItems: RegExpMatchArray = innerHTML.match( new RegExp( lookup + ".*", "g" ) )!;
+
+            if ( patternItems !== null ) {
+                const patternItemsLength: number = patternItems.length;
+            
+                for ( let patternItemsIndex: number = 0; patternItemsIndex < patternItemsLength; patternItemsIndex++ ) {
+                    const comment: string = patternItems[ patternItemsIndex ];
+                    const commentVariable: string = "$C{" + _cached_Comments_Count.toString() + "}";
+    
+                    _cached_Comments[ commentVariable ] = "<span class=\"comment\">" + comment + "</span>";
+                    _cached_Comments_Count++;
+        
+                    innerHTML = innerHTML.replace( comment, commentVariable );
+    
+                    fireCustomTriggerEvent( syntaxOptions.events!.onCommentRender!, comment );
+                }
+            }
+        }
+        
+        return innerHTML;
+    }
+
+    function renderElementMultiLineCommentVariables( innerHTML: string, language: SyntaxLanguage, syntaxOptions: BindingOptions ) : string {
+        const multiLineComment: string[] = language.multiLineComment as string[];
+
+        if ( Is.definedArray( multiLineComment ) && multiLineComment.length === 2 ) {
+            let startIndex: number = 0;
+            let endIndex: number = 0;
+
+            while ( startIndex >= 0 && endIndex >= 0 ) {
+                startIndex = innerHTML.indexOf( multiLineComment[ 0 ], endIndex );
+    
+                if ( startIndex > -1 ) {
+                    endIndex = innerHTML.indexOf( multiLineComment[ 1 ], startIndex + multiLineComment[ 0 ].length );
+    
+                    if ( endIndex > -1 ) {
+                        const comment: string = innerHTML.substring( startIndex, endIndex + multiLineComment[ 1 ].length );
+                        const commentLines: string[] = comment.split( Char.newLine );
+                        const commentLinesLength: number = commentLines.length;
+                        const commentCssClass: string = commentLinesLength === 1 ? "comment" : "multi-line-comment";
+                        
+                        for ( var commentLineIndex = 0; commentLineIndex < commentLinesLength; commentLineIndex++ ) {
+                            const commentVariable: string = "$C{" + _cached_Comments_Count.toString() + "}";
+                            const commentLine: string = commentLines[ commentLineIndex ];
+                            
+                            _cached_Comments[ commentVariable ] = "<span class=\"" + commentCssClass + "\">" + commentLine + "</span>";
+                            _cached_Comments_Count++;
+                
+                            innerHTML = innerHTML.replace( commentLine, commentVariable );
+                        }
+
+                        fireCustomTriggerEvent( syntaxOptions.events!.onCommentRender!, comment );
+                    }
+                }
+            }
+        }
+
+        return innerHTML;
+    }
 
     function renderElementStringPatternVariables( innerHTML: string, patternItems: string[], syntaxOptions: BindingOptions ) : string {
         if ( patternItems !== null ) {
