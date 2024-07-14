@@ -15,6 +15,7 @@ export const enum Char {
     empty = "",
     space = " ",
     newLine = "\n",
+    dash = "-",
 }
 
 export const enum Language {
