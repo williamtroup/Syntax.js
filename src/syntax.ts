@@ -24,13 +24,21 @@ import { PublicApi } from "./ts/api";
 import { Constants } from "./ts/constant";
 import { Data } from "./ts/data";
 import { Is } from "./ts/is";
-import { Char } from "./ts/enum";
+import { Char, Language } from "./ts/enum";
 import { DomElement } from "./ts/dom";
 
 
 type StringToJson = {
     parsed: boolean;
     object: any;
+};
+
+type RenderElementResult = {
+    rendered: boolean;
+    tabContents: HTMLElement;
+    tabTitle: string;
+    tabBindingOptions: BindingTabContentOptions,
+    syntaxLanguage: string
 };
 
 
@@ -66,6 +74,235 @@ type StringToJson = {
      * Rendering
      * ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
      */
+
+    function render() {
+        const tagTypes: string[] = _configuration.highlightAllDomElementTypes as string[];
+        const tagTypesLength: number = tagTypes.length;
+
+        for ( let tagTypeIndex: number = 0; tagTypeIndex < tagTypesLength; tagTypeIndex++ ) {
+            const domElements: HTMLCollectionOf<Element> = document.getElementsByTagName( tagTypes[ tagTypeIndex ] );
+            const elements: HTMLElement[] = [].slice.call( domElements );
+            const elementsLength: number = elements.length;
+
+            if ( elementsLength > 0 ) {
+                fireCustomTriggerEvent( _configuration.events!.onBeforeRender! );
+            }
+
+            for ( let elementIndex: number = 0; elementIndex < elementsLength; elementIndex++ ) {
+                const element: HTMLElement = elements[ elementIndex ];
+                let elementBreak: boolean = false;
+
+                if ( element.hasAttribute( Constants.SYNTAX_JS_ATTRIBUTE_NAME_LANGUAGE ) && element.getAttribute( Constants.SYNTAX_JS_ATTRIBUTE_NAME_LANGUAGE )!.toLowerCase() === Language.tabbed ) {
+                    const divElements: HTMLElement[] = [].slice.call( element.children );
+                    const divElementsLength: number = divElements.length;
+                    const tabElements: HTMLElement[] = [];
+                    const tabContentElements: HTMLElement[] = [];
+
+                    element.removeAttribute( Constants.SYNTAX_JS_ATTRIBUTE_NAME_LANGUAGE );
+                    element.className = element.className === Char.empty ? "syntax-highlight" : element.className + " syntax-highlight";
+                    element.innerHTML = Char.empty;
+
+                    const codeContainer: HTMLElement = DomElement.create( "div", "code custom-scroll-bars" );
+                    element.appendChild( codeContainer );
+
+                    const tabs: HTMLElement = DomElement.create( "div", "tabs" );
+                    codeContainer.appendChild( tabs );
+
+                    for ( let divElementIndex: number = 0; divElementIndex < divElementsLength; divElementIndex++ ) {
+                        const renderResult: RenderElementResult = renderElement( divElements[ divElementIndex ], codeContainer );
+
+                        if ( !renderResult.rendered ) {
+                            elementBreak = true;
+
+                        } else {
+                            renderTab( tabs, tabElements, tabContentElements, renderResult, divElementIndex, renderResult.tabBindingOptions, renderResult.syntaxLanguage );
+                        }
+                    }
+                    
+                } else {
+                    if ( !renderElement( element ).rendered ) {
+                        elementBreak = true;
+                    }
+                }
+
+                if ( elementBreak ) {
+                    break;
+                }
+            }
+
+            if ( elementsLength > 0 ) {
+                fireCustomTriggerEvent( _configuration.events!.onAfterRender! );
+            }
+        }
+    }
+
+    function renderTab( tabs: HTMLElement, tabElements: HTMLElement[], tabContentElements: HTMLElement[], renderResult: RenderElementResult, divElementIndex: number, tabBindingOptions: BindingTabContentOptions, syntaxLanguage: string ) : void {
+        const tab: HTMLElement = DomElement.create( "button", "tab" );
+        tabs.appendChild( tab );
+
+        DomElement.setNodeText( tab, renderResult.tabTitle, _configuration );
+
+        tabElements.push( tab );
+        tabContentElements.push( renderResult.tabContents );
+
+        tab.onclick = function() {
+            if ( tab.className !== "tab-active" ) {
+                const tabElementsLength: number = tabElements.length;
+                const tabContentElementsLength: number = tabContentElements.length;
+
+                for ( let tabElementsIndex: number = 0; tabElementsIndex < tabElementsLength; tabElementsIndex++ ) {
+                    tabElements[ tabElementsIndex ].className = "tab";
+                }
+
+                for ( let tabContentElementsIndex: number = 0; tabContentElementsIndex < tabContentElementsLength; tabContentElementsIndex++ ) {
+                    tabContentElements[ tabContentElementsIndex ].style.display = "none";
+                }
+
+                tab.className = "tab-active";
+                renderResult.tabContents.style.display = "flex";
+
+                if ( Is.definedObject( tabBindingOptions ) ) {
+                    fireCustomTriggerEvent( tabBindingOptions.events!.onOpen!, syntaxLanguage );
+                }
+            }
+        };
+
+        if ( divElementIndex > 0 ) {
+            renderResult.tabContents.style.display = "none";
+        } else {
+            tab.className = "tab-active";
+        }
+    }
+
+    function renderElement( element: HTMLElement, codeContainer: HTMLElement = null! ) {
+        const result: RenderElementResult = {} as RenderElementResult;
+        result.rendered = true;
+
+        if ( Is.defined( element ) && element.hasAttribute( Constants.SYNTAX_JS_ATTRIBUTE_NAME_LANGUAGE ) && ( !element.hasAttribute( Constants.SYNTAX_JS_ATTRIBUTE_NAME_TAB_CONTENTS ) || Is.defined( codeContainer ) ) ) {
+            result.syntaxLanguage = element.getAttribute( Constants.SYNTAX_JS_ATTRIBUTE_NAME_LANGUAGE )!;
+
+            if ( Is.definedString( result.syntaxLanguage ) ) {
+                const language: SyntaxLanguage = getLanguage( result.syntaxLanguage );
+
+                if ( Is.defined( language ) || result.syntaxLanguage.toLowerCase() === Language.unknown ) {
+                    const syntaxOptionsParsed: StringToJson = getObjectFromString( element.getAttribute( Constants.SYNTAX_JS_ATTRIBUTE_NAME_OPTIONS ) );
+                    const syntaxButtonsParsed: StringToJson = getObjectFromString( element.getAttribute( Constants.SYNTAX_JS_ATTRIBUTE_NAME_BUTTONS ) );
+
+                    if ( syntaxOptionsParsed.parsed ) {
+                        if ( element.innerHTML.trim() !== Char.empty ) {
+                            let innerHTML: string = element.innerHTML;
+                            const syntaxOptions: BindingOptions = getBindingOptions( syntaxOptionsParsed.object );
+                            let isPreFormatted: boolean = false;
+                            let descriptionText: string = null!;
+
+                            fireCustomTriggerEvent( syntaxOptions.events!.onBeforeRenderComplete!, element );
+
+                            if ( element.children.length > 0 && element.children[ 0 ].nodeName.toLowerCase() === "pre" ) {
+                                innerHTML = element.children[ 0 ].innerHTML;
+                                isPreFormatted = true;
+                            }
+                            
+                            const innerHTMLCopy: string = innerHTML.trim();
+                            let numbers: HTMLElement = null!;
+                            let description: HTMLElement = null!;
+                            let elementId: string = element.id;
+
+                            if ( !Is.definedString( elementId ) ) {
+                                elementId = Data.String.newGuid();
+                            }
+
+                            _elements_Original[ elementId ] = element.innerHTML;
+
+                            element.removeAttribute( Constants.SYNTAX_JS_ATTRIBUTE_NAME_LANGUAGE );
+                            element.removeAttribute( Constants.SYNTAX_JS_ATTRIBUTE_NAME_OPTIONS );
+                            element.id = elementId;
+
+                            if ( !Is.defined( codeContainer ) ) {
+                                element.className = element.className === Char.empty ? "syntax-highlight" : element.className + " syntax-highlight";
+                                element.innerHTML = Char.empty;
+
+                                codeContainer = DomElement.create( "div", "code custom-scroll-bars" );
+                                element.appendChild( codeContainer );
+
+                            } else {
+                                if ( element.hasAttribute( Constants.SYNTAX_JS_ATTRIBUTE_NAME_TAB_CONTENTS ) && element.getAttribute( Constants.SYNTAX_JS_ATTRIBUTE_NAME_TAB_CONTENTS )!.toLowerCase() !== "true" ) {
+                                    const syntaxTabOptions: StringToJson = getObjectFromString( element.getAttribute( Constants.SYNTAX_JS_ATTRIBUTE_NAME_TAB_CONTENTS ) );
+
+                                    if ( syntaxTabOptions.parsed && Is.definedObject( syntaxTabOptions.object ) ) {
+                                        result.tabBindingOptions = getBindingTabContentOptions( syntaxTabOptions.object );
+                                        descriptionText = result.tabBindingOptions.description!;
+
+                                        if ( Is.definedString( result.tabBindingOptions.title ) ) {
+                                            result.tabTitle = result.tabBindingOptions.title!;
+                                        }
+                                    }
+
+                                } else {
+                                    result.tabTitle = getFriendlyLanguageName( result.syntaxLanguage );
+                                }
+                            }
+
+                            result.tabContents = DomElement.create( "div", "tab-contents" );
+                            codeContainer.appendChild( result.tabContents );
+
+                            if ( Is.definedString( descriptionText ) ) {
+                                description = DomElement.create( "div", "description" );
+                                result.tabContents.appendChild( description );
+
+                                DomElement.setNodeText( description, descriptionText, _configuration );
+                            }
+
+                            if ( syntaxOptions.showLineNumbers ) {
+                                numbers = DomElement.create( "div", "numbers" );
+                                result.tabContents.appendChild( numbers );
+                            }
+                
+                            const syntax: HTMLElement = DomElement.create( "div", "syntax" );
+                            result.tabContents.appendChild( syntax );
+
+                            renderElementButtons( syntax, syntaxOptions, result.syntaxLanguage, syntaxButtonsParsed, innerHTMLCopy );
+
+                            if ( result.syntaxLanguage.toLowerCase() !== Language.unknown ) {
+                                innerHTML = renderHTML( innerHTML, language, syntaxOptions );
+                            } else {
+                                innerHTML = Data.String.encodeMarkUpCharacters( innerHTML );
+                            }
+
+                            renderElementCompletedHTML( element, description, numbers, syntax, innerHTML, syntaxOptions, isPreFormatted );
+                            fireCustomTriggerEvent( syntaxOptions.events!.onRenderComplete!, element );
+
+                            _elements.push( element );
+
+                            _cached_Keywords = {};
+                            _cached_Keywords_Count = 0;
+                            _cached_Values = {};
+                            _cached_Values_Count = 0;
+                            _cached_Attributes = {};
+                            _cached_Attributes_Count = 0;
+                            _cached_Strings = {};
+                            _cached_Strings_Count = 0;
+                            _cached_Comments = {};
+                            _cached_Comments_Count = 0;
+
+                        } else {
+                            result.rendered = logError( _configuration.text!.noCodeAvailableToRenderErrorText! );
+                        }
+
+                    } else {
+                        result.rendered = !_configuration.safeMode;
+                    }
+
+                } else {
+                    result.rendered = logError( _configuration.text!.languageNotSupportedErrorText!.replace( "{{language}}", result.syntaxLanguage ) );
+                }
+
+            } else {
+                result.rendered = logError( _configuration.text!.attributeNotSetErrorText!.replace( "{{attribute_name}}", Constants.SYNTAX_JS_ATTRIBUTE_NAME_LANGUAGE ) );
+            }
+        }
+
+        return result;
+    }
 
     function renderHTML( innerHTML: string, language: SyntaxLanguage, syntaxOptions: BindingOptions ) : string {
         if ( !language.isMarkUp ) {

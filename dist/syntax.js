@@ -1,5 +1,14 @@
 "use strict";
 
+var Constants;
+
+(e => {
+    e.SYNTAX_JS_ATTRIBUTE_NAME_LANGUAGE = "data-syntax-language";
+    e.SYNTAX_JS_ATTRIBUTE_NAME_OPTIONS = "data-syntax-options";
+    e.SYNTAX_JS_ATTRIBUTE_NAME_BUTTONS = "data-syntax-buttons";
+    e.SYNTAX_JS_ATTRIBUTE_NAME_TAB_CONTENTS = "data-syntax-tab-contents";
+})(Constants || (Constants = {}));
+
 var Is;
 
 (e => {
@@ -23,14 +32,14 @@ var Is;
         return t(e) && typeof e === "function";
     }
     e.definedFunction = r;
-    function l(e) {
+    function a(e) {
         return t(e) && typeof e === "number";
     }
-    e.definedNumber = l;
-    function a(e) {
+    e.definedNumber = a;
+    function s(e) {
         return n(e) && e instanceof Array;
     }
-    e.definedArray = a;
+    e.definedArray = s;
 })(Is || (Is = {}));
 
 var Data;
@@ -87,18 +96,18 @@ var Data;
         return Is.definedNumber(e) ? e : t;
     }
     e.getDefaultNumber = r;
-    function l(e, t) {
+    function a(e, t) {
         return Is.definedFunction(e) ? e : t;
     }
-    e.getDefaultFunction = l;
-    function a(e, t) {
+    e.getDefaultFunction = a;
+    function s(e, t) {
         return Is.definedArray(e) ? e : t;
     }
-    e.getDefaultArray = a;
-    function s(e, t) {
+    e.getDefaultArray = s;
+    function l(e, t) {
         return Is.definedObject(e) ? e : t;
     }
-    e.getDefaultObject = s;
+    e.getDefaultObject = l;
     function c(e, t) {
         let n = t;
         if (Is.definedString(e)) {
@@ -109,7 +118,7 @@ var Data;
                 n = o;
             }
         } else {
-            n = a(e, t);
+            n = s(e, t);
         }
         return n;
     }
@@ -170,6 +179,180 @@ var DomElement;
     let _cached_Comments = {};
     let _cached_Comments_Count = 0;
     let _languages = {};
+    function render() {
+        const e = _configuration.highlightAllDomElementTypes;
+        const t = e.length;
+        for (let n = 0; n < t; n++) {
+            const t = document.getElementsByTagName(e[n]);
+            const o = [].slice.call(t);
+            const i = o.length;
+            if (i > 0) {
+                fireCustomTriggerEvent(_configuration.events.onBeforeRender);
+            }
+            for (let e = 0; e < i; e++) {
+                const t = o[e];
+                let n = false;
+                if (t.hasAttribute(Constants.SYNTAX_JS_ATTRIBUTE_NAME_LANGUAGE) && t.getAttribute(Constants.SYNTAX_JS_ATTRIBUTE_NAME_LANGUAGE).toLowerCase() === "tabbed") {
+                    const e = [].slice.call(t.children);
+                    const o = e.length;
+                    const i = [];
+                    const r = [];
+                    t.removeAttribute(Constants.SYNTAX_JS_ATTRIBUTE_NAME_LANGUAGE);
+                    t.className = t.className === "" ? "syntax-highlight" : t.className + " syntax-highlight";
+                    t.innerHTML = "";
+                    const a = DomElement.create("div", "code custom-scroll-bars");
+                    t.appendChild(a);
+                    const s = DomElement.create("div", "tabs");
+                    a.appendChild(s);
+                    for (let t = 0; t < o; t++) {
+                        const o = renderElement(e[t], a);
+                        if (!o.rendered) {
+                            n = true;
+                        } else {
+                            renderTab(s, i, r, o, t, o.tabBindingOptions, o.syntaxLanguage);
+                        }
+                    }
+                } else {
+                    if (!renderElement(t).rendered) {
+                        n = true;
+                    }
+                }
+                if (n) {
+                    break;
+                }
+            }
+            if (i > 0) {
+                fireCustomTriggerEvent(_configuration.events.onAfterRender);
+            }
+        }
+    }
+    function renderTab(e, t, n, o, i, r, a) {
+        const s = DomElement.create("button", "tab");
+        e.appendChild(s);
+        DomElement.setNodeText(s, o.tabTitle, _configuration);
+        t.push(s);
+        n.push(o.tabContents);
+        s.onclick = function() {
+            if (s.className !== "tab-active") {
+                const e = t.length;
+                const i = n.length;
+                for (let n = 0; n < e; n++) {
+                    t[n].className = "tab";
+                }
+                for (let e = 0; e < i; e++) {
+                    n[e].style.display = "none";
+                }
+                s.className = "tab-active";
+                o.tabContents.style.display = "flex";
+                if (Is.definedObject(r)) {
+                    fireCustomTriggerEvent(r.events.onOpen, a);
+                }
+            }
+        };
+        if (i > 0) {
+            o.tabContents.style.display = "none";
+        } else {
+            s.className = "tab-active";
+        }
+    }
+    function renderElement(e, t = null) {
+        const n = {};
+        n.rendered = true;
+        if (Is.defined(e) && e.hasAttribute(Constants.SYNTAX_JS_ATTRIBUTE_NAME_LANGUAGE) && (!e.hasAttribute(Constants.SYNTAX_JS_ATTRIBUTE_NAME_TAB_CONTENTS) || Is.defined(t))) {
+            n.syntaxLanguage = e.getAttribute(Constants.SYNTAX_JS_ATTRIBUTE_NAME_LANGUAGE);
+            if (Is.definedString(n.syntaxLanguage)) {
+                const o = getLanguage(n.syntaxLanguage);
+                if (Is.defined(o) || n.syntaxLanguage.toLowerCase() === "unknown") {
+                    const i = getObjectFromString(e.getAttribute(Constants.SYNTAX_JS_ATTRIBUTE_NAME_OPTIONS));
+                    const r = getObjectFromString(e.getAttribute(Constants.SYNTAX_JS_ATTRIBUTE_NAME_BUTTONS));
+                    if (i.parsed) {
+                        if (e.innerHTML.trim() !== "") {
+                            let a = e.innerHTML;
+                            const s = getBindingOptions(i.object);
+                            let l = false;
+                            let c = null;
+                            fireCustomTriggerEvent(s.events.onBeforeRenderComplete, e);
+                            if (e.children.length > 0 && e.children[0].nodeName.toLowerCase() === "pre") {
+                                a = e.children[0].innerHTML;
+                                l = true;
+                            }
+                            const u = a.trim();
+                            let d = null;
+                            let g = null;
+                            let f = e.id;
+                            if (!Is.definedString(f)) {
+                                f = Data.String.newGuid();
+                            }
+                            _elements_Original[f] = e.innerHTML;
+                            e.removeAttribute(Constants.SYNTAX_JS_ATTRIBUTE_NAME_LANGUAGE);
+                            e.removeAttribute(Constants.SYNTAX_JS_ATTRIBUTE_NAME_OPTIONS);
+                            e.id = f;
+                            if (!Is.defined(t)) {
+                                e.className = e.className === "" ? "syntax-highlight" : e.className + " syntax-highlight";
+                                e.innerHTML = "";
+                                t = DomElement.create("div", "code custom-scroll-bars");
+                                e.appendChild(t);
+                            } else {
+                                if (e.hasAttribute(Constants.SYNTAX_JS_ATTRIBUTE_NAME_TAB_CONTENTS) && e.getAttribute(Constants.SYNTAX_JS_ATTRIBUTE_NAME_TAB_CONTENTS).toLowerCase() !== "true") {
+                                    const t = getObjectFromString(e.getAttribute(Constants.SYNTAX_JS_ATTRIBUTE_NAME_TAB_CONTENTS));
+                                    if (t.parsed && Is.definedObject(t.object)) {
+                                        n.tabBindingOptions = getBindingTabContentOptions(t.object);
+                                        c = n.tabBindingOptions.description;
+                                        if (Is.definedString(n.tabBindingOptions.title)) {
+                                            n.tabTitle = n.tabBindingOptions.title;
+                                        }
+                                    }
+                                } else {
+                                    n.tabTitle = getFriendlyLanguageName(n.syntaxLanguage);
+                                }
+                            }
+                            n.tabContents = DomElement.create("div", "tab-contents");
+                            t.appendChild(n.tabContents);
+                            if (Is.definedString(c)) {
+                                g = DomElement.create("div", "description");
+                                n.tabContents.appendChild(g);
+                                DomElement.setNodeText(g, c, _configuration);
+                            }
+                            if (s.showLineNumbers) {
+                                d = DomElement.create("div", "numbers");
+                                n.tabContents.appendChild(d);
+                            }
+                            const m = DomElement.create("div", "syntax");
+                            n.tabContents.appendChild(m);
+                            renderElementButtons(m, s, n.syntaxLanguage, r, u);
+                            if (n.syntaxLanguage.toLowerCase() !== "unknown") {
+                                a = renderHTML(a, o, s);
+                            } else {
+                                a = Data.String.encodeMarkUpCharacters(a);
+                            }
+                            renderElementCompletedHTML(e, g, d, m, a, s, l);
+                            fireCustomTriggerEvent(s.events.onRenderComplete, e);
+                            _elements.push(e);
+                            _cached_Keywords = {};
+                            _cached_Keywords_Count = 0;
+                            _cached_Values = {};
+                            _cached_Values_Count = 0;
+                            _cached_Attributes = {};
+                            _cached_Attributes_Count = 0;
+                            _cached_Strings = {};
+                            _cached_Strings_Count = 0;
+                            _cached_Comments = {};
+                            _cached_Comments_Count = 0;
+                        } else {
+                            n.rendered = logError(_configuration.text.noCodeAvailableToRenderErrorText);
+                        }
+                    } else {
+                        n.rendered = !_configuration.safeMode;
+                    }
+                } else {
+                    n.rendered = logError(_configuration.text.languageNotSupportedErrorText.replace("{{language}}", n.syntaxLanguage));
+                }
+            } else {
+                n.rendered = logError(_configuration.text.attributeNotSetErrorText.replace("{{attribute_name}}", Constants.SYNTAX_JS_ATTRIBUTE_NAME_LANGUAGE));
+            }
+        }
+        return n;
+    }
     function renderHTML(e, t, n) {
         if (!t.isMarkUp) {
             e = Data.String.encodeMarkUpCharacters(e);
@@ -210,7 +393,7 @@ var DomElement;
     function renderElementButtons(e, t, n, o, i) {
         if (t.showLanguageLabel || t.showCopyButton || t.showPrintButton || o.parsed) {
             const r = DomElement.create("div", "buttons");
-            const l = [];
+            const a = [];
             e.appendChild(r);
             if (o.parsed && Is.definedArray(o.object)) {
                 const e = o.object;
@@ -218,7 +401,7 @@ var DomElement;
                 for (let o = 0; o < n; o++) {
                     const n = e[o];
                     if (Is.defined(n.text) && Is.definedFunction(n.onClick)) {
-                        renderElementButton(n, l, r, i, t);
+                        renderElementButton(n, a, r, i, t);
                     }
                 }
             }
@@ -231,7 +414,7 @@ var DomElement;
                     navigator.clipboard.writeText(i);
                     fireCustomTriggerEvent(t.events.onCopy, i);
                 };
-                l.push(e);
+                a.push(e);
             }
             if (t.showPrintButton) {
                 const o = DomElement.create("button", "button");
@@ -264,22 +447,22 @@ var DomElement;
                     o.close();
                     fireCustomTriggerEvent(t.events.onPrint, i.innerHTML);
                 };
-                l.push(o);
+                a.push(o);
             }
             if (t.showLanguageLabel) {
                 const e = DomElement.create("div", "language-label");
                 r.appendChild(e);
                 DomElement.setNodeText(e, getFriendlyLanguageName(n, t.languageLabelCasing), _configuration);
             }
-            const a = l.length;
-            if (a > t.maximumButtons) {
+            const s = a.length;
+            if (s > t.maximumButtons) {
                 const e = DomElement.create("button", "button button-opener");
                 e.innerText = t.buttonsVisible ? _configuration.text.buttonsCloserText : _configuration.text.buttonsOpenerText;
                 r.insertBefore(e, r.children[0]);
                 e.onclick = function() {
                     const n = e.innerText === _configuration.text.buttonsCloserText;
-                    for (let e = 0; e < a; e++) {
-                        l[e].style.display = n ? "none" : "inline-block";
+                    for (let e = 0; e < s; e++) {
+                        a[e].style.display = n ? "none" : "inline-block";
                     }
                     e.innerText = n ? _configuration.text.buttonsOpenerText : _configuration.text.buttonsCloserText;
                     if (n) {
@@ -288,9 +471,9 @@ var DomElement;
                         fireCustomTriggerEvent(t.events.onButtonsOpened);
                     }
                 };
-            } else if (!t.buttonsVisible && a <= t.maximumButtons) {
-                for (let e = 0; e < a; e++) {
-                    l[e].style.display = "inline-block";
+            } else if (!t.buttonsVisible && s <= t.maximumButtons) {
+                for (let e = 0; e < s; e++) {
+                    a[e].style.display = "inline-block";
                 }
             }
         }
@@ -336,18 +519,18 @@ var DomElement;
                 if (t > -1) {
                     r = e.indexOf(o[1], t + o[0].length);
                     if (r > -1) {
-                        const l = e.substring(t, r + o[1].length);
-                        const a = l.split("\n");
-                        const s = a.length;
-                        const c = s === 1 ? "comment" : "multi-line-comment";
-                        for (var i = 0; i < s; i++) {
+                        const a = e.substring(t, r + o[1].length);
+                        const s = a.split("\n");
+                        const l = s.length;
+                        const c = l === 1 ? "comment" : "multi-line-comment";
+                        for (var i = 0; i < l; i++) {
                             const t = "$C{" + _cached_Comments_Count.toString() + "}";
-                            const n = a[i];
+                            const n = s[i];
                             _cached_Comments[t] = '<span class="' + c + '">' + n + "</span>";
                             _cached_Comments_Count++;
                             e = e.replace(n, t);
                         }
-                        fireCustomTriggerEvent(n.events.onCommentRender, l);
+                        fireCustomTriggerEvent(n.events.onCommentRender, a);
                     }
                 }
             }
@@ -360,12 +543,12 @@ var DomElement;
             for (let i = 0; i < o; i++) {
                 const o = t[i];
                 const r = o.split("\n");
-                const l = r.length;
-                const a = l === 1 ? "string" : "multi-line-string";
-                for (let t = 0; t < l; t++) {
+                const a = r.length;
+                const s = a === 1 ? "string" : "multi-line-string";
+                for (let t = 0; t < a; t++) {
                     const n = r[t];
                     const o = "$S{" + _cached_Strings_Count.toString() + "}";
-                    _cached_Strings[o] = '<span class="' + a + '">' + n + "</span>";
+                    _cached_Strings[o] = '<span class="' + s + '">' + n + "</span>";
                     _cached_Strings_Count++;
                     e = e.replace(n, o);
                 }
@@ -378,26 +561,26 @@ var DomElement;
         const o = Data.getDefaultStringOrArray(t.keywords, []);
         const i = o.length;
         const r = t.caseSensitive;
-        const l = getKeywordCasing(t.keywordsCasing);
+        const a = getKeywordCasing(t.keywordsCasing);
         Data.String.sortArrayOfStringByLength(o);
-        for (let a = 0; a < i; a++) {
-            const i = o[a];
-            const s = getDisplayTextTestCasing(i, l);
+        for (let s = 0; s < i; s++) {
+            const i = o[s];
+            const l = getDisplayTextTestCasing(i, a);
             const c = "KW" + _cached_Keywords_Count.toString() + ";";
             let u = null;
             const d = r ? "g" : "gi";
             const g = new RegExp(getWordRegEx(i, t), d);
             if (n.highlightKeywords) {
                 if (Is.definedFunction(n.events.onKeywordClicked)) {
-                    u = '<span class="keyword-clickable">' + s + "</span>";
+                    u = '<span class="keyword-clickable">' + l + "</span>";
                     e = e.replace(g, c);
                 } else {
-                    u = '<span class="keyword">' + s + "</span>";
+                    u = '<span class="keyword">' + l + "</span>";
                     e = e.replace(g, c);
                 }
             } else {
                 if (Is.definedFunction(n.events.onKeywordClicked)) {
-                    u = '<span class="no-highlight-keyword-clickable">' + s + "</span>";
+                    u = '<span class="no-highlight-keyword-clickable">' + l + "</span>";
                     e = e.replace(g, c);
                 }
             }
@@ -411,37 +594,37 @@ var DomElement;
         const o = Data.getDefaultStringOrArray(t.keywords, []);
         const i = t.caseSensitive;
         const r = getKeywordCasing(t.keywordsCasing);
-        const l = /(<([^>]+)>)/gi;
-        const a = i ? "g" : "gi";
-        let s = l.exec(e);
-        while (s) {
-            if (s.index === l.lastIndex) {
-                l.lastIndex++;
+        const a = /(<([^>]+)>)/gi;
+        const s = i ? "g" : "gi";
+        let l = a.exec(e);
+        while (l) {
+            if (l.index === a.lastIndex) {
+                a.lastIndex++;
             }
-            let i = s[0];
+            let i = l[0];
             i = i.replace("</", "").replace("<", "").replace(">", "");
             i = i.split(" ")[0];
             if (o.indexOf(i) > -1) {
                 const o = "KW" + _cached_Keywords_Count.toString() + ";";
-                const l = new RegExp(getWordRegEx(i, t), a);
-                let s = null;
+                const a = new RegExp(getWordRegEx(i, t), s);
+                let l = null;
                 let c = getDisplayTextTestCasing(i, r);
                 if (n.highlightKeywords) {
                     if (Is.definedFunction(n.events.onKeywordClicked)) {
-                        s = '<span class="keyword-clickable">' + c + "</span>";
+                        l = '<span class="keyword-clickable">' + c + "</span>";
                     } else {
-                        s = '<span class="keyword">' + c + "</span>";
+                        l = '<span class="keyword">' + c + "</span>";
                     }
                 } else {
                     if (Is.definedFunction(n.events.onKeywordClicked)) {
-                        s = '<span class="no-highlight-keyword-clickable">' + c + "</span>";
+                        l = '<span class="no-highlight-keyword-clickable">' + c + "</span>";
                     }
                 }
-                e = e.replace(l, o);
-                _cached_Keywords[o] = s;
+                e = e.replace(a, o);
+                _cached_Keywords[o] = l;
                 _cached_Keywords_Count++;
             }
-            s = l.exec(e);
+            l = a.exec(e);
         }
         return e;
     }
@@ -450,27 +633,27 @@ var DomElement;
         const i = o.length;
         const r = t.caseSensitive;
         Data.String.sortArrayOfStringByLength(o);
-        for (let l = 0; l < i; l++) {
-            const i = o[l];
-            const a = "VAL" + _cached_Values_Count.toString() + ";";
-            let s = null;
+        for (let a = 0; a < i; a++) {
+            const i = o[a];
+            const s = "VAL" + _cached_Values_Count.toString() + ";";
+            let l = null;
             const c = r ? "g" : "gi";
             const u = new RegExp(getWordRegEx(i, t), c);
             if (n.highlightValues) {
                 if (Is.definedFunction(n.events.onValueClicked)) {
-                    s = '<span class="value-clickable">' + i + "</span>";
-                    e = e.replace(u, a);
+                    l = '<span class="value-clickable">' + i + "</span>";
+                    e = e.replace(u, s);
                 } else {
-                    s = '<span class="value">' + i + "</span>";
-                    e = e.replace(u, a);
+                    l = '<span class="value">' + i + "</span>";
+                    e = e.replace(u, s);
                 }
             } else {
                 if (Is.definedFunction(n.events.onValueClicked)) {
-                    s = '<span class="no-highlight-value-clickable">' + i + "</span>";
-                    e = e.replace(u, a);
+                    l = '<span class="no-highlight-value-clickable">' + i + "</span>";
+                    e = e.replace(u, s);
                 }
             }
-            _cached_Values[a] = s;
+            _cached_Values[s] = l;
             _cached_Values_Count++;
             fireCustomTriggerEvent(n.events.onValueRender, i);
         }
@@ -481,27 +664,27 @@ var DomElement;
         const i = o.length;
         const r = t.caseSensitive;
         Data.String.sortArrayOfStringByLength(o);
-        for (let l = 0; l < i; l++) {
-            const i = o[l];
-            const a = "ATTR" + _cached_Attributes_Count.toString() + ";";
-            let s = null;
+        for (let a = 0; a < i; a++) {
+            const i = o[a];
+            const s = "ATTR" + _cached_Attributes_Count.toString() + ";";
+            let l = null;
             let c = r ? "g" : "gi";
             const u = new RegExp(getWordRegEx(i, t), c);
             if (n.highlightAttributes) {
                 if (Is.definedFunction(n.events.onAttributeClicked)) {
-                    s = '<span class="attribute-clickable">' + i + "</span>";
-                    e = e.replace(u, a);
+                    l = '<span class="attribute-clickable">' + i + "</span>";
+                    e = e.replace(u, s);
                 } else {
-                    s = '<span class="attribute">' + i + "</span>";
-                    e = e.replace(u, a);
+                    l = '<span class="attribute">' + i + "</span>";
+                    e = e.replace(u, s);
                 }
             } else {
                 if (Is.definedFunction(n.events.onAttributeClicked)) {
-                    s = '<span class="no-highlight-attribute-clickable">' + i + "</span>";
-                    e = e.replace(u, a);
+                    l = '<span class="no-highlight-attribute-clickable">' + i + "</span>";
+                    e = e.replace(u, s);
                 }
             }
-            _cached_Attributes[a] = s;
+            _cached_Attributes[s] = l;
             _cached_Attributes_Count++;
             fireCustomTriggerEvent(n.events.onAttributeRender, i);
         }
@@ -525,12 +708,12 @@ var DomElement;
         }
         for (let r in _cached_Comments) {
             if (_cached_Comments.hasOwnProperty(r)) {
-                let l = _cached_Comments[r];
+                let a = _cached_Comments[r];
                 if (t.isMarkUp && Is.definedString(o) && Is.definedString(i)) {
-                    l = l.replace(n[0], o);
-                    l = l.replace(n[1], i);
+                    a = a.replace(n[0], o);
+                    a = a.replace(n[1], i);
                 }
-                e = e.replace(r, l);
+                e = e.replace(r, a);
             }
         }
         return e;
@@ -544,16 +727,16 @@ var DomElement;
         }
         return e;
     }
-    function renderElementCompletedHTML(e, t, n, o, i, r, l) {
-        const a = i.split("\n");
-        const s = a.length;
-        const c = s.toString().length;
+    function renderElementCompletedHTML(e, t, n, o, i, r, a) {
+        const s = i.split("\n");
+        const l = s.length;
+        const c = l.toString().length;
         let u = n;
         let d = o;
         let g = null;
         let f = 1;
         let m = false;
-        if (l) {
+        if (a) {
             d = DomElement.create("pre");
             o.appendChild(d);
             if (Is.defined(n)) {
@@ -576,12 +759,12 @@ var DomElement;
                 DomElement.selectTextInElement(d);
             };
         }
-        for (let e = 0; e < s; e++) {
-            let t = a[e];
+        for (let e = 0; e < l; e++) {
+            let t = s[e];
             if (t.trim() !== "" && g === null) {
                 g = t.substring(0, t.match(/^\s*/)[0].length);
             }
-            if (e !== 0 && e !== s - 1 || t.trim() !== "") {
+            if (e !== 0 && e !== l - 1 || t.trim() !== "") {
                 if (t.trim() !== "" || !r.removeBlankLines) {
                     const e = t.trim() === "";
                     if (e && !m || !r.removeDuplicateBlankLines || !e) {
@@ -598,7 +781,7 @@ var DomElement;
                         }
                         if (g !== null) {
                             t = t.replace(g, "");
-                            if (!l) {
+                            if (!a) {
                                 const e = t.match(/^\s*/)[0].length;
                                 const n = t.substring(0, e);
                                 const o = Array(e).join("&nbsp;");

@@ -10,6 +10,20 @@ var __commonJS = (e, t) => function n() {
     }).exports, t), t.exports;
 };
 
+var Constants;
+
+var init_constant = __esm({
+    "src/ts/constant.ts"() {
+        "use strict";
+        (e => {
+            e.SYNTAX_JS_ATTRIBUTE_NAME_LANGUAGE = "data-syntax-language";
+            e.SYNTAX_JS_ATTRIBUTE_NAME_OPTIONS = "data-syntax-options";
+            e.SYNTAX_JS_ATTRIBUTE_NAME_BUTTONS = "data-syntax-buttons";
+            e.SYNTAX_JS_ATTRIBUTE_NAME_TAB_CONTENTS = "data-syntax-tab-contents";
+        })(Constants || (Constants = {}));
+    }
+});
+
 var init_enum = __esm({
     "src/ts/enum.ts"() {
         "use strict";
@@ -43,14 +57,14 @@ var init_is = __esm({
                 return t(e) && typeof e === "function";
             }
             e.definedFunction = r;
-            function l(e) {
+            function s(e) {
                 return t(e) && typeof e === "number";
             }
-            e.definedNumber = l;
-            function s(e) {
+            e.definedNumber = s;
+            function a(e) {
                 return n(e) && e instanceof Array;
             }
-            e.definedArray = s;
+            e.definedArray = a;
         })(Is || (Is = {}));
     }
 });
@@ -114,18 +128,18 @@ var init_data = __esm({
                 return Is.definedNumber(e) ? e : t;
             }
             e.getDefaultNumber = r;
-            function l(e, t) {
+            function s(e, t) {
                 return Is.definedFunction(e) ? e : t;
             }
-            e.getDefaultFunction = l;
-            function s(e, t) {
+            e.getDefaultFunction = s;
+            function a(e, t) {
                 return Is.definedArray(e) ? e : t;
             }
-            e.getDefaultArray = s;
-            function a(e, t) {
+            e.getDefaultArray = a;
+            function l(e, t) {
                 return Is.definedObject(e) ? e : t;
             }
-            e.getDefaultObject = a;
+            e.getDefaultObject = l;
             function c(e, t) {
                 let n = t;
                 if (Is.definedString(e)) {
@@ -136,7 +150,7 @@ var init_data = __esm({
                         n = i;
                     }
                 } else {
-                    n = s(e, t);
+                    n = a(e, t);
                 }
                 return n;
             }
@@ -192,6 +206,7 @@ var init_dom = __esm({
 
 var require_syntax = __commonJS({
     "src/syntax.ts"(exports, module) {
+        init_constant();
         init_data();
         init_is();
         init_enum();
@@ -212,6 +227,180 @@ var require_syntax = __commonJS({
             let _cached_Comments = {};
             let _cached_Comments_Count = 0;
             let _languages = {};
+            function render() {
+                const e = _configuration.highlightAllDomElementTypes;
+                const t = e.length;
+                for (let n = 0; n < t; n++) {
+                    const t = document.getElementsByTagName(e[n]);
+                    const i = [].slice.call(t);
+                    const o = i.length;
+                    if (o > 0) {
+                        fireCustomTriggerEvent(_configuration.events.onBeforeRender);
+                    }
+                    for (let e = 0; e < o; e++) {
+                        const t = i[e];
+                        let n = false;
+                        if (t.hasAttribute(Constants.SYNTAX_JS_ATTRIBUTE_NAME_LANGUAGE) && t.getAttribute(Constants.SYNTAX_JS_ATTRIBUTE_NAME_LANGUAGE).toLowerCase() === "tabbed") {
+                            const e = [].slice.call(t.children);
+                            const i = e.length;
+                            const o = [];
+                            const r = [];
+                            t.removeAttribute(Constants.SYNTAX_JS_ATTRIBUTE_NAME_LANGUAGE);
+                            t.className = t.className === "" ? "syntax-highlight" : t.className + " syntax-highlight";
+                            t.innerHTML = "";
+                            const s = DomElement.create("div", "code custom-scroll-bars");
+                            t.appendChild(s);
+                            const a = DomElement.create("div", "tabs");
+                            s.appendChild(a);
+                            for (let t = 0; t < i; t++) {
+                                const i = renderElement(e[t], s);
+                                if (!i.rendered) {
+                                    n = true;
+                                } else {
+                                    renderTab(a, o, r, i, t, i.tabBindingOptions, i.syntaxLanguage);
+                                }
+                            }
+                        } else {
+                            if (!renderElement(t).rendered) {
+                                n = true;
+                            }
+                        }
+                        if (n) {
+                            break;
+                        }
+                    }
+                    if (o > 0) {
+                        fireCustomTriggerEvent(_configuration.events.onAfterRender);
+                    }
+                }
+            }
+            function renderTab(e, t, n, i, o, r, s) {
+                const a = DomElement.create("button", "tab");
+                e.appendChild(a);
+                DomElement.setNodeText(a, i.tabTitle, _configuration);
+                t.push(a);
+                n.push(i.tabContents);
+                a.onclick = function() {
+                    if (a.className !== "tab-active") {
+                        const e = t.length;
+                        const o = n.length;
+                        for (let n = 0; n < e; n++) {
+                            t[n].className = "tab";
+                        }
+                        for (let e = 0; e < o; e++) {
+                            n[e].style.display = "none";
+                        }
+                        a.className = "tab-active";
+                        i.tabContents.style.display = "flex";
+                        if (Is.definedObject(r)) {
+                            fireCustomTriggerEvent(r.events.onOpen, s);
+                        }
+                    }
+                };
+                if (o > 0) {
+                    i.tabContents.style.display = "none";
+                } else {
+                    a.className = "tab-active";
+                }
+            }
+            function renderElement(e, t = null) {
+                const n = {};
+                n.rendered = true;
+                if (Is.defined(e) && e.hasAttribute(Constants.SYNTAX_JS_ATTRIBUTE_NAME_LANGUAGE) && (!e.hasAttribute(Constants.SYNTAX_JS_ATTRIBUTE_NAME_TAB_CONTENTS) || Is.defined(t))) {
+                    n.syntaxLanguage = e.getAttribute(Constants.SYNTAX_JS_ATTRIBUTE_NAME_LANGUAGE);
+                    if (Is.definedString(n.syntaxLanguage)) {
+                        const i = getLanguage(n.syntaxLanguage);
+                        if (Is.defined(i) || n.syntaxLanguage.toLowerCase() === "unknown") {
+                            const o = getObjectFromString(e.getAttribute(Constants.SYNTAX_JS_ATTRIBUTE_NAME_OPTIONS));
+                            const r = getObjectFromString(e.getAttribute(Constants.SYNTAX_JS_ATTRIBUTE_NAME_BUTTONS));
+                            if (o.parsed) {
+                                if (e.innerHTML.trim() !== "") {
+                                    let s = e.innerHTML;
+                                    const a = getBindingOptions(o.object);
+                                    let l = false;
+                                    let c = null;
+                                    fireCustomTriggerEvent(a.events.onBeforeRenderComplete, e);
+                                    if (e.children.length > 0 && e.children[0].nodeName.toLowerCase() === "pre") {
+                                        s = e.children[0].innerHTML;
+                                        l = true;
+                                    }
+                                    const u = s.trim();
+                                    let d = null;
+                                    let g = null;
+                                    let f = e.id;
+                                    if (!Is.definedString(f)) {
+                                        f = Data.String.newGuid();
+                                    }
+                                    _elements_Original[f] = e.innerHTML;
+                                    e.removeAttribute(Constants.SYNTAX_JS_ATTRIBUTE_NAME_LANGUAGE);
+                                    e.removeAttribute(Constants.SYNTAX_JS_ATTRIBUTE_NAME_OPTIONS);
+                                    e.id = f;
+                                    if (!Is.defined(t)) {
+                                        e.className = e.className === "" ? "syntax-highlight" : e.className + " syntax-highlight";
+                                        e.innerHTML = "";
+                                        t = DomElement.create("div", "code custom-scroll-bars");
+                                        e.appendChild(t);
+                                    } else {
+                                        if (e.hasAttribute(Constants.SYNTAX_JS_ATTRIBUTE_NAME_TAB_CONTENTS) && e.getAttribute(Constants.SYNTAX_JS_ATTRIBUTE_NAME_TAB_CONTENTS).toLowerCase() !== "true") {
+                                            const t = getObjectFromString(e.getAttribute(Constants.SYNTAX_JS_ATTRIBUTE_NAME_TAB_CONTENTS));
+                                            if (t.parsed && Is.definedObject(t.object)) {
+                                                n.tabBindingOptions = getBindingTabContentOptions(t.object);
+                                                c = n.tabBindingOptions.description;
+                                                if (Is.definedString(n.tabBindingOptions.title)) {
+                                                    n.tabTitle = n.tabBindingOptions.title;
+                                                }
+                                            }
+                                        } else {
+                                            n.tabTitle = getFriendlyLanguageName(n.syntaxLanguage);
+                                        }
+                                    }
+                                    n.tabContents = DomElement.create("div", "tab-contents");
+                                    t.appendChild(n.tabContents);
+                                    if (Is.definedString(c)) {
+                                        g = DomElement.create("div", "description");
+                                        n.tabContents.appendChild(g);
+                                        DomElement.setNodeText(g, c, _configuration);
+                                    }
+                                    if (a.showLineNumbers) {
+                                        d = DomElement.create("div", "numbers");
+                                        n.tabContents.appendChild(d);
+                                    }
+                                    const m = DomElement.create("div", "syntax");
+                                    n.tabContents.appendChild(m);
+                                    renderElementButtons(m, a, n.syntaxLanguage, r, u);
+                                    if (n.syntaxLanguage.toLowerCase() !== "unknown") {
+                                        s = renderHTML(s, i, a);
+                                    } else {
+                                        s = Data.String.encodeMarkUpCharacters(s);
+                                    }
+                                    renderElementCompletedHTML(e, g, d, m, s, a, l);
+                                    fireCustomTriggerEvent(a.events.onRenderComplete, e);
+                                    _elements.push(e);
+                                    _cached_Keywords = {};
+                                    _cached_Keywords_Count = 0;
+                                    _cached_Values = {};
+                                    _cached_Values_Count = 0;
+                                    _cached_Attributes = {};
+                                    _cached_Attributes_Count = 0;
+                                    _cached_Strings = {};
+                                    _cached_Strings_Count = 0;
+                                    _cached_Comments = {};
+                                    _cached_Comments_Count = 0;
+                                } else {
+                                    n.rendered = logError(_configuration.text.noCodeAvailableToRenderErrorText);
+                                }
+                            } else {
+                                n.rendered = !_configuration.safeMode;
+                            }
+                        } else {
+                            n.rendered = logError(_configuration.text.languageNotSupportedErrorText.replace("{{language}}", n.syntaxLanguage));
+                        }
+                    } else {
+                        n.rendered = logError(_configuration.text.attributeNotSetErrorText.replace("{{attribute_name}}", Constants.SYNTAX_JS_ATTRIBUTE_NAME_LANGUAGE));
+                    }
+                }
+                return n;
+            }
             function renderHTML(e, t, n) {
                 if (!t.isMarkUp) {
                     e = Data.String.encodeMarkUpCharacters(e);
@@ -252,7 +441,7 @@ var require_syntax = __commonJS({
             function renderElementButtons(e, t, n, i, o) {
                 if (t.showLanguageLabel || t.showCopyButton || t.showPrintButton || i.parsed) {
                     const r = DomElement.create("div", "buttons");
-                    const l = [];
+                    const s = [];
                     e.appendChild(r);
                     if (i.parsed && Is.definedArray(i.object)) {
                         const e = i.object;
@@ -260,7 +449,7 @@ var require_syntax = __commonJS({
                         for (let i = 0; i < n; i++) {
                             const n = e[i];
                             if (Is.defined(n.text) && Is.definedFunction(n.onClick)) {
-                                renderElementButton(n, l, r, o, t);
+                                renderElementButton(n, s, r, o, t);
                             }
                         }
                     }
@@ -273,7 +462,7 @@ var require_syntax = __commonJS({
                             navigator.clipboard.writeText(o);
                             fireCustomTriggerEvent(t.events.onCopy, o);
                         };
-                        l.push(e);
+                        s.push(e);
                     }
                     if (t.showPrintButton) {
                         const i = DomElement.create("button", "button");
@@ -306,22 +495,22 @@ var require_syntax = __commonJS({
                             i.close();
                             fireCustomTriggerEvent(t.events.onPrint, o.innerHTML);
                         };
-                        l.push(i);
+                        s.push(i);
                     }
                     if (t.showLanguageLabel) {
                         const e = DomElement.create("div", "language-label");
                         r.appendChild(e);
                         DomElement.setNodeText(e, getFriendlyLanguageName(n, t.languageLabelCasing), _configuration);
                     }
-                    const s = l.length;
-                    if (s > t.maximumButtons) {
+                    const a = s.length;
+                    if (a > t.maximumButtons) {
                         const e = DomElement.create("button", "button button-opener");
                         e.innerText = t.buttonsVisible ? _configuration.text.buttonsCloserText : _configuration.text.buttonsOpenerText;
                         r.insertBefore(e, r.children[0]);
                         e.onclick = function() {
                             const n = e.innerText === _configuration.text.buttonsCloserText;
-                            for (let e = 0; e < s; e++) {
-                                l[e].style.display = n ? "none" : "inline-block";
+                            for (let e = 0; e < a; e++) {
+                                s[e].style.display = n ? "none" : "inline-block";
                             }
                             e.innerText = n ? _configuration.text.buttonsOpenerText : _configuration.text.buttonsCloserText;
                             if (n) {
@@ -330,9 +519,9 @@ var require_syntax = __commonJS({
                                 fireCustomTriggerEvent(t.events.onButtonsOpened);
                             }
                         };
-                    } else if (!t.buttonsVisible && s <= t.maximumButtons) {
-                        for (let e = 0; e < s; e++) {
-                            l[e].style.display = "inline-block";
+                    } else if (!t.buttonsVisible && a <= t.maximumButtons) {
+                        for (let e = 0; e < a; e++) {
+                            s[e].style.display = "inline-block";
                         }
                     }
                 }
@@ -378,18 +567,18 @@ var require_syntax = __commonJS({
                         if (t > -1) {
                             r = e.indexOf(i[1], t + i[0].length);
                             if (r > -1) {
-                                const l = e.substring(t, r + i[1].length);
-                                const s = l.split("\n");
-                                const a = s.length;
-                                const c = a === 1 ? "comment" : "multi-line-comment";
-                                for (var o = 0; o < a; o++) {
+                                const s = e.substring(t, r + i[1].length);
+                                const a = s.split("\n");
+                                const l = a.length;
+                                const c = l === 1 ? "comment" : "multi-line-comment";
+                                for (var o = 0; o < l; o++) {
                                     const t = "$C{" + _cached_Comments_Count.toString() + "}";
-                                    const n = s[o];
+                                    const n = a[o];
                                     _cached_Comments[t] = '<span class="' + c + '">' + n + "</span>";
                                     _cached_Comments_Count++;
                                     e = e.replace(n, t);
                                 }
-                                fireCustomTriggerEvent(n.events.onCommentRender, l);
+                                fireCustomTriggerEvent(n.events.onCommentRender, s);
                             }
                         }
                     }
@@ -402,12 +591,12 @@ var require_syntax = __commonJS({
                     for (let o = 0; o < i; o++) {
                         const i = t[o];
                         const r = i.split("\n");
-                        const l = r.length;
-                        const s = l === 1 ? "string" : "multi-line-string";
-                        for (let t = 0; t < l; t++) {
+                        const s = r.length;
+                        const a = s === 1 ? "string" : "multi-line-string";
+                        for (let t = 0; t < s; t++) {
                             const n = r[t];
                             const i = "$S{" + _cached_Strings_Count.toString() + "}";
-                            _cached_Strings[i] = '<span class="' + s + '">' + n + "</span>";
+                            _cached_Strings[i] = '<span class="' + a + '">' + n + "</span>";
                             _cached_Strings_Count++;
                             e = e.replace(n, i);
                         }
@@ -420,26 +609,26 @@ var require_syntax = __commonJS({
                 const i = Data.getDefaultStringOrArray(t.keywords, []);
                 const o = i.length;
                 const r = t.caseSensitive;
-                const l = getKeywordCasing(t.keywordsCasing);
+                const s = getKeywordCasing(t.keywordsCasing);
                 Data.String.sortArrayOfStringByLength(i);
-                for (let s = 0; s < o; s++) {
-                    const o = i[s];
-                    const a = getDisplayTextTestCasing(o, l);
+                for (let a = 0; a < o; a++) {
+                    const o = i[a];
+                    const l = getDisplayTextTestCasing(o, s);
                     const c = "KW" + _cached_Keywords_Count.toString() + ";";
                     let u = null;
                     const d = r ? "g" : "gi";
                     const g = new RegExp(getWordRegEx(o, t), d);
                     if (n.highlightKeywords) {
                         if (Is.definedFunction(n.events.onKeywordClicked)) {
-                            u = '<span class="keyword-clickable">' + a + "</span>";
+                            u = '<span class="keyword-clickable">' + l + "</span>";
                             e = e.replace(g, c);
                         } else {
-                            u = '<span class="keyword">' + a + "</span>";
+                            u = '<span class="keyword">' + l + "</span>";
                             e = e.replace(g, c);
                         }
                     } else {
                         if (Is.definedFunction(n.events.onKeywordClicked)) {
-                            u = '<span class="no-highlight-keyword-clickable">' + a + "</span>";
+                            u = '<span class="no-highlight-keyword-clickable">' + l + "</span>";
                             e = e.replace(g, c);
                         }
                     }
@@ -453,37 +642,37 @@ var require_syntax = __commonJS({
                 const i = Data.getDefaultStringOrArray(t.keywords, []);
                 const o = t.caseSensitive;
                 const r = getKeywordCasing(t.keywordsCasing);
-                const l = /(<([^>]+)>)/gi;
-                const s = o ? "g" : "gi";
-                let a = l.exec(e);
-                while (a) {
-                    if (a.index === l.lastIndex) {
-                        l.lastIndex++;
+                const s = /(<([^>]+)>)/gi;
+                const a = o ? "g" : "gi";
+                let l = s.exec(e);
+                while (l) {
+                    if (l.index === s.lastIndex) {
+                        s.lastIndex++;
                     }
-                    let o = a[0];
+                    let o = l[0];
                     o = o.replace("</", "").replace("<", "").replace(">", "");
                     o = o.split(" ")[0];
                     if (i.indexOf(o) > -1) {
                         const i = "KW" + _cached_Keywords_Count.toString() + ";";
-                        const l = new RegExp(getWordRegEx(o, t), s);
-                        let a = null;
+                        const s = new RegExp(getWordRegEx(o, t), a);
+                        let l = null;
                         let c = getDisplayTextTestCasing(o, r);
                         if (n.highlightKeywords) {
                             if (Is.definedFunction(n.events.onKeywordClicked)) {
-                                a = '<span class="keyword-clickable">' + c + "</span>";
+                                l = '<span class="keyword-clickable">' + c + "</span>";
                             } else {
-                                a = '<span class="keyword">' + c + "</span>";
+                                l = '<span class="keyword">' + c + "</span>";
                             }
                         } else {
                             if (Is.definedFunction(n.events.onKeywordClicked)) {
-                                a = '<span class="no-highlight-keyword-clickable">' + c + "</span>";
+                                l = '<span class="no-highlight-keyword-clickable">' + c + "</span>";
                             }
                         }
-                        e = e.replace(l, i);
-                        _cached_Keywords[i] = a;
+                        e = e.replace(s, i);
+                        _cached_Keywords[i] = l;
                         _cached_Keywords_Count++;
                     }
-                    a = l.exec(e);
+                    l = s.exec(e);
                 }
                 return e;
             }
@@ -492,27 +681,27 @@ var require_syntax = __commonJS({
                 const o = i.length;
                 const r = t.caseSensitive;
                 Data.String.sortArrayOfStringByLength(i);
-                for (let l = 0; l < o; l++) {
-                    const o = i[l];
-                    const s = "VAL" + _cached_Values_Count.toString() + ";";
-                    let a = null;
+                for (let s = 0; s < o; s++) {
+                    const o = i[s];
+                    const a = "VAL" + _cached_Values_Count.toString() + ";";
+                    let l = null;
                     const c = r ? "g" : "gi";
                     const u = new RegExp(getWordRegEx(o, t), c);
                     if (n.highlightValues) {
                         if (Is.definedFunction(n.events.onValueClicked)) {
-                            a = '<span class="value-clickable">' + o + "</span>";
-                            e = e.replace(u, s);
+                            l = '<span class="value-clickable">' + o + "</span>";
+                            e = e.replace(u, a);
                         } else {
-                            a = '<span class="value">' + o + "</span>";
-                            e = e.replace(u, s);
+                            l = '<span class="value">' + o + "</span>";
+                            e = e.replace(u, a);
                         }
                     } else {
                         if (Is.definedFunction(n.events.onValueClicked)) {
-                            a = '<span class="no-highlight-value-clickable">' + o + "</span>";
-                            e = e.replace(u, s);
+                            l = '<span class="no-highlight-value-clickable">' + o + "</span>";
+                            e = e.replace(u, a);
                         }
                     }
-                    _cached_Values[s] = a;
+                    _cached_Values[a] = l;
                     _cached_Values_Count++;
                     fireCustomTriggerEvent(n.events.onValueRender, o);
                 }
@@ -523,27 +712,27 @@ var require_syntax = __commonJS({
                 const o = i.length;
                 const r = t.caseSensitive;
                 Data.String.sortArrayOfStringByLength(i);
-                for (let l = 0; l < o; l++) {
-                    const o = i[l];
-                    const s = "ATTR" + _cached_Attributes_Count.toString() + ";";
-                    let a = null;
+                for (let s = 0; s < o; s++) {
+                    const o = i[s];
+                    const a = "ATTR" + _cached_Attributes_Count.toString() + ";";
+                    let l = null;
                     let c = r ? "g" : "gi";
                     const u = new RegExp(getWordRegEx(o, t), c);
                     if (n.highlightAttributes) {
                         if (Is.definedFunction(n.events.onAttributeClicked)) {
-                            a = '<span class="attribute-clickable">' + o + "</span>";
-                            e = e.replace(u, s);
+                            l = '<span class="attribute-clickable">' + o + "</span>";
+                            e = e.replace(u, a);
                         } else {
-                            a = '<span class="attribute">' + o + "</span>";
-                            e = e.replace(u, s);
+                            l = '<span class="attribute">' + o + "</span>";
+                            e = e.replace(u, a);
                         }
                     } else {
                         if (Is.definedFunction(n.events.onAttributeClicked)) {
-                            a = '<span class="no-highlight-attribute-clickable">' + o + "</span>";
-                            e = e.replace(u, s);
+                            l = '<span class="no-highlight-attribute-clickable">' + o + "</span>";
+                            e = e.replace(u, a);
                         }
                     }
-                    _cached_Attributes[s] = a;
+                    _cached_Attributes[a] = l;
                     _cached_Attributes_Count++;
                     fireCustomTriggerEvent(n.events.onAttributeRender, o);
                 }
@@ -567,12 +756,12 @@ var require_syntax = __commonJS({
                 }
                 for (let r in _cached_Comments) {
                     if (_cached_Comments.hasOwnProperty(r)) {
-                        let l = _cached_Comments[r];
+                        let s = _cached_Comments[r];
                         if (t.isMarkUp && Is.definedString(i) && Is.definedString(o)) {
-                            l = l.replace(n[0], i);
-                            l = l.replace(n[1], o);
+                            s = s.replace(n[0], i);
+                            s = s.replace(n[1], o);
                         }
-                        e = e.replace(r, l);
+                        e = e.replace(r, s);
                     }
                 }
                 return e;
@@ -586,16 +775,16 @@ var require_syntax = __commonJS({
                 }
                 return e;
             }
-            function renderElementCompletedHTML(e, t, n, i, o, r, l) {
-                const s = o.split("\n");
-                const a = s.length;
-                const c = a.toString().length;
+            function renderElementCompletedHTML(e, t, n, i, o, r, s) {
+                const a = o.split("\n");
+                const l = a.length;
+                const c = l.toString().length;
                 let u = n;
                 let d = i;
                 let g = null;
                 let f = 1;
                 let m = false;
-                if (l) {
+                if (s) {
                     d = DomElement.create("pre");
                     i.appendChild(d);
                     if (Is.defined(n)) {
@@ -618,12 +807,12 @@ var require_syntax = __commonJS({
                         DomElement.selectTextInElement(d);
                     };
                 }
-                for (let e = 0; e < a; e++) {
-                    let t = s[e];
+                for (let e = 0; e < l; e++) {
+                    let t = a[e];
                     if (t.trim() !== "" && g === null) {
                         g = t.substring(0, t.match(/^\s*/)[0].length);
                     }
-                    if (e !== 0 && e !== a - 1 || t.trim() !== "") {
+                    if (e !== 0 && e !== l - 1 || t.trim() !== "") {
                         if (t.trim() !== "" || !r.removeBlankLines) {
                             const e = t.trim() === "";
                             if (e && !m || !r.removeDuplicateBlankLines || !e) {
@@ -640,7 +829,7 @@ var require_syntax = __commonJS({
                                 }
                                 if (g !== null) {
                                     t = t.replace(g, "");
-                                    if (!l) {
+                                    if (!s) {
                                         const e = t.match(/^\s*/)[0].length;
                                         const n = t.substring(0, e);
                                         const i = Array(e).join("&nbsp;");
