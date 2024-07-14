@@ -18,8 +18,8 @@ import {
     type BindingTabContentOptions,
     type Configuration,
     type SyntaxLanguage, 
-    ConfigurationText,
-    ConfigurationEvents} from "./ts/type";
+    type ConfigurationText,
+    type ConfigurationEvents} from "./ts/type";
 
 import { PublicApi } from "./ts/api";
 import { Constants } from "./ts/constant";
