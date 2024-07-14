@@ -14,12 +14,12 @@
 export type Configuration = {
     text?: ConfigurationText;
     events?: ConfigurationEvents;
-}
+};
 
 export type ConfigurationEvents = {
     onBeforeRender?: Function;
     onAfterRender?: Function;
-}
+};
 
 export type ConfigurationText = {
     buttonsOpenerText?: string;
@@ -29,5 +29,52 @@ export type ConfigurationText = {
     languageNotSupportedErrorText?: string;
     noCodeAvailableToRenderErrorText?: string;
     copyButtonText?: string;
-    printButtonText?:string;
-}
+    printButtonText?: string;
+};
+
+export type BindingOptions = {
+    showCopyButton?: boolean;
+    removeBlankLines?: boolean;
+    showLineNumbers?: boolean;
+    highlightKeywords?: boolean;
+    highlightValues?: boolean;
+    highlightAttributes?: boolean;
+    highlightStrings?: boolean;
+    highlightComments?: boolean;
+    showLanguageLabel?: boolean;
+    showPrintButton?: boolean;
+    padLineNumbers?: boolean;
+    removeDuplicateBlankLines?: boolean;
+    doubleClickToSelectAll?: boolean;
+    languageLabelCasing?: string;
+    buttonsVisible?: boolean;
+    maximumButtons?: number;
+    events?: BindingOptionEvents;
+};
+
+export type BindingOptionEvents = {
+    onCopy?: Function;
+    onRenderComplete?: Function;
+    onKeywordClicked?: Function;
+    onValueClicked?: Function;
+    onAttributeClicked?: Function;
+    onKeywordRender?: Function;
+    onValueRender?: Function;
+    onAttributeRender?: Function;
+    onStringRender?: Function;
+    onCommentRender?: Function;
+    onPrint?: Function;
+    onBeforeRenderComplete?: Function;
+    onButtonsOpened?: Function;
+    onButtonsClosed?: Function;
+};
+
+export type BindingTabContentOptions = {
+    title?: string;
+    description?: string;
+    events?: BindingTabContentOptionEvents;
+};
+
+export type BindingTabContentOptionEvents = {
+    onOpen?: Function;
+};
