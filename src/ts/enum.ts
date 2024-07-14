@@ -22,3 +22,8 @@ export const enum Language {
     unknown = "unknown",
     tabbed = "tabbed",
 }
+
+export const enum TextCasing {
+    uppercase = "uppercase",
+    lowercase = "lowercase",
+}

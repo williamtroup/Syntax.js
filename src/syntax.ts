@@ -26,7 +26,7 @@ import { PublicApi } from "./ts/api";
 import { Constants } from "./ts/constant";
 import { Data } from "./ts/data";
 import { Is } from "./ts/is";
-import { Char, Language } from "./ts/enum";
+import { Char, Language, TextCasing } from "./ts/enum";
 import { DomElement } from "./ts/dom";
 
 
@@ -961,9 +961,9 @@ type RenderElementResult = {
     }
 
     function getDisplayTextTestCasing( keyword: string, keywordsCasing: string ) : string {
-        if ( keywordsCasing === "uppercase" ) {
+        if ( keywordsCasing === TextCasing.uppercase ) {
             keyword = keyword.toUpperCase();
-        } else if ( keywordsCasing === "lowercase" ) {
+        } else if ( keywordsCasing === TextCasing.lowercase ) {
             keyword = keyword.toLowerCase();
         }
         
@@ -1010,7 +1010,7 @@ type RenderElementResult = {
         options.padLineNumbers = Data.getDefaultBoolean( options.padLineNumbers, false );
         options.removeDuplicateBlankLines = Data.getDefaultBoolean( options.removeDuplicateBlankLines, true );
         options.doubleClickToSelectAll = Data.getDefaultBoolean( options.doubleClickToSelectAll, true );
-        options.languageLabelCasing = Data.getDefaultString( options.languageLabelCasing, "uppercase" );
+        options.languageLabelCasing = Data.getDefaultString( options.languageLabelCasing, TextCasing.uppercase );
         options.buttonsVisible = Data.getDefaultBoolean( options.buttonsVisible, true );
         options.maximumButtons = Data.getDefaultNumber( options.maximumButtons, 2 );
         
