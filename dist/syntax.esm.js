@@ -31,14 +31,14 @@ var init_is = __esm({
                 return e(t) && typeof t === "object";
             }
             t.definedObject = n;
-            function r(t) {
+            function o(t) {
                 return e(t) && typeof t === "boolean";
             }
-            t.definedBoolean = r;
-            function o(t) {
+            t.definedBoolean = o;
+            function r(t) {
                 return e(t) && typeof t === "string";
             }
-            t.definedString = o;
+            t.definedString = r;
             function i(t) {
                 return e(t) && typeof t === "function";
             }
@@ -47,10 +47,10 @@ var init_is = __esm({
                 return e(t) && typeof t === "number";
             }
             t.definedNumber = u;
-            function c(t) {
+            function a(t) {
                 return n(t) && t instanceof Array;
             }
-            t.definedArray = c;
+            t.definedArray = a;
         })(Is || (Is = {}));
     }
 });
@@ -85,31 +85,31 @@ var init_data = __esm({
                     return n;
                 }
                 t.padNumber = n;
-                function r(t) {
+                function o(t) {
                     t = t.replace(/</g, "&lt;");
                     t = t.replace(/>/g, "&gt;");
                     return t;
                 }
-                t.encodeMarkUpCharacters = r;
-                function o(t) {
+                t.encodeMarkUpCharacters = o;
+                function r(t) {
                     t.sort((function(t, e) {
                         return e.length - t.length;
                     }));
                 }
-                t.sortArrayOfStringByLength = o;
+                t.sortArrayOfStringByLength = r;
             })(e = t.String || (t.String = {}));
             function n(t, e) {
                 return typeof t === "string" ? t : e;
             }
             t.getDefaultAnyString = n;
-            function r(t, e) {
+            function o(t, e) {
                 return Is.definedString(t) ? t : e;
             }
-            t.getDefaultString = r;
-            function o(t, e) {
+            t.getDefaultString = o;
+            function r(t, e) {
                 return Is.definedBoolean(t) ? t : e;
             }
-            t.getDefaultBoolean = o;
+            t.getDefaultBoolean = r;
             function i(t, e) {
                 return Is.definedNumber(t) ? t : e;
             }
@@ -118,35 +118,35 @@ var init_data = __esm({
                 return Is.definedFunction(t) ? t : e;
             }
             t.getDefaultFunction = u;
-            function c(t, e) {
+            function a(t, e) {
                 return Is.definedArray(t) ? t : e;
             }
-            t.getDefaultArray = c;
-            function s(t, e) {
+            t.getDefaultArray = a;
+            function l(t, e) {
                 return Is.definedObject(t) ? t : e;
             }
-            t.getDefaultObject = s;
-            function l(t, e) {
+            t.getDefaultObject = l;
+            function s(t, e) {
                 let n = e;
                 if (Is.definedString(t)) {
-                    const r = t.toString().split(" ");
-                    if (r.length === 0) {
+                    const o = t.toString().split(" ");
+                    if (o.length === 0) {
                         t = e;
                     } else {
-                        n = r;
+                        n = o;
                     }
                 } else {
-                    n = c(t, e);
+                    n = a(t, e);
                 }
                 return n;
             }
-            t.getDefaultStringOrArray = l;
-            function a(t) {
+            t.getDefaultStringOrArray = s;
+            function c(t) {
                 const e = JSON.stringify(t);
                 const n = JSON.parse(e);
                 return n;
             }
-            t.getClonedObject = a;
+            t.getClonedObject = c;
         })(Data || (Data = {}));
     }
 });
@@ -170,6 +170,48 @@ var require_syntax = __commonJS({
             let _cached_Strings_Count = 0;
             let _cached_Comments = {};
             let _cached_Comments_Count = 0;
+            function getBindingOptions(t) {
+                let e = Data.getDefaultObject(t, {});
+                e = buildBindingAttributeOptions(e);
+                e = buildBindingAttributeOptionCustomTriggers(e);
+                return e;
+            }
+            function buildBindingAttributeOptions(t) {
+                t.showCopyButton = Data.getDefaultBoolean(t.showCopyButton, true);
+                t.removeBlankLines = Data.getDefaultBoolean(t.removeBlankLines, false);
+                t.showLineNumbers = Data.getDefaultBoolean(t.showLineNumbers, true);
+                t.highlightKeywords = Data.getDefaultBoolean(t.highlightKeywords, true);
+                t.highlightValues = Data.getDefaultBoolean(t.highlightValues, true);
+                t.highlightAttributes = Data.getDefaultBoolean(t.highlightAttributes, true);
+                t.highlightStrings = Data.getDefaultBoolean(t.highlightStrings, true);
+                t.highlightComments = Data.getDefaultBoolean(t.highlightComments, true);
+                t.showLanguageLabel = Data.getDefaultBoolean(t.showLanguageLabel, true);
+                t.showPrintButton = Data.getDefaultBoolean(t.showPrintButton, true);
+                t.padLineNumbers = Data.getDefaultBoolean(t.padLineNumbers, false);
+                t.removeDuplicateBlankLines = Data.getDefaultBoolean(t.removeDuplicateBlankLines, true);
+                t.doubleClickToSelectAll = Data.getDefaultBoolean(t.doubleClickToSelectAll, true);
+                t.languageLabelCasing = Data.getDefaultString(t.languageLabelCasing, "uppercase");
+                t.buttonsVisible = Data.getDefaultBoolean(t.buttonsVisible, true);
+                t.maximumButtons = Data.getDefaultNumber(t.maximumButtons, 2);
+                return t;
+            }
+            function buildBindingAttributeOptionCustomTriggers(t) {
+                t.events.onCopy = Data.getDefaultFunction(t.events.onCopy, null);
+                t.events.onRenderComplete = Data.getDefaultFunction(t.events.onRenderComplete, null);
+                t.events.onKeywordClicked = Data.getDefaultFunction(t.events.onKeywordClicked, null);
+                t.events.onValueClicked = Data.getDefaultFunction(t.events.onValueClicked, null);
+                t.events.onAttributeClicked = Data.getDefaultFunction(t.events.onAttributeClicked, null);
+                t.events.onKeywordRender = Data.getDefaultFunction(t.events.onKeywordRender, null);
+                t.events.onValueRender = Data.getDefaultFunction(t.events.onValueRender, null);
+                t.events.onAttributeRender = Data.getDefaultFunction(t.events.onAttributeRender, null);
+                t.events.onStringRender = Data.getDefaultFunction(t.events.onStringRender, null);
+                t.events.onCommentRender = Data.getDefaultFunction(t.events.onCommentRender, null);
+                t.events.onPrint = Data.getDefaultFunction(t.events.onPrint, null);
+                t.events.onBeforeRenderComplete = Data.getDefaultFunction(t.events.onBeforeRenderComplete, null);
+                t.events.onButtonsOpened = Data.getDefaultFunction(t.events.onButtonsOpened, null);
+                t.events.onButtonsClosed = Data.getDefaultFunction(t.events.onButtonsClosed, null);
+                return t;
+            }
             function getBindingTabContentOptions(t) {
                 let e = Data.getDefaultObject(t, {});
                 e = buildBindingTabContentAttributeOptionStrings(e);

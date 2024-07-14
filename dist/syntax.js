@@ -2,124 +2,124 @@
 
 var Is;
 
-(t => {
-    function e(t) {
-        return t !== null && t !== void 0 && t.toString() !== "";
+(e => {
+    function t(e) {
+        return e !== null && e !== void 0 && e.toString() !== "";
     }
-    t.defined = e;
-    function n(t) {
-        return e(t) && typeof t === "object";
+    e.defined = t;
+    function n(e) {
+        return t(e) && typeof e === "object";
     }
-    t.definedObject = n;
-    function r(t) {
-        return e(t) && typeof t === "boolean";
+    e.definedObject = n;
+    function o(e) {
+        return t(e) && typeof e === "boolean";
     }
-    t.definedBoolean = r;
-    function o(t) {
-        return e(t) && typeof t === "string";
+    e.definedBoolean = o;
+    function r(e) {
+        return t(e) && typeof e === "string";
     }
-    t.definedString = o;
-    function i(t) {
-        return e(t) && typeof t === "function";
+    e.definedString = r;
+    function i(e) {
+        return t(e) && typeof e === "function";
     }
-    t.definedFunction = i;
-    function u(t) {
-        return e(t) && typeof t === "number";
+    e.definedFunction = i;
+    function u(e) {
+        return t(e) && typeof e === "number";
     }
-    t.definedNumber = u;
-    function c(t) {
-        return n(t) && t instanceof Array;
+    e.definedNumber = u;
+    function l(e) {
+        return n(e) && e instanceof Array;
     }
-    t.definedArray = c;
+    e.definedArray = l;
 })(Is || (Is = {}));
 
 var Data;
 
-(t => {
-    let e;
-    (t => {
-        function e() {
-            const t = [];
-            for (let e = 0; e < 32; e++) {
-                if (e === 8 || e === 12 || e === 16 || e === 20) {
-                    t.push("-");
+(e => {
+    let t;
+    (e => {
+        function t() {
+            const e = [];
+            for (let t = 0; t < 32; t++) {
+                if (t === 8 || t === 12 || t === 16 || t === 20) {
+                    e.push("-");
                 }
                 const n = Math.floor(Math.random() * 16).toString(16);
-                t.push(n);
+                e.push(n);
             }
-            return t.join("");
+            return e.join("");
         }
-        t.newGuid = e;
-        function n(t, e) {
-            let n = t;
-            while (n.length < e) {
+        e.newGuid = t;
+        function n(e, t) {
+            let n = e;
+            while (n.length < t) {
                 n = "0" + n;
             }
             return n;
         }
-        t.padNumber = n;
-        function r(t) {
-            t = t.replace(/</g, "&lt;");
-            t = t.replace(/>/g, "&gt;");
-            return t;
+        e.padNumber = n;
+        function o(e) {
+            e = e.replace(/</g, "&lt;");
+            e = e.replace(/>/g, "&gt;");
+            return e;
         }
-        t.encodeMarkUpCharacters = r;
-        function o(t) {
-            t.sort((function(t, e) {
-                return e.length - t.length;
+        e.encodeMarkUpCharacters = o;
+        function r(e) {
+            e.sort((function(e, t) {
+                return t.length - e.length;
             }));
         }
-        t.sortArrayOfStringByLength = o;
-    })(e = t.String || (t.String = {}));
-    function n(t, e) {
-        return typeof t === "string" ? t : e;
+        e.sortArrayOfStringByLength = r;
+    })(t = e.String || (e.String = {}));
+    function n(e, t) {
+        return typeof e === "string" ? e : t;
     }
-    t.getDefaultAnyString = n;
-    function r(t, e) {
-        return Is.definedString(t) ? t : e;
+    e.getDefaultAnyString = n;
+    function o(e, t) {
+        return Is.definedString(e) ? e : t;
     }
-    t.getDefaultString = r;
-    function o(t, e) {
-        return Is.definedBoolean(t) ? t : e;
+    e.getDefaultString = o;
+    function r(e, t) {
+        return Is.definedBoolean(e) ? e : t;
     }
-    t.getDefaultBoolean = o;
-    function i(t, e) {
-        return Is.definedNumber(t) ? t : e;
+    e.getDefaultBoolean = r;
+    function i(e, t) {
+        return Is.definedNumber(e) ? e : t;
     }
-    t.getDefaultNumber = i;
-    function u(t, e) {
-        return Is.definedFunction(t) ? t : e;
+    e.getDefaultNumber = i;
+    function u(e, t) {
+        return Is.definedFunction(e) ? e : t;
     }
-    t.getDefaultFunction = u;
-    function c(t, e) {
-        return Is.definedArray(t) ? t : e;
+    e.getDefaultFunction = u;
+    function l(e, t) {
+        return Is.definedArray(e) ? e : t;
     }
-    t.getDefaultArray = c;
-    function l(t, e) {
-        return Is.definedObject(t) ? t : e;
+    e.getDefaultArray = l;
+    function a(e, t) {
+        return Is.definedObject(e) ? e : t;
     }
-    t.getDefaultObject = l;
-    function a(t, e) {
-        let n = e;
-        if (Is.definedString(t)) {
-            const r = t.toString().split(" ");
-            if (r.length === 0) {
-                t = e;
+    e.getDefaultObject = a;
+    function s(e, t) {
+        let n = t;
+        if (Is.definedString(e)) {
+            const o = e.toString().split(" ");
+            if (o.length === 0) {
+                e = t;
             } else {
-                n = r;
+                n = o;
             }
         } else {
-            n = c(t, e);
+            n = l(e, t);
         }
         return n;
     }
-    t.getDefaultStringOrArray = a;
-    function f(t) {
-        const e = JSON.stringify(t);
-        const n = JSON.parse(e);
+    e.getDefaultStringOrArray = s;
+    function g(e) {
+        const t = JSON.stringify(e);
+        const n = JSON.parse(t);
         return n;
     }
-    t.getClonedObject = f;
+    e.getClonedObject = g;
 })(Data || (Data = {}));
 
 (() => {
@@ -137,25 +137,67 @@ var Data;
     let _cached_Strings_Count = 0;
     let _cached_Comments = {};
     let _cached_Comments_Count = 0;
-    function getBindingTabContentOptions(t) {
-        let e = Data.getDefaultObject(t, {});
-        e = buildBindingTabContentAttributeOptionStrings(e);
-        e = buildBindingTabContentAttributeOptionCustomTriggers(e);
+    function getBindingOptions(e) {
+        let t = Data.getDefaultObject(e, {});
+        t = buildBindingAttributeOptions(t);
+        t = buildBindingAttributeOptionCustomTriggers(t);
+        return t;
+    }
+    function buildBindingAttributeOptions(e) {
+        e.showCopyButton = Data.getDefaultBoolean(e.showCopyButton, true);
+        e.removeBlankLines = Data.getDefaultBoolean(e.removeBlankLines, false);
+        e.showLineNumbers = Data.getDefaultBoolean(e.showLineNumbers, true);
+        e.highlightKeywords = Data.getDefaultBoolean(e.highlightKeywords, true);
+        e.highlightValues = Data.getDefaultBoolean(e.highlightValues, true);
+        e.highlightAttributes = Data.getDefaultBoolean(e.highlightAttributes, true);
+        e.highlightStrings = Data.getDefaultBoolean(e.highlightStrings, true);
+        e.highlightComments = Data.getDefaultBoolean(e.highlightComments, true);
+        e.showLanguageLabel = Data.getDefaultBoolean(e.showLanguageLabel, true);
+        e.showPrintButton = Data.getDefaultBoolean(e.showPrintButton, true);
+        e.padLineNumbers = Data.getDefaultBoolean(e.padLineNumbers, false);
+        e.removeDuplicateBlankLines = Data.getDefaultBoolean(e.removeDuplicateBlankLines, true);
+        e.doubleClickToSelectAll = Data.getDefaultBoolean(e.doubleClickToSelectAll, true);
+        e.languageLabelCasing = Data.getDefaultString(e.languageLabelCasing, "uppercase");
+        e.buttonsVisible = Data.getDefaultBoolean(e.buttonsVisible, true);
+        e.maximumButtons = Data.getDefaultNumber(e.maximumButtons, 2);
         return e;
     }
-    function buildBindingTabContentAttributeOptionStrings(t) {
-        t.title = Data.getDefaultString(t.title, null);
-        t.description = Data.getDefaultString(t.description, null);
+    function buildBindingAttributeOptionCustomTriggers(e) {
+        e.events.onCopy = Data.getDefaultFunction(e.events.onCopy, null);
+        e.events.onRenderComplete = Data.getDefaultFunction(e.events.onRenderComplete, null);
+        e.events.onKeywordClicked = Data.getDefaultFunction(e.events.onKeywordClicked, null);
+        e.events.onValueClicked = Data.getDefaultFunction(e.events.onValueClicked, null);
+        e.events.onAttributeClicked = Data.getDefaultFunction(e.events.onAttributeClicked, null);
+        e.events.onKeywordRender = Data.getDefaultFunction(e.events.onKeywordRender, null);
+        e.events.onValueRender = Data.getDefaultFunction(e.events.onValueRender, null);
+        e.events.onAttributeRender = Data.getDefaultFunction(e.events.onAttributeRender, null);
+        e.events.onStringRender = Data.getDefaultFunction(e.events.onStringRender, null);
+        e.events.onCommentRender = Data.getDefaultFunction(e.events.onCommentRender, null);
+        e.events.onPrint = Data.getDefaultFunction(e.events.onPrint, null);
+        e.events.onBeforeRenderComplete = Data.getDefaultFunction(e.events.onBeforeRenderComplete, null);
+        e.events.onButtonsOpened = Data.getDefaultFunction(e.events.onButtonsOpened, null);
+        e.events.onButtonsClosed = Data.getDefaultFunction(e.events.onButtonsClosed, null);
+        return e;
+    }
+    function getBindingTabContentOptions(e) {
+        let t = Data.getDefaultObject(e, {});
+        t = buildBindingTabContentAttributeOptionStrings(t);
+        t = buildBindingTabContentAttributeOptionCustomTriggers(t);
         return t;
     }
-    function buildBindingTabContentAttributeOptionCustomTriggers(t) {
-        t.events = Data.getDefaultFunction(t.events, {});
-        t.events.onOpen = Data.getDefaultFunction(t.events.onOpen, null);
-        return t;
+    function buildBindingTabContentAttributeOptionStrings(e) {
+        e.title = Data.getDefaultString(e.title, null);
+        e.description = Data.getDefaultString(e.description, null);
+        return e;
     }
-    function fireCustomTriggerEvent(t, ...e) {
-        if (Is.definedFunction(t)) {
-            t.apply(null, [].slice.call(e, 0));
+    function buildBindingTabContentAttributeOptionCustomTriggers(e) {
+        e.events = Data.getDefaultFunction(e.events, {});
+        e.events.onOpen = Data.getDefaultFunction(e.events.onOpen, null);
+        return e;
+    }
+    function fireCustomTriggerEvent(e, ...t) {
+        if (Is.definedFunction(e)) {
+            e.apply(null, [].slice.call(t, 0));
         }
     }
     function getObjectFromString(objectString) {
@@ -173,9 +215,9 @@ var Data;
                 if (Is.definedFunction(result.object)) {
                     result.object = result.object();
                 }
-            } catch (t) {
+            } catch (e) {
                 if (!_configuration.safeMode) {
-                    logError(_configuration.text.objectErrorText.replace("{{error_1}}", e1.message).replace("{{error_2}}", t.message));
+                    logError(_configuration.text.objectErrorText.replace("{{error_1}}", e1.message).replace("{{error_2}}", e.message));
                     result.parsed = false;
                 }
                 result.object = null;
@@ -183,58 +225,58 @@ var Data;
         }
         return result;
     }
-    function logError(t) {
-        let e = true;
+    function logError(e) {
+        let t = true;
         if (!_configuration.safeMode) {
-            console.error(t);
-            e = false;
+            console.error(e);
+            t = false;
         }
-        return e;
+        return t;
     }
     const _public = {
         highlightAll: function() {
             throw new Error("Function not implemented.");
         },
-        highlightElement: function(t) {
+        highlightElement: function(e) {
             throw new Error("Function not implemented.");
         },
         getElementsHighlighted: function() {
             throw new Error("Function not implemented.");
         },
-        getCode: function(t) {
+        getCode: function(e) {
             throw new Error("Function not implemented.");
         },
         destroyAll: function() {
             throw new Error("Function not implemented.");
         },
-        destroy: function(t) {
+        destroy: function(e) {
             throw new Error("Function not implemented.");
         },
-        addLanguage: function(t, e, n = true) {
+        addLanguage: function(e, t, n = true) {
             throw new Error("Function not implemented.");
         },
-        removeLanguage: function(t) {
+        removeLanguage: function(e) {
             throw new Error("Function not implemented.");
         },
-        getLanguage: function(t) {
+        getLanguage: function(e) {
             throw new Error("Function not implemented.");
         },
         getLanguages: function() {
             throw new Error("Function not implemented.");
         },
-        addAlias: function(t, e, n = true) {
+        addAlias: function(e, t, n = true) {
             throw new Error("Function not implemented.");
         },
-        removeAlias: function(t) {
+        removeAlias: function(e) {
             throw new Error("Function not implemented.");
         },
-        getAlias: function(t) {
+        getAlias: function(e) {
             throw new Error("Function not implemented.");
         },
         getAliases: function() {
             throw new Error("Function not implemented.");
         },
-        setConfiguration: function(t) {
+        setConfiguration: function(e) {
             throw new Error("Function not implemented.");
         },
         getVersion: function() {

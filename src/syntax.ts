@@ -12,6 +12,7 @@
 
 
 import {
+    BindingOptions,
     type BindingTabContentOptionEvents,
     type BindingTabContentOptions,
     type Configuration,
@@ -53,6 +54,62 @@ type StringToJson = {
     let _cached_Comments: Record<string, string> = {} as Record<string, string>;
     let _cached_Comments_Count: number = 0;
 
+
+
+    /*
+     * ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+     * Binding Options
+     * ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+     */
+
+    function getBindingOptions( newOptions: any ) : BindingOptions {
+        let options: BindingOptions = Data.getDefaultObject( newOptions, {} as BindingOptions );
+
+        options = buildBindingAttributeOptions( options );
+        options = buildBindingAttributeOptionCustomTriggers( options );
+
+        return options;
+    }
+
+    function buildBindingAttributeOptions( options: BindingOptions ) : BindingOptions {
+        options.showCopyButton = Data.getDefaultBoolean( options.showCopyButton, true );
+        options.removeBlankLines = Data.getDefaultBoolean( options.removeBlankLines, false );
+        options.showLineNumbers = Data.getDefaultBoolean( options.showLineNumbers, true );
+        options.highlightKeywords = Data.getDefaultBoolean( options.highlightKeywords, true );
+        options.highlightValues = Data.getDefaultBoolean( options.highlightValues, true );
+        options.highlightAttributes = Data.getDefaultBoolean( options.highlightAttributes, true );
+        options.highlightStrings = Data.getDefaultBoolean( options.highlightStrings, true );
+        options.highlightComments = Data.getDefaultBoolean( options.highlightComments, true );
+        options.showLanguageLabel = Data.getDefaultBoolean( options.showLanguageLabel, true );
+        options.showPrintButton = Data.getDefaultBoolean( options.showPrintButton, true );
+        options.padLineNumbers = Data.getDefaultBoolean( options.padLineNumbers, false );
+        options.removeDuplicateBlankLines = Data.getDefaultBoolean( options.removeDuplicateBlankLines, true );
+        options.doubleClickToSelectAll = Data.getDefaultBoolean( options.doubleClickToSelectAll, true );
+        options.languageLabelCasing = Data.getDefaultString( options.languageLabelCasing, "uppercase" );
+        options.buttonsVisible = Data.getDefaultBoolean( options.buttonsVisible, true );
+        options.maximumButtons = Data.getDefaultNumber( options.maximumButtons, 2 );
+        
+        return options;
+    }
+
+    function buildBindingAttributeOptionCustomTriggers( options: BindingOptions ) : BindingOptions {
+        options.events!.onCopy = Data.getDefaultFunction( options.events!.onCopy, null! );
+        options.events!.onRenderComplete = Data.getDefaultFunction( options.events!.onRenderComplete, null! );
+        options.events!.onKeywordClicked = Data.getDefaultFunction( options.events!.onKeywordClicked, null! );
+        options.events!.onValueClicked = Data.getDefaultFunction( options.events!.onValueClicked, null! );
+        options.events!.onAttributeClicked = Data.getDefaultFunction( options.events!.onAttributeClicked, null! );
+        options.events!.onKeywordRender = Data.getDefaultFunction( options.events!.onKeywordRender, null! );
+        options.events!.onValueRender = Data.getDefaultFunction( options.events!.onValueRender, null! );
+        options.events!.onAttributeRender = Data.getDefaultFunction( options.events!.onAttributeRender, null! );
+        options.events!.onStringRender = Data.getDefaultFunction( options.events!.onStringRender, null! );
+        options.events!.onCommentRender = Data.getDefaultFunction( options.events!.onCommentRender, null! );
+        options.events!.onPrint = Data.getDefaultFunction( options.events!.onPrint, null! );
+        options.events!.onBeforeRenderComplete = Data.getDefaultFunction( options.events!.onBeforeRenderComplete, null! );
+        options.events!.onButtonsOpened = Data.getDefaultFunction( options.events!.onButtonsOpened, null! );
+        options.events!.onButtonsClosed = Data.getDefaultFunction( options.events!.onButtonsClosed, null! );
+
+        return options;
+    }
 
 
     /*
