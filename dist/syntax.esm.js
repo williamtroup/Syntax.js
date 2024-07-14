@@ -1,13 +1,13 @@
 var __getOwnPropNames = Object.getOwnPropertyNames;
 
-var __esm = (t, e) => function n() {
-    return t && (e = (0, t[__getOwnPropNames(t)[0]])(t = 0)), e;
+var __esm = (e, t) => function n() {
+    return e && (t = (0, e[__getOwnPropNames(e)[0]])(e = 0)), t;
 };
 
-var __commonJS = (t, e) => function n() {
-    return e || (0, t[__getOwnPropNames(t)[0]])((e = {
+var __commonJS = (e, t) => function n() {
+    return t || (0, e[__getOwnPropNames(e)[0]])((t = {
         exports: {}
-    }).exports, e), e.exports;
+    }).exports, t), t.exports;
 };
 
 var init_enum = __esm({
@@ -22,35 +22,35 @@ var init_is = __esm({
     "src/ts/is.ts"() {
         "use strict";
         init_enum();
-        (t => {
-            function e(t) {
-                return t !== null && t !== void 0 && t.toString() !== "";
+        (e => {
+            function t(e) {
+                return e !== null && e !== void 0 && e.toString() !== "";
             }
-            t.defined = e;
-            function n(t) {
-                return e(t) && typeof t === "object";
+            e.defined = t;
+            function n(e) {
+                return t(e) && typeof e === "object";
             }
-            t.definedObject = n;
-            function o(t) {
-                return e(t) && typeof t === "boolean";
+            e.definedObject = n;
+            function o(e) {
+                return t(e) && typeof e === "boolean";
             }
-            t.definedBoolean = o;
-            function r(t) {
-                return e(t) && typeof t === "string";
+            e.definedBoolean = o;
+            function r(e) {
+                return t(e) && typeof e === "string";
             }
-            t.definedString = r;
-            function i(t) {
-                return e(t) && typeof t === "function";
+            e.definedString = r;
+            function i(e) {
+                return t(e) && typeof e === "function";
             }
-            t.definedFunction = i;
-            function u(t) {
-                return e(t) && typeof t === "number";
+            e.definedFunction = i;
+            function u(e) {
+                return t(e) && typeof e === "number";
             }
-            t.definedNumber = u;
-            function a(t) {
-                return n(t) && t instanceof Array;
+            e.definedNumber = u;
+            function a(e) {
+                return n(e) && e instanceof Array;
             }
-            t.definedArray = a;
+            e.definedArray = a;
         })(Is || (Is = {}));
     }
 });
@@ -62,91 +62,91 @@ var init_data = __esm({
         "use strict";
         init_enum();
         init_is();
-        (t => {
-            let e;
-            (t => {
-                function e() {
-                    const t = [];
-                    for (let e = 0; e < 32; e++) {
-                        if (e === 8 || e === 12 || e === 16 || e === 20) {
-                            t.push("-");
+        (e => {
+            let t;
+            (e => {
+                function t() {
+                    const e = [];
+                    for (let t = 0; t < 32; t++) {
+                        if (t === 8 || t === 12 || t === 16 || t === 20) {
+                            e.push("-");
                         }
                         const n = Math.floor(Math.random() * 16).toString(16);
-                        t.push(n);
+                        e.push(n);
                     }
-                    return t.join("");
+                    return e.join("");
                 }
-                t.newGuid = e;
-                function n(t, e) {
-                    let n = t;
-                    while (n.length < e) {
+                e.newGuid = t;
+                function n(e, t) {
+                    let n = e;
+                    while (n.length < t) {
                         n = "0" + n;
                     }
                     return n;
                 }
-                t.padNumber = n;
-                function o(t) {
-                    t = t.replace(/</g, "&lt;");
-                    t = t.replace(/>/g, "&gt;");
-                    return t;
+                e.padNumber = n;
+                function o(e) {
+                    e = e.replace(/</g, "&lt;");
+                    e = e.replace(/>/g, "&gt;");
+                    return e;
                 }
-                t.encodeMarkUpCharacters = o;
-                function r(t) {
-                    t.sort((function(t, e) {
-                        return e.length - t.length;
+                e.encodeMarkUpCharacters = o;
+                function r(e) {
+                    e.sort((function(e, t) {
+                        return t.length - e.length;
                     }));
                 }
-                t.sortArrayOfStringByLength = r;
-            })(e = t.String || (t.String = {}));
-            function n(t, e) {
-                return typeof t === "string" ? t : e;
+                e.sortArrayOfStringByLength = r;
+            })(t = e.String || (e.String = {}));
+            function n(e, t) {
+                return typeof e === "string" ? e : t;
             }
-            t.getDefaultAnyString = n;
-            function o(t, e) {
-                return Is.definedString(t) ? t : e;
+            e.getDefaultAnyString = n;
+            function o(e, t) {
+                return Is.definedString(e) ? e : t;
             }
-            t.getDefaultString = o;
-            function r(t, e) {
-                return Is.definedBoolean(t) ? t : e;
+            e.getDefaultString = o;
+            function r(e, t) {
+                return Is.definedBoolean(e) ? e : t;
             }
-            t.getDefaultBoolean = r;
-            function i(t, e) {
-                return Is.definedNumber(t) ? t : e;
+            e.getDefaultBoolean = r;
+            function i(e, t) {
+                return Is.definedNumber(e) ? e : t;
             }
-            t.getDefaultNumber = i;
-            function u(t, e) {
-                return Is.definedFunction(t) ? t : e;
+            e.getDefaultNumber = i;
+            function u(e, t) {
+                return Is.definedFunction(e) ? e : t;
             }
-            t.getDefaultFunction = u;
-            function a(t, e) {
-                return Is.definedArray(t) ? t : e;
+            e.getDefaultFunction = u;
+            function a(e, t) {
+                return Is.definedArray(e) ? e : t;
             }
-            t.getDefaultArray = a;
-            function l(t, e) {
-                return Is.definedObject(t) ? t : e;
+            e.getDefaultArray = a;
+            function l(e, t) {
+                return Is.definedObject(e) ? e : t;
             }
-            t.getDefaultObject = l;
-            function s(t, e) {
-                let n = e;
-                if (Is.definedString(t)) {
-                    const o = t.toString().split(" ");
+            e.getDefaultObject = l;
+            function s(e, t) {
+                let n = t;
+                if (Is.definedString(e)) {
+                    const o = e.toString().split(" ");
                     if (o.length === 0) {
-                        t = e;
+                        e = t;
                     } else {
                         n = o;
                     }
                 } else {
-                    n = a(t, e);
+                    n = a(e, t);
                 }
                 return n;
             }
-            t.getDefaultStringOrArray = s;
-            function c(t) {
-                const e = JSON.stringify(t);
-                const n = JSON.parse(e);
+            e.getDefaultStringOrArray = s;
+            function g(e) {
+                const t = JSON.stringify(e);
+                const n = JSON.parse(t);
                 return n;
             }
-            t.getClonedObject = c;
+            e.getClonedObject = g;
         })(Data || (Data = {}));
     }
 });
@@ -170,67 +170,131 @@ var require_syntax = __commonJS({
             let _cached_Strings_Count = 0;
             let _cached_Comments = {};
             let _cached_Comments_Count = 0;
-            function getBindingOptions(t) {
-                let e = Data.getDefaultObject(t, {});
-                e = buildBindingAttributeOptions(e);
-                e = buildBindingAttributeOptionCustomTriggers(e);
-                return e;
-            }
-            function buildBindingAttributeOptions(t) {
-                t.showCopyButton = Data.getDefaultBoolean(t.showCopyButton, true);
-                t.removeBlankLines = Data.getDefaultBoolean(t.removeBlankLines, false);
-                t.showLineNumbers = Data.getDefaultBoolean(t.showLineNumbers, true);
-                t.highlightKeywords = Data.getDefaultBoolean(t.highlightKeywords, true);
-                t.highlightValues = Data.getDefaultBoolean(t.highlightValues, true);
-                t.highlightAttributes = Data.getDefaultBoolean(t.highlightAttributes, true);
-                t.highlightStrings = Data.getDefaultBoolean(t.highlightStrings, true);
-                t.highlightComments = Data.getDefaultBoolean(t.highlightComments, true);
-                t.showLanguageLabel = Data.getDefaultBoolean(t.showLanguageLabel, true);
-                t.showPrintButton = Data.getDefaultBoolean(t.showPrintButton, true);
-                t.padLineNumbers = Data.getDefaultBoolean(t.padLineNumbers, false);
-                t.removeDuplicateBlankLines = Data.getDefaultBoolean(t.removeDuplicateBlankLines, true);
-                t.doubleClickToSelectAll = Data.getDefaultBoolean(t.doubleClickToSelectAll, true);
-                t.languageLabelCasing = Data.getDefaultString(t.languageLabelCasing, "uppercase");
-                t.buttonsVisible = Data.getDefaultBoolean(t.buttonsVisible, true);
-                t.maximumButtons = Data.getDefaultNumber(t.maximumButtons, 2);
-                return t;
-            }
-            function buildBindingAttributeOptionCustomTriggers(t) {
-                t.events.onCopy = Data.getDefaultFunction(t.events.onCopy, null);
-                t.events.onRenderComplete = Data.getDefaultFunction(t.events.onRenderComplete, null);
-                t.events.onKeywordClicked = Data.getDefaultFunction(t.events.onKeywordClicked, null);
-                t.events.onValueClicked = Data.getDefaultFunction(t.events.onValueClicked, null);
-                t.events.onAttributeClicked = Data.getDefaultFunction(t.events.onAttributeClicked, null);
-                t.events.onKeywordRender = Data.getDefaultFunction(t.events.onKeywordRender, null);
-                t.events.onValueRender = Data.getDefaultFunction(t.events.onValueRender, null);
-                t.events.onAttributeRender = Data.getDefaultFunction(t.events.onAttributeRender, null);
-                t.events.onStringRender = Data.getDefaultFunction(t.events.onStringRender, null);
-                t.events.onCommentRender = Data.getDefaultFunction(t.events.onCommentRender, null);
-                t.events.onPrint = Data.getDefaultFunction(t.events.onPrint, null);
-                t.events.onBeforeRenderComplete = Data.getDefaultFunction(t.events.onBeforeRenderComplete, null);
-                t.events.onButtonsOpened = Data.getDefaultFunction(t.events.onButtonsOpened, null);
-                t.events.onButtonsClosed = Data.getDefaultFunction(t.events.onButtonsClosed, null);
-                return t;
-            }
-            function getBindingTabContentOptions(t) {
-                let e = Data.getDefaultObject(t, {});
-                e = buildBindingTabContentAttributeOptionStrings(e);
-                e = buildBindingTabContentAttributeOptionCustomTriggers(e);
-                return e;
-            }
-            function buildBindingTabContentAttributeOptionStrings(t) {
-                t.title = Data.getDefaultString(t.title, null);
-                t.description = Data.getDefaultString(t.description, null);
-                return t;
-            }
-            function buildBindingTabContentAttributeOptionCustomTriggers(t) {
-                t.events = Data.getDefaultFunction(t.events, {});
-                t.events.onOpen = Data.getDefaultFunction(t.events.onOpen, null);
-                return t;
-            }
-            function fireCustomTriggerEvent(t, ...e) {
+            let _languages = {};
+            function renderElementClickEvents(e, t, n) {
                 if (Is.definedFunction(t)) {
-                    t.apply(null, [].slice.call(e, 0));
+                    const e = document.getElementsByTagName(n);
+                    const o = [].slice.call(e);
+                    const r = o.length;
+                    for (let e = 0; e < r; e++) {
+                        renderElementClickEvent(o[e], t);
+                    }
+                }
+            }
+            function renderElementClickEvent(e, t) {
+                const n = e.innerText;
+                e.onclick = function() {
+                    t(n);
+                };
+            }
+            function getFriendlyLanguageName(e, t) {
+                let n = null;
+                const o = getLanguage(e);
+                if (Is.defined(o) && Is.definedString(o.friendlyName)) {
+                    n = o.friendlyName;
+                } else {
+                    n = e;
+                }
+                n = getDisplayTextTestCasing(n, t);
+                return n;
+            }
+            function getLanguage(e) {
+                let t = null;
+                let n = e.toLowerCase();
+                if (_languages.hasOwnProperty(n)) {
+                    t = _languages[n];
+                } else {
+                    if (_aliases_Rules.hasOwnProperty(n)) {
+                        n = _aliases_Rules[n];
+                        if (_languages.hasOwnProperty(n)) {
+                            t = _languages[n];
+                        }
+                    }
+                }
+                return t;
+            }
+            function getKeywordCasing(e) {
+                if (Is.definedString(e)) {
+                    e = e.toLowerCase().trim();
+                }
+                return e;
+            }
+            function getDisplayTextTestCasing(e, t) {
+                if (t === "uppercase") {
+                    e = e.toUpperCase();
+                } else if (t === "lowercase") {
+                    e = e.toLowerCase();
+                }
+                return e;
+            }
+            function getWordRegEx(e, t) {
+                let n = "(?<=^|[^-])\\b" + e + "\\b(?=[^-]|$)";
+                if (Is.definedString(t.wordRegEx)) {
+                    n = t.wordRegEx.replace("%word%", e);
+                }
+                return n;
+            }
+            function getBindingOptions(e) {
+                let t = Data.getDefaultObject(e, {});
+                t = buildBindingAttributeOptions(t);
+                t = buildBindingAttributeOptionCustomTriggers(t);
+                return t;
+            }
+            function buildBindingAttributeOptions(e) {
+                e.showCopyButton = Data.getDefaultBoolean(e.showCopyButton, true);
+                e.removeBlankLines = Data.getDefaultBoolean(e.removeBlankLines, false);
+                e.showLineNumbers = Data.getDefaultBoolean(e.showLineNumbers, true);
+                e.highlightKeywords = Data.getDefaultBoolean(e.highlightKeywords, true);
+                e.highlightValues = Data.getDefaultBoolean(e.highlightValues, true);
+                e.highlightAttributes = Data.getDefaultBoolean(e.highlightAttributes, true);
+                e.highlightStrings = Data.getDefaultBoolean(e.highlightStrings, true);
+                e.highlightComments = Data.getDefaultBoolean(e.highlightComments, true);
+                e.showLanguageLabel = Data.getDefaultBoolean(e.showLanguageLabel, true);
+                e.showPrintButton = Data.getDefaultBoolean(e.showPrintButton, true);
+                e.padLineNumbers = Data.getDefaultBoolean(e.padLineNumbers, false);
+                e.removeDuplicateBlankLines = Data.getDefaultBoolean(e.removeDuplicateBlankLines, true);
+                e.doubleClickToSelectAll = Data.getDefaultBoolean(e.doubleClickToSelectAll, true);
+                e.languageLabelCasing = Data.getDefaultString(e.languageLabelCasing, "uppercase");
+                e.buttonsVisible = Data.getDefaultBoolean(e.buttonsVisible, true);
+                e.maximumButtons = Data.getDefaultNumber(e.maximumButtons, 2);
+                return e;
+            }
+            function buildBindingAttributeOptionCustomTriggers(e) {
+                e.events.onCopy = Data.getDefaultFunction(e.events.onCopy, null);
+                e.events.onRenderComplete = Data.getDefaultFunction(e.events.onRenderComplete, null);
+                e.events.onKeywordClicked = Data.getDefaultFunction(e.events.onKeywordClicked, null);
+                e.events.onValueClicked = Data.getDefaultFunction(e.events.onValueClicked, null);
+                e.events.onAttributeClicked = Data.getDefaultFunction(e.events.onAttributeClicked, null);
+                e.events.onKeywordRender = Data.getDefaultFunction(e.events.onKeywordRender, null);
+                e.events.onValueRender = Data.getDefaultFunction(e.events.onValueRender, null);
+                e.events.onAttributeRender = Data.getDefaultFunction(e.events.onAttributeRender, null);
+                e.events.onStringRender = Data.getDefaultFunction(e.events.onStringRender, null);
+                e.events.onCommentRender = Data.getDefaultFunction(e.events.onCommentRender, null);
+                e.events.onPrint = Data.getDefaultFunction(e.events.onPrint, null);
+                e.events.onBeforeRenderComplete = Data.getDefaultFunction(e.events.onBeforeRenderComplete, null);
+                e.events.onButtonsOpened = Data.getDefaultFunction(e.events.onButtonsOpened, null);
+                e.events.onButtonsClosed = Data.getDefaultFunction(e.events.onButtonsClosed, null);
+                return e;
+            }
+            function getBindingTabContentOptions(e) {
+                let t = Data.getDefaultObject(e, {});
+                t = buildBindingTabContentAttributeOptionStrings(t);
+                t = buildBindingTabContentAttributeOptionCustomTriggers(t);
+                return t;
+            }
+            function buildBindingTabContentAttributeOptionStrings(e) {
+                e.title = Data.getDefaultString(e.title, null);
+                e.description = Data.getDefaultString(e.description, null);
+                return e;
+            }
+            function buildBindingTabContentAttributeOptionCustomTriggers(e) {
+                e.events = Data.getDefaultFunction(e.events, {});
+                e.events.onOpen = Data.getDefaultFunction(e.events.onOpen, null);
+                return e;
+            }
+            function fireCustomTriggerEvent(e, ...t) {
+                if (Is.definedFunction(e)) {
+                    e.apply(null, [].slice.call(t, 0));
                 }
             }
             function getObjectFromString(objectString) {
@@ -248,9 +312,9 @@ var require_syntax = __commonJS({
                         if (Is.definedFunction(result.object)) {
                             result.object = result.object();
                         }
-                    } catch (t) {
+                    } catch (e) {
                         if (!_configuration.safeMode) {
-                            logError(_configuration.text.objectErrorText.replace("{{error_1}}", e1.message).replace("{{error_2}}", t.message));
+                            logError(_configuration.text.objectErrorText.replace("{{error_1}}", e1.message).replace("{{error_2}}", e.message));
                             result.parsed = false;
                         }
                         result.object = null;
@@ -258,58 +322,58 @@ var require_syntax = __commonJS({
                 }
                 return result;
             }
-            function logError(t) {
-                let e = true;
+            function logError(e) {
+                let t = true;
                 if (!_configuration.safeMode) {
-                    console.error(t);
-                    e = false;
+                    console.error(e);
+                    t = false;
                 }
-                return e;
+                return t;
             }
             const _public = {
                 highlightAll: function() {
                     throw new Error("Function not implemented.");
                 },
-                highlightElement: function(t) {
+                highlightElement: function(e) {
                     throw new Error("Function not implemented.");
                 },
                 getElementsHighlighted: function() {
                     throw new Error("Function not implemented.");
                 },
-                getCode: function(t) {
+                getCode: function(e) {
                     throw new Error("Function not implemented.");
                 },
                 destroyAll: function() {
                     throw new Error("Function not implemented.");
                 },
-                destroy: function(t) {
+                destroy: function(e) {
                     throw new Error("Function not implemented.");
                 },
-                addLanguage: function(t, e, n = true) {
+                addLanguage: function(e, t, n = true) {
                     throw new Error("Function not implemented.");
                 },
-                removeLanguage: function(t) {
+                removeLanguage: function(e) {
                     throw new Error("Function not implemented.");
                 },
-                getLanguage: function(t) {
+                getLanguage: function(e) {
                     throw new Error("Function not implemented.");
                 },
                 getLanguages: function() {
                     throw new Error("Function not implemented.");
                 },
-                addAlias: function(t, e, n = true) {
+                addAlias: function(e, t, n = true) {
                     throw new Error("Function not implemented.");
                 },
-                removeAlias: function(t) {
+                removeAlias: function(e) {
                     throw new Error("Function not implemented.");
                 },
-                getAlias: function(t) {
+                getAlias: function(e) {
                     throw new Error("Function not implemented.");
                 },
                 getAliases: function() {
                     throw new Error("Function not implemented.");
                 },
-                setConfiguration: function(t) {
+                setConfiguration: function(e) {
                     throw new Error("Function not implemented.");
                 },
                 getVersion: function() {

@@ -54,6 +54,98 @@ type StringToJson = {
     let _cached_Comments: Record<string, string> = {} as Record<string, string>;
     let _cached_Comments_Count: number = 0;
 
+    // Variables: Languages
+    let _languages: Record<string, SyntaxLanguage> = {} as Record<string, SyntaxLanguage>;
+
+
+    /*
+     * ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+     * Rendering
+     * ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+     */
+
+    function renderElementClickEvents( element: HTMLElement, customTrigger: Function, className: string ) : void {
+        if ( Is.definedFunction( customTrigger ) ) {
+            const domElements: HTMLCollectionOf<Element> = document.getElementsByTagName( className );
+            const elements: HTMLElement[] = [].slice.call( domElements );
+            const elementsLength: number = elements.length;
+
+            for ( let elementIndex: number = 0; elementIndex < elementsLength; elementIndex++ ) {
+                renderElementClickEvent( elements[ elementIndex ], customTrigger );
+            }
+        }
+    }
+
+    function renderElementClickEvent( element: HTMLElement, customTrigger: Function ) : void {
+        const text: string = element.innerText;
+
+        element.onclick = function() {
+            customTrigger( text );
+        };
+    }
+
+    function getFriendlyLanguageName( syntaxLanguage: string, languageLabelCasing: string ) : string {
+        let result: string = null!;
+        const language: SyntaxLanguage = getLanguage( syntaxLanguage );
+
+        if ( Is.defined( language ) && Is.definedString( language.friendlyName ) ) {
+            result = language.friendlyName!;
+        } else {
+            result = syntaxLanguage;
+        }
+
+        result = getDisplayTextTestCasing( result, languageLabelCasing );
+
+        return result;
+    }
+
+    function getLanguage( syntaxLanguage: string ) : SyntaxLanguage {
+        let result: SyntaxLanguage = null!;
+        let language: string = syntaxLanguage.toLowerCase();
+
+        if ( _languages.hasOwnProperty( language ) ) {
+            result = _languages[ language ];
+        } else {
+
+            if ( _aliases_Rules.hasOwnProperty( language ) ) {
+                language = _aliases_Rules[ language ];
+
+                if ( _languages.hasOwnProperty( language ) ) {
+                    result = _languages[ language ];
+                }
+            }
+        }
+
+        return result;
+    }
+
+    function getKeywordCasing( keywordsCasing: string ) : string {
+        if ( Is.definedString( keywordsCasing ) ) {
+            keywordsCasing = keywordsCasing.toLowerCase().trim();
+        }
+
+        return keywordsCasing;
+    }
+
+    function getDisplayTextTestCasing( keyword: string, keywordsCasing: string ) : string {
+        if ( keywordsCasing === "uppercase" ) {
+            keyword = keyword.toUpperCase();
+        } else if ( keywordsCasing === "lowercase" ) {
+            keyword = keyword.toLowerCase();
+        }
+        
+        return keyword;
+    }
+
+    function getWordRegEx( word: string, language: SyntaxLanguage ) : string {
+        let result: string = "(?<=^|[^-])\\b" + word + "\\b(?=[^-]|$)";
+
+        if ( Is.definedString( language.wordRegEx ) ) {
+            result = language.wordRegEx!.replace( "%word%", word );
+        }
+
+        return result;
+    }
 
 
     /*

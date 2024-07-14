@@ -137,6 +137,70 @@ var Data;
     let _cached_Strings_Count = 0;
     let _cached_Comments = {};
     let _cached_Comments_Count = 0;
+    let _languages = {};
+    function renderElementClickEvents(e, t, n) {
+        if (Is.definedFunction(t)) {
+            const e = document.getElementsByTagName(n);
+            const o = [].slice.call(e);
+            const r = o.length;
+            for (let e = 0; e < r; e++) {
+                renderElementClickEvent(o[e], t);
+            }
+        }
+    }
+    function renderElementClickEvent(e, t) {
+        const n = e.innerText;
+        e.onclick = function() {
+            t(n);
+        };
+    }
+    function getFriendlyLanguageName(e, t) {
+        let n = null;
+        const o = getLanguage(e);
+        if (Is.defined(o) && Is.definedString(o.friendlyName)) {
+            n = o.friendlyName;
+        } else {
+            n = e;
+        }
+        n = getDisplayTextTestCasing(n, t);
+        return n;
+    }
+    function getLanguage(e) {
+        let t = null;
+        let n = e.toLowerCase();
+        if (_languages.hasOwnProperty(n)) {
+            t = _languages[n];
+        } else {
+            if (_aliases_Rules.hasOwnProperty(n)) {
+                n = _aliases_Rules[n];
+                if (_languages.hasOwnProperty(n)) {
+                    t = _languages[n];
+                }
+            }
+        }
+        return t;
+    }
+    function getKeywordCasing(e) {
+        if (Is.definedString(e)) {
+            e = e.toLowerCase().trim();
+        }
+        return e;
+    }
+    function getDisplayTextTestCasing(e, t) {
+        if (t === "uppercase") {
+            e = e.toUpperCase();
+        } else if (t === "lowercase") {
+            e = e.toLowerCase();
+        }
+        return e;
+    }
+    function getWordRegEx(e, t) {
+        let n = "(?<=^|[^-])\\b" + e + "\\b(?=[^-]|$)";
+        if (Is.definedString(t.wordRegEx)) {
+            n = t.wordRegEx.replace("%word%", e);
+        }
+        return n;
+    }
     function getBindingOptions(e) {
         let t = Data.getDefaultObject(e, {});
         t = buildBindingAttributeOptions(t);
