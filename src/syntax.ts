@@ -17,7 +17,9 @@ import {
     type BindingTabContentOptionEvents,
     type BindingTabContentOptions,
     type Configuration,
-    type SyntaxLanguage } from "./ts/type";
+    type SyntaxLanguage, 
+    ConfigurationText,
+    ConfigurationEvents} from "./ts/type";
 
 import { PublicApi } from "./ts/api";
 import { Constants } from "./ts/constant";
@@ -1117,6 +1119,40 @@ type RenderElementResult = {
 
 	/*
 	 * ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+	 * Public API Functions:  Helpers:  Configuration
+	 * ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+	 */
+
+    function buildDefaultConfiguration() {
+        _configuration.safeMode = Data.getDefaultBoolean( _configuration.safeMode, true );
+        _configuration.highlightAllDomElementTypes = Data.getDefaultStringOrArray( _configuration.highlightAllDomElementTypes, [ "div", "code" ] );
+        _configuration.allowHtmlInTextDisplay = Data.getDefaultBoolean( _configuration.allowHtmlInTextDisplay, true );
+
+        buildDefaultConfigurationStrings();
+        buildDefaultConfigurationCustomTriggers();
+    }
+
+    function buildDefaultConfigurationStrings() {
+        _configuration.text = Data.getDefaultObject( _configuration.text, {} as ConfigurationText )
+        _configuration.text!.buttonsOpenerText = Data.getDefaultString( _configuration.text!.buttonsOpenerText, "<" );
+        _configuration.text!.buttonsCloserText = Data.getDefaultString( _configuration.text!.buttonsCloserText, ">" );
+        _configuration.text!.objectErrorText = Data.getDefaultString( _configuration.text!.objectErrorText, "Errors in object: {{error_1}}, {{error_2}}" );
+        _configuration.text!.attributeNotSetErrorText = Data.getDefaultString( _configuration.text!.attributeNotSetErrorText, "The attribute '{{attribute_name}}' has not been set correctly." );
+        _configuration.text!.languageNotSupportedErrorText = Data.getDefaultString( _configuration.text!.languageNotSupportedErrorText, "Language '{{language}}' is not supported." );
+        _configuration.text!.noCodeAvailableToRenderErrorText = Data.getDefaultString( _configuration.text!.noCodeAvailableToRenderErrorText, "No code is available to render." );
+        _configuration.text!.copyButtonText = Data.getDefaultString( _configuration.text!.copyButtonText, "Copy" );
+        _configuration.text!.printButtonText = Data.getDefaultString( _configuration.text!.printButtonText, "Print" );
+    }
+
+    function buildDefaultConfigurationCustomTriggers() {
+        _configuration.events = Data.getDefaultObject( _configuration.events, {} as ConfigurationEvents )
+        _configuration.events!.onBeforeRender = Data.getDefaultFunction( _configuration.events!.onBeforeRender, null! );
+        _configuration.events!.onAfterRender = Data.getDefaultFunction( _configuration.events!.onAfterRender, null! );
+    }
+
+
+	/*
+	 * ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 	 * Public API Functions:
 	 * ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 	 */
@@ -1129,19 +1165,37 @@ type RenderElementResult = {
          */
 
         highlightAll: function () : PublicApi {
-            throw new Error("Function not implemented.");
+            render();
+
+            return _public;
         },
 
         highlightElement: function ( elementOrId: any ) : PublicApi {
-            throw new Error("Function not implemented.");
+            let element: any = elementOrId;
+
+            if ( Is.definedString( element ) ) {
+                element = document.getElementById( element );
+            }
+    
+            if ( Is.defined( element ) ) {
+                renderElement( element );
+            }
+    
+            return _public;
         },
 
         getElementsHighlighted: function () : HTMLElement[] {
-            throw new Error("Function not implemented.");
+            return [].slice.call( _elements );
         },
 
         getCode: function ( elementId: string ) : string | null {
-            throw new Error("Function not implemented.");
+            let result: string = null!;
+
+            if ( _elements_Original.hasOwnProperty( elementId ) ) {
+                result = _elements_Original[ elementId ];
+            }
+    
+            return result;
         },
 
 
@@ -1152,11 +1206,43 @@ type RenderElementResult = {
          */
 
         destroyAll: function () : PublicApi {
-            throw new Error("Function not implemented.");
+            for ( let elementId in _elements_Original ) {
+                if ( _elements_Original.hasOwnProperty( elementId ) ) {
+                    const renderedElement: HTMLElement = document.getElementById( elementId )!;
+    
+                    if ( Is.defined( renderedElement ) ) {
+                        renderedElement.innerHTML = _elements_Original[ elementId ];
+                    }
+                }
+            }
+    
+            _elements_Original = {};
+            _elements = [];
+    
+            return _public;
         },
     
         destroy: function ( elementId: string ) : PublicApi {
-            throw new Error("Function not implemented.");
+            if ( _elements_Original.hasOwnProperty( elementId.toLowerCase() ) ) {
+                const renderedElement: HTMLElement = document.getElementById( elementId )!;
+    
+                if ( Is.defined( renderedElement ) ) {
+                    renderedElement.innerHTML = _elements_Original[ elementId.toLowerCase() ];
+    
+                    delete _elements_Original[ elementId.toLowerCase() ];
+    
+                    const elementsLength: number = _elements.length;
+                    
+                    for ( let elementIndex: number = 0; elementIndex < elementsLength; elementIndex++ ) {
+                        if ( _elements[ elementIndex ].id === elementId ) {
+                            delete _elements[ elementIndex ];
+                            break;
+                        }
+                    }
+                }
+            }
+    
+            return _public;
         },
 
 
@@ -1167,19 +1253,53 @@ type RenderElementResult = {
          */
 
         addLanguage: function ( name: string, languageDetails: SyntaxLanguage, triggerRender: boolean = true ) : boolean {
-            throw new Error("Function not implemented.");
+            let added: boolean = false;
+            const lookup: string = name.toLowerCase();
+
+            if ( !_languages.hasOwnProperty( lookup ) ) {
+                _languages[ lookup ] = languageDetails;
+                added = true;
+
+                if ( triggerRender ) {
+                    render();
+                }
+            }
+
+            return added;
         },
 
         removeLanguage: function ( name: string ) : boolean {
-            throw new Error("Function not implemented.");
+            let removed: boolean = false;
+            const lookup: string = name.toLowerCase();
+
+            if ( _languages.hasOwnProperty( lookup ) ) {
+                delete _languages[ lookup ];
+
+                for ( let alias in _aliases_Rules ) {
+                    if ( _aliases_Rules.hasOwnProperty( alias ) && _aliases_Rules[ alias ] === lookup ) {
+                        delete _aliases_Rules[ alias ];
+                    }
+                }
+
+                removed = true;
+            }
+
+            return removed;
         },
 
         getLanguage: function ( name: string ) : SyntaxLanguage {
-            throw new Error("Function not implemented.");
+            let details: SyntaxLanguage = null!;
+            const lookup: string = name.toLowerCase();
+
+            if ( _languages.hasOwnProperty( lookup ) ) {
+                details = Data.getClonedObject( lookup );
+            }
+
+            return details;
         },
 
         getLanguages: function () : Record<string, SyntaxLanguage> {
-            throw new Error("Function not implemented.");
+            return Data.getClonedObject( _languages );
         },
 
 
@@ -1190,19 +1310,44 @@ type RenderElementResult = {
          */
 
         addAlias: function ( alias: string, language: string, triggerRender: boolean = true ) : boolean {
-            throw new Error("Function not implemented.");
+            let added: boolean = false;
+
+            if ( _languages.hasOwnProperty( language.toLowerCase() ) && !_aliases_Rules.hasOwnProperty( alias.toLowerCase() ) ) {
+                _aliases_Rules[ alias.toLowerCase() ] = language.toLowerCase();
+                added = true;
+    
+                if ( triggerRender ) {
+                    render();
+                }
+            }
+    
+            return added;
         },
 
         removeAlias: function ( alias: string ) : boolean {
-            throw new Error("Function not implemented.");
+            let removed: boolean = false;
+
+            if ( _aliases_Rules.hasOwnProperty( alias.toLowerCase() ) ) {
+                delete _aliases_Rules[ alias.toLowerCase() ];
+    
+                removed = true;
+            }
+    
+            return removed;
         },
 
         getAlias: function ( alias: string ) : string {
-            throw new Error("Function not implemented.");
+            let result: string = null!;
+
+            if ( _aliases_Rules.hasOwnProperty( alias.toLowerCase() ) ) {
+                result = _aliases_Rules[ alias.toLowerCase() ];
+            }
+    
+            return result;
         },
 
         getAliases: function () : Record<string, string> {
-            throw new Error("Function not implemented.");
+            return Data.getClonedObject( _aliases_Rules );
         },
 
 
@@ -1213,7 +1358,11 @@ type RenderElementResult = {
          */
 
         setConfiguration: function ( newConfiguration: any ) : PublicApi {
-            throw new Error("Function not implemented.");
+            _configuration = Data.getDefaultObject( newConfiguration, {} as Configuration );
+        
+            buildDefaultConfiguration();
+    
+            return _public;
         },
 
 
@@ -1224,7 +1373,7 @@ type RenderElementResult = {
          */
 
         getVersion: function () : string {
-            throw new Error("Function not implemented.");
+            return "3.0.0";
         }
     };
 
@@ -1234,7 +1383,16 @@ type RenderElementResult = {
      * Initialize Syntax.js
      * ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
      */
-    ( () => {
 
+    ( () => {
+        buildDefaultConfiguration();
+
+        document.addEventListener( "DOMContentLoaded", function() {
+            render();
+        } );
+
+        if ( !Is.defined( window.$syntax ) ) {
+            window.$syntax = _public;
+        }
     } )();
 } )();
