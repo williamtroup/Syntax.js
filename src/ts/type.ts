@@ -20,8 +20,8 @@ export type Configuration = {
 };
 
 export type ConfigurationEvents = {
-    onBeforeRender?: Function;
-    onAfterRender?: Function;
+    onBeforeRender?: () => void;
+    onAfterRender?: () => void;
 };
 
 export type ConfigurationText = {
@@ -56,20 +56,20 @@ export type BindingOptions = {
 };
 
 export type BindingOptionEvents = {
-    onCopy?: Function;
-    onRenderComplete?: Function;
-    onKeywordClicked?: Function;
-    onValueClicked?: Function;
-    onAttributeClicked?: Function;
-    onKeywordRender?: Function;
-    onValueRender?: Function;
-    onAttributeRender?: Function;
-    onStringRender?: Function;
-    onCommentRender?: Function;
-    onPrint?: Function;
-    onBeforeRenderComplete?: Function;
-    onButtonsOpened?: Function;
-    onButtonsClosed?: Function;
+    onCopy?: ( code: string ) => void;
+    onRenderComplete?: ( element: HTMLElement ) => void;
+    onKeywordClicked?: ( keyword: string ) => void;
+    onValueClicked?: ( value: string ) => void;
+    onAttributeClicked?: ( attribute: string ) => void;
+    onKeywordRender?: ( keyword: string ) => void;
+    onValueRender?: ( value: string ) => void;
+    onAttributeRender?: ( attribute: string ) => void;
+    onStringRender?: ( string: string ) => void;
+    onCommentRender?: ( comment: string ) => void;
+    onPrint?: ( code: string ) => void;
+    onBeforeRenderComplete?: ( element: HTMLElement ) => void;
+    onButtonsOpened?: () => void;
+    onButtonsClosed?: () => void;
 };
 
 export type BindingTabContentOptions = {
@@ -79,7 +79,7 @@ export type BindingTabContentOptions = {
 };
 
 export type BindingTabContentOptionEvents = {
-    onOpen?: Function;
+    onOpen?: ( language: string ) => void;
 };
 
 export type SyntaxLanguage = {
@@ -98,5 +98,5 @@ export type SyntaxLanguage = {
 export type CustomButton = {
     text?: string;
     className?: string;
-    onClick?: Function;
+    onClick?: ( code: string ) => void;
 };
