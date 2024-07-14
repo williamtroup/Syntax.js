@@ -95,11 +95,11 @@ var Data;
         return Is.definedArray(e) ? e : t;
     }
     e.getDefaultArray = a;
-    function u(e, t) {
+    function s(e, t) {
         return Is.definedObject(e) ? e : t;
     }
-    e.getDefaultObject = u;
-    function s(e, t) {
+    e.getDefaultObject = s;
+    function u(e, t) {
         let n = t;
         if (Is.definedString(e)) {
             const r = e.toString().split(" ");
@@ -113,7 +113,7 @@ var Data;
         }
         return n;
     }
-    e.getDefaultStringOrArray = s;
+    e.getDefaultStringOrArray = u;
     function c(e) {
         const t = JSON.stringify(e);
         const n = JSON.parse(t);
@@ -170,6 +170,97 @@ var DomElement;
     let _cached_Comments = {};
     let _cached_Comments_Count = 0;
     let _languages = {};
+    function renderElementStringPatternVariables(e, t, n) {
+        if (t !== null) {
+            const r = t.length;
+            for (let i = 0; i < r; i++) {
+                const r = t[i];
+                const o = r.split("\n");
+                const l = o.length;
+                const a = l === 1 ? "string" : "multi-line-string";
+                for (let t = 0; t < l; t++) {
+                    const n = o[t];
+                    const r = "$S{" + _cached_Strings_Count.toString() + "}";
+                    _cached_Strings[r] = '<span class="' + a + '">' + n + "</span>";
+                    _cached_Strings_Count++;
+                    e = e.replace(n, r);
+                }
+                fireCustomTriggerEvent(n.events.onStringRender, r);
+            }
+        }
+        return e;
+    }
+    function renderElementKeywords(e, t, n) {
+        const r = Data.getDefaultStringOrArray(t.keywords, []);
+        const i = r.length;
+        const o = t.caseSensitive;
+        const l = getKeywordCasing(t.keywordsCasing);
+        Data.String.sortArrayOfStringByLength(r);
+        for (let a = 0; a < i; a++) {
+            const i = r[a];
+            const s = getDisplayTextTestCasing(i, l);
+            const u = "KW" + _cached_Keywords_Count.toString() + ";";
+            let c = null;
+            const g = o ? "g" : "gi";
+            const d = new RegExp(getWordRegEx(i, t), g);
+            if (n.highlightKeywords) {
+                if (Is.definedFunction(n.events.onKeywordClicked)) {
+                    c = '<span class="keyword-clickable">' + s + "</span>";
+                    e = e.replace(d, u);
+                } else {
+                    c = '<span class="keyword">' + s + "</span>";
+                    e = e.replace(d, u);
+                }
+            } else {
+                if (Is.definedFunction(n.events.onKeywordClicked)) {
+                    c = '<span class="no-highlight-keyword-clickable">' + s + "</span>";
+                    e = e.replace(d, u);
+                }
+            }
+            _cached_Keywords[u] = c;
+            _cached_Keywords_Count++;
+            fireCustomTriggerEvent(n.events.onKeywordRender, i);
+        }
+        return e;
+    }
+    function replaceMarkUpKeywords(e, t, n) {
+        const r = Data.getDefaultStringOrArray(t.keywords, []);
+        const i = t.caseSensitive;
+        const o = getKeywordCasing(t.keywordsCasing);
+        const l = /(<([^>]+)>)/gi;
+        const a = i ? "g" : "gi";
+        let s = l.exec(e);
+        while (s) {
+            if (s.index === l.lastIndex) {
+                l.lastIndex++;
+            }
+            let i = s[0];
+            i = i.replace("</", "").replace("<", "").replace(">", "");
+            i = i.split(" ")[0];
+            if (r.indexOf(i) > -1) {
+                const r = "KW" + _cached_Keywords_Count.toString() + ";";
+                const l = new RegExp(getWordRegEx(i, t), a);
+                let s = null;
+                let u = getDisplayTextTestCasing(i, o);
+                if (n.highlightKeywords) {
+                    if (Is.definedFunction(n.events.onKeywordClicked)) {
+                        s = '<span class="keyword-clickable">' + u + "</span>";
+                    } else {
+                        s = '<span class="keyword">' + u + "</span>";
+                    }
+                } else {
+                    if (Is.definedFunction(n.events.onKeywordClicked)) {
+                        s = '<span class="no-highlight-keyword-clickable">' + u + "</span>";
+                    }
+                }
+                e = e.replace(l, r);
+                _cached_Keywords[r] = s;
+                _cached_Keywords_Count++;
+            }
+            s = l.exec(e);
+        }
+        return e;
+    }
     function renderElementValues(e, t, n) {
         const r = Data.getDefaultStringOrArray(t.values, []);
         const i = r.length;
@@ -178,24 +269,24 @@ var DomElement;
         for (let l = 0; l < i; l++) {
             const i = r[l];
             const a = "VAL" + _cached_Values_Count.toString() + ";";
-            let u = null;
-            const s = o ? "g" : "gi";
-            const c = new RegExp(getWordRegEx(i, t), s);
+            let s = null;
+            const u = o ? "g" : "gi";
+            const c = new RegExp(getWordRegEx(i, t), u);
             if (n.highlightValues) {
                 if (Is.definedFunction(n.events.onValueClicked)) {
-                    u = '<span class="value-clickable">' + i + "</span>";
+                    s = '<span class="value-clickable">' + i + "</span>";
                     e = e.replace(c, a);
                 } else {
-                    u = '<span class="value">' + i + "</span>";
+                    s = '<span class="value">' + i + "</span>";
                     e = e.replace(c, a);
                 }
             } else {
                 if (Is.definedFunction(n.events.onValueClicked)) {
-                    u = '<span class="no-highlight-value-clickable">' + i + "</span>";
+                    s = '<span class="no-highlight-value-clickable">' + i + "</span>";
                     e = e.replace(c, a);
                 }
             }
-            _cached_Values[a] = u;
+            _cached_Values[a] = s;
             _cached_Values_Count++;
             fireCustomTriggerEvent(n.events.onValueRender, i);
         }
@@ -209,24 +300,24 @@ var DomElement;
         for (let l = 0; l < i; l++) {
             const i = r[l];
             const a = "ATTR" + _cached_Attributes_Count.toString() + ";";
-            let u = null;
-            let s = o ? "g" : "gi";
-            const c = new RegExp(getWordRegEx(i, t), s);
+            let s = null;
+            let u = o ? "g" : "gi";
+            const c = new RegExp(getWordRegEx(i, t), u);
             if (n.highlightAttributes) {
                 if (Is.definedFunction(n.events.onAttributeClicked)) {
-                    u = '<span class="attribute-clickable">' + i + "</span>";
+                    s = '<span class="attribute-clickable">' + i + "</span>";
                     e = e.replace(c, a);
                 } else {
-                    u = '<span class="attribute">' + i + "</span>";
+                    s = '<span class="attribute">' + i + "</span>";
                     e = e.replace(c, a);
                 }
             } else {
                 if (Is.definedFunction(n.events.onAttributeClicked)) {
-                    u = '<span class="no-highlight-attribute-clickable">' + i + "</span>";
+                    s = '<span class="no-highlight-attribute-clickable">' + i + "</span>";
                     e = e.replace(c, a);
                 }
             }
-            _cached_Attributes[a] = u;
+            _cached_Attributes[a] = s;
             _cached_Attributes_Count++;
             fireCustomTriggerEvent(n.events.onAttributeRender, i);
         }
@@ -271,8 +362,8 @@ var DomElement;
     }
     function renderElementCompletedHTML(e, t, n, r, i, o, l) {
         const a = i.split("\n");
-        const u = a.length;
-        const s = u.toString().length;
+        const s = a.length;
+        const u = s.toString().length;
         let c = n;
         let g = r;
         let d = null;
@@ -301,12 +392,12 @@ var DomElement;
                 DomElement.selectTextInElement(g);
             };
         }
-        for (let e = 0; e < u; e++) {
+        for (let e = 0; e < s; e++) {
             let t = a[e];
             if (t.trim() !== "" && d === null) {
                 d = t.substring(0, t.match(/^\s*/)[0].length);
             }
-            if (e !== 0 && e !== u - 1 || t.trim() !== "") {
+            if (e !== 0 && e !== s - 1 || t.trim() !== "") {
                 if (t.trim() !== "" || !o.removeBlankLines) {
                     const e = t.trim() === "";
                     if (e && !m || !o.removeDuplicateBlankLines || !e) {
@@ -314,7 +405,7 @@ var DomElement;
                         if (Is.defined(c)) {
                             const e = DomElement.create("p");
                             if (o.padLineNumbers) {
-                                e.innerText = Data.String.padNumber(f.toString(), s);
+                                e.innerText = Data.String.padNumber(f.toString(), u);
                             } else {
                                 e.innerText = f.toString();
                             }

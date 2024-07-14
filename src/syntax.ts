@@ -67,6 +67,123 @@ type StringToJson = {
      */
 
 
+    function renderElementStringPatternVariables( innerHTML: string, patternItems: string[], syntaxOptions: BindingOptions ) : string {
+        if ( patternItems !== null ) {
+            const patternItemsLength: number = patternItems.length;
+        
+            for ( let patternItemsIndex: number = 0; patternItemsIndex < patternItemsLength; patternItemsIndex++ ) {
+                const string: string = patternItems[ patternItemsIndex ];
+                const stringLines: string[] = string.split( Char.newLine );
+                const stringLinesLength: number = stringLines.length;
+                const stringCssClass: string = stringLinesLength === 1 ? "string" : "multi-line-string";
+
+                for ( let stringLineIndex: number = 0; stringLineIndex < stringLinesLength; stringLineIndex++ ) {
+                    const stringLine: string = stringLines[ stringLineIndex ];
+                    const stringVariable: string = "$S{" + _cached_Strings_Count.toString() + "}";
+
+                    _cached_Strings[ stringVariable ] = "<span class=\"" + stringCssClass + "\">" + stringLine + "</span>";
+                    _cached_Strings_Count++;
+        
+                    innerHTML = innerHTML.replace( stringLine, stringVariable );
+                }
+
+                fireCustomTriggerEvent( syntaxOptions.events!.onStringRender!, string );
+            }
+        }
+
+        return innerHTML;
+    }
+
+    function renderElementKeywords( innerHTML: string, language: SyntaxLanguage, syntaxOptions: BindingOptions ) : string {
+        const keywords: string[] = Data.getDefaultStringOrArray( language.keywords, [] );
+        const keywordsLength: number = keywords.length;
+        const caseSensitive: boolean = language.caseSensitive!;
+        const keywordsCasing: string = getKeywordCasing( language.keywordsCasing! );
+
+        Data.String.sortArrayOfStringByLength( keywords );
+
+        for ( let keywordIndex: number = 0; keywordIndex < keywordsLength; keywordIndex++ ) {
+            const keyword: string = keywords[ keywordIndex ];
+            const keywordDisplay: string = getDisplayTextTestCasing( keyword, keywordsCasing );
+            const keywordVariable: string = "KW" + _cached_Keywords_Count.toString() + ";";
+            let keywordReplacement: string = null!;
+            const regExFlags: string = caseSensitive ? "g" : "gi";
+            const regEx: RegExp = new RegExp( getWordRegEx( keyword, language ), regExFlags );
+
+            if ( syntaxOptions.highlightKeywords ) {
+                if ( Is.definedFunction( syntaxOptions.events!.onKeywordClicked ) ) {
+                    keywordReplacement = "<span class=\"keyword-clickable\">" + keywordDisplay + "</span>";
+                    innerHTML = innerHTML.replace( regEx, keywordVariable );
+                } else {
+                    keywordReplacement = "<span class=\"keyword\">" + keywordDisplay + "</span>";
+                    innerHTML = innerHTML.replace( regEx, keywordVariable );
+                }
+
+            } else {
+                if ( Is.definedFunction( syntaxOptions.events!.onKeywordClicked ) ) {
+                    keywordReplacement = "<span class=\"no-highlight-keyword-clickable\">" + keywordDisplay + "</span>";
+                    innerHTML = innerHTML.replace( regEx, keywordVariable );
+                }
+            }
+
+            _cached_Keywords[ keywordVariable ] = keywordReplacement;
+            _cached_Keywords_Count++;
+
+            fireCustomTriggerEvent( syntaxOptions.events!.onKeywordRender!, keyword );
+        }
+
+        return innerHTML;
+    }
+
+    function replaceMarkUpKeywords( innerHTML: string, language: SyntaxLanguage, syntaxOptions: BindingOptions ) : string {
+        const keywords: string[] = Data.getDefaultStringOrArray( language.keywords, [] );
+        const caseSensitive: boolean = language.caseSensitive!;
+        const keywordsCasing: string = getKeywordCasing( language.keywordsCasing! );
+
+        const regEx: RegExp = /(<([^>]+)>)/ig;
+        const regExFlags: string = caseSensitive ? "g" : "gi";
+        let regExResult: RegExpExecArray = regEx.exec( innerHTML )!;
+
+        while ( regExResult ) {
+            if ( regExResult.index === regEx.lastIndex ) {
+                regEx.lastIndex++;
+            }
+
+            let tag: string = regExResult[ 0 ];
+            tag = tag.replace( "</", Char.empty ).replace( "<", Char.empty ).replace( ">", Char.empty );
+            tag = tag.split( Char.space )[ 0 ];
+
+            if ( keywords.indexOf( tag ) > -1 ) {
+                const keywordVariable: string = "KW" + _cached_Keywords_Count.toString() + ";";
+                const regExReplace: RegExp = new RegExp( getWordRegEx( tag, language ), regExFlags );
+                let keywordReplacement: string = null!;
+                let replacementTagDisplay: string = getDisplayTextTestCasing( tag, keywordsCasing );
+
+                if ( syntaxOptions.highlightKeywords ) {
+                    if ( Is.definedFunction( syntaxOptions.events!.onKeywordClicked ) ) {
+                        keywordReplacement = "<span class=\"keyword-clickable\">" + replacementTagDisplay + "</span>";
+                    } else {
+                        keywordReplacement = "<span class=\"keyword\">" + replacementTagDisplay + "</span>";
+                    }
+    
+                } else {
+                    if ( Is.definedFunction( syntaxOptions.events!.onKeywordClicked ) ) {
+                        keywordReplacement = "<span class=\"no-highlight-keyword-clickable\">" + replacementTagDisplay + "</span>";
+                    }
+                }
+
+                innerHTML = innerHTML.replace( regExReplace, keywordVariable );
+
+                _cached_Keywords[ keywordVariable ] = keywordReplacement;
+                _cached_Keywords_Count++;
+            }
+
+            regExResult = regEx.exec( innerHTML )!;
+        }
+
+        return innerHTML;
+    }
+
     function renderElementValues( innerHTML: string, language: SyntaxLanguage, syntaxOptions: BindingOptions ) : string {
         const values: string[] = Data.getDefaultStringOrArray( language.values, [] );
         const valuesLength: number = values.length;
