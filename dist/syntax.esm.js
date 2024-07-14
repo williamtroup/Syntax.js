@@ -1015,14 +1015,14 @@ var require_syntax = __commonJS({
             }
             function buildDefaultConfigurationStrings() {
                 _configuration.text = Data.getDefaultObject(_configuration.text, {});
-                _configuration.text.buttonsOpenerText = Data.getDefaultString(_configuration.text.buttonsOpenerText, "<");
-                _configuration.text.buttonsCloserText = Data.getDefaultString(_configuration.text.buttonsCloserText, ">");
-                _configuration.text.objectErrorText = Data.getDefaultString(_configuration.text.objectErrorText, "Errors in object: {{error_1}}, {{error_2}}");
-                _configuration.text.attributeNotSetErrorText = Data.getDefaultString(_configuration.text.attributeNotSetErrorText, "The attribute '{{attribute_name}}' has not been set correctly.");
-                _configuration.text.languageNotSupportedErrorText = Data.getDefaultString(_configuration.text.languageNotSupportedErrorText, "Language '{{language}}' is not supported.");
-                _configuration.text.noCodeAvailableToRenderErrorText = Data.getDefaultString(_configuration.text.noCodeAvailableToRenderErrorText, "No code is available to render.");
-                _configuration.text.copyButtonText = Data.getDefaultString(_configuration.text.copyButtonText, "Copy");
-                _configuration.text.printButtonText = Data.getDefaultString(_configuration.text.printButtonText, "Print");
+                _configuration.text.buttonsOpenerText = Data.getDefaultAnyString(_configuration.text.buttonsOpenerText, "<");
+                _configuration.text.buttonsCloserText = Data.getDefaultAnyString(_configuration.text.buttonsCloserText, ">");
+                _configuration.text.objectErrorText = Data.getDefaultAnyString(_configuration.text.objectErrorText, "Errors in object: {{error_1}}, {{error_2}}");
+                _configuration.text.attributeNotSetErrorText = Data.getDefaultAnyString(_configuration.text.attributeNotSetErrorText, "The attribute '{{attribute_name}}' has not been set correctly.");
+                _configuration.text.languageNotSupportedErrorText = Data.getDefaultAnyString(_configuration.text.languageNotSupportedErrorText, "Language '{{language}}' is not supported.");
+                _configuration.text.noCodeAvailableToRenderErrorText = Data.getDefaultAnyString(_configuration.text.noCodeAvailableToRenderErrorText, "No code is available to render.");
+                _configuration.text.copyButtonText = Data.getDefaultAnyString(_configuration.text.copyButtonText, "Copy");
+                _configuration.text.printButtonText = Data.getDefaultAnyString(_configuration.text.printButtonText, "Print");
             }
             function buildDefaultConfigurationCustomTriggers() {
                 _configuration.events = Data.getDefaultObject(_configuration.events, {});
