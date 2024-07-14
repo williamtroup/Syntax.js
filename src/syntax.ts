@@ -13,10 +13,33 @@
 
 import { PublicApi } from "./ts/api";
 import { Constants } from "./ts/constant";
-import { SyntaxLanguage } from "./ts/type";
+import { type Configuration, type SyntaxLanguage } from "./ts/type";
 
 
 ( () => {
+    // Variables: Configuration
+    let _configuration: Configuration = {} as Configuration;
+
+    // Variables: Aliases
+    let _aliases_Rules: Record<string, string> = {} as Record<string, string>;
+
+    // Variables: Elements
+    let _elements: HTMLElement[] = [];
+    let _elements_Original: Record<string, string> = {} as Record<string, string>;
+
+    // Variables: Temporary Caching
+    let _cached_Keywords: Record<string, string> = {} as Record<string, string>;
+    let _cached_Keywords_Count: number = 0;
+    let _cached_Values: Record<string, string> = {} as Record<string, string>;
+    let _cached_Values_Count: number = 0;
+    let _cached_Attributes: Record<string, string> = {} as Record<string, string>;
+    let _cached_Attributes_Count: number = 0;
+    let _cached_Strings: Record<string, string> = {} as Record<string, string>;
+    let _cached_Strings_Count: number = 0;
+    let _cached_Comments: Record<string, string> = {} as Record<string, string>;
+    let _cached_Comments_Count: number = 0;
+
+
 
 
 	/*
@@ -96,7 +119,7 @@ import { SyntaxLanguage } from "./ts/type";
         addAlias: function ( alias: string, language: string, triggerRender: boolean = true ) : boolean {
             throw new Error("Function not implemented.");
         },
-        
+
         removeAlias: function ( alias: string ) : boolean {
             throw new Error("Function not implemented.");
         },
