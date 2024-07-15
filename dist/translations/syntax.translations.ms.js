@@ -1,11 +1,13 @@
-/*! Syntax.js v2.6.0 - Malay | (c) Bunoon 2024 | MIT License */
+/*! Syntax.js v3.0.0 - Malay | (c) Bunoon 2024 | MIT License */
 $syntax.setConfiguration( {
-        "buttonsOpenerText": "<",
-        "buttonsCloserText": ">",
-        "objectErrorText": "Ralat dalam objek: {{error_1}}, {{error_2}}",
-        "attributeNotSetErrorText": "sifat '{{attribute_name}}' belum ditetapkan dengan betul.",
-        "languageNotSupportedErrorText": "Bahasa '{{language}}' tidak disokong.",
-        "noCodeAvailableToRenderErrorText": "Tiada kod tersedia untuk dipaparkan.",
-        "copyButtonText": "Salinan",
-        "printButtonText": "Cetak"
+        "text": {
+                "buttonsOpenerText": "←",
+                "buttonsCloserText": "→",
+                "objectErrorText": "Ralat dalam objek: {{error_1}}, {{error_2}}",
+                "attributeNotSetErrorText": "sifat '{{attribute_name}}' belum ditetapkan dengan betul.",
+                "languageNotSupportedErrorText": "Bahasa '{{language}}' tidak disokong.",
+                "noCodeAvailableToRenderErrorText": "Tiada kod tersedia untuk dipaparkan.",
+                "copyButtonText": "Salinan",
+                "printButtonText": "Cetak"
+        }
 } );

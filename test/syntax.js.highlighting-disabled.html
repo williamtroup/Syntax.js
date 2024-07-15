@@ -4,10 +4,10 @@
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <title>Syntax.js - Highlighting Disabled</title>
-        <link rel="stylesheet" href="../css/styles.css">
-        <link rel="stylesheet" href="../../dist/syntax.js.css">
-        <script src="../../src/syntax.js"></script>
-        <script src="../../dist/languages/syntax.javascript.js"></script>
+        <link rel="stylesheet" href="css/styles.css">
+        <link rel="stylesheet" href="../dist/syntax.js.min.css">
+        <script src="../dist/syntax.js"></script>
+        <script src="../dist/languages/syntax.javascript.js"></script>
     </head>
 
     <body>
@@ -17,7 +17,7 @@
         </div>
 
         <div class="contents">
-            <code data-syntax-language="javascript" data-syntax-options="{ 'highlightComments': false, 'highlightStrings': false, 'highlightKeywords': false, 'highlightValues': false, 'onKeywordClicked': onKeywordClickedCustomTrigger, 'onValueClicked': onValueClickedCustomTrigger }">
+            <code data-syntax-language="javascript" data-syntax-options="{ 'highlightComments': false, 'highlightStrings': false, 'highlightKeywords': false, 'highlightValues': false, 'events': { 'onKeywordClicked': onKeywordClickedCustomTrigger, 'onValueClicked': onValueClickedCustomTrigger } }">
                 <pre>
                     var something = true;
     

@@ -1,980 +1,1146 @@
-/*! Syntax.js v2.6.0 | (c) Bunoon 2024 | MIT License */
-(function() {
-  var _parameter_Document = null, _parameter_Navigator = null, _parameter_Window = null, _parameter_Math = null, _parameter_Json = null, _public = {}, _configuration = {}, _string = {empty:"", space:" ", newLine:"\n"}, _aliases_Rules = {}, _elements_Type = {}, _elements = [], _elements_Original = {}, _cached_Keywords = {}, _cached_Keywords_Count = 0, _cached_Values = {}, _cached_Values_Count = 0, _cached_Attributes = {}, _cached_Attributes_Count = 0, _cached_Strings = {}, _cached_Strings_Count = 
-  0, _cached_Comments = {}, _cached_Comments_Count = 0, _languages = {}, _languages_Unknown = "unknown", _languages_Tabbed = "tabbed", _attribute_Name_Language = "data-syntax-language", _attribute_Name_Options = "data-syntax-options", _attribute_Name_Buttons = "data-syntax-buttons", _attribute_Name_TabContents = "data-syntax-tab-contents";
-  function render() {
-    var tagTypes = _configuration.highlightAllDomElementTypes, tagTypesLength = tagTypes.length;
-    for (var tagTypeIndex = 0; tagTypeIndex < tagTypesLength; tagTypeIndex++) {
-      var domElements = _parameter_Document.getElementsByTagName(tagTypes[tagTypeIndex]), elements = [].slice.call(domElements), elementsLength = elements.length;
-      if (elementsLength > 0) {
-        fireCustomTrigger(_configuration.onBeforeRender);
-      }
-      for (var elementIndex = 0; elementIndex < elementsLength; elementIndex++) {
-        var element = elements[elementIndex], elementBreak = false;
-        if (element.hasAttribute(_attribute_Name_Language) && element.getAttribute(_attribute_Name_Language).toLowerCase() === _languages_Tabbed) {
-          var divElements = [].slice.call(element.children), divElementsLength = divElements.length, tabElements = [], tabContentElements = [];
-          element.removeAttribute(_attribute_Name_Language);
-          element.className = element.className === _string.empty ? "syntax-highlight" : element.className + " syntax-highlight";
-          element.innerHTML = _string.empty;
-          var codeContainer = createElement("div", "code custom-scroll-bars");
-          element.appendChild(codeContainer);
-          var tabs = createElement("div", "tabs");
-          codeContainer.appendChild(tabs);
-          for (var divElementIndex = 0; divElementIndex < divElementsLength; divElementIndex++) {
-            var renderResult = renderElement(divElements[divElementIndex], codeContainer);
-            if (!renderResult.rendered) {
-              elementBreak = true;
-            } else {
-              renderTab(tabs, tabElements, tabContentElements, renderResult, divElementIndex, renderResult.tabBindingOptions, renderResult.syntaxLanguage);
-            }
-          }
-        } else {
-          if (!renderElement(element).rendered) {
-            elementBreak = true;
-          }
-        }
-        if (elementBreak) {
-          break;
-        }
-      }
-      if (elementsLength > 0) {
-        fireCustomTrigger(_configuration.onAfterRender);
-      }
+"use strict";
+
+var Constants;
+
+(e => {
+    e.SYNTAX_JS_ATTRIBUTE_NAME_LANGUAGE = "data-syntax-language";
+    e.SYNTAX_JS_ATTRIBUTE_NAME_OPTIONS = "data-syntax-options";
+    e.SYNTAX_JS_ATTRIBUTE_NAME_BUTTONS = "data-syntax-buttons";
+    e.SYNTAX_JS_ATTRIBUTE_NAME_TAB_CONTENTS = "data-syntax-tab-contents";
+})(Constants || (Constants = {}));
+
+var Is;
+
+(e => {
+    function t(e) {
+        return e !== null && e !== void 0 && e.toString() !== "";
     }
-  }
-  function renderTab(tabs, tabElements, tabContentElements, renderResult, divElementIndex, tabBindingOptions, syntaxLanguage) {
-    var tab = createElement("button", "tab");
-    tabs.appendChild(tab);
-    setNodeText(tab, renderResult.tabTitle);
-    tabElements.push(tab);
-    tabContentElements.push(renderResult.tabContents);
-    tab.onclick = function() {
-      if (tab.className !== "tab-active") {
-        var tabElementsLength = tabElements.length, tabContentElementsLength = tabContentElements.length;
-        for (var tabElementsIndex = 0; tabElementsIndex < tabElementsLength; tabElementsIndex++) {
-          tabElements[tabElementsIndex].className = "tab";
-        }
-        for (var tabContentElementsIndex = 0; tabContentElementsIndex < tabContentElementsLength; tabContentElementsIndex++) {
-          tabContentElements[tabContentElementsIndex].style.display = "none";
-        }
-        tab.className = "tab-active";
-        renderResult.tabContents.style.display = "flex";
-        if (isDefinedObject(tabBindingOptions)) {
-          fireCustomTrigger(tabBindingOptions.onOpen, syntaxLanguage);
-        }
-      }
-    };
-    if (divElementIndex > 0) {
-      renderResult.tabContents.style.display = "none";
-    } else {
-      tab.className = "tab-active";
+    e.defined = t;
+    function n(e) {
+        return t(e) && typeof e === "object";
     }
-  }
-  function renderElement(element, codeContainer) {
-    var result = true, tabTitle = null, tabContents = null, tabBindingOptions = null, syntaxLanguage = null;
-    if (isDefined(element) && element.hasAttribute(_attribute_Name_Language) && (!element.hasAttribute(_attribute_Name_TabContents) || isDefined(codeContainer))) {
-      syntaxLanguage = element.getAttribute(_attribute_Name_Language);
-      if (isDefinedString(syntaxLanguage)) {
-        var language = getLanguage(syntaxLanguage);
-        if (isDefined(language) || syntaxLanguage.toLowerCase() === _languages_Unknown) {
-          var syntaxOptionsParsed = getObjectFromString(element.getAttribute(_attribute_Name_Options)), syntaxButtonsParsed = getObjectFromString(element.getAttribute(_attribute_Name_Buttons));
-          if (syntaxOptionsParsed.parsed) {
-            if (element.innerHTML.trim() !== _string.empty) {
-              var innerHTML = element.innerHTML, syntaxOptions = getBindingOptions(syntaxOptionsParsed.result), isPreFormatted = false, descriptionText = null;
-              fireCustomTrigger(syntaxOptions.onBeforeRenderComplete, element);
-              if (element.children.length > 0 && element.children[0].nodeName.toLowerCase() === "pre") {
-                innerHTML = element.children[0].innerHTML;
-                isPreFormatted = true;
-              }
-              var innerHTMLCopy = innerHTML.trim(), numbers = null, description = null, elementId = element.id;
-              if (!isDefinedString(elementId)) {
-                elementId = newGuid();
-              }
-              _elements_Original[elementId] = element.innerHTML;
-              element.removeAttribute(_attribute_Name_Language);
-              element.removeAttribute(_attribute_Name_Options);
-              element.id = elementId;
-              if (!isDefined(codeContainer)) {
-                element.className = element.className === _string.empty ? "syntax-highlight" : element.className + " syntax-highlight";
-                element.innerHTML = _string.empty;
-                codeContainer = createElement("div", "code custom-scroll-bars");
-                element.appendChild(codeContainer);
-              } else {
-                if (element.hasAttribute(_attribute_Name_TabContents) && element.getAttribute(_attribute_Name_TabContents).toLowerCase() !== "true") {
-                  var syntaxTabOptions = getObjectFromString(element.getAttribute(_attribute_Name_TabContents));
-                  if (syntaxTabOptions.parsed && isDefinedObject(syntaxTabOptions.result)) {
-                    tabBindingOptions = getBindingTabContentOptions(syntaxTabOptions.result);
-                    descriptionText = tabBindingOptions.description;
-                    if (isDefinedString(tabBindingOptions.title)) {
-                      tabTitle = tabBindingOptions.title;
-                    }
-                  }
-                } else {
-                  tabTitle = getFriendlyLanguageName(syntaxLanguage);
+    e.definedObject = n;
+    function i(e) {
+        return t(e) && typeof e === "boolean";
+    }
+    e.definedBoolean = i;
+    function o(e) {
+        return t(e) && typeof e === "string";
+    }
+    e.definedString = o;
+    function r(e) {
+        return t(e) && typeof e === "function";
+    }
+    e.definedFunction = r;
+    function a(e) {
+        return t(e) && typeof e === "number";
+    }
+    e.definedNumber = a;
+    function l(e) {
+        return n(e) && e instanceof Array;
+    }
+    e.definedArray = l;
+})(Is || (Is = {}));
+
+var Data;
+
+(e => {
+    let t;
+    (e => {
+        function t() {
+            const e = [];
+            for (let t = 0; t < 32; t++) {
+                if (t === 8 || t === 12 || t === 16 || t === 20) {
+                    e.push("-");
                 }
-              }
-              tabContents = createElement("div", "tab-contents");
-              codeContainer.appendChild(tabContents);
-              if (isDefinedString(descriptionText)) {
-                description = createElement("div", "description");
-                tabContents.appendChild(description);
-                setNodeText(description, descriptionText);
-              }
-              if (syntaxOptions.showLineNumbers) {
-                numbers = createElement("div", "numbers");
-                tabContents.appendChild(numbers);
-              }
-              var syntax = createElement("div", "syntax");
-              tabContents.appendChild(syntax);
-              renderElementButtons(syntax, syntaxOptions, syntaxLanguage, syntaxButtonsParsed, innerHTMLCopy);
-              if (syntaxLanguage.toLowerCase() !== _languages_Unknown) {
-                innerHTML = renderHTML(innerHTML, language, syntaxOptions);
-              } else {
-                innerHTML = encodeMarkUpCharacters(innerHTML);
-              }
-              renderElementCompletedHTML(element, description, numbers, syntax, innerHTML, syntaxOptions, isPreFormatted);
-              fireCustomTrigger(syntaxOptions.onRenderComplete, element);
-              _elements.push(element);
-              _cached_Keywords = {};
-              _cached_Keywords_Count = 0;
-              _cached_Values = {};
-              _cached_Values_Count = 0;
-              _cached_Attributes = {};
-              _cached_Attributes_Count = 0;
-              _cached_Strings = {};
-              _cached_Strings_Count = 0;
-              _cached_Comments = {};
-              _cached_Comments_Count = 0;
+                const n = Math.floor(Math.random() * 16).toString(16);
+                e.push(n);
+            }
+            return e.join("");
+        }
+        e.newGuid = t;
+        function n(e, t) {
+            let n = e;
+            while (n.length < t) {
+                n = `0${n}`;
+            }
+            return n;
+        }
+        e.padNumber = n;
+        function i(e) {
+            e = e.replace(/</g, "&lt;");
+            e = e.replace(/>/g, "&gt;");
+            return e;
+        }
+        e.encodeMarkUpCharacters = i;
+        function o(e) {
+            e.sort((function(e, t) {
+                return t.length - e.length;
+            }));
+        }
+        e.sortArrayOfStringByLength = o;
+    })(t = e.String || (e.String = {}));
+    function n(e, t) {
+        return typeof e === "string" ? e : t;
+    }
+    e.getDefaultAnyString = n;
+    function i(e, t) {
+        return Is.definedString(e) ? e : t;
+    }
+    e.getDefaultString = i;
+    function o(e, t) {
+        return Is.definedBoolean(e) ? e : t;
+    }
+    e.getDefaultBoolean = o;
+    function r(e, t) {
+        return Is.definedNumber(e) ? e : t;
+    }
+    e.getDefaultNumber = r;
+    function a(e, t) {
+        return Is.definedFunction(e) ? e : t;
+    }
+    e.getDefaultFunction = a;
+    function l(e, t) {
+        return Is.definedArray(e) ? e : t;
+    }
+    e.getDefaultArray = l;
+    function s(e, t) {
+        return Is.definedObject(e) ? e : t;
+    }
+    e.getDefaultObject = s;
+    function u(e, t) {
+        let n = t;
+        if (Is.definedString(e)) {
+            const i = e.toString().split(" ");
+            if (i.length === 0) {
+                e = t;
             } else {
-              result = logError(_configuration.noCodeAvailableToRenderErrorText);
+                n = i;
             }
-          } else {
-            result = !_configuration.safeMode;
-          }
         } else {
-          result = logError(_configuration.languageNotSupportedErrorText.replace("{{language}}", syntaxLanguage));
+            n = l(e, t);
         }
-      } else {
-        result = logError(_configuration.attributeNotSetErrorText.replace("{{attribute_name}}", _attribute_Name_Language));
-      }
+        return n;
     }
-    return {rendered:result, tabContents:tabContents, tabTitle:tabTitle, tabBindingOptions:tabBindingOptions, syntaxLanguage:syntaxLanguage};
-  }
-  function renderHTML(innerHTML, language, syntaxOptions) {
-    if (!language.isMarkUp) {
-      innerHTML = encodeMarkUpCharacters(innerHTML);
+    e.getDefaultStringOrArray = u;
+    function c(e) {
+        const t = JSON.stringify(e);
+        const n = JSON.parse(t);
+        return n;
     }
-    if (syntaxOptions.highlightComments) {
-      innerHTML = renderElementMultiLineCommentVariables(innerHTML, language, syntaxOptions);
-      innerHTML = renderElementCommentVariables(innerHTML, language, syntaxOptions);
-    }
-    if (syntaxOptions.highlightStrings) {
-      innerHTML = renderElementStringPatternVariables(innerHTML, innerHTML.match(/"((?:\\.|[^"\\])*)"/g), syntaxOptions);
-      if (language.comment !== "'") {
-        innerHTML = renderElementStringPatternVariables(innerHTML, innerHTML.match(/'((?:\\.|[^"\\])*)'/g), syntaxOptions);
-      }
-    }
-    if (!language.isMarkUp) {
-      innerHTML = renderElementKeywords(innerHTML, language, syntaxOptions);
-    } else {
-      innerHTML = replaceMarkUpKeywords(innerHTML, language, syntaxOptions);
-    }
-    innerHTML = renderElementValues(innerHTML, language, syntaxOptions);
-    if (language.isMarkUp) {
-      innerHTML = renderElementAttributes(innerHTML, language, syntaxOptions);
-    }
-    innerHTML = encodeMarkUpCharacters(innerHTML);
-    if (syntaxOptions.highlightComments) {
-      innerHTML = renderElementCommentsFromVariables(innerHTML, language);
-    }
-    if (syntaxOptions.highlightStrings) {
-      innerHTML = renderElementStringQuotesFromVariables(innerHTML);
-    }
-    innerHTML = renderElementVariables(innerHTML, _cached_Keywords);
-    innerHTML = renderElementVariables(innerHTML, _cached_Values);
-    if (language.isMarkUp) {
-      innerHTML = renderElementVariables(innerHTML, _cached_Attributes);
-    }
-    return innerHTML;
-  }
-  function renderElementButtons(syntax, syntaxOptions, syntaxLanguage, syntaxButtonsParsed, innerHTMLCopy) {
-    if (syntaxOptions.showLanguageLabel || syntaxOptions.showCopyButton || syntaxOptions.showPrintButton || syntaxButtonsParsed.parsed) {
-      var buttons = createElement("div", "buttons"), buttonsElements = [];
-      syntax.appendChild(buttons);
-      if (syntaxButtonsParsed.parsed && isDefinedArray(syntaxButtonsParsed.result)) {
-        var customButtons = syntaxButtonsParsed.result, customButtonsLength = customButtons.length;
-        for (var customButtonsIndex = 0; customButtonsIndex < customButtonsLength; customButtonsIndex++) {
-          var customButton = customButtons[customButtonsIndex];
-          if (isDefined(customButton.text) && isDefinedFunction(customButton.onClick)) {
-            renderElementButton(customButton, buttonsElements, buttons, innerHTMLCopy, syntaxOptions);
-          }
+    e.getClonedObject = c;
+})(Data || (Data = {}));
+
+var DomElement;
+
+(e => {
+    function t(e, t = "") {
+        const n = e.toLowerCase();
+        const i = n === "text";
+        let o = i ? document.createTextNode("") : document.createElement(n);
+        if (Is.defined(t)) {
+            o.className = t;
         }
-      }
-      if (syntaxOptions.showCopyButton) {
-        var copyButton = createElement("button", "button");
-        copyButton.style.display = syntaxOptions.buttonsVisible ? "inline-block" : "none";
-        buttons.appendChild(copyButton);
-        setNodeText(copyButton, _configuration.copyButtonText);
-        copyButton.onclick = function() {
-          _parameter_Navigator.clipboard.writeText(innerHTMLCopy);
-          fireCustomTrigger(syntaxOptions.onCopy, innerHTMLCopy);
-        };
-        buttonsElements.push(copyButton);
-      }
-      if (syntaxOptions.showPrintButton) {
-        var printButton = createElement("button", "button");
-        printButton.style.display = syntaxOptions.buttonsVisible ? "inline-block" : "none";
-        buttons.appendChild(printButton);
-        setNodeText(printButton, _configuration.printButtonText);
-        printButton.onclick = function() {
-          var newWindow = window.open(_string.empty, "PRINT", "height=400,width=600"), newElementForPrint = syntax.cloneNode(true), newTitleElement = createElement("div");
-          newElementForPrint.removeChild(newElementForPrint.children[0]);
-          newTitleElement.innerHTML = getFriendlyLanguageName(syntaxLanguage);
-          newWindow.document.write("<html>");
-          newWindow.document.write("<head>");
-          newWindow.document.write("<title>");
-          newWindow.document.write(newTitleElement.innerHTML);
-          newWindow.document.write("</title>");
-          newWindow.document.write("</head>");
-          newWindow.document.write("<body>");
-          newWindow.document.write("<code>");
-          newWindow.document.write("<pre>");
-          newWindow.document.write(newElementForPrint.innerHTML);
-          newWindow.document.write("</pre>");
-          newWindow.document.write("</code>");
-          newWindow.document.write("</body>");
-          newWindow.document.write("</html>");
-          newWindow.document.close();
-          newWindow.focus();
-          newWindow.print();
-          newWindow.close();
-          fireCustomTrigger(syntaxOptions.onPrint, newElementForPrint.innerHTML);
-        };
-        buttonsElements.push(printButton);
-      }
-      if (syntaxOptions.showLanguageLabel) {
-        var languageLabel = createElement("div", "language-label");
-        buttons.appendChild(languageLabel);
-        setNodeText(languageLabel, getFriendlyLanguageName(syntaxLanguage, syntaxOptions.languageLabelCasing));
-      }
-      var buttonsElementsLength = buttonsElements.length;
-      if (buttonsElementsLength > syntaxOptions.maximumButtons) {
-        var openButton = createElement("button", "button button-opener");
-        openButton.innerText = syntaxOptions.buttonsVisible ? _configuration.buttonsCloserText : _configuration.buttonsOpenerText;
-        buttons.insertBefore(openButton, buttons.children[0]);
-        openButton.onclick = function() {
-          var areButtonsVisible = openButton.innerText === _configuration.buttonsCloserText;
-          for (var buttonsElementIndex = 0; buttonsElementIndex < buttonsElementsLength; buttonsElementIndex++) {
-            buttonsElements[buttonsElementIndex].style.display = areButtonsVisible ? "none" : "inline-block";
-          }
-          openButton.innerText = areButtonsVisible ? _configuration.buttonsOpenerText : _configuration.buttonsCloserText;
-          if (areButtonsVisible) {
-            fireCustomTrigger(syntaxOptions.onButtonsClosed);
-          } else {
-            fireCustomTrigger(syntaxOptions.onButtonsOpened);
-          }
-        };
-      } else if (!syntaxOptions.buttonsVisible && buttonsElementsLength <= syntaxOptions.maximumButtons) {
-        for (var buttonsElementIndex = 0; buttonsElementIndex < buttonsElementsLength; buttonsElementIndex++) {
-          buttonsElements[buttonsElementIndex].style.display = "inline-block";
-        }
-      }
+        return o;
     }
-  }
-  function renderElementButton(customButton, buttonsElements, buttons, innerHTMLCopy, syntaxOptions) {
-    var newCustomButton = createElement("button", "button");
-    newCustomButton.style.display = syntaxOptions.buttonsVisible ? "inline-block" : "none";
-    buttons.appendChild(newCustomButton);
-    setNodeText(newCustomButton, customButton.text);
-    newCustomButton.onclick = function() {
-      customButton.onClick(innerHTMLCopy);
+    e.create = t;
+    function n(e, n, i) {
+        if (!i.allowHtmlInTextDisplay) {
+            const i = t("div");
+            i.innerHTML = n;
+            e.innerText = i.innerText;
+        } else {
+            e.innerHTML = n;
+        }
+    }
+    e.setNodeText = n;
+    function i(e) {
+        var t = document.createRange();
+        t.selectNode(e);
+        window.getSelection().removeAllRanges();
+        window.getSelection().addRange(t);
+    }
+    e.selectTextInElement = i;
+})(DomElement || (DomElement = {}));
+
+(() => {
+    let _configuration = {};
+    let _aliases_Rules = {};
+    let _elements = [];
+    let _elements_Original = {};
+    let _cached_Keywords = {};
+    let _cached_Keywords_Count = 0;
+    let _cached_Values = {};
+    let _cached_Values_Count = 0;
+    let _cached_Attributes = {};
+    let _cached_Attributes_Count = 0;
+    let _cached_Strings = {};
+    let _cached_Strings_Count = 0;
+    let _cached_Comments = {};
+    let _cached_Comments_Count = 0;
+    let _languages = {};
+    function render() {
+        const e = _configuration.highlightAllDomElementTypes;
+        const t = e.length;
+        for (let n = 0; n < t; n++) {
+            const t = document.getElementsByTagName(e[n]);
+            const i = [].slice.call(t);
+            const o = i.length;
+            if (o > 0) {
+                fireCustomTriggerEvent(_configuration.events.onBeforeRender);
+            }
+            for (let e = 0; e < o; e++) {
+                const t = i[e];
+                let n = false;
+                if (t.hasAttribute(Constants.SYNTAX_JS_ATTRIBUTE_NAME_LANGUAGE) && t.getAttribute(Constants.SYNTAX_JS_ATTRIBUTE_NAME_LANGUAGE).toLowerCase() === "tabbed") {
+                    const e = [].slice.call(t.children);
+                    const i = e.length;
+                    const o = [];
+                    const r = [];
+                    t.removeAttribute(Constants.SYNTAX_JS_ATTRIBUTE_NAME_LANGUAGE);
+                    t.className = t.className === "" ? "syntax-highlight" : `${t.className} syntax-highlight`;
+                    t.innerHTML = "";
+                    const a = DomElement.create("div", "code custom-scroll-bars");
+                    t.appendChild(a);
+                    const l = DomElement.create("div", "tabs");
+                    a.appendChild(l);
+                    for (let t = 0; t < i; t++) {
+                        const i = renderElement(e[t], a);
+                        if (!i.rendered) {
+                            n = true;
+                        } else {
+                            renderTab(l, o, r, i, t, i.tabBindingOptions, i.syntaxLanguage);
+                        }
+                    }
+                } else {
+                    if (!renderElement(t).rendered) {
+                        n = true;
+                    }
+                }
+                if (n) {
+                    break;
+                }
+            }
+            if (o > 0) {
+                fireCustomTriggerEvent(_configuration.events.onAfterRender);
+            }
+        }
+    }
+    function renderTab(e, t, n, i, o, r, a) {
+        const l = DomElement.create("button", "tab");
+        e.appendChild(l);
+        DomElement.setNodeText(l, i.tabTitle, _configuration);
+        t.push(l);
+        n.push(i.tabContents);
+        l.onclick = function() {
+            if (l.className !== "tab-active") {
+                const e = t.length;
+                const o = n.length;
+                for (let n = 0; n < e; n++) {
+                    t[n].className = "tab";
+                }
+                for (let e = 0; e < o; e++) {
+                    n[e].style.display = "none";
+                }
+                l.className = "tab-active";
+                i.tabContents.style.display = "flex";
+                if (Is.definedObject(r)) {
+                    fireCustomTriggerEvent(r.events.onOpen, a);
+                }
+            }
+        };
+        if (o > 0) {
+            i.tabContents.style.display = "none";
+        } else {
+            l.className = "tab-active";
+        }
+    }
+    function renderElement(e, t = null) {
+        const n = {};
+        n.rendered = true;
+        if (Is.defined(e) && e.hasAttribute(Constants.SYNTAX_JS_ATTRIBUTE_NAME_LANGUAGE) && (!e.hasAttribute(Constants.SYNTAX_JS_ATTRIBUTE_NAME_TAB_CONTENTS) || Is.defined(t))) {
+            n.syntaxLanguage = e.getAttribute(Constants.SYNTAX_JS_ATTRIBUTE_NAME_LANGUAGE);
+            if (Is.definedString(n.syntaxLanguage)) {
+                const i = getLanguage(n.syntaxLanguage);
+                if (Is.defined(i) || n.syntaxLanguage.toLowerCase() === "unknown") {
+                    const o = getObjectFromString(e.getAttribute(Constants.SYNTAX_JS_ATTRIBUTE_NAME_OPTIONS));
+                    const r = getObjectFromString(e.getAttribute(Constants.SYNTAX_JS_ATTRIBUTE_NAME_BUTTONS));
+                    if (o.parsed) {
+                        if (e.innerHTML.trim() !== "") {
+                            let a = e.innerHTML;
+                            const l = getBindingOptions(o.object);
+                            let s = false;
+                            let u = null;
+                            fireCustomTriggerEvent(l.events.onBeforeRenderComplete, e);
+                            if (e.children.length > 0 && e.children[0].nodeName.toLowerCase() === "pre") {
+                                a = e.children[0].innerHTML;
+                                s = true;
+                            }
+                            const c = a.trim();
+                            let g = null;
+                            let d = null;
+                            let f = e.id;
+                            if (!Is.definedString(f)) {
+                                f = Data.String.newGuid();
+                            }
+                            _elements_Original[f] = e.innerHTML;
+                            e.removeAttribute(Constants.SYNTAX_JS_ATTRIBUTE_NAME_LANGUAGE);
+                            e.removeAttribute(Constants.SYNTAX_JS_ATTRIBUTE_NAME_OPTIONS);
+                            e.id = f;
+                            if (!Is.defined(t)) {
+                                e.className = e.className === "" ? "syntax-highlight" : `${e.className} syntax-highlight`;
+                                e.innerHTML = "";
+                                t = DomElement.create("div", "code custom-scroll-bars");
+                                e.appendChild(t);
+                            } else {
+                                if (e.hasAttribute(Constants.SYNTAX_JS_ATTRIBUTE_NAME_TAB_CONTENTS) && e.getAttribute(Constants.SYNTAX_JS_ATTRIBUTE_NAME_TAB_CONTENTS).toLowerCase() !== "true") {
+                                    const t = getObjectFromString(e.getAttribute(Constants.SYNTAX_JS_ATTRIBUTE_NAME_TAB_CONTENTS));
+                                    if (t.parsed && Is.definedObject(t.object)) {
+                                        n.tabBindingOptions = getBindingTabContentOptions(t.object);
+                                        u = n.tabBindingOptions.description;
+                                        if (Is.definedString(n.tabBindingOptions.title)) {
+                                            n.tabTitle = n.tabBindingOptions.title;
+                                        }
+                                    }
+                                } else {
+                                    n.tabTitle = getFriendlyLanguageName(n.syntaxLanguage);
+                                }
+                            }
+                            n.tabContents = DomElement.create("div", "tab-contents");
+                            t.appendChild(n.tabContents);
+                            if (Is.definedString(u)) {
+                                d = DomElement.create("div", "description");
+                                n.tabContents.appendChild(d);
+                                DomElement.setNodeText(d, u, _configuration);
+                            }
+                            if (l.showLineNumbers) {
+                                g = DomElement.create("div", "numbers");
+                                n.tabContents.appendChild(g);
+                            }
+                            const m = DomElement.create("div", "syntax");
+                            n.tabContents.appendChild(m);
+                            renderElementButtons(m, l, n.syntaxLanguage, r, c);
+                            if (n.syntaxLanguage.toLowerCase() !== "unknown") {
+                                a = renderHTML(a, i, l);
+                            } else {
+                                a = Data.String.encodeMarkUpCharacters(a);
+                            }
+                            renderElementCompletedHTML(d, g, m, a, l, s);
+                            fireCustomTriggerEvent(l.events.onRenderComplete, e);
+                            if (!Is.defined(n.tabContents)) {
+                                renderSyntaxCustomTriggers(e, l);
+                            } else {
+                                renderSyntaxCustomTriggers(n.tabContents, l);
+                            }
+                            _elements.push(e);
+                            _cached_Keywords = {};
+                            _cached_Keywords_Count = 0;
+                            _cached_Values = {};
+                            _cached_Values_Count = 0;
+                            _cached_Attributes = {};
+                            _cached_Attributes_Count = 0;
+                            _cached_Strings = {};
+                            _cached_Strings_Count = 0;
+                            _cached_Comments = {};
+                            _cached_Comments_Count = 0;
+                        } else {
+                            n.rendered = logError(_configuration.text.noCodeAvailableToRenderErrorText);
+                        }
+                    } else {
+                        n.rendered = !_configuration.safeMode;
+                    }
+                } else {
+                    n.rendered = logError(_configuration.text.languageNotSupportedErrorText.replace("{{language}}", n.syntaxLanguage));
+                }
+            } else {
+                n.rendered = logError(_configuration.text.attributeNotSetErrorText.replace("{{attribute_name}}", Constants.SYNTAX_JS_ATTRIBUTE_NAME_LANGUAGE));
+            }
+        }
+        return n;
+    }
+    function renderSyntaxCustomTriggers(e, t) {
+        renderElementClickEvents(e, t.events.onKeywordClicked, "keyword-clickable");
+        renderElementClickEvents(e, t.events.onKeywordClicked, "no-highlight-keyword-clickable");
+        renderElementClickEvents(e, t.events.onValueClicked, "value-clickable");
+        renderElementClickEvents(e, t.events.onValueClicked, "no-highlight-value-clickable");
+        renderElementClickEvents(e, t.events.onAttributeClicked, "attribute-clickable");
+        renderElementClickEvents(e, t.events.onAttributeClicked, "no-highlight-attribute-clickable");
+    }
+    function renderHTML(e, t, n) {
+        if (!t.isMarkUp) {
+            e = Data.String.encodeMarkUpCharacters(e);
+        }
+        if (n.highlightComments) {
+            e = renderElementMultiLineCommentVariables(e, t, n);
+            e = renderElementCommentVariables(e, t, n);
+        }
+        if (n.highlightStrings) {
+            e = renderElementStringPatternVariables(e, e.match(/"((?:\\.|[^"\\])*)"/g), n);
+            if (t.comment !== "'") {
+                e = renderElementStringPatternVariables(e, e.match(/'((?:\\.|[^"\\])*)'/g), n);
+            }
+        }
+        if (!t.isMarkUp) {
+            e = renderElementKeywords(e, t, n);
+        } else {
+            e = replaceMarkUpKeywords(e, t, n);
+        }
+        e = renderElementValues(e, t, n);
+        if (t.isMarkUp) {
+            e = renderElementAttributes(e, t, n);
+        }
+        e = Data.String.encodeMarkUpCharacters(e);
+        if (n.highlightComments) {
+            e = renderElementCommentsFromVariables(e, t);
+        }
+        if (n.highlightStrings) {
+            e = renderElementStringQuotesFromVariables(e);
+        }
+        e = renderElementVariables(e, _cached_Keywords);
+        e = renderElementVariables(e, _cached_Values);
+        if (t.isMarkUp) {
+            e = renderElementVariables(e, _cached_Attributes);
+        }
+        return e;
+    }
+    function renderElementButtons(e, t, n, i, o) {
+        if (t.showLanguageLabel || t.showCopyButton || t.showPrintButton || i.parsed) {
+            const r = DomElement.create("div", "buttons");
+            const a = [];
+            e.appendChild(r);
+            if (i.parsed && Is.definedArray(i.object)) {
+                const e = i.object;
+                const n = e.length;
+                for (let i = 0; i < n; i++) {
+                    const n = e[i];
+                    if (Is.defined(n.text) && Is.definedFunction(n.events.onClick)) {
+                        renderElementButton(n, a, r, o, t);
+                    }
+                }
+            }
+            if (t.showCopyButton) {
+                const e = DomElement.create("button", "button");
+                e.style.display = t.buttonsVisible ? "inline-block" : "none";
+                r.appendChild(e);
+                DomElement.setNodeText(e, _configuration.text.copyButtonText, _configuration);
+                e.onclick = function() {
+                    navigator.clipboard.writeText(o);
+                    fireCustomTriggerEvent(t.events.onCopy, o);
+                };
+                a.push(e);
+            }
+            if (t.showPrintButton) {
+                const i = DomElement.create("button", "button");
+                i.style.display = t.buttonsVisible ? "inline-block" : "none";
+                r.appendChild(i);
+                DomElement.setNodeText(i, _configuration.text.printButtonText, _configuration);
+                i.onclick = function() {
+                    const i = window.open("", "PRINT", "height=400,width=600");
+                    const o = e.cloneNode(true);
+                    const r = DomElement.create("div");
+                    o.removeChild(o.children[0]);
+                    r.innerHTML = getFriendlyLanguageName(n);
+                    i.document.write("<html>");
+                    i.document.write("<head>");
+                    i.document.write("<title>");
+                    i.document.write(r.innerHTML);
+                    i.document.write("</title>");
+                    i.document.write("</head>");
+                    i.document.write("<body>");
+                    i.document.write("<code>");
+                    i.document.write("<pre>");
+                    i.document.write(o.innerHTML);
+                    i.document.write("</pre>");
+                    i.document.write("</code>");
+                    i.document.write("</body>");
+                    i.document.write("</html>");
+                    i.document.close();
+                    i.focus();
+                    i.print();
+                    i.close();
+                    fireCustomTriggerEvent(t.events.onPrint, o.innerHTML);
+                };
+                a.push(i);
+            }
+            if (t.showLanguageLabel) {
+                const e = DomElement.create("div", "language-label");
+                r.appendChild(e);
+                DomElement.setNodeText(e, getFriendlyLanguageName(n, t.languageLabelCasing), _configuration);
+            }
+            const l = a.length;
+            if (l > t.maximumButtons) {
+                const e = DomElement.create("button", "button button-opener");
+                e.innerText = t.buttonsVisible ? _configuration.text.buttonsCloserText : _configuration.text.buttonsOpenerText;
+                r.insertBefore(e, r.children[0]);
+                e.onclick = function() {
+                    const n = e.innerText === _configuration.text.buttonsCloserText;
+                    for (let e = 0; e < l; e++) {
+                        a[e].style.display = n ? "none" : "inline-block";
+                    }
+                    e.innerText = n ? _configuration.text.buttonsOpenerText : _configuration.text.buttonsCloserText;
+                    if (n) {
+                        fireCustomTriggerEvent(t.events.onButtonsClosed);
+                    } else {
+                        fireCustomTriggerEvent(t.events.onButtonsOpened);
+                    }
+                };
+            } else if (!t.buttonsVisible && l <= t.maximumButtons) {
+                for (let e = 0; e < l; e++) {
+                    a[e].style.display = "inline-block";
+                }
+            }
+        }
+    }
+    function renderElementButton(e, t, n, i, o) {
+        const r = DomElement.create("button", "button");
+        r.style.display = o.buttonsVisible ? "inline-block" : "none";
+        n.appendChild(r);
+        DomElement.setNodeText(r, e.text, _configuration);
+        r.onclick = function() {
+            e.events.onClick(i);
+        };
+        if (Is.defined(e.className)) {
+            r.className += " " + e.className;
+        }
+        t.push(r);
+    }
+    function renderElementCommentVariables(e, t, n) {
+        const i = t.comment;
+        if (Is.definedString(i)) {
+            const t = e.match(new RegExp(`${i}.*`, "g"));
+            if (t !== null) {
+                const i = t.length;
+                for (let o = 0; o < i; o++) {
+                    const i = t[o];
+                    const r = `$C{${_cached_Comments_Count.toString()}}`;
+                    _cached_Comments[r] = `<span class="comment">${i}</span>`;
+                    _cached_Comments_Count++;
+                    e = e.replace(i, r);
+                    fireCustomTriggerEvent(n.events.onCommentRender, i);
+                }
+            }
+        }
+        return e;
+    }
+    function renderElementMultiLineCommentVariables(e, t, n) {
+        const i = t.multiLineComment;
+        if (Is.definedArray(i) && i.length === 2) {
+            let t = 0;
+            let o = 0;
+            while (t >= 0 && o >= 0) {
+                t = e.indexOf(i[0], o);
+                if (t > -1) {
+                    o = e.indexOf(i[1], t + i[0].length);
+                    if (o > -1) {
+                        const r = e.substring(t, o + i[1].length);
+                        const a = r.split("\n");
+                        const l = a.length;
+                        const s = l === 1 ? "comment" : "multi-line-comment";
+                        for (let t = 0; t < l; t++) {
+                            const n = `$C{${_cached_Comments_Count.toString()}}`;
+                            const i = a[t];
+                            _cached_Comments[n] = `<span class="${s}">${i}</span>`;
+                            _cached_Comments_Count++;
+                            e = e.replace(i, n);
+                        }
+                        fireCustomTriggerEvent(n.events.onCommentRender, r);
+                    }
+                }
+            }
+        }
+        return e;
+    }
+    function renderElementStringPatternVariables(e, t, n) {
+        if (t !== null) {
+            const i = t.length;
+            for (let o = 0; o < i; o++) {
+                const i = t[o];
+                const r = i.split("\n");
+                const a = r.length;
+                const l = a === 1 ? "string" : "multi-line-string";
+                for (let t = 0; t < a; t++) {
+                    const n = r[t];
+                    const i = `$S{${_cached_Strings_Count.toString()}}`;
+                    _cached_Strings[i] = `<span class="${l}">${n}</span>`;
+                    _cached_Strings_Count++;
+                    e = e.replace(n, i);
+                }
+                fireCustomTriggerEvent(n.events.onStringRender, i);
+            }
+        }
+        return e;
+    }
+    function renderElementKeywords(e, t, n) {
+        const i = Data.getDefaultStringOrArray(t.keywords, []);
+        const o = i.length;
+        const r = t.caseSensitive;
+        const a = getKeywordCasing(t.keywordsCasing);
+        Data.String.sortArrayOfStringByLength(i);
+        for (let l = 0; l < o; l++) {
+            const o = i[l];
+            const s = getDisplayTextTestCasing(o, a);
+            const u = `KW${_cached_Keywords_Count.toString()};`;
+            let c = null;
+            const g = r ? "g" : "gi";
+            const d = new RegExp(getWordRegEx(o, t), g);
+            if (n.highlightKeywords) {
+                if (Is.definedFunction(n.events.onKeywordClicked)) {
+                    c = `<span class="keyword-clickable">${s}</span>`;
+                    e = e.replace(d, u);
+                } else {
+                    c = `<span class="keyword">${s}</span>`;
+                    e = e.replace(d, u);
+                }
+            } else {
+                if (Is.definedFunction(n.events.onKeywordClicked)) {
+                    c = `<span class="no-highlight-keyword-clickable">${s}</span>`;
+                    e = e.replace(d, u);
+                }
+            }
+            _cached_Keywords[u] = c;
+            _cached_Keywords_Count++;
+            fireCustomTriggerEvent(n.events.onKeywordRender, o);
+        }
+        return e;
+    }
+    function replaceMarkUpKeywords(e, t, n) {
+        const i = Data.getDefaultStringOrArray(t.keywords, []);
+        const o = t.caseSensitive;
+        const r = getKeywordCasing(t.keywordsCasing);
+        const a = /(<([^>]+)>)/gi;
+        const l = o ? "g" : "gi";
+        let s = a.exec(e);
+        while (s) {
+            if (s.index === a.lastIndex) {
+                a.lastIndex++;
+            }
+            let o = s[0];
+            o = o.replace("</", "").replace("<", "").replace(">", "");
+            o = o.split(" ")[0];
+            if (i.indexOf(o) > -1) {
+                const i = `KW${_cached_Keywords_Count.toString()};`;
+                const a = new RegExp(getWordRegEx(o, t), l);
+                let s = null;
+                let u = getDisplayTextTestCasing(o, r);
+                if (n.highlightKeywords) {
+                    if (Is.definedFunction(n.events.onKeywordClicked)) {
+                        s = `<span class="keyword-clickable">${u}</span>`;
+                    } else {
+                        s = `<span class="keyword">${u}</span>`;
+                    }
+                } else {
+                    if (Is.definedFunction(n.events.onKeywordClicked)) {
+                        s = `<span class="no-highlight-keyword-clickable">${u}</span>`;
+                    }
+                }
+                e = e.replace(a, i);
+                _cached_Keywords[i] = s;
+                _cached_Keywords_Count++;
+            }
+            s = a.exec(e);
+        }
+        return e;
+    }
+    function renderElementValues(e, t, n) {
+        const i = Data.getDefaultStringOrArray(t.values, []);
+        const o = i.length;
+        const r = t.caseSensitive;
+        Data.String.sortArrayOfStringByLength(i);
+        for (let a = 0; a < o; a++) {
+            const o = i[a];
+            const l = `VAL${_cached_Values_Count.toString()};`;
+            let s = null;
+            const u = r ? "g" : "gi";
+            const c = new RegExp(getWordRegEx(o, t), u);
+            if (n.highlightValues) {
+                if (Is.definedFunction(n.events.onValueClicked)) {
+                    s = `<span class="value-clickable">${o}</span>`;
+                    e = e.replace(c, l);
+                } else {
+                    s = `<span class="value">${o}</span>`;
+                    e = e.replace(c, l);
+                }
+            } else {
+                if (Is.definedFunction(n.events.onValueClicked)) {
+                    s = `<span class="no-highlight-value-clickable">${o}</span>`;
+                    e = e.replace(c, l);
+                }
+            }
+            _cached_Values[l] = s;
+            _cached_Values_Count++;
+            fireCustomTriggerEvent(n.events.onValueRender, o);
+        }
+        return e;
+    }
+    function renderElementAttributes(e, t, n) {
+        const i = Data.getDefaultStringOrArray(t.attributes, []);
+        const o = i.length;
+        const r = t.caseSensitive;
+        Data.String.sortArrayOfStringByLength(i);
+        for (let a = 0; a < o; a++) {
+            const o = i[a];
+            const l = `ATTR${_cached_Attributes_Count.toString()};`;
+            let s = null;
+            let u = r ? "g" : "gi";
+            const c = new RegExp(getWordRegEx(o, t), u);
+            if (n.highlightAttributes) {
+                if (Is.definedFunction(n.events.onAttributeClicked)) {
+                    s = `<span class="attribute-clickable">${o}</span>`;
+                    e = e.replace(c, l);
+                } else {
+                    s = `<span class="attribute">${o}</span>`;
+                    e = e.replace(c, l);
+                }
+            } else {
+                if (Is.definedFunction(n.events.onAttributeClicked)) {
+                    s = `<span class="no-highlight-attribute-clickable">${o}</span>`;
+                    e = e.replace(c, l);
+                }
+            }
+            _cached_Attributes[l] = s;
+            _cached_Attributes_Count++;
+            fireCustomTriggerEvent(n.events.onAttributeRender, o);
+        }
+        return e;
+    }
+    function renderElementStringQuotesFromVariables(e) {
+        for (let t in _cached_Strings) {
+            if (_cached_Strings.hasOwnProperty(t)) {
+                e = e.replace(t, _cached_Strings[t]);
+            }
+        }
+        return e;
+    }
+    function renderElementCommentsFromVariables(e, t) {
+        const n = t.multiLineComment;
+        let i = null;
+        let o = null;
+        if (Is.definedArray(n) && n.length === 2) {
+            i = Data.String.encodeMarkUpCharacters(n[0]);
+            o = Data.String.encodeMarkUpCharacters(n[1]);
+        }
+        for (let r in _cached_Comments) {
+            if (_cached_Comments.hasOwnProperty(r)) {
+                let a = _cached_Comments[r];
+                if (t.isMarkUp && Is.definedString(i) && Is.definedString(o)) {
+                    a = a.replace(n[0], i);
+                    a = a.replace(n[1], o);
+                }
+                e = e.replace(r, a);
+            }
+        }
+        return e;
+    }
+    function renderElementVariables(e, t) {
+        for (let n in t) {
+            if (t.hasOwnProperty(n)) {
+                const i = new RegExp(n, "g");
+                e = e.replace(i, t[n]);
+            }
+        }
+        return e;
+    }
+    function renderElementCompletedHTML(e, t, n, i, o, r) {
+        const a = i.split("\n");
+        const l = a.length;
+        const s = l.toString().length;
+        let u = t;
+        let c = n;
+        let g = null;
+        let d = 1;
+        let f = false;
+        if (r) {
+            c = DomElement.create("pre");
+            n.appendChild(c);
+            if (Is.defined(t)) {
+                u = DomElement.create("pre");
+                t.appendChild(u);
+            }
+        }
+        if (o.doubleClickToSelectAll) {
+            if (Is.defined(e)) {
+                e.ondblclick = function() {
+                    DomElement.selectTextInElement(c);
+                };
+            }
+            if (Is.defined(t)) {
+                t.ondblclick = function() {
+                    DomElement.selectTextInElement(c);
+                };
+            }
+            n.ondblclick = function() {
+                DomElement.selectTextInElement(c);
+            };
+        }
+        for (let e = 0; e < l; e++) {
+            let t = a[e];
+            if (t.trim() !== "" && g === null) {
+                g = t.substring(0, t.match(/^\s*/)[0].length);
+            }
+            if (e !== 0 && e !== l - 1 || t.trim() !== "") {
+                if (t.trim() !== "" || !o.removeBlankLines) {
+                    const e = t.trim() === "";
+                    if (e && !f || !o.removeDuplicateBlankLines || !e) {
+                        f = e;
+                        if (Is.defined(u)) {
+                            const e = DomElement.create("p");
+                            if (o.padLineNumbers) {
+                                e.innerText = Data.String.padNumber(d.toString(), s);
+                            } else {
+                                e.innerText = d.toString();
+                            }
+                            u.appendChild(e);
+                            d++;
+                        }
+                        if (g !== null) {
+                            t = t.replace(g, "");
+                            if (!r) {
+                                const e = t.match(/^\s*/)[0].length;
+                                const n = t.substring(0, e);
+                                const i = Array(e).join("&nbsp;");
+                                t = t.replace(n, i);
+                            }
+                        }
+                        const n = DomElement.create("p");
+                        n.innerHTML = t.trim() === "" ? "<br>" : t;
+                        c.appendChild(n);
+                    }
+                }
+            }
+        }
+    }
+    function renderElementClickEvents(e, t, n) {
+        if (Is.definedFunction(t)) {
+            const i = e.getElementsByClassName(n);
+            const o = [].slice.call(i);
+            const r = o.length;
+            for (let e = 0; e < r; e++) {
+                renderElementClickEvent(o[e], t);
+            }
+        }
+    }
+    function renderElementClickEvent(e, t) {
+        const n = e.innerText;
+        e.onclick = function() {
+            t(n);
+        };
+    }
+    function getFriendlyLanguageName(e, t = null) {
+        let n = null;
+        const i = getLanguage(e);
+        if (Is.defined(i) && Is.definedString(i.friendlyName)) {
+            n = i.friendlyName;
+        } else {
+            n = e;
+        }
+        n = getDisplayTextTestCasing(n, t);
+        return n;
+    }
+    function getLanguage(e) {
+        let t = null;
+        let n = e.toLowerCase();
+        if (_languages.hasOwnProperty(n)) {
+            t = _languages[n];
+        } else {
+            if (_aliases_Rules.hasOwnProperty(n)) {
+                n = _aliases_Rules[n];
+                if (_languages.hasOwnProperty(n)) {
+                    t = _languages[n];
+                }
+            }
+        }
+        return t;
+    }
+    function getKeywordCasing(e) {
+        if (Is.definedString(e)) {
+            e = e.toLowerCase().trim();
+        }
+        return e;
+    }
+    function getDisplayTextTestCasing(e, t) {
+        if (t === "uppercase") {
+            e = e.toUpperCase();
+        } else if (t === "lowercase") {
+            e = e.toLowerCase();
+        }
+        return e;
+    }
+    function getWordRegEx(e, t) {
+        let n = `(?<=^|[^-])\\b${e}\\b(?=[^-]|$)`;
+        if (Is.definedString(t.wordRegEx)) {
+            n = t.wordRegEx.replace("%word%", e);
+        }
+        return n;
+    }
+    function getBindingOptions(e) {
+        let t = Data.getDefaultObject(e, {});
+        t = buildBindingAttributeOptions(t);
+        t = buildBindingAttributeOptionCustomTriggers(t);
+        return t;
+    }
+    function buildBindingAttributeOptions(e) {
+        e.showCopyButton = Data.getDefaultBoolean(e.showCopyButton, true);
+        e.removeBlankLines = Data.getDefaultBoolean(e.removeBlankLines, false);
+        e.showLineNumbers = Data.getDefaultBoolean(e.showLineNumbers, true);
+        e.highlightKeywords = Data.getDefaultBoolean(e.highlightKeywords, true);
+        e.highlightValues = Data.getDefaultBoolean(e.highlightValues, true);
+        e.highlightAttributes = Data.getDefaultBoolean(e.highlightAttributes, true);
+        e.highlightStrings = Data.getDefaultBoolean(e.highlightStrings, true);
+        e.highlightComments = Data.getDefaultBoolean(e.highlightComments, true);
+        e.showLanguageLabel = Data.getDefaultBoolean(e.showLanguageLabel, true);
+        e.showPrintButton = Data.getDefaultBoolean(e.showPrintButton, true);
+        e.padLineNumbers = Data.getDefaultBoolean(e.padLineNumbers, false);
+        e.removeDuplicateBlankLines = Data.getDefaultBoolean(e.removeDuplicateBlankLines, true);
+        e.doubleClickToSelectAll = Data.getDefaultBoolean(e.doubleClickToSelectAll, true);
+        e.languageLabelCasing = Data.getDefaultString(e.languageLabelCasing, "uppercase");
+        e.buttonsVisible = Data.getDefaultBoolean(e.buttonsVisible, true);
+        e.maximumButtons = Data.getDefaultNumber(e.maximumButtons, 2);
+        return e;
+    }
+    function buildBindingAttributeOptionCustomTriggers(e) {
+        e.events = Data.getDefaultObject(e.events, {});
+        e.events.onCopy = Data.getDefaultFunction(e.events.onCopy, null);
+        e.events.onRenderComplete = Data.getDefaultFunction(e.events.onRenderComplete, null);
+        e.events.onKeywordClicked = Data.getDefaultFunction(e.events.onKeywordClicked, null);
+        e.events.onValueClicked = Data.getDefaultFunction(e.events.onValueClicked, null);
+        e.events.onAttributeClicked = Data.getDefaultFunction(e.events.onAttributeClicked, null);
+        e.events.onKeywordRender = Data.getDefaultFunction(e.events.onKeywordRender, null);
+        e.events.onValueRender = Data.getDefaultFunction(e.events.onValueRender, null);
+        e.events.onAttributeRender = Data.getDefaultFunction(e.events.onAttributeRender, null);
+        e.events.onStringRender = Data.getDefaultFunction(e.events.onStringRender, null);
+        e.events.onCommentRender = Data.getDefaultFunction(e.events.onCommentRender, null);
+        e.events.onPrint = Data.getDefaultFunction(e.events.onPrint, null);
+        e.events.onBeforeRenderComplete = Data.getDefaultFunction(e.events.onBeforeRenderComplete, null);
+        e.events.onButtonsOpened = Data.getDefaultFunction(e.events.onButtonsOpened, null);
+        e.events.onButtonsClosed = Data.getDefaultFunction(e.events.onButtonsClosed, null);
+        return e;
+    }
+    function getBindingTabContentOptions(e) {
+        let t = Data.getDefaultObject(e, {});
+        t = buildBindingTabContentAttributeOptionStrings(t);
+        t = buildBindingTabContentAttributeOptionCustomTriggers(t);
+        return t;
+    }
+    function buildBindingTabContentAttributeOptionStrings(e) {
+        e.title = Data.getDefaultString(e.title, null);
+        e.description = Data.getDefaultString(e.description, null);
+        return e;
+    }
+    function buildBindingTabContentAttributeOptionCustomTriggers(e) {
+        e.events = Data.getDefaultFunction(e.events, {});
+        e.events.onOpen = Data.getDefaultFunction(e.events.onOpen, null);
+        return e;
+    }
+    function fireCustomTriggerEvent(e, ...t) {
+        if (Is.definedFunction(e)) {
+            e.apply(null, [].slice.call(t, 0));
+        }
+    }
+    function getObjectFromString(objectString) {
+        const result = {
+            parsed: true,
+            object: null
+        };
+        try {
+            if (Is.definedString(objectString)) {
+                result.object = JSON.parse(objectString);
+            }
+        } catch (e1) {
+            try {
+                result.object = eval(`(${objectString})`);
+                if (Is.definedFunction(result.object)) {
+                    result.object = result.object();
+                }
+            } catch (e) {
+                if (!_configuration.safeMode) {
+                    logError(_configuration.text.objectErrorText.replace("{{error_1}}", e1.message).replace("{{error_2}}", e.message));
+                    result.parsed = false;
+                }
+                result.object = null;
+            }
+        }
+        return result;
+    }
+    function logError(e) {
+        let t = true;
+        if (!_configuration.safeMode) {
+            console.error(e);
+            t = false;
+        }
+        return t;
+    }
+    function buildDefaultConfiguration(e = null) {
+        _configuration = Data.getDefaultObject(e, {});
+        _configuration.safeMode = Data.getDefaultBoolean(_configuration.safeMode, true);
+        _configuration.highlightAllDomElementTypes = Data.getDefaultStringOrArray(_configuration.highlightAllDomElementTypes, [ "div", "code" ]);
+        _configuration.allowHtmlInTextDisplay = Data.getDefaultBoolean(_configuration.allowHtmlInTextDisplay, true);
+        buildDefaultConfigurationStrings();
+        buildDefaultConfigurationCustomTriggers();
+    }
+    function buildDefaultConfigurationStrings() {
+        _configuration.text = Data.getDefaultObject(_configuration.text, {});
+        _configuration.text.buttonsOpenerText = Data.getDefaultAnyString(_configuration.text.buttonsOpenerText, "←");
+        _configuration.text.buttonsCloserText = Data.getDefaultAnyString(_configuration.text.buttonsCloserText, "→");
+        _configuration.text.objectErrorText = Data.getDefaultAnyString(_configuration.text.objectErrorText, "Errors in object: {{error_1}}, {{error_2}}");
+        _configuration.text.attributeNotSetErrorText = Data.getDefaultAnyString(_configuration.text.attributeNotSetErrorText, "The attribute '{{attribute_name}}' has not been set correctly.");
+        _configuration.text.languageNotSupportedErrorText = Data.getDefaultAnyString(_configuration.text.languageNotSupportedErrorText, "Language '{{language}}' is not supported.");
+        _configuration.text.noCodeAvailableToRenderErrorText = Data.getDefaultAnyString(_configuration.text.noCodeAvailableToRenderErrorText, "No code is available to render.");
+        _configuration.text.copyButtonText = Data.getDefaultAnyString(_configuration.text.copyButtonText, "Copy");
+        _configuration.text.printButtonText = Data.getDefaultAnyString(_configuration.text.printButtonText, "Print");
+    }
+    function buildDefaultConfigurationCustomTriggers() {
+        _configuration.events = Data.getDefaultObject(_configuration.events, {});
+        _configuration.events.onBeforeRender = Data.getDefaultFunction(_configuration.events.onBeforeRender, null);
+        _configuration.events.onAfterRender = Data.getDefaultFunction(_configuration.events.onAfterRender, null);
+    }
+    const _public = {
+        highlightAll: function() {
+            render();
+            return _public;
+        },
+        highlightElement: function(e) {
+            let t = e;
+            if (Is.definedString(t)) {
+                t = document.getElementById(t);
+            }
+            if (Is.defined(t)) {
+                renderElement(t);
+            }
+            return _public;
+        },
+        getElementsHighlighted: function() {
+            return [].slice.call(_elements);
+        },
+        getCode: function(e) {
+            let t = null;
+            if (_elements_Original.hasOwnProperty(e)) {
+                t = _elements_Original[e];
+            }
+            return t;
+        },
+        destroyAll: function() {
+            for (let e in _elements_Original) {
+                if (_elements_Original.hasOwnProperty(e)) {
+                    const t = document.getElementById(e);
+                    if (Is.defined(t)) {
+                        t.innerHTML = _elements_Original[e];
+                    }
+                }
+            }
+            _elements_Original = {};
+            _elements = [];
+            return _public;
+        },
+        destroy: function(e) {
+            if (_elements_Original.hasOwnProperty(e.toLowerCase())) {
+                const t = document.getElementById(e);
+                if (Is.defined(t)) {
+                    t.innerHTML = _elements_Original[e.toLowerCase()];
+                    delete _elements_Original[e.toLowerCase()];
+                    const n = _elements.length;
+                    for (let t = 0; t < n; t++) {
+                        if (_elements[t].id === e) {
+                            delete _elements[t];
+                            break;
+                        }
+                    }
+                }
+            }
+            return _public;
+        },
+        addLanguage: function(e, t, n = true) {
+            let i = false;
+            const o = e.toLowerCase();
+            if (!_languages.hasOwnProperty(o)) {
+                _languages[o] = t;
+                i = true;
+                if (n) {
+                    render();
+                }
+            }
+            return i;
+        },
+        removeLanguage: function(e) {
+            let t = false;
+            const n = e.toLowerCase();
+            if (_languages.hasOwnProperty(n)) {
+                delete _languages[n];
+                for (let e in _aliases_Rules) {
+                    if (_aliases_Rules.hasOwnProperty(e) && _aliases_Rules[e] === n) {
+                        delete _aliases_Rules[e];
+                    }
+                }
+                t = true;
+            }
+            return t;
+        },
+        getLanguage: function(e) {
+            let t = null;
+            const n = e.toLowerCase();
+            if (_languages.hasOwnProperty(n)) {
+                t = Data.getClonedObject(n);
+            }
+            return t;
+        },
+        getLanguages: function() {
+            return Data.getClonedObject(_languages);
+        },
+        addAlias: function(e, t, n = true) {
+            let i = false;
+            if (_languages.hasOwnProperty(t.toLowerCase()) && !_aliases_Rules.hasOwnProperty(e.toLowerCase())) {
+                _aliases_Rules[e.toLowerCase()] = t.toLowerCase();
+                i = true;
+                if (n) {
+                    render();
+                }
+            }
+            return i;
+        },
+        removeAlias: function(e) {
+            let t = false;
+            if (_aliases_Rules.hasOwnProperty(e.toLowerCase())) {
+                delete _aliases_Rules[e.toLowerCase()];
+                t = true;
+            }
+            return t;
+        },
+        getAlias: function(e) {
+            let t = null;
+            if (_aliases_Rules.hasOwnProperty(e.toLowerCase())) {
+                t = _aliases_Rules[e.toLowerCase()];
+            }
+            return t;
+        },
+        getAliases: function() {
+            return Data.getClonedObject(_aliases_Rules);
+        },
+        setConfiguration: function(e) {
+            if (Is.definedObject(e)) {
+                let t = false;
+                const n = _configuration;
+                for (let i in e) {
+                    if (e.hasOwnProperty(i) && _configuration.hasOwnProperty(i) && n[i] !== e[i]) {
+                        n[i] = e[i];
+                        t = true;
+                    }
+                }
+                if (t) {
+                    buildDefaultConfiguration(n);
+                }
+            }
+            return _public;
+        },
+        getVersion: function() {
+            return "3.0.0";
+        }
     };
-    if (isDefined(customButton.className)) {
-      newCustomButton.className += _string.space + customButton.className;
-    }
-    buttonsElements.push(newCustomButton);
-  }
-  function renderElementCommentVariables(innerHTML, language, syntaxOptions) {
-    var lookup = language.comment;
-    if (isDefinedString(lookup)) {
-      var patternItems = innerHTML.match(new RegExp(lookup + ".*", "g"));
-      if (patternItems !== null) {
-        var patternItemsLength = patternItems.length;
-        for (var patternItemsIndex = 0; patternItemsIndex < patternItemsLength; patternItemsIndex++) {
-          var comment = patternItems[patternItemsIndex], commentVariable = "$C{" + _cached_Comments_Count.toString() + "}";
-          _cached_Comments[commentVariable] = '<span class="comment">' + comment + "</span>";
-          _cached_Comments_Count++;
-          innerHTML = innerHTML.replace(comment, commentVariable);
-          fireCustomTrigger(syntaxOptions.onCommentRender, comment);
+    (() => {
+        buildDefaultConfiguration();
+        document.addEventListener("DOMContentLoaded", (function() {
+            render();
+        }));
+        if (!Is.defined(window.$syntax)) {
+            window.$syntax = _public;
         }
-      }
-    }
-    return innerHTML;
-  }
-  function renderElementMultiLineCommentVariables(innerHTML, language, syntaxOptions) {
-    var multiLineComment = language.multiLineComment;
-    if (isDefinedArray(multiLineComment) && multiLineComment.length === 2) {
-      var startIndex = 0, endIndex = 0;
-      while (startIndex >= 0 && endIndex >= 0) {
-        startIndex = innerHTML.indexOf(multiLineComment[0], endIndex);
-        if (startIndex > -1) {
-          endIndex = innerHTML.indexOf(multiLineComment[1], startIndex + multiLineComment[0].length);
-          if (endIndex > -1) {
-            var comment = innerHTML.substring(startIndex, endIndex + multiLineComment[1].length), commentLines = comment.split(_string.newLine), commentLinesLength = commentLines.length, commentCssClass = commentLinesLength === 1 ? "comment" : "multi-line-comment";
-            for (var commentLineIndex = 0; commentLineIndex < commentLinesLength; commentLineIndex++) {
-              var commentVariable = "$C{" + _cached_Comments_Count.toString() + "}", commentLine = commentLines[commentLineIndex];
-              _cached_Comments[commentVariable] = '<span class="' + commentCssClass + '">' + commentLine + "</span>";
-              _cached_Comments_Count++;
-              innerHTML = innerHTML.replace(commentLine, commentVariable);
-            }
-            fireCustomTrigger(syntaxOptions.onCommentRender, comment);
-          }
-        }
-      }
-    }
-    return innerHTML;
-  }
-  function renderElementStringPatternVariables(innerHTML, patternItems, syntaxOptions) {
-    if (patternItems !== null) {
-      var patternItemsLength = patternItems.length;
-      for (var patternItemsIndex = 0; patternItemsIndex < patternItemsLength; patternItemsIndex++) {
-        var string = patternItems[patternItemsIndex], stringLines = string.split(_string.newLine), stringLinesLength = stringLines.length, stringCssClass = stringLinesLength === 1 ? "string" : "multi-line-string";
-        for (var stringLineIndex = 0; stringLineIndex < stringLinesLength; stringLineIndex++) {
-          var stringLine = stringLines[stringLineIndex], stringVariable = "$S{" + _cached_Strings_Count.toString() + "}";
-          _cached_Strings[stringVariable] = '<span class="' + stringCssClass + '">' + stringLine + "</span>";
-          _cached_Strings_Count++;
-          innerHTML = innerHTML.replace(stringLine, stringVariable);
-        }
-        fireCustomTrigger(syntaxOptions.onStringRender, string);
-      }
-    }
-    return innerHTML;
-  }
-  function renderElementKeywords(innerHTML, language, syntaxOptions) {
-    var keywords = getDefaultStringOrArray(language.keywords, []), keywordsLength = keywords.length, caseSensitive = language.caseSensitive, keywordsCasing = getKeywordCasing(language.keywordsCasing);
-    sortArrayOfStringByLength(keywords);
-    for (var keywordIndex = 0; keywordIndex < keywordsLength; keywordIndex++) {
-      var keyword = keywords[keywordIndex], keywordDisplay = getDisplayTextTestCasing(keyword, keywordsCasing), keywordVariable = "KW" + _cached_Keywords_Count.toString() + ";", keywordReplacement = null, regExFlags = caseSensitive ? "g" : "gi", regEx = new RegExp(getWordRegEx(keyword, language), regExFlags);
-      if (syntaxOptions.highlightKeywords) {
-        if (isDefinedFunction(syntaxOptions.onKeywordClicked)) {
-          keywordReplacement = '<span class="keyword-clickable">' + keywordDisplay + "</span>";
-          innerHTML = innerHTML.replace(regEx, keywordVariable);
-        } else {
-          keywordReplacement = '<span class="keyword">' + keywordDisplay + "</span>";
-          innerHTML = innerHTML.replace(regEx, keywordVariable);
-        }
-      } else {
-        if (isDefinedFunction(syntaxOptions.onKeywordClicked)) {
-          keywordReplacement = '<span class="no-highlight-keyword-clickable">' + keywordDisplay + "</span>";
-          innerHTML = innerHTML.replace(regEx, keywordVariable);
-        }
-      }
-      _cached_Keywords[keywordVariable] = keywordReplacement;
-      _cached_Keywords_Count++;
-      fireCustomTrigger(syntaxOptions.onKeywordRender, keyword);
-    }
-    return innerHTML;
-  }
-  function replaceMarkUpKeywords(innerHTML, language, syntaxOptions) {
-    var keywords = getDefaultStringOrArray(language.keywords, []), caseSensitive = language.caseSensitive, keywordsCasing = getKeywordCasing(language.keywordsCasing);
-    var regEx = /(<([^>]+)>)/ig, regExFlags = caseSensitive ? "g" : "gi", regExResult = regEx.exec(innerHTML);
-    while (regExResult) {
-      if (regExResult.index === regEx.lastIndex) {
-        regEx.lastIndex++;
-      }
-      var tag = regExResult[0];
-      tag = tag.replace("</", _string.empty).replace("<", _string.empty).replace(">", _string.empty);
-      tag = tag.split(_string.space)[0];
-      if (keywords.indexOf(tag) > -1) {
-        var keywordVariable = "KW" + _cached_Keywords_Count.toString() + ";", regExReplace = new RegExp(getWordRegEx(tag, language), regExFlags), keywordReplacement = null, replacementTagDisplay = getDisplayTextTestCasing(tag, keywordsCasing);
-        if (syntaxOptions.highlightKeywords) {
-          if (isDefinedFunction(syntaxOptions.onKeywordClicked)) {
-            keywordReplacement = '<span class="keyword-clickable">' + replacementTagDisplay + "</span>";
-          } else {
-            keywordReplacement = '<span class="keyword">' + replacementTagDisplay + "</span>";
-          }
-        } else {
-          if (isDefinedFunction(syntaxOptions.onKeywordClicked)) {
-            keywordReplacement = '<span class="no-highlight-keyword-clickable">' + replacementTagDisplay + "</span>";
-          }
-        }
-        innerHTML = innerHTML.replace(regExReplace, keywordVariable);
-        _cached_Keywords[keywordVariable] = keywordReplacement;
-        _cached_Keywords_Count++;
-      }
-      regExResult = regEx.exec(innerHTML);
-    }
-    return innerHTML;
-  }
-  function renderElementValues(innerHTML, language, syntaxOptions) {
-    var values = getDefaultStringOrArray(language.values, []), valuesLength = values.length, caseSensitive = language.caseSensitive;
-    sortArrayOfStringByLength(values);
-    for (var valueIndex = 0; valueIndex < valuesLength; valueIndex++) {
-      var value = values[valueIndex], valueVariable = "VAL" + _cached_Values_Count.toString() + ";", valueReplacement = null, regExFlags = caseSensitive ? "g" : "gi", regEx = new RegExp(getWordRegEx(value, language), regExFlags);
-      if (syntaxOptions.highlightValues) {
-        if (isDefinedFunction(syntaxOptions.onValueClicked)) {
-          valueReplacement = '<span class="value-clickable">' + value + "</span>";
-          innerHTML = innerHTML.replace(regEx, valueVariable);
-        } else {
-          valueReplacement = '<span class="value">' + value + "</span>";
-          innerHTML = innerHTML.replace(regEx, valueVariable);
-        }
-      } else {
-        if (isDefinedFunction(syntaxOptions.onValueClicked)) {
-          valueReplacement = '<span class="no-highlight-value-clickable">' + value + "</span>";
-          innerHTML = innerHTML.replace(regEx, valueVariable);
-        }
-      }
-      _cached_Values[valueVariable] = valueReplacement;
-      _cached_Values_Count++;
-      fireCustomTrigger(syntaxOptions.onValueRender, value);
-    }
-    return innerHTML;
-  }
-  function renderElementAttributes(innerHTML, language, syntaxOptions) {
-    var attributes = getDefaultStringOrArray(language.attributes, []), attributesLength = attributes.length, caseSensitive = language.caseSensitive;
-    sortArrayOfStringByLength(attributes);
-    for (var attributeIndex = 0; attributeIndex < attributesLength; attributeIndex++) {
-      var attribute = attributes[attributeIndex], attributeVariable = "ATTR" + _cached_Attributes_Count.toString() + ";", attributeReplacement = null, regExFlags = caseSensitive ? "g" : "gi", regEx = new RegExp(getWordRegEx(attribute, language), regExFlags);
-      if (syntaxOptions.highlightAttributes) {
-        if (isDefinedFunction(syntaxOptions.onAttributeClicked)) {
-          attributeReplacement = '<span class="attribute-clickable">' + attribute + "</span>";
-          innerHTML = innerHTML.replace(regEx, attributeVariable);
-        } else {
-          attributeReplacement = '<span class="attribute">' + attribute + "</span>";
-          innerHTML = innerHTML.replace(regEx, attributeVariable);
-        }
-      } else {
-        if (isDefinedFunction(syntaxOptions.onAttributeClicked)) {
-          attributeReplacement = '<span class="no-highlight-attribute-clickable">' + attribute + "</span>";
-          innerHTML = innerHTML.replace(regEx, attributeVariable);
-        }
-      }
-      _cached_Attributes[attributeVariable] = attributeReplacement;
-      _cached_Attributes_Count++;
-      fireCustomTrigger(syntaxOptions.onAttributeRender, attribute);
-    }
-    return innerHTML;
-  }
-  function renderElementStringQuotesFromVariables(innerHTML) {
-    for (var quoteVariable in _cached_Strings) {
-      if (_cached_Strings.hasOwnProperty(quoteVariable)) {
-        innerHTML = innerHTML.replace(quoteVariable, _cached_Strings[quoteVariable]);
-      }
-    }
-    return innerHTML;
-  }
-  function renderElementCommentsFromVariables(innerHTML, language) {
-    var multiLineComment = language.multiLineComment, start = null, end = null;
-    if (isDefinedArray(multiLineComment) && multiLineComment.length === 2) {
-      start = encodeMarkUpCharacters(multiLineComment[0]);
-      end = encodeMarkUpCharacters(multiLineComment[1]);
-    }
-    for (var commentVariable in _cached_Comments) {
-      if (_cached_Comments.hasOwnProperty(commentVariable)) {
-        var replacement = _cached_Comments[commentVariable];
-        if (language.isMarkUp && isDefinedString(start) && isDefinedString(end)) {
-          replacement = replacement.replace(multiLineComment[0], start);
-          replacement = replacement.replace(multiLineComment[1], end);
-        }
-        innerHTML = innerHTML.replace(commentVariable, replacement);
-      }
-    }
-    return innerHTML;
-  }
-  function renderElementVariables(innerHTML, variables) {
-    for (var variable in variables) {
-      if (variables.hasOwnProperty(variable)) {
-        var regExHtmlReplace = new RegExp(variable, "g");
-        innerHTML = innerHTML.replace(regExHtmlReplace, variables[variable]);
-      }
-    }
-    return innerHTML;
-  }
-  function renderElementCompletedHTML(element, description, numbers, syntax, innerHTML, syntaxOptions, isPreFormatted) {
-    var lines = innerHTML.split(_string.newLine), linesLength = lines.length, linesLengthStringLength = linesLength.toString().length, numberContainer = numbers, codeContainer = syntax, replaceWhitespace = null, lineNumber = 1, lastLineWasBlank = false;
-    if (isPreFormatted) {
-      codeContainer = createElement("pre");
-      syntax.appendChild(codeContainer);
-      if (isDefined(numbers)) {
-        numberContainer = createElement("pre");
-        numbers.appendChild(numberContainer);
-      }
-    }
-    if (syntaxOptions.doubleClickToSelectAll) {
-      if (isDefined(description)) {
-        description.ondblclick = function() {
-          selectTextInElement(codeContainer);
-        };
-      }
-      if (isDefined(numbers)) {
-        numbers.ondblclick = function() {
-          selectTextInElement(codeContainer);
-        };
-      }
-      syntax.ondblclick = function() {
-        selectTextInElement(codeContainer);
-      };
-    }
-    for (var lineIndex = 0; lineIndex < linesLength; lineIndex++) {
-      var line = lines[lineIndex];
-      if (line.trim() !== _string.empty && replaceWhitespace === null) {
-        replaceWhitespace = line.substring(0, line.match(/^\s*/)[0].length);
-      }
-      if (lineIndex !== 0 && lineIndex !== linesLength - 1 || line.trim() !== _string.empty) {
-        if (line.trim() !== _string.empty || !syntaxOptions.removeBlankLines) {
-          var isBlank = line.trim() === _string.empty;
-          if (isBlank && !lastLineWasBlank || !syntaxOptions.removeDuplicateBlankLines || !isBlank) {
-            lastLineWasBlank = isBlank;
-            if (isDefined(numberContainer)) {
-              var numberCode = createElement("p");
-              if (syntaxOptions.padLineNumbers) {
-                numberCode.innerText = padNumber(lineNumber.toString(), linesLengthStringLength);
-              } else {
-                numberCode.innerText = lineNumber.toString();
-              }
-              numberContainer.appendChild(numberCode);
-              lineNumber++;
-            }
-            if (replaceWhitespace !== null) {
-              line = line.replace(replaceWhitespace, _string.empty);
-              if (!isPreFormatted) {
-                var remainingStartWhitespaceCount = line.match(/^\s*/)[0].length, remainingStartWhitespace = line.substring(0, remainingStartWhitespaceCount), whitespaceReplacement = Array(remainingStartWhitespaceCount).join("&nbsp;");
-                line = line.replace(remainingStartWhitespace, whitespaceReplacement);
-              }
-            }
-            var syntaxCode = createElement("p");
-            syntaxCode.innerHTML = line.trim() === _string.empty ? "<br>" : line;
-            codeContainer.appendChild(syntaxCode);
-          }
-        }
-      }
-    }
-    renderElementClickEvents(element, syntaxOptions.onKeywordClicked, "keyword-clickable");
-    renderElementClickEvents(element, syntaxOptions.onValueClicked, "value-clickable");
-  }
-  function renderElementClickEvents(element, customTrigger, className) {
-    if (isDefinedFunction(customTrigger)) {
-      var elements = element.getElementsByClassName(className), elementsLength = elements.length;
-      for (var elementIndex = 0; elementIndex < elementsLength; elementIndex++) {
-        renderElementClickEvent(elements[elementIndex], customTrigger);
-      }
-    }
-  }
-  function renderElementClickEvent(element, customTrigger) {
-    var text = element.innerText;
-    element.onclick = function() {
-      customTrigger(text);
-    };
-  }
-  function getFriendlyLanguageName(syntaxLanguage, languageLabelCasing) {
-    var result = null, language = getLanguage(syntaxLanguage);
-    if (isDefined(language) && isDefinedString(language.friendlyName)) {
-      result = language.friendlyName;
-    } else {
-      result = syntaxLanguage;
-    }
-    result = getDisplayTextTestCasing(result, languageLabelCasing);
-    return result;
-  }
-  function getLanguage(syntaxLanguage) {
-    var result = null, language = syntaxLanguage.toLowerCase();
-    if (_languages.hasOwnProperty(language)) {
-      result = _languages[language];
-    } else {
-      if (_aliases_Rules.hasOwnProperty(language)) {
-        language = _aliases_Rules[language];
-        if (_languages.hasOwnProperty(language)) {
-          result = _languages[language];
-        }
-      }
-    }
-    return result;
-  }
-  function getKeywordCasing(keywordsCasing) {
-    if (isDefinedString(keywordsCasing)) {
-      keywordsCasing = keywordsCasing.toLowerCase().trim();
-    }
-    return keywordsCasing;
-  }
-  function getDisplayTextTestCasing(keyword, keywordsCasing) {
-    if (keywordsCasing === "uppercase") {
-      keyword = keyword.toUpperCase();
-    } else if (keywordsCasing === "lowercase") {
-      keyword = keyword.toLowerCase();
-    }
-    return keyword;
-  }
-  function getWordRegEx(word, language) {
-    var result = "(?<=^|[^-])\\b" + word + "\\b(?=[^-]|$)";
-    if (isDefinedString(language.wordRegEx)) {
-      result = language.wordRegEx.replace("%word%", word);
-    }
-    return result;
-  }
-  function getBindingOptions(newOptions) {
-    var options = !isDefinedObject(newOptions) ? {} : newOptions;
-    options = buildBindingAttributeOptions(options);
-    options = buildBindingAttributeOptionCustomTriggers(options);
-    return options;
-  }
-  function buildBindingAttributeOptions(options) {
-    options.showCopyButton = getDefaultBoolean(options.showCopyButton, true);
-    options.removeBlankLines = getDefaultBoolean(options.removeBlankLines, false);
-    options.showLineNumbers = getDefaultBoolean(options.showLineNumbers, true);
-    options.highlightKeywords = getDefaultBoolean(options.highlightKeywords, true);
-    options.highlightValues = getDefaultBoolean(options.highlightValues, true);
-    options.highlightAttributes = getDefaultBoolean(options.highlightAttributes, true);
-    options.highlightStrings = getDefaultBoolean(options.highlightStrings, true);
-    options.highlightComments = getDefaultBoolean(options.highlightComments, true);
-    options.showLanguageLabel = getDefaultBoolean(options.showLanguageLabel, true);
-    options.showPrintButton = getDefaultBoolean(options.showPrintButton, true);
-    options.padLineNumbers = getDefaultBoolean(options.padLineNumbers, false);
-    options.removeDuplicateBlankLines = getDefaultBoolean(options.removeDuplicateBlankLines, true);
-    options.doubleClickToSelectAll = getDefaultBoolean(options.doubleClickToSelectAll, true);
-    options.languageLabelCasing = getDefaultString(options.languageLabelCasing, "uppercase");
-    options.buttonsVisible = getDefaultBoolean(options.buttonsVisible, true);
-    options.maximumButtons = getDefaultNumber(options.maximumButtons, 2);
-    return options;
-  }
-  function buildBindingAttributeOptionCustomTriggers(options) {
-    options.onCopy = getDefaultFunction(options.onCopy, null);
-    options.onRenderComplete = getDefaultFunction(options.onRenderComplete, null);
-    options.onKeywordClicked = getDefaultFunction(options.onKeywordClicked, null);
-    options.onValueClicked = getDefaultFunction(options.onValueClicked, null);
-    options.onAttributeClicked = getDefaultFunction(options.onAttributeClicked, null);
-    options.onKeywordRender = getDefaultFunction(options.onKeywordRender, null);
-    options.onValueRender = getDefaultFunction(options.onValueRender, null);
-    options.onAttributeRender = getDefaultFunction(options.onAttributeRender, null);
-    options.onStringRender = getDefaultFunction(options.onStringRender, null);
-    options.onCommentRender = getDefaultFunction(options.onCommentRender, null);
-    options.onPrint = getDefaultFunction(options.onPrint, null);
-    options.onBeforeRenderComplete = getDefaultFunction(options.onBeforeRenderComplete, null);
-    options.onButtonsOpened = getDefaultFunction(options.onButtonsOpened, null);
-    options.onButtonsClosed = getDefaultFunction(options.onButtonsClosed, null);
-    return options;
-  }
-  function getBindingTabContentOptions(newOptions) {
-    var options = !isDefinedObject(newOptions) ? {} : newOptions;
-    options = buildBindingTabContentAttributeOptionStrings(options);
-    options = buildBindingTabContentAttributeOptionCustomTriggers(options);
-    return options;
-  }
-  function buildBindingTabContentAttributeOptionStrings(options) {
-    options.title = getDefaultString(options.title, null);
-    options.description = getDefaultString(options.description, null);
-    return options;
-  }
-  function buildBindingTabContentAttributeOptionCustomTriggers(options) {
-    options.onOpen = getDefaultFunction(options.onOpen, null);
-    return options;
-  }
-  function isDefined(value) {
-    return value !== null && value !== undefined && value !== _string.empty;
-  }
-  function isDefinedObject(object) {
-    return isDefined(object) && typeof object === "object";
-  }
-  function isDefinedBoolean(object) {
-    return isDefined(object) && typeof object === "boolean";
-  }
-  function isDefinedString(object) {
-    return isDefined(object) && typeof object === "string";
-  }
-  function isDefinedFunction(object) {
-    return isDefined(object) && typeof object === "function";
-  }
-  function isDefinedNumber(object) {
-    return isDefined(object) && typeof object === "number";
-  }
-  function isDefinedArray(object) {
-    return isDefinedObject(object) && object instanceof Array;
-  }
-  function createElement(type, className) {
-    var result = null, nodeType = type.toLowerCase(), isText = nodeType === "text";
-    if (!_elements_Type.hasOwnProperty(nodeType)) {
-      _elements_Type[nodeType] = isText ? _parameter_Document.createTextNode(_string.empty) : _parameter_Document.createElement(nodeType);
-    }
-    result = _elements_Type[nodeType].cloneNode(false);
-    if (isDefined(className)) {
-      result.className = className;
-    }
-    return result;
-  }
-  function selectTextInElement(element) {
-    if (_parameter_Document.selection) {
-      var textRange = _parameter_Document.body.createTextRange();
-      textRange.moveToElementText(element);
-      textRange.select();
-    } else if (_parameter_Window.getSelection) {
-      var range = _parameter_Document.createRange();
-      range.selectNode(element);
-      _parameter_Window.getSelection().removeAllRanges();
-      _parameter_Window.getSelection().addRange(range);
-    }
-  }
-  function setNodeText(element, text) {
-    if (!_configuration.allowHtmlInTextDisplay) {
-      var div = createElement("div");
-      div.innerHTML = text;
-      element.innerText = div.innerText;
-    } else {
-      element.innerHTML = text;
-    }
-  }
-  function fireCustomTrigger(triggerFunction) {
-    if (isDefinedFunction(triggerFunction)) {
-      triggerFunction.apply(null, [].slice.call(arguments, 1));
-    }
-  }
-  function getDefaultString(value, defaultValue) {
-    return isDefinedString(value) ? value : defaultValue;
-  }
-  function getDefaultBoolean(value, defaultValue) {
-    return isDefinedBoolean(value) ? value : defaultValue;
-  }
-  function getDefaultNumber(value, defaultValue) {
-    return isDefinedNumber(value) ? value : defaultValue;
-  }
-  function getDefaultFunction(value, defaultValue) {
-    return isDefinedFunction(value) ? value : defaultValue;
-  }
-  function getDefaultArray(value, defaultValue) {
-    return isDefinedArray(value) ? value : defaultValue;
-  }
-  function getDefaultObject(value, defaultValue) {
-    return isDefinedObject(value) ? value : defaultValue;
-  }
-  function getDefaultStringOrArray(value, defaultValue) {
-    if (isDefinedString(value)) {
-      value = value.split(_string.space);
-      if (value.length === 0) {
-        value = defaultValue;
-      }
-    } else {
-      value = getDefaultArray(value, defaultValue);
-    }
-    return value;
-  }
-  function getObjectFromString(objectString) {
-    var parsed = true, result = null;
-    try {
-      if (isDefinedString(objectString)) {
-        result = _parameter_Json.parse(objectString);
-      }
-    } catch (e1) {
-      try {
-        result = eval("(" + objectString + ")");
-        if (isDefinedFunction(result)) {
-          result = result();
-        }
-      } catch (e2) {
-        parsed = logError(_configuration.objectErrorText.replace("{{error_1}}", e1.message).replace("{{error_2}}", e2.message));
-        result = null;
-      }
-    }
-    return {parsed:parsed, result:result};
-  }
-  function getClonedObject(object) {
-    var json = _parameter_Json.stringify(object), result = _parameter_Json.parse(json);
-    return result;
-  }
-  function logError(error) {
-    var result = true;
-    if (!_configuration.safeMode) {
-      console.error(error);
-      result = false;
-    }
-    return result;
-  }
-  function newGuid() {
-    var result = [];
-    for (var charIndex = 0; charIndex < 32; charIndex++) {
-      if (charIndex === 8 || charIndex === 12 || charIndex === 16 || charIndex === 20) {
-        result.push("-");
-      }
-      var character = _parameter_Math.floor(_parameter_Math.random() * 16).toString(16);
-      result.push(character);
-    }
-    return result.join(_string.empty);
-  }
-  function padNumber(number, length) {
-    var result = number;
-    while (result.length < length) {
-      result = "0" + result;
-    }
-    return result;
-  }
-  function encodeMarkUpCharacters(data) {
-    data = data.replace(/</g, "&lt;");
-    data = data.replace(/>/g, "&gt;");
-    return data;
-  }
-  function sortArrayOfStringByLength(array) {
-    array.sort(function(a, b) {
-      return b.length - a.length;
-    });
-  }
-  _public.highlightAll = function() {
-    render();
-    return _public;
-  };
-  _public.highlightElement = function(elementOrId) {
-    var element = elementOrId;
-    if (isDefinedString(element)) {
-      element = _parameter_Document.getElementById(element);
-    }
-    if (isDefined(element)) {
-      renderElement(element);
-    }
-    return _public;
-  };
-  _public.getElementsHighlighted = function() {
-    return [].slice.call(_elements);
-  };
-  _public.getCode = function(elementId) {
-    var result = null;
-    if (_elements_Original.hasOwnProperty(elementId)) {
-      result = _elements_Original[elementId];
-    }
-    return result;
-  };
-  _public.destroyAll = function() {
-    for (var elementId in _elements_Original) {
-      if (_elements_Original.hasOwnProperty(elementId)) {
-        var renderedElement = _parameter_Document.getElementById(elementId);
-        if (isDefined(renderedElement)) {
-          renderedElement.innerHTML = _elements_Original[elementId];
-        }
-      }
-    }
-    _elements_Original = {};
-    _elements = [];
-    return _public;
-  };
-  _public.destroy = function(elementId) {
-    if (_elements_Original.hasOwnProperty(elementId.toLowerCase())) {
-      var renderedElement = _parameter_Document.getElementById(elementId);
-      if (isDefined(renderedElement)) {
-        renderedElement.innerHTML = _elements_Original[elementId.toLowerCase()];
-        delete _elements_Original[elementId.toLowerCase()];
-        var elementsLength = _elements.length;
-        for (var elementIndex = 0; elementIndex < elementsLength; elementIndex++) {
-          if (_elements[elementIndex].id === elementId) {
-            delete _elements[elementIndex];
-            break;
-          }
-        }
-      }
-    }
-    return _public;
-  };
-  _public.addLanguage = function(name, languageDetails, triggerRender) {
-    var added = false, lookup = name.toLowerCase();
-    if (!_languages.hasOwnProperty(lookup)) {
-      triggerRender = getDefaultBoolean(triggerRender, true);
-      _languages[lookup] = languageDetails;
-      added = true;
-      if (triggerRender) {
-        render();
-      }
-    }
-    return added;
-  };
-  _public.removeLanguage = function(name) {
-    var removed = false, lookup = name.toLowerCase();
-    if (_languages.hasOwnProperty(lookup)) {
-      delete _languages[lookup];
-      for (var alias in _aliases_Rules) {
-        if (_aliases_Rules.hasOwnProperty(alias) && _aliases_Rules[alias] === lookup) {
-          delete _aliases_Rules[alias];
-        }
-      }
-      removed = true;
-    }
-    return removed;
-  };
-  _public.getLanguage = function(name) {
-    var details = null, lookup = name.toLowerCase();
-    if (_languages.hasOwnProperty(lookup)) {
-      details = getClonedObject(lookup);
-    }
-    return details;
-  };
-  _public.getLanguages = function() {
-    return getClonedObject(_languages);
-  };
-  _public.addAlias = function(alias, language, triggerRender) {
-    var added = false;
-    if (_languages.hasOwnProperty(language.toLowerCase()) && !_aliases_Rules.hasOwnProperty(alias.toLowerCase())) {
-      triggerRender = getDefaultBoolean(triggerRender, true);
-      _aliases_Rules[alias.toLowerCase()] = language.toLowerCase();
-      added = true;
-      if (triggerRender) {
-        render();
-      }
-    }
-    return added;
-  };
-  _public.removeAlias = function(alias) {
-    var removed = false;
-    if (_aliases_Rules.hasOwnProperty(alias.toLowerCase())) {
-      delete _aliases_Rules[alias.toLowerCase()];
-      removed = true;
-    }
-    return removed;
-  };
-  _public.getAlias = function(alias) {
-    var result = null;
-    if (_aliases_Rules.hasOwnProperty(alias.toLowerCase())) {
-      result = _aliases_Rules[alias.toLowerCase()];
-    }
-    return result;
-  };
-  _public.getAliases = function() {
-    return getClonedObject(_aliases_Rules);
-  };
-  _public.setConfiguration = function(newOptions) {
-    _configuration = getDefaultObject(newOptions, {});
-    buildDefaultConfiguration();
-    return _public;
-  };
-  function buildDefaultConfiguration() {
-    _configuration.safeMode = getDefaultBoolean(_configuration.safeMode, true);
-    _configuration.highlightAllDomElementTypes = getDefaultStringOrArray(_configuration.highlightAllDomElementTypes, ["div", "code"]);
-    _configuration.allowHtmlInTextDisplay = getDefaultBoolean(_configuration.allowHtmlInTextDisplay, true);
-    buildDefaultConfigurationStrings();
-    buildDefaultConfigurationCustomTriggers();
-  }
-  function buildDefaultConfigurationStrings() {
-    _configuration.buttonsOpenerText = getDefaultString(_configuration.buttonsOpenerText, "<");
-    _configuration.buttonsCloserText = getDefaultString(_configuration.buttonsCloserText, ">");
-    _configuration.objectErrorText = getDefaultString(_configuration.objectErrorText, "Errors in object: {{error_1}}, {{error_2}}");
-    _configuration.attributeNotSetErrorText = getDefaultString(_configuration.attributeNotSetErrorText, "The attribute '{{attribute_name}}' has not been set correctly.");
-    _configuration.languageNotSupportedErrorText = getDefaultString(_configuration.languageNotSupportedErrorText, "Language '{{language}}' is not supported.");
-    _configuration.noCodeAvailableToRenderErrorText = getDefaultString(_configuration.noCodeAvailableToRenderErrorText, "No code is available to render.");
-    _configuration.copyButtonText = getDefaultString(_configuration.copyButtonText, "Copy");
-    _configuration.printButtonText = getDefaultString(_configuration.printButtonText, "Print");
-  }
-  function buildDefaultConfigurationCustomTriggers() {
-    _configuration.onBeforeRender = getDefaultFunction(_configuration.onBeforeRender, null);
-    _configuration.onAfterRender = getDefaultFunction(_configuration.onAfterRender, null);
-  }
-  _public.getVersion = function() {
-    return "2.6.0";
-  };
-  (function(documentObject, navigatorObject, windowObject, mathObject, jsonObject) {
-    _parameter_Document = documentObject;
-    _parameter_Navigator = navigatorObject;
-    _parameter_Window = windowObject;
-    _parameter_Math = mathObject;
-    _parameter_Json = jsonObject;
-    buildDefaultConfiguration();
-    _parameter_Document.addEventListener("DOMContentLoaded", function() {
-      render();
-    });
-    if (!isDefined(_parameter_Window.$syntax)) {
-      _parameter_Window.$syntax = _public;
-    }
-  })(document, navigator, window, Math, JSON);
-})();
+    })();
+})();//# sourceMappingURL=syntax.js.map

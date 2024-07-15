@@ -1,16 +1,27 @@
 /*
- * Syntax.js Library v2.6.0
+ * Syntax.js Library v3.0.0
  *
  * Copyright 2024 Bunoon
  * Released under the MIT License
  */
 
 
-@import "foundation/styles";
+@import "sass/styles";
 
 :root {
     // Fonts
-    --syntax-js-default-font: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", "Noto Sans", "Liberation Sans", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+    --syntax-js-default-font: system-ui,
+                              -apple-system,
+                              "Segoe UI",
+                              Roboto,
+                              "Helvetica Neue",
+                              "Noto Sans",
+                              "Liberation Sans",
+                              Arial, sans-serif,
+                              "Apple Color Emoji",
+                              "Segoe UI Emoji",
+                              "Segoe UI Symbol",
+                              "Noto Color Emoji";
 
     // Colors
     --syntax-js-color-keyword: #A71500;

@@ -1,11 +1,22 @@
 /*
- * Syntax.js Library v2.6.0
+ * Syntax.js Library v3.0.0
  *
  * Copyright 2024 Bunoon
  * Released under the MIT License
  */
 :root {
-  --syntax-js-default-font: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", "Noto Sans", "Liberation Sans", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+  --syntax-js-default-font: system-ui,
+                            -apple-system,
+                            "Segoe UI",
+                            Roboto,
+                            "Helvetica Neue",
+                            "Noto Sans",
+                            "Liberation Sans",
+                            Arial, sans-serif,
+                            "Apple Color Emoji",
+                            "Segoe UI Emoji",
+                            "Segoe UI Symbol",
+                            "Noto Color Emoji";
   --syntax-js-color-keyword: #A71500;
   --syntax-js-color-value: #F28C28;
   --syntax-js-color-attribute: #730dd9;
@@ -374,4 +385,6 @@ div.syntax-highlight div.code div.tab-contents div.syntax p span.multi-line-stri
 }
 .custom-scroll-bars::-webkit-scrollbar-thumb:active {
   background-color: var(--syntax-js-color-lighter-gray);
-}/*# sourceMappingURL=syntax.js.css.map */
+}
+
+/*# sourceMappingURL=syntax.js.css.map */
