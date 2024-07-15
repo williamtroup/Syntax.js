@@ -1,8 +1,8 @@
 /*! Syntax.js v3.0.0 - Indonesian | (c) Bunoon 2024 | MIT License */
 $syntax.setConfiguration( {
         "text": {
-                "buttonsOpenerText": "<",
-                "buttonsCloserText": ">",
+                "buttonsOpenerText": "←",
+                "buttonsCloserText": "→",
                 "objectErrorText": "Kesalahan pada objek: {{error_1}}, {{error_2}}",
                 "attributeNotSetErrorText": "Atribut '{{attribute_name}}' belum diatur dengan benar.",
                 "languageNotSupportedErrorText": "Bahasa '{{language}}' tidak didukung.",

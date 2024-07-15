@@ -663,7 +663,7 @@ var require_syntax = __commonJS({
                         a.lastIndex++;
                     }
                     let r = l[0];
-                    r = r.replace("</", "").replace("<", "").replace(">", "");
+                    r = r.replace("</", "").replace("←", "").replace("→", "");
                     r = r.split(" ")[0];
                     if (i.indexOf(r) > -1) {
                         const i = `KW${_cached_Keywords_Count.toString()};`;

@@ -1,8 +1,8 @@
 /*! Syntax.js v3.0.0 - Slovak | (c) Bunoon 2024 | MIT License */
 $syntax.setConfiguration( {
         "text": {
-                "buttonsOpenerText": "<",
-                "buttonsCloserText": ">",
+                "buttonsOpenerText": "←",
+                "buttonsCloserText": "→",
                 "objectErrorText": "Chyby v objekte: {{error_1}}, {{error_2}}",
                 "attributeNotSetErrorText": "atribút '{{attribute_name}}“ nie je správne nastavené.",
                 "languageNotSupportedErrorText": "Jazyk '{{language}}' nie je podporovaný.",

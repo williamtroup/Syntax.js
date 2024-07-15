@@ -615,7 +615,7 @@ var DomElement;
                 a.lastIndex++;
             }
             let o = s[0];
-            o = o.replace("</", "").replace("<", "").replace(">", "");
+            o = o.replace("</", "").replace("←", "").replace("→", "");
             o = o.split(" ")[0];
             if (i.indexOf(o) > -1) {
                 const i = `KW${_cached_Keywords_Count.toString()};`;

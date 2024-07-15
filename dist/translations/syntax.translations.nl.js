@@ -1,8 +1,8 @@
 /*! Syntax.js v3.0.0 - Dutch | (c) Bunoon 2024 | MIT License */
 $syntax.setConfiguration( {
         "text": {
-                "buttonsOpenerText": "<",
-                "buttonsCloserText": ">",
+                "buttonsOpenerText": "←",
+                "buttonsCloserText": "→",
                 "objectErrorText": "Fouten in object: {{error_1}}, {{error_2}}",
                 "attributeNotSetErrorText": "Het attribuut '{{attribute_name}}' is niet correct ingesteld.",
                 "languageNotSupportedErrorText": "Taal '{{language}}' wordt niet ondersteund.",

@@ -1,8 +1,8 @@
 /*! Syntax.js v3.0.0 - Romanian | (c) Bunoon 2024 | MIT License */
 $syntax.setConfiguration( {
         "text": {
-                "buttonsOpenerText": "<",
-                "buttonsCloserText": ">",
+                "buttonsOpenerText": "←",
+                "buttonsCloserText": "→",
                 "objectErrorText": "Erori la obiect: {{error_1}}, {{error_2}}",
                 "attributeNotSetErrorText": "Atributul '{{attribute_name}}' nu a fost setat corect.",
                 "languageNotSupportedErrorText": "Limba '{{language}}' nu e suportat.",

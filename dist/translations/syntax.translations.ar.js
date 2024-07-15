@@ -1,8 +1,8 @@
 /*! Syntax.js v3.0.0 - Arabic | (c) Bunoon 2024 | MIT License */
 $syntax.setConfiguration( {
         "text": {
-                "buttonsOpenerText": "<",
-                "buttonsCloserText": ">",
+                "buttonsOpenerText": "←",
+                "buttonsCloserText": "→",
                 "objectErrorText": "أخطاء في الكائن: {{error_1}}, {{error_2}}",
                 "attributeNotSetErrorText": "السمة '{{attribute_name}}\"لم يتم ضبطه بشكل صحيح.",
                 "languageNotSupportedErrorText": "لغة '{{language}}' غير مدعومة.",
