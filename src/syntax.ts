@@ -147,7 +147,7 @@ type RenderElementResult = {
         tabElements.push( tab );
         tabContentElements.push( renderResult.tabContents );
 
-        tab.onclick = function() {
+        tab.onclick = () => {
             if ( tab.className !== "tab-active" ) {
                 const tabElementsLength: number = tabElements.length;
                 const tabContentElementsLength: number = tabContentElements.length;
@@ -398,7 +398,7 @@ type RenderElementResult = {
 
                 DomElement.setNodeText( copyButton, _configuration.text!.copyButtonText!, _configuration );
 
-                copyButton.onclick = function() {
+                copyButton.onclick =() => {
                     navigator.clipboard.writeText( innerHTMLCopy );
 
                     fireCustomTriggerEvent( syntaxOptions.events!.onCopy!, innerHTMLCopy );
@@ -414,7 +414,7 @@ type RenderElementResult = {
 
                 DomElement.setNodeText( printButton, _configuration.text!.printButtonText!, _configuration );
 
-                printButton.onclick = function() {
+                printButton.onclick =() => {
                     const newWindow: WindowProxy = window.open( Char.empty, "PRINT", "height=400,width=600" )!;
                     const newElementForPrint: HTMLElement = syntax.cloneNode( true ) as HTMLElement;
                     const newTitleElement: HTMLElement = DomElement.create( "div" );
@@ -462,7 +462,7 @@ type RenderElementResult = {
                 openButton.innerText = syntaxOptions.buttonsVisible ? _configuration.text!.buttonsCloserText! : _configuration.text!.buttonsOpenerText!;
                 buttons.insertBefore( openButton, buttons.children[ 0 ] );
 
-                openButton.onclick = function() {
+                openButton.onclick =() => {
                     const areButtonsVisible: boolean = openButton.innerText === _configuration.text!.buttonsCloserText;
 
                     for ( let buttonsElementIndex: number = 0; buttonsElementIndex < buttonsElementsLength; buttonsElementIndex++ ) {
@@ -493,7 +493,7 @@ type RenderElementResult = {
 
         DomElement.setNodeText( newCustomButton, customButton.text!, _configuration );
 
-        newCustomButton.onclick = function() {
+        newCustomButton.onclick =() => {
             customButton.events!.onClick!( innerHTMLCopy );
         };
 
@@ -833,18 +833,18 @@ type RenderElementResult = {
 
         if ( syntaxOptions.doubleClickToSelectAll ) {
             if ( Is.defined( description ) ) {
-                description.ondblclick = function() {
+                description.ondblclick =() => {
                     DomElement.selectTextInElement( codeContainer );
                 };
             }
 
             if ( Is.defined( numbers ) ) {
-                numbers.ondblclick = function() {
+                numbers.ondblclick =() => {
                     DomElement.selectTextInElement( codeContainer );
                 };
             }
     
-            syntax.ondblclick = function() {
+            syntax.ondblclick =() => {
                 DomElement.selectTextInElement( codeContainer );
             };
         }
@@ -912,7 +912,7 @@ type RenderElementResult = {
     function renderElementClickEvent( element: HTMLElement, customTrigger: Function ) : void {
         const text: string = element.innerText;
 
-        element.onclick = function() {
+        element.onclick =() => {
             customTrigger( text );
         };
     }

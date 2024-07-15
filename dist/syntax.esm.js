@@ -280,7 +280,7 @@ var require_syntax = __commonJS({
                 DomElement.setNodeText(s, i.tabTitle, _configuration);
                 t.push(s);
                 n.push(i.tabContents);
-                s.onclick = function() {
+                s.onclick = () => {
                     if (s.className !== "tab-active") {
                         const e = t.length;
                         const r = n.length;
@@ -471,7 +471,7 @@ var require_syntax = __commonJS({
                         e.style.display = t.buttonsVisible ? "inline-block" : "none";
                         o.appendChild(e);
                         DomElement.setNodeText(e, _configuration.text.copyButtonText, _configuration);
-                        e.onclick = function() {
+                        e.onclick = () => {
                             navigator.clipboard.writeText(r);
                             fireCustomTriggerEvent(t.events.onCopy, r);
                         };
@@ -482,7 +482,7 @@ var require_syntax = __commonJS({
                         i.style.display = t.buttonsVisible ? "inline-block" : "none";
                         o.appendChild(i);
                         DomElement.setNodeText(i, _configuration.text.printButtonText, _configuration);
-                        i.onclick = function() {
+                        i.onclick = () => {
                             const i = window.open("", "PRINT", "height=400,width=600");
                             const r = e.cloneNode(true);
                             const o = DomElement.create("div");
@@ -520,7 +520,7 @@ var require_syntax = __commonJS({
                         const e = DomElement.create("button", "button button-opener");
                         e.innerText = t.buttonsVisible ? _configuration.text.buttonsCloserText : _configuration.text.buttonsOpenerText;
                         o.insertBefore(e, o.children[0]);
-                        e.onclick = function() {
+                        e.onclick = () => {
                             const n = e.innerText === _configuration.text.buttonsCloserText;
                             for (let e = 0; e < s; e++) {
                                 a[e].style.display = n ? "none" : "inline-block";
@@ -544,7 +544,7 @@ var require_syntax = __commonJS({
                 o.style.display = r.buttonsVisible ? "inline-block" : "none";
                 n.appendChild(o);
                 DomElement.setNodeText(o, e.text, _configuration);
-                o.onclick = function() {
+                o.onclick = () => {
                     e.events.onClick(i);
                 };
                 if (Is.defined(e.className)) {
@@ -807,16 +807,16 @@ var require_syntax = __commonJS({
                 }
                 if (r.doubleClickToSelectAll) {
                     if (Is.defined(e)) {
-                        e.ondblclick = function() {
+                        e.ondblclick = () => {
                             DomElement.selectTextInElement(c);
                         };
                     }
                     if (Is.defined(t)) {
-                        t.ondblclick = function() {
+                        t.ondblclick = () => {
                             DomElement.selectTextInElement(c);
                         };
                     }
-                    n.ondblclick = function() {
+                    n.ondblclick = () => {
                         DomElement.selectTextInElement(c);
                     };
                 }
@@ -869,7 +869,7 @@ var require_syntax = __commonJS({
             }
             function renderElementClickEvent(e, t) {
                 const n = e.innerText;
-                e.onclick = function() {
+                e.onclick = () => {
                     t(n);
                 };
             }
