@@ -77,7 +77,7 @@ type RenderElementResult = {
      * ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
      */
 
-    function render() {
+    function render() : void {
         const tagTypes: string[] = _configuration.highlightAllDomElementTypes as string[];
         const tagTypesLength: number = tagTypes.length;
 
@@ -176,7 +176,7 @@ type RenderElementResult = {
         }
     }
 
-    function renderElement( element: HTMLElement, codeContainer: HTMLElement = null! ) {
+    function renderElement( element: HTMLElement, codeContainer: HTMLElement = null! ) : RenderElementResult {
         const result: RenderElementResult = {} as RenderElementResult;
         result.rendered = true;
 
@@ -312,7 +312,7 @@ type RenderElementResult = {
         return result;
     }
 
-    function renderSyntaxCustomTriggers( element: HTMLElement, syntaxOptions: BindingOptions ) {
+    function renderSyntaxCustomTriggers( element: HTMLElement, syntaxOptions: BindingOptions ) : void {
         renderElementClickEvents( element, syntaxOptions.events!.onKeywordClicked!, "keyword-clickable" );
         renderElementClickEvents( element, syntaxOptions.events!.onKeywordClicked!, "no-highlight-keyword-clickable" );
         renderElementClickEvents( element, syntaxOptions.events!.onValueClicked!, "value-clickable" );
@@ -1137,7 +1137,7 @@ type RenderElementResult = {
 	 * ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 	 */
 
-    function buildDefaultConfiguration( newConfiguration: Configuration = null! ) {
+    function buildDefaultConfiguration( newConfiguration: Configuration = null! ) : void {
         _configuration = Data.getDefaultObject( newConfiguration, {} as Configuration );
         _configuration.safeMode = Data.getDefaultBoolean( _configuration.safeMode, true );
         _configuration.highlightAllDomElementTypes = Data.getDefaultStringOrArray( _configuration.highlightAllDomElementTypes, [ "div", "code" ] );
@@ -1147,7 +1147,7 @@ type RenderElementResult = {
         buildDefaultConfigurationCustomTriggers();
     }
 
-    function buildDefaultConfigurationStrings() {
+    function buildDefaultConfigurationStrings() : void {
         _configuration.text = Data.getDefaultObject( _configuration.text, {} as ConfigurationText )
         _configuration.text!.buttonsOpenerText = Data.getDefaultAnyString( _configuration.text!.buttonsOpenerText, "←" );
         _configuration.text!.buttonsCloserText = Data.getDefaultAnyString( _configuration.text!.buttonsCloserText, "→" );
@@ -1159,7 +1159,7 @@ type RenderElementResult = {
         _configuration.text!.printButtonText = Data.getDefaultAnyString( _configuration.text!.printButtonText, "Print" );
     }
 
-    function buildDefaultConfigurationCustomTriggers() {
+    function buildDefaultConfigurationCustomTriggers() : void {
         _configuration.events = Data.getDefaultObject( _configuration.events, {} as ConfigurationEvents )
         _configuration.events!.onBeforeRender = Data.getDefaultFunction( _configuration.events!.onBeforeRender, null! );
         _configuration.events!.onAfterRender = Data.getDefaultFunction( _configuration.events!.onAfterRender, null! );
