@@ -1179,7 +1179,7 @@ var require_syntax = __commonJS({
                     return _public;
                 },
                 getVersion: function() {
-                    return "3.0.0";
+                    return "3.0.1";
                 }
             };
             (() => {

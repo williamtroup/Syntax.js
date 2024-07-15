@@ -4,7 +4,7 @@
  * A lightweight, and easy-to-use, JavaScript library for code syntax highlighting!
  * 
  * @file        constant.js
- * @version     v3.0.0
+ * @version     v3.0.1
  * @author      Bunoon
  * @license     MIT License
  * @copyright   Bunoon 2024
