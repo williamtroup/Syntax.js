@@ -1302,7 +1302,7 @@ type RenderElementResult = {
             return removed;
         },
 
-        getLanguage: function ( name: string ) : SyntaxLanguage {
+        getLanguage: function ( name: string ) : SyntaxLanguage | null {
             let details: SyntaxLanguage = null!;
             const lookup: string = name.toLowerCase();
 
@@ -1351,7 +1351,7 @@ type RenderElementResult = {
             return removed;
         },
 
-        getAlias: function ( alias: string ) : string {
+        getAlias: function ( alias: string ) : string | null {
             let result: string = null!;
 
             if ( _aliases_Rules.hasOwnProperty( alias.toLowerCase() ) ) {

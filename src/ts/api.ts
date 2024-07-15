@@ -149,7 +149,7 @@ export type PublicApi = {
      * 
      * @returns     {Object}                                                The language details.
      */
-    getLanguage: ( name: string ) => SyntaxLanguage;
+    getLanguage: ( name: string ) => SyntaxLanguage | null;
 
     /**
      * getLanguages().
@@ -209,7 +209,7 @@ export type PublicApi = {
      * 
      * @returns     {string}                                                The name of the language.
      */
-    getAlias: ( alias: string ) => string;
+    getAlias: ( alias: string ) => string | null;
 
     /**
      * getAliases().
