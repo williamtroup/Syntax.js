@@ -615,7 +615,7 @@ var DomElement;
                 a.lastIndex++;
             }
             let o = s[0];
-            o = o.replace("</", "").replace("←", "").replace("→", "");
+            o = o.replace("</", "").replace("<", "").replace(">", "");
             o = o.split(" ")[0];
             if (i.indexOf(o) > -1) {
                 const i = `KW${_cached_Keywords_Count.toString()};`;
@@ -969,7 +969,8 @@ var DomElement;
         }
         return t;
     }
-    function buildDefaultConfiguration() {
+    function buildDefaultConfiguration(e = null) {
+        _configuration = Data.getDefaultObject(e, {});
         _configuration.safeMode = Data.getDefaultBoolean(_configuration.safeMode, true);
         _configuration.highlightAllDomElementTypes = Data.getDefaultStringOrArray(_configuration.highlightAllDomElementTypes, [ "div", "code" ]);
         _configuration.allowHtmlInTextDisplay = Data.getDefaultBoolean(_configuration.allowHtmlInTextDisplay, true);
@@ -1114,8 +1115,19 @@ var DomElement;
             return Data.getClonedObject(_aliases_Rules);
         },
         setConfiguration: function(e) {
-            _configuration = Data.getDefaultObject(e, {});
-            buildDefaultConfiguration();
+            if (Is.definedObject(e)) {
+                let t = false;
+                const n = _configuration;
+                for (let i in e) {
+                    if (e.hasOwnProperty(i) && _configuration.hasOwnProperty(i) && n[i] !== e[i]) {
+                        n[i] = e[i];
+                        t = true;
+                    }
+                }
+                if (t) {
+                    buildDefaultConfiguration(n);
+                }
+            }
             return _public;
         },
         getVersion: function() {

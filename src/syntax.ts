@@ -1137,7 +1137,8 @@ type RenderElementResult = {
 	 * ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 	 */
 
-    function buildDefaultConfiguration() {
+    function buildDefaultConfiguration( newConfiguration: Configuration = null! ) {
+        _configuration = Data.getDefaultObject( newConfiguration, {} as Configuration );
         _configuration.safeMode = Data.getDefaultBoolean( _configuration.safeMode, true );
         _configuration.highlightAllDomElementTypes = Data.getDefaultStringOrArray( _configuration.highlightAllDomElementTypes, [ "div", "code" ] );
         _configuration.allowHtmlInTextDisplay = Data.getDefaultBoolean( _configuration.allowHtmlInTextDisplay, true );
@@ -1372,9 +1373,21 @@ type RenderElementResult = {
          */
 
         setConfiguration: function ( newConfiguration: any ) : PublicApi {
-            _configuration = Data.getDefaultObject( newConfiguration, {} as Configuration );
+            if ( Is.definedObject( newConfiguration ) ) {
+                let configurationHasChanged: boolean = false;
+                const newInternalConfiguration: any = _configuration;
+            
+                for ( let propertyName in newConfiguration ) {
+                    if ( newConfiguration.hasOwnProperty( propertyName ) && _configuration.hasOwnProperty( propertyName ) && newInternalConfiguration[ propertyName ] !== newConfiguration[ propertyName ] ) {
+                        newInternalConfiguration[ propertyName ] = newConfiguration[ propertyName ];
+                        configurationHasChanged = true;
+                    }
+                }
         
-            buildDefaultConfiguration();
+                if ( configurationHasChanged ) {
+                    buildDefaultConfiguration( newInternalConfiguration );
+                }
+            }
     
             return _public;
         },
