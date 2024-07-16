@@ -22,7 +22,7 @@ import {
     type ConfigurationEvents,
     type BindingOptionEvents} from "./ts/type";
 
-import { PublicApi } from "./ts/api";
+import { type PublicApi } from "./ts/api";
 import { Constant } from "./ts/constant";
 import { Data } from "./ts/data";
 import { Is } from "./ts/is";
