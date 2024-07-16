@@ -3,7 +3,7 @@
  * 
  * A lightweight, and easy-to-use, JavaScript library for code syntax highlighting!
  * 
- * @file        api.js
+ * @file        api.ts
  * @version     v3.0.1
  * @author      Bunoon
  * @license     MIT License
