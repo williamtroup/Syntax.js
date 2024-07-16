@@ -1,13 +1,13 @@
 "use strict";
 
-var Constants;
+var Constant;
 
 (e => {
     e.SYNTAX_JS_ATTRIBUTE_NAME_LANGUAGE = "data-syntax-language";
     e.SYNTAX_JS_ATTRIBUTE_NAME_OPTIONS = "data-syntax-options";
     e.SYNTAX_JS_ATTRIBUTE_NAME_BUTTONS = "data-syntax-buttons";
     e.SYNTAX_JS_ATTRIBUTE_NAME_TAB_CONTENTS = "data-syntax-tab-contents";
-})(Constants || (Constants = {}));
+})(Constant || (Constant = {}));
 
 var Is;
 
@@ -192,12 +192,12 @@ var DomElement;
             for (let e = 0; e < r; e++) {
                 const t = i[e];
                 let n = false;
-                if (t.hasAttribute(Constants.SYNTAX_JS_ATTRIBUTE_NAME_LANGUAGE) && t.getAttribute(Constants.SYNTAX_JS_ATTRIBUTE_NAME_LANGUAGE).toLowerCase() === "tabbed") {
+                if (t.hasAttribute(Constant.SYNTAX_JS_ATTRIBUTE_NAME_LANGUAGE) && t.getAttribute(Constant.SYNTAX_JS_ATTRIBUTE_NAME_LANGUAGE).toLowerCase() === "tabbed") {
                     const e = [].slice.call(t.children);
                     const i = e.length;
                     const r = [];
                     const o = [];
-                    t.removeAttribute(Constants.SYNTAX_JS_ATTRIBUTE_NAME_LANGUAGE);
+                    t.removeAttribute(Constant.SYNTAX_JS_ATTRIBUTE_NAME_LANGUAGE);
                     t.className = t.className === "" ? "syntax-highlight" : `${t.className} syntax-highlight`;
                     t.innerHTML = "";
                     const a = DomElement.create("div", "code custom-scroll-bars");
@@ -258,13 +258,13 @@ var DomElement;
     function renderElement(e, t = null) {
         const n = {};
         n.rendered = true;
-        if (Is.defined(e) && e.hasAttribute(Constants.SYNTAX_JS_ATTRIBUTE_NAME_LANGUAGE) && (!e.hasAttribute(Constants.SYNTAX_JS_ATTRIBUTE_NAME_TAB_CONTENTS) || Is.defined(t))) {
-            n.syntaxLanguage = e.getAttribute(Constants.SYNTAX_JS_ATTRIBUTE_NAME_LANGUAGE);
+        if (Is.defined(e) && e.hasAttribute(Constant.SYNTAX_JS_ATTRIBUTE_NAME_LANGUAGE) && (!e.hasAttribute(Constant.SYNTAX_JS_ATTRIBUTE_NAME_TAB_CONTENTS) || Is.defined(t))) {
+            n.syntaxLanguage = e.getAttribute(Constant.SYNTAX_JS_ATTRIBUTE_NAME_LANGUAGE);
             if (Is.definedString(n.syntaxLanguage)) {
                 const i = getLanguage(n.syntaxLanguage);
                 if (Is.defined(i) || n.syntaxLanguage.toLowerCase() === "unknown") {
-                    const r = getObjectFromString(e.getAttribute(Constants.SYNTAX_JS_ATTRIBUTE_NAME_OPTIONS));
-                    const o = getObjectFromString(e.getAttribute(Constants.SYNTAX_JS_ATTRIBUTE_NAME_BUTTONS));
+                    const r = getObjectFromString(e.getAttribute(Constant.SYNTAX_JS_ATTRIBUTE_NAME_OPTIONS));
+                    const o = getObjectFromString(e.getAttribute(Constant.SYNTAX_JS_ATTRIBUTE_NAME_BUTTONS));
                     if (r.parsed) {
                         if (e.innerHTML.trim() !== "") {
                             let a = e.innerHTML;
@@ -284,8 +284,8 @@ var DomElement;
                                 f = Data.String.newGuid();
                             }
                             _elements_Original[f] = e.innerHTML;
-                            e.removeAttribute(Constants.SYNTAX_JS_ATTRIBUTE_NAME_LANGUAGE);
-                            e.removeAttribute(Constants.SYNTAX_JS_ATTRIBUTE_NAME_OPTIONS);
+                            e.removeAttribute(Constant.SYNTAX_JS_ATTRIBUTE_NAME_LANGUAGE);
+                            e.removeAttribute(Constant.SYNTAX_JS_ATTRIBUTE_NAME_OPTIONS);
                             e.id = f;
                             if (!Is.defined(t)) {
                                 e.className = e.className === "" ? "syntax-highlight" : `${e.className} syntax-highlight`;
@@ -293,8 +293,8 @@ var DomElement;
                                 t = DomElement.create("div", "code custom-scroll-bars");
                                 e.appendChild(t);
                             } else {
-                                if (e.hasAttribute(Constants.SYNTAX_JS_ATTRIBUTE_NAME_TAB_CONTENTS) && e.getAttribute(Constants.SYNTAX_JS_ATTRIBUTE_NAME_TAB_CONTENTS).toLowerCase() !== "true") {
-                                    const t = getObjectFromString(e.getAttribute(Constants.SYNTAX_JS_ATTRIBUTE_NAME_TAB_CONTENTS));
+                                if (e.hasAttribute(Constant.SYNTAX_JS_ATTRIBUTE_NAME_TAB_CONTENTS) && e.getAttribute(Constant.SYNTAX_JS_ATTRIBUTE_NAME_TAB_CONTENTS).toLowerCase() !== "true") {
+                                    const t = getObjectFromString(e.getAttribute(Constant.SYNTAX_JS_ATTRIBUTE_NAME_TAB_CONTENTS));
                                     if (t.parsed && Is.definedObject(t.object)) {
                                         n.tabBindingOptions = getBindingTabContentOptions(t.object);
                                         u = n.tabBindingOptions.description;
@@ -353,7 +353,7 @@ var DomElement;
                     n.rendered = logError(_configuration.text.languageNotSupportedErrorText.replace("{{language}}", n.syntaxLanguage));
                 }
             } else {
-                n.rendered = logError(_configuration.text.attributeNotSetErrorText.replace("{{attribute_name}}", Constants.SYNTAX_JS_ATTRIBUTE_NAME_LANGUAGE));
+                n.rendered = logError(_configuration.text.attributeNotSetErrorText.replace("{{attribute_name}}", Constant.SYNTAX_JS_ATTRIBUTE_NAME_LANGUAGE));
             }
         }
         return n;

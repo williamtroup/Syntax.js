@@ -23,7 +23,7 @@ import {
     type BindingOptionEvents} from "./ts/type";
 
 import { PublicApi } from "./ts/api";
-import { Constants } from "./ts/constant";
+import { Constant } from "./ts/constant";
 import { Data } from "./ts/data";
 import { Is } from "./ts/is";
 import { Char, Language, TextCasing } from "./ts/enum";
@@ -94,13 +94,13 @@ type RenderElementResult = {
                 const element: HTMLElement = elements[ elementIndex ];
                 let elementBreak: boolean = false;
 
-                if ( element.hasAttribute( Constants.SYNTAX_JS_ATTRIBUTE_NAME_LANGUAGE ) && element.getAttribute( Constants.SYNTAX_JS_ATTRIBUTE_NAME_LANGUAGE )!.toLowerCase() === Language.tabbed ) {
+                if ( element.hasAttribute( Constant.SYNTAX_JS_ATTRIBUTE_NAME_LANGUAGE ) && element.getAttribute( Constant.SYNTAX_JS_ATTRIBUTE_NAME_LANGUAGE )!.toLowerCase() === Language.tabbed ) {
                     const divElements: HTMLElement[] = [].slice.call( element.children );
                     const divElementsLength: number = divElements.length;
                     const tabElements: HTMLElement[] = [];
                     const tabContentElements: HTMLElement[] = [];
 
-                    element.removeAttribute( Constants.SYNTAX_JS_ATTRIBUTE_NAME_LANGUAGE );
+                    element.removeAttribute( Constant.SYNTAX_JS_ATTRIBUTE_NAME_LANGUAGE );
                     element.className = element.className === Char.empty ? "syntax-highlight" : `${element.className} syntax-highlight`;
                     element.innerHTML = Char.empty;
 
@@ -180,15 +180,15 @@ type RenderElementResult = {
         const result: RenderElementResult = {} as RenderElementResult;
         result.rendered = true;
 
-        if ( Is.defined( element ) && element.hasAttribute( Constants.SYNTAX_JS_ATTRIBUTE_NAME_LANGUAGE ) && ( !element.hasAttribute( Constants.SYNTAX_JS_ATTRIBUTE_NAME_TAB_CONTENTS ) || Is.defined( codeContainer ) ) ) {
-            result.syntaxLanguage = element.getAttribute( Constants.SYNTAX_JS_ATTRIBUTE_NAME_LANGUAGE )!;
+        if ( Is.defined( element ) && element.hasAttribute( Constant.SYNTAX_JS_ATTRIBUTE_NAME_LANGUAGE ) && ( !element.hasAttribute( Constant.SYNTAX_JS_ATTRIBUTE_NAME_TAB_CONTENTS ) || Is.defined( codeContainer ) ) ) {
+            result.syntaxLanguage = element.getAttribute( Constant.SYNTAX_JS_ATTRIBUTE_NAME_LANGUAGE )!;
 
             if ( Is.definedString( result.syntaxLanguage ) ) {
                 const language: SyntaxLanguage = getLanguage( result.syntaxLanguage );
 
                 if ( Is.defined( language ) || result.syntaxLanguage.toLowerCase() === Language.unknown ) {
-                    const syntaxOptionsParsed: StringToJson = getObjectFromString( element.getAttribute( Constants.SYNTAX_JS_ATTRIBUTE_NAME_OPTIONS ) );
-                    const syntaxButtonsParsed: StringToJson = getObjectFromString( element.getAttribute( Constants.SYNTAX_JS_ATTRIBUTE_NAME_BUTTONS ) );
+                    const syntaxOptionsParsed: StringToJson = getObjectFromString( element.getAttribute( Constant.SYNTAX_JS_ATTRIBUTE_NAME_OPTIONS ) );
+                    const syntaxButtonsParsed: StringToJson = getObjectFromString( element.getAttribute( Constant.SYNTAX_JS_ATTRIBUTE_NAME_BUTTONS ) );
 
                     if ( syntaxOptionsParsed.parsed ) {
                         if ( element.innerHTML.trim() !== Char.empty ) {
@@ -215,8 +215,8 @@ type RenderElementResult = {
 
                             _elements_Original[ elementId ] = element.innerHTML;
 
-                            element.removeAttribute( Constants.SYNTAX_JS_ATTRIBUTE_NAME_LANGUAGE );
-                            element.removeAttribute( Constants.SYNTAX_JS_ATTRIBUTE_NAME_OPTIONS );
+                            element.removeAttribute( Constant.SYNTAX_JS_ATTRIBUTE_NAME_LANGUAGE );
+                            element.removeAttribute( Constant.SYNTAX_JS_ATTRIBUTE_NAME_OPTIONS );
                             element.id = elementId;
 
                             if ( !Is.defined( codeContainer ) ) {
@@ -227,8 +227,8 @@ type RenderElementResult = {
                                 element.appendChild( codeContainer );
 
                             } else {
-                                if ( element.hasAttribute( Constants.SYNTAX_JS_ATTRIBUTE_NAME_TAB_CONTENTS ) && element.getAttribute( Constants.SYNTAX_JS_ATTRIBUTE_NAME_TAB_CONTENTS )!.toLowerCase() !== "true" ) {
-                                    const syntaxTabOptions: StringToJson = getObjectFromString( element.getAttribute( Constants.SYNTAX_JS_ATTRIBUTE_NAME_TAB_CONTENTS ) );
+                                if ( element.hasAttribute( Constant.SYNTAX_JS_ATTRIBUTE_NAME_TAB_CONTENTS ) && element.getAttribute( Constant.SYNTAX_JS_ATTRIBUTE_NAME_TAB_CONTENTS )!.toLowerCase() !== "true" ) {
+                                    const syntaxTabOptions: StringToJson = getObjectFromString( element.getAttribute( Constant.SYNTAX_JS_ATTRIBUTE_NAME_TAB_CONTENTS ) );
 
                                     if ( syntaxTabOptions.parsed && Is.definedObject( syntaxTabOptions.object ) ) {
                                         result.tabBindingOptions = getBindingTabContentOptions( syntaxTabOptions.object );
@@ -305,7 +305,7 @@ type RenderElementResult = {
                 }
 
             } else {
-                result.rendered = logError( _configuration.text!.attributeNotSetErrorText!.replace( "{{attribute_name}}", Constants.SYNTAX_JS_ATTRIBUTE_NAME_LANGUAGE ) );
+                result.rendered = logError( _configuration.text!.attributeNotSetErrorText!.replace( "{{attribute_name}}", Constant.SYNTAX_JS_ATTRIBUTE_NAME_LANGUAGE ) );
             }
         }
 

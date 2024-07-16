@@ -11,7 +11,7 @@
  */
 
 
-export namespace Constants {
+export namespace Constant {
     export const SYNTAX_JS_ATTRIBUTE_NAME_LANGUAGE = "data-syntax-language";
     export const SYNTAX_JS_ATTRIBUTE_NAME_OPTIONS = "data-syntax-options";
     export const SYNTAX_JS_ATTRIBUTE_NAME_BUTTONS = "data-syntax-buttons";
