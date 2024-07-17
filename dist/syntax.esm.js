@@ -194,7 +194,7 @@ var init_dom = __esm({
             }
             e.setNodeText = n;
             function i(e) {
-                var t = document.createRange();
+                const t = document.createRange();
                 t.selectNode(e);
                 window.getSelection().removeAllRanges();
                 window.getSelection().addRange(t);

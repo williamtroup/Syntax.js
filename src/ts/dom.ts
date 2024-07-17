@@ -43,7 +43,7 @@ export namespace DomElement {
     }
 
     export function selectTextInElement( element: HTMLElement ) : void {
-        var range = document.createRange();
+        const range: Range = document.createRange();
         range.selectNode( element );
 
         window.getSelection()!.removeAllRanges();
