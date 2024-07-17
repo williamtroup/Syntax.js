@@ -3,7 +3,6 @@
   "title": "Syntax.js",
   "description": "A lightweight, and easy-to-use, JavaScript library for code syntax highlighting!",
   "version": "3.0.1",
-  "main": "dist/syntax.js",
   "homepage": "https://www.william-troup.com/syntax-js/",
   "author": {
     "name": "Bunoon"
@@ -14,6 +13,7 @@
     "url": "https://github.com/williamtroup/Syntax.js"
   },
   "keywords": [
+    "typescript",
     "javascript",
     "css",
     "highlight",
@@ -26,6 +26,8 @@
   "bugs": {
     "url": "https://github.com/williamtroup/Syntax.js/issues"
   },
+  "main": "dist/syntax.js",
+  "types": "dist/syntax.d.ts",
   "scripts": {
     "build-all": "npm run build && npm run build-minimized",
     "build": "tsup --config tsup.build.config.ts && tsup --config tsup.build.esm.config.ts && sass src/syntax.js.scss dist/syntax.js.css",
