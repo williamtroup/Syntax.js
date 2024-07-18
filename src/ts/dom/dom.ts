@@ -3,17 +3,17 @@
  * 
  * A lightweight, and easy-to-use, JavaScript library for code syntax highlighting!
  * 
- * @file        dom.js
- * @version     v3.0.0
+ * @file        dom.ts
+ * @version     v3.0.1
  * @author      Bunoon
  * @license     MIT License
  * @copyright   Bunoon 2024
  */
 
 
-import { Char } from "./enum";
-import { Is } from "./is";
-import { type Configuration } from "./type";
+import { Char } from "../data/enum";
+import { Is } from "../data/is";
+import { type Configuration } from "../type";
 
 
 export namespace DomElement {
@@ -43,7 +43,7 @@ export namespace DomElement {
     }
 
     export function selectTextInElement( element: HTMLElement ) : void {
-        var range = document.createRange();
+        const range: Range = document.createRange();
         range.selectNode( element );
 
         window.getSelection()!.removeAllRanges();

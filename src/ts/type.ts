@@ -3,8 +3,8 @@
  * 
  * A lightweight, and easy-to-use, JavaScript library for code syntax highlighting!
  * 
- * @file        type.js
- * @version     v3.0.0
+ * @file        type.ts
+ * @version     v3.0.1
  * @author      Bunoon
  * @license     MIT License
  * @copyright   Bunoon 2024

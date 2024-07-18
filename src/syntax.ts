@@ -3,8 +3,8 @@
  * 
  * A lightweight, and easy-to-use, JavaScript library for code syntax highlighting!
  * 
- * @file        syntax.js
- * @version     v3.0.0
+ * @file        syntax.ts
+ * @version     v3.0.1
  * @author      Bunoon
  * @license     MIT License
  * @copyright   Bunoon 2024
@@ -14,20 +14,21 @@
 import {
     type BindingOptions,
     type CustomButton,
-    type BindingTabContentOptionEvents,
     type BindingTabContentOptions,
     type Configuration,
-    type SyntaxLanguage, 
-    type ConfigurationText,
-    type ConfigurationEvents,
-    type BindingOptionEvents} from "./ts/type";
+    type SyntaxLanguage } from "./ts/type";
 
-import { PublicApi } from "./ts/api";
-import { Constants } from "./ts/constant";
-import { Data } from "./ts/data";
-import { Is } from "./ts/is";
-import { Char, Language, TextCasing } from "./ts/enum";
-import { DomElement } from "./ts/dom";
+import { type PublicApi } from "./ts/api";
+import { Constant } from "./ts/constant";
+import { Default } from "./ts/data/default";
+import { Is } from "./ts/data/is";
+import { Char, Language, TextCasing } from "./ts/data/enum";
+import { DomElement } from "./ts/dom/dom";
+import { Str } from "./ts/data/str";
+import { Trigger } from "./ts/area/trigger";
+import { Config } from "./ts/options/config";
+import { Binding } from "./ts/options/binding";
+import { Tab } from "./ts/options/tab";
 
 
 type StringToJson = {
@@ -87,20 +88,20 @@ type RenderElementResult = {
             const elementsLength: number = elements.length;
 
             if ( elementsLength > 0 ) {
-                fireCustomTriggerEvent( _configuration.events!.onBeforeRender! );
+                Trigger.customEvent( _configuration.events!.onBeforeRender! );
             }
 
             for ( let elementIndex: number = 0; elementIndex < elementsLength; elementIndex++ ) {
                 const element: HTMLElement = elements[ elementIndex ];
                 let elementBreak: boolean = false;
 
-                if ( element.hasAttribute( Constants.SYNTAX_JS_ATTRIBUTE_NAME_LANGUAGE ) && element.getAttribute( Constants.SYNTAX_JS_ATTRIBUTE_NAME_LANGUAGE )!.toLowerCase() === Language.tabbed ) {
+                if ( element.hasAttribute( Constant.SYNTAX_JS_ATTRIBUTE_NAME_LANGUAGE ) && element.getAttribute( Constant.SYNTAX_JS_ATTRIBUTE_NAME_LANGUAGE )!.toLowerCase() === Language.tabbed ) {
                     const divElements: HTMLElement[] = [].slice.call( element.children );
                     const divElementsLength: number = divElements.length;
                     const tabElements: HTMLElement[] = [];
                     const tabContentElements: HTMLElement[] = [];
 
-                    element.removeAttribute( Constants.SYNTAX_JS_ATTRIBUTE_NAME_LANGUAGE );
+                    element.removeAttribute( Constant.SYNTAX_JS_ATTRIBUTE_NAME_LANGUAGE );
                     element.className = element.className === Char.empty ? "syntax-highlight" : `${element.className} syntax-highlight`;
                     element.innerHTML = Char.empty;
 
@@ -133,7 +134,7 @@ type RenderElementResult = {
             }
 
             if ( elementsLength > 0 ) {
-                fireCustomTriggerEvent( _configuration.events!.onAfterRender! );
+                Trigger.customEvent( _configuration.events!.onAfterRender! );
             }
         }
     }
@@ -147,7 +148,7 @@ type RenderElementResult = {
         tabElements.push( tab );
         tabContentElements.push( renderResult.tabContents );
 
-        tab.onclick = function() {
+        tab.onclick = () => {
             if ( tab.className !== "tab-active" ) {
                 const tabElementsLength: number = tabElements.length;
                 const tabContentElementsLength: number = tabContentElements.length;
@@ -164,7 +165,7 @@ type RenderElementResult = {
                 renderResult.tabContents.style.display = "flex";
 
                 if ( Is.definedObject( tabBindingOptions ) ) {
-                    fireCustomTriggerEvent( tabBindingOptions.events!.onOpen!, syntaxLanguage );
+                    Trigger.customEvent( tabBindingOptions.events!.onOpen!, syntaxLanguage );
                 }
             }
         };
@@ -180,24 +181,24 @@ type RenderElementResult = {
         const result: RenderElementResult = {} as RenderElementResult;
         result.rendered = true;
 
-        if ( Is.defined( element ) && element.hasAttribute( Constants.SYNTAX_JS_ATTRIBUTE_NAME_LANGUAGE ) && ( !element.hasAttribute( Constants.SYNTAX_JS_ATTRIBUTE_NAME_TAB_CONTENTS ) || Is.defined( codeContainer ) ) ) {
-            result.syntaxLanguage = element.getAttribute( Constants.SYNTAX_JS_ATTRIBUTE_NAME_LANGUAGE )!;
+        if ( Is.defined( element ) && element.hasAttribute( Constant.SYNTAX_JS_ATTRIBUTE_NAME_LANGUAGE ) && ( !element.hasAttribute( Constant.SYNTAX_JS_ATTRIBUTE_NAME_TAB_CONTENTS ) || Is.defined( codeContainer ) ) ) {
+            result.syntaxLanguage = element.getAttribute( Constant.SYNTAX_JS_ATTRIBUTE_NAME_LANGUAGE )!;
 
             if ( Is.definedString( result.syntaxLanguage ) ) {
                 const language: SyntaxLanguage = getLanguage( result.syntaxLanguage );
 
                 if ( Is.defined( language ) || result.syntaxLanguage.toLowerCase() === Language.unknown ) {
-                    const syntaxOptionsParsed: StringToJson = getObjectFromString( element.getAttribute( Constants.SYNTAX_JS_ATTRIBUTE_NAME_OPTIONS ) );
-                    const syntaxButtonsParsed: StringToJson = getObjectFromString( element.getAttribute( Constants.SYNTAX_JS_ATTRIBUTE_NAME_BUTTONS ) );
+                    const bindingOptionsParsed: StringToJson = getObjectFromString( element.getAttribute( Constant.SYNTAX_JS_ATTRIBUTE_NAME_OPTIONS ) );
+                    const syntaxButtonsParsed: StringToJson = getObjectFromString( element.getAttribute( Constant.SYNTAX_JS_ATTRIBUTE_NAME_BUTTONS ) );
 
-                    if ( syntaxOptionsParsed.parsed ) {
+                    if ( bindingOptionsParsed.parsed ) {
                         if ( element.innerHTML.trim() !== Char.empty ) {
                             let innerHTML: string = element.innerHTML;
-                            const syntaxOptions: BindingOptions = getBindingOptions( syntaxOptionsParsed.object );
+                            const bindingOptions: BindingOptions = Binding.Options.get( bindingOptionsParsed.object );
                             let isPreFormatted: boolean = false;
                             let descriptionText: string = null!;
 
-                            fireCustomTriggerEvent( syntaxOptions.events!.onBeforeRenderComplete!, element );
+                            Trigger.customEvent( bindingOptions.events!.onBeforeRenderComplete!, element );
 
                             if ( element.children.length > 0 && element.children[ 0 ].nodeName.toLowerCase() === "pre" ) {
                                 innerHTML = element.children[ 0 ].innerHTML;
@@ -210,13 +211,13 @@ type RenderElementResult = {
                             let elementId: string = element.id;
 
                             if ( !Is.definedString( elementId ) ) {
-                                elementId = Data.String.newGuid();
+                                elementId = Str.newGuid();
                             }
 
                             _elements_Original[ elementId ] = element.innerHTML;
 
-                            element.removeAttribute( Constants.SYNTAX_JS_ATTRIBUTE_NAME_LANGUAGE );
-                            element.removeAttribute( Constants.SYNTAX_JS_ATTRIBUTE_NAME_OPTIONS );
+                            element.removeAttribute( Constant.SYNTAX_JS_ATTRIBUTE_NAME_LANGUAGE );
+                            element.removeAttribute( Constant.SYNTAX_JS_ATTRIBUTE_NAME_OPTIONS );
                             element.id = elementId;
 
                             if ( !Is.defined( codeContainer ) ) {
@@ -227,11 +228,11 @@ type RenderElementResult = {
                                 element.appendChild( codeContainer );
 
                             } else {
-                                if ( element.hasAttribute( Constants.SYNTAX_JS_ATTRIBUTE_NAME_TAB_CONTENTS ) && element.getAttribute( Constants.SYNTAX_JS_ATTRIBUTE_NAME_TAB_CONTENTS )!.toLowerCase() !== "true" ) {
-                                    const syntaxTabOptions: StringToJson = getObjectFromString( element.getAttribute( Constants.SYNTAX_JS_ATTRIBUTE_NAME_TAB_CONTENTS ) );
+                                if ( element.hasAttribute( Constant.SYNTAX_JS_ATTRIBUTE_NAME_TAB_CONTENTS ) && element.getAttribute( Constant.SYNTAX_JS_ATTRIBUTE_NAME_TAB_CONTENTS )!.toLowerCase() !== "true" ) {
+                                    const tabOptions: StringToJson = getObjectFromString( element.getAttribute( Constant.SYNTAX_JS_ATTRIBUTE_NAME_TAB_CONTENTS ) );
 
-                                    if ( syntaxTabOptions.parsed && Is.definedObject( syntaxTabOptions.object ) ) {
-                                        result.tabBindingOptions = getBindingTabContentOptions( syntaxTabOptions.object );
+                                    if ( tabOptions.parsed && Is.definedObject( tabOptions.object ) ) {
+                                        result.tabBindingOptions = Tab.Options.get( tabOptions.object );
                                         descriptionText = result.tabBindingOptions.description!;
 
                                         if ( Is.definedString( result.tabBindingOptions.title ) ) {
@@ -254,7 +255,7 @@ type RenderElementResult = {
                                 DomElement.setNodeText( description, descriptionText, _configuration );
                             }
 
-                            if ( syntaxOptions.showLineNumbers ) {
+                            if ( bindingOptions.showLineNumbers ) {
                                 numbers = DomElement.create( "div", "numbers" );
                                 result.tabContents.appendChild( numbers );
                             }
@@ -262,21 +263,21 @@ type RenderElementResult = {
                             const syntax: HTMLElement = DomElement.create( "div", "syntax" );
                             result.tabContents.appendChild( syntax );
 
-                            renderElementButtons( syntax, syntaxOptions, result.syntaxLanguage, syntaxButtonsParsed, innerHTMLCopy );
+                            renderElementButtons( syntax, bindingOptions, result.syntaxLanguage, syntaxButtonsParsed, innerHTMLCopy );
 
                             if ( result.syntaxLanguage.toLowerCase() !== Language.unknown ) {
-                                innerHTML = renderHTML( innerHTML, language, syntaxOptions );
+                                innerHTML = renderHTML( innerHTML, language, bindingOptions );
                             } else {
-                                innerHTML = Data.String.encodeMarkUpCharacters( innerHTML );
+                                innerHTML = Str.encodeMarkUpCharacters( innerHTML );
                             }
 
-                            renderElementCompletedHTML( description, numbers, syntax, innerHTML, syntaxOptions, isPreFormatted );
-                            fireCustomTriggerEvent( syntaxOptions.events!.onRenderComplete!, element );
+                            renderElementCompletedHTML( description, numbers, syntax, innerHTML, bindingOptions, isPreFormatted );
+                            Trigger.customEvent( bindingOptions.events!.onRenderComplete!, element );
 
                             if ( !Is.defined( result.tabContents ) ) {
-                                renderSyntaxCustomTriggers( element, syntaxOptions );
+                                renderSyntaxCustomTriggers( element, bindingOptions );
                             } else {
-                                renderSyntaxCustomTriggers( result.tabContents, syntaxOptions );
+                                renderSyntaxCustomTriggers( result.tabContents, bindingOptions );
                             }
 
                             _elements.push( element );
@@ -305,59 +306,59 @@ type RenderElementResult = {
                 }
 
             } else {
-                result.rendered = logError( _configuration.text!.attributeNotSetErrorText!.replace( "{{attribute_name}}", Constants.SYNTAX_JS_ATTRIBUTE_NAME_LANGUAGE ) );
+                result.rendered = logError( _configuration.text!.attributeNotSetErrorText!.replace( "{{attribute_name}}", Constant.SYNTAX_JS_ATTRIBUTE_NAME_LANGUAGE ) );
             }
         }
 
         return result;
     }
 
-    function renderSyntaxCustomTriggers( element: HTMLElement, syntaxOptions: BindingOptions ) : void {
-        renderElementClickEvents( element, syntaxOptions.events!.onKeywordClicked!, "keyword-clickable" );
-        renderElementClickEvents( element, syntaxOptions.events!.onKeywordClicked!, "no-highlight-keyword-clickable" );
-        renderElementClickEvents( element, syntaxOptions.events!.onValueClicked!, "value-clickable" );
-        renderElementClickEvents( element, syntaxOptions.events!.onValueClicked!, "no-highlight-value-clickable" );
-        renderElementClickEvents( element, syntaxOptions.events!.onAttributeClicked!, "attribute-clickable" );
-        renderElementClickEvents( element, syntaxOptions.events!.onAttributeClicked!, "no-highlight-attribute-clickable" );
+    function renderSyntaxCustomTriggers( element: HTMLElement, bindingOptions: BindingOptions ) : void {
+        renderElementClickEvents( element, bindingOptions.events!.onKeywordClicked!, "keyword-clickable" );
+        renderElementClickEvents( element, bindingOptions.events!.onKeywordClicked!, "no-highlight-keyword-clickable" );
+        renderElementClickEvents( element, bindingOptions.events!.onValueClicked!, "value-clickable" );
+        renderElementClickEvents( element, bindingOptions.events!.onValueClicked!, "no-highlight-value-clickable" );
+        renderElementClickEvents( element, bindingOptions.events!.onAttributeClicked!, "attribute-clickable" );
+        renderElementClickEvents( element, bindingOptions.events!.onAttributeClicked!, "no-highlight-attribute-clickable" );
     }
 
-    function renderHTML( innerHTML: string, language: SyntaxLanguage, syntaxOptions: BindingOptions ) : string {
+    function renderHTML( innerHTML: string, language: SyntaxLanguage, bindingOptions: BindingOptions ) : string {
         if ( !language.isMarkUp ) {
-            innerHTML = Data.String.encodeMarkUpCharacters( innerHTML );
+            innerHTML = Str.encodeMarkUpCharacters( innerHTML );
         }
 
-        if ( syntaxOptions.highlightComments ) {
-            innerHTML = renderElementMultiLineCommentVariables( innerHTML, language, syntaxOptions );
-            innerHTML = renderElementCommentVariables( innerHTML, language, syntaxOptions );
+        if ( bindingOptions.highlightComments ) {
+            innerHTML = renderElementMultiLineCommentVariables( innerHTML, language, bindingOptions );
+            innerHTML = renderElementCommentVariables( innerHTML, language, bindingOptions );
         }
 
-        if ( syntaxOptions.highlightStrings ) {
-            innerHTML = renderElementStringPatternVariables( innerHTML, innerHTML.match( /"((?:\\.|[^"\\])*)"/g )!, syntaxOptions );
+        if ( bindingOptions.highlightStrings ) {
+            innerHTML = renderElementStringPatternVariables( innerHTML, innerHTML.match( /"((?:\\.|[^"\\])*)"/g )!, bindingOptions );
 
             if ( language.comment !== "'" ) {
-                innerHTML = renderElementStringPatternVariables( innerHTML, innerHTML.match( /'((?:\\.|[^"\\])*)'/g )!, syntaxOptions );
+                innerHTML = renderElementStringPatternVariables( innerHTML, innerHTML.match( /'((?:\\.|[^"\\])*)'/g )!, bindingOptions );
             }
         }
 
         if ( !language.isMarkUp ) {
-            innerHTML = renderElementKeywords( innerHTML, language, syntaxOptions );
+            innerHTML = renderElementKeywords( innerHTML, language, bindingOptions );
         } else {
-            innerHTML = replaceMarkUpKeywords( innerHTML, language, syntaxOptions );
+            innerHTML = replaceMarkUpKeywords( innerHTML, language, bindingOptions );
         }
         
-        innerHTML = renderElementValues( innerHTML, language, syntaxOptions );
+        innerHTML = renderElementValues( innerHTML, language, bindingOptions );
 
         if ( language.isMarkUp ) {
-            innerHTML = renderElementAttributes( innerHTML, language, syntaxOptions );
+            innerHTML = renderElementAttributes( innerHTML, language, bindingOptions );
         }
 
-        innerHTML = Data.String.encodeMarkUpCharacters( innerHTML );
+        innerHTML = Str.encodeMarkUpCharacters( innerHTML );
 
-        if ( syntaxOptions.highlightComments ) {
+        if ( bindingOptions.highlightComments ) {
             innerHTML = renderElementCommentsFromVariables( innerHTML, language );
         }
         
-        if ( syntaxOptions.highlightStrings ) {
+        if ( bindingOptions.highlightStrings ) {
             innerHTML = renderElementStringQuotesFromVariables( innerHTML );
         }
 
@@ -371,8 +372,8 @@ type RenderElementResult = {
         return innerHTML;
     }
 
-    function renderElementButtons( syntax: HTMLElement, syntaxOptions: BindingOptions, syntaxLanguage: string, syntaxButtonsParsed: StringToJson, innerHTMLCopy: string ) : void {
-        if ( syntaxOptions.showLanguageLabel || syntaxOptions.showCopyButton || syntaxOptions.showPrintButton || syntaxButtonsParsed.parsed ) {
+    function renderElementButtons( syntax: HTMLElement, bindingOptions: BindingOptions, syntaxLanguage: string, syntaxButtonsParsed: StringToJson, innerHTMLCopy: string ) : void {
+        if ( bindingOptions.showLanguageLabel || bindingOptions.showCopyButton || bindingOptions.showPrintButton || syntaxButtonsParsed.parsed ) {
             const buttons: HTMLElement = DomElement.create( "div", "buttons" );
             const buttonsElements: HTMLElement[] = [];
 
@@ -386,35 +387,35 @@ type RenderElementResult = {
                     const customButton: CustomButton = customButtons[ customButtonsIndex ];
 
                     if ( Is.defined( customButton.text ) && Is.definedFunction( customButton.events!.onClick! ) ) {
-                        renderElementButton( customButton, buttonsElements, buttons, innerHTMLCopy, syntaxOptions );
+                        renderElementButton( customButton, buttonsElements, buttons, innerHTMLCopy, bindingOptions );
                     }
                 }
             }
 
-            if ( syntaxOptions.showCopyButton ) {
+            if ( bindingOptions.showCopyButton ) {
                 const copyButton: HTMLButtonElement = DomElement.create( "button", "button" ) as HTMLButtonElement;
-                copyButton.style.display = syntaxOptions.buttonsVisible ? "inline-block" : "none";
+                copyButton.style.display = bindingOptions.buttonsVisible ? "inline-block" : "none";
                 buttons.appendChild( copyButton );
 
                 DomElement.setNodeText( copyButton, _configuration.text!.copyButtonText!, _configuration );
 
-                copyButton.onclick = function() {
+                copyButton.onclick =() => {
                     navigator.clipboard.writeText( innerHTMLCopy );
 
-                    fireCustomTriggerEvent( syntaxOptions.events!.onCopy!, innerHTMLCopy );
+                    Trigger.customEvent( bindingOptions.events!.onCopy!, innerHTMLCopy );
                 };
 
                 buttonsElements.push( copyButton );
             }
 
-            if ( syntaxOptions.showPrintButton ) {
+            if ( bindingOptions.showPrintButton ) {
                 const printButton: HTMLButtonElement = DomElement.create( "button", "button" ) as HTMLButtonElement;
-                printButton.style.display = syntaxOptions.buttonsVisible ? "inline-block" : "none";
+                printButton.style.display = bindingOptions.buttonsVisible ? "inline-block" : "none";
                 buttons.appendChild( printButton );
 
                 DomElement.setNodeText( printButton, _configuration.text!.printButtonText!, _configuration );
 
-                printButton.onclick = function() {
+                printButton.onclick =() => {
                     const newWindow: WindowProxy = window.open( Char.empty, "PRINT", "height=400,width=600" )!;
                     const newElementForPrint: HTMLElement = syntax.cloneNode( true ) as HTMLElement;
                     const newTitleElement: HTMLElement = DomElement.create( "div" );
@@ -442,27 +443,27 @@ type RenderElementResult = {
                     newWindow.print();
                     newWindow.close();
 
-                    fireCustomTriggerEvent( syntaxOptions.events!.onPrint!, newElementForPrint.innerHTML );
+                    Trigger.customEvent( bindingOptions.events!.onPrint!, newElementForPrint.innerHTML );
                 };
 
                 buttonsElements.push( printButton );
             }
 
-            if ( syntaxOptions.showLanguageLabel ) {
+            if ( bindingOptions.showLanguageLabel ) {
                 const languageLabel: HTMLElement = DomElement.create( "div", "language-label" );
                 buttons.appendChild( languageLabel );
 
-                DomElement.setNodeText( languageLabel, getFriendlyLanguageName( syntaxLanguage, syntaxOptions.languageLabelCasing! ), _configuration );
+                DomElement.setNodeText( languageLabel, getFriendlyLanguageName( syntaxLanguage, bindingOptions.languageLabelCasing! ), _configuration );
             }
 
             const buttonsElementsLength: number = buttonsElements.length;
 
-            if ( buttonsElementsLength > syntaxOptions.maximumButtons! ) {
+            if ( buttonsElementsLength > bindingOptions.maximumButtons! ) {
                 const openButton: HTMLButtonElement = DomElement.create( "button", "button button-opener" ) as HTMLButtonElement;
-                openButton.innerText = syntaxOptions.buttonsVisible ? _configuration.text!.buttonsCloserText! : _configuration.text!.buttonsOpenerText!;
+                openButton.innerText = bindingOptions.buttonsVisible ? _configuration.text!.buttonsCloserText! : _configuration.text!.buttonsOpenerText!;
                 buttons.insertBefore( openButton, buttons.children[ 0 ] );
 
-                openButton.onclick = function() {
+                openButton.onclick =() => {
                     const areButtonsVisible: boolean = openButton.innerText === _configuration.text!.buttonsCloserText;
 
                     for ( let buttonsElementIndex: number = 0; buttonsElementIndex < buttonsElementsLength; buttonsElementIndex++ ) {
@@ -472,13 +473,13 @@ type RenderElementResult = {
                     openButton.innerText = areButtonsVisible ? _configuration.text!.buttonsOpenerText! : _configuration.text!.buttonsCloserText!;
 
                     if ( areButtonsVisible ) {
-                        fireCustomTriggerEvent( syntaxOptions.events!.onButtonsClosed! );
+                        Trigger.customEvent( bindingOptions.events!.onButtonsClosed! );
                     } else {
-                        fireCustomTriggerEvent( syntaxOptions.events!.onButtonsOpened! );
+                        Trigger.customEvent( bindingOptions.events!.onButtonsOpened! );
                     }
                 };
 
-            } else if ( !syntaxOptions.buttonsVisible && buttonsElementsLength <= syntaxOptions.maximumButtons! ) {
+            } else if ( !bindingOptions.buttonsVisible && buttonsElementsLength <= bindingOptions.maximumButtons! ) {
                 for ( let buttonsElementIndex: number = 0; buttonsElementIndex < buttonsElementsLength; buttonsElementIndex++ ) {
                     buttonsElements[ buttonsElementIndex ].style.display = "inline-block";
                 }
@@ -486,14 +487,14 @@ type RenderElementResult = {
         }
     }
 
-    function renderElementButton( customButton: CustomButton, buttonsElements: HTMLElement[], buttons: HTMLElement, innerHTMLCopy: string, syntaxOptions: BindingOptions ) : void {
+    function renderElementButton( customButton: CustomButton, buttonsElements: HTMLElement[], buttons: HTMLElement, innerHTMLCopy: string, bindingOptions: BindingOptions ) : void {
         const newCustomButton: HTMLButtonElement = DomElement.create( "button", "button" ) as HTMLButtonElement;
-        newCustomButton.style.display = syntaxOptions.buttonsVisible ? "inline-block" : "none";
+        newCustomButton.style.display = bindingOptions.buttonsVisible ? "inline-block" : "none";
         buttons.appendChild( newCustomButton );
 
         DomElement.setNodeText( newCustomButton, customButton.text!, _configuration );
 
-        newCustomButton.onclick = function() {
+        newCustomButton.onclick =() => {
             customButton.events!.onClick!( innerHTMLCopy );
         };
 
@@ -504,7 +505,7 @@ type RenderElementResult = {
         buttonsElements.push( newCustomButton );
     }
 
-    function renderElementCommentVariables( innerHTML: string, language: SyntaxLanguage, syntaxOptions: BindingOptions ) : string {
+    function renderElementCommentVariables( innerHTML: string, language: SyntaxLanguage, bindingOptions: BindingOptions ) : string {
         const lookup: string = language.comment!;
 
         if ( Is.definedString( lookup ) ) {
@@ -522,7 +523,7 @@ type RenderElementResult = {
         
                     innerHTML = innerHTML.replace( comment, commentVariable );
     
-                    fireCustomTriggerEvent( syntaxOptions.events!.onCommentRender!, comment );
+                    Trigger.customEvent( bindingOptions.events!.onCommentRender!, comment );
                 }
             }
         }
@@ -530,7 +531,7 @@ type RenderElementResult = {
         return innerHTML;
     }
 
-    function renderElementMultiLineCommentVariables( innerHTML: string, language: SyntaxLanguage, syntaxOptions: BindingOptions ) : string {
+    function renderElementMultiLineCommentVariables( innerHTML: string, language: SyntaxLanguage, bindingOptions: BindingOptions ) : string {
         const multiLineComment: string[] = language.multiLineComment as string[];
 
         if ( Is.definedArray( multiLineComment ) && multiLineComment.length === 2 ) {
@@ -559,7 +560,7 @@ type RenderElementResult = {
                             innerHTML = innerHTML.replace( commentLine, commentVariable );
                         }
 
-                        fireCustomTriggerEvent( syntaxOptions.events!.onCommentRender!, comment );
+                        Trigger.customEvent( bindingOptions.events!.onCommentRender!, comment );
                     }
                 }
             }
@@ -568,7 +569,7 @@ type RenderElementResult = {
         return innerHTML;
     }
 
-    function renderElementStringPatternVariables( innerHTML: string, patternItems: string[], syntaxOptions: BindingOptions ) : string {
+    function renderElementStringPatternVariables( innerHTML: string, patternItems: string[], bindingOptions: BindingOptions ) : string {
         if ( patternItems !== null ) {
             const patternItemsLength: number = patternItems.length;
         
@@ -588,20 +589,20 @@ type RenderElementResult = {
                     innerHTML = innerHTML.replace( stringLine, stringVariable );
                 }
 
-                fireCustomTriggerEvent( syntaxOptions.events!.onStringRender!, string );
+                Trigger.customEvent( bindingOptions.events!.onStringRender!, string );
             }
         }
 
         return innerHTML;
     }
 
-    function renderElementKeywords( innerHTML: string, language: SyntaxLanguage, syntaxOptions: BindingOptions ) : string {
-        const keywords: string[] = Data.getDefaultStringOrArray( language.keywords, [] );
+    function renderElementKeywords( innerHTML: string, language: SyntaxLanguage, bindingOptions: BindingOptions ) : string {
+        const keywords: string[] = Default.getStringOrArray( language.keywords, [] );
         const keywordsLength: number = keywords.length;
         const caseSensitive: boolean = language.caseSensitive!;
         const keywordsCasing: string = getKeywordCasing( language.keywordsCasing! );
 
-        Data.String.sortArrayOfStringByLength( keywords );
+        Str.sortArrayOfStringByLength( keywords );
 
         for ( let keywordIndex: number = 0; keywordIndex < keywordsLength; keywordIndex++ ) {
             const keyword: string = keywords[ keywordIndex ];
@@ -611,8 +612,8 @@ type RenderElementResult = {
             const regExFlags: string = caseSensitive ? "g" : "gi";
             const regEx: RegExp = new RegExp( getWordRegEx( keyword, language ), regExFlags );
 
-            if ( syntaxOptions.highlightKeywords ) {
-                if ( Is.definedFunction( syntaxOptions.events!.onKeywordClicked ) ) {
+            if ( bindingOptions.highlightKeywords ) {
+                if ( Is.definedFunction( bindingOptions.events!.onKeywordClicked ) ) {
                     keywordReplacement = `<span class=\"keyword-clickable\">${keywordDisplay}</span>`;
                     innerHTML = innerHTML.replace( regEx, keywordVariable );
                 } else {
@@ -621,7 +622,7 @@ type RenderElementResult = {
                 }
 
             } else {
-                if ( Is.definedFunction( syntaxOptions.events!.onKeywordClicked ) ) {
+                if ( Is.definedFunction( bindingOptions.events!.onKeywordClicked ) ) {
                     keywordReplacement = `<span class=\"no-highlight-keyword-clickable\">${keywordDisplay}</span>`;
                     innerHTML = innerHTML.replace( regEx, keywordVariable );
                 }
@@ -630,14 +631,14 @@ type RenderElementResult = {
             _cached_Keywords[ keywordVariable ] = keywordReplacement;
             _cached_Keywords_Count++;
 
-            fireCustomTriggerEvent( syntaxOptions.events!.onKeywordRender!, keyword );
+            Trigger.customEvent( bindingOptions.events!.onKeywordRender!, keyword );
         }
 
         return innerHTML;
     }
 
-    function replaceMarkUpKeywords( innerHTML: string, language: SyntaxLanguage, syntaxOptions: BindingOptions ) : string {
-        const keywords: string[] = Data.getDefaultStringOrArray( language.keywords, [] );
+    function replaceMarkUpKeywords( innerHTML: string, language: SyntaxLanguage, bindingOptions: BindingOptions ) : string {
+        const keywords: string[] = Default.getStringOrArray( language.keywords, [] );
         const caseSensitive: boolean = language.caseSensitive!;
         const keywordsCasing: string = getKeywordCasing( language.keywordsCasing! );
 
@@ -660,15 +661,15 @@ type RenderElementResult = {
                 let keywordReplacement: string = null!;
                 let replacementTagDisplay: string = getDisplayTextTestCasing( tag, keywordsCasing );
 
-                if ( syntaxOptions.highlightKeywords ) {
-                    if ( Is.definedFunction( syntaxOptions.events!.onKeywordClicked ) ) {
+                if ( bindingOptions.highlightKeywords ) {
+                    if ( Is.definedFunction( bindingOptions.events!.onKeywordClicked ) ) {
                         keywordReplacement = `<span class=\"keyword-clickable\">${replacementTagDisplay}</span>`;
                     } else {
                         keywordReplacement = `<span class=\"keyword\">${replacementTagDisplay}</span>`;
                     }
     
                 } else {
-                    if ( Is.definedFunction( syntaxOptions.events!.onKeywordClicked ) ) {
+                    if ( Is.definedFunction( bindingOptions.events!.onKeywordClicked ) ) {
                         keywordReplacement = `<span class=\"no-highlight-keyword-clickable\">${replacementTagDisplay}</span>`;
                     }
                 }
@@ -685,12 +686,12 @@ type RenderElementResult = {
         return innerHTML;
     }
 
-    function renderElementValues( innerHTML: string, language: SyntaxLanguage, syntaxOptions: BindingOptions ) : string {
-        const values: string[] = Data.getDefaultStringOrArray( language.values, [] );
+    function renderElementValues( innerHTML: string, language: SyntaxLanguage, bindingOptions: BindingOptions ) : string {
+        const values: string[] = Default.getStringOrArray( language.values, [] );
         const valuesLength: number = values.length;
         const caseSensitive: boolean = language.caseSensitive!;
 
-        Data.String.sortArrayOfStringByLength( values );
+        Str.sortArrayOfStringByLength( values );
 
         for ( let valueIndex: number = 0; valueIndex < valuesLength; valueIndex++ ) {
             const value: string = values[ valueIndex ];
@@ -699,8 +700,8 @@ type RenderElementResult = {
             const regExFlags: string = caseSensitive ? "g" : "gi";
             const regEx: RegExp = new RegExp( getWordRegEx( value, language ), regExFlags );
 
-            if ( syntaxOptions.highlightValues ) {
-                if ( Is.definedFunction( syntaxOptions.events!.onValueClicked! ) ) {
+            if ( bindingOptions.highlightValues ) {
+                if ( Is.definedFunction( bindingOptions.events!.onValueClicked! ) ) {
                     valueReplacement = `<span class=\"value-clickable\">${value}</span>`;
                     innerHTML = innerHTML.replace( regEx, valueVariable );
                 } else {
@@ -709,7 +710,7 @@ type RenderElementResult = {
                 }
 
             } else {
-                if ( Is.definedFunction( syntaxOptions.events!.onValueClicked! ) ) {
+                if ( Is.definedFunction( bindingOptions.events!.onValueClicked! ) ) {
                     valueReplacement = `<span class=\"no-highlight-value-clickable\">${value}</span>`;
                     innerHTML = innerHTML.replace( regEx, valueVariable );
                 }
@@ -718,18 +719,18 @@ type RenderElementResult = {
             _cached_Values[ valueVariable ] = valueReplacement;
             _cached_Values_Count++;
 
-            fireCustomTriggerEvent( syntaxOptions.events!.onValueRender!, value );
+            Trigger.customEvent( bindingOptions.events!.onValueRender!, value );
         }
 
         return innerHTML;
     }
 
-    function renderElementAttributes( innerHTML: string, language: SyntaxLanguage, syntaxOptions: BindingOptions ) : string {
-        const attributes: string[] = Data.getDefaultStringOrArray( language.attributes, [] );
+    function renderElementAttributes( innerHTML: string, language: SyntaxLanguage, bindingOptions: BindingOptions ) : string {
+        const attributes: string[] = Default.getStringOrArray( language.attributes, [] );
         const attributesLength: number = attributes.length;
         const caseSensitive: boolean = language.caseSensitive!;
 
-        Data.String.sortArrayOfStringByLength( attributes );
+        Str.sortArrayOfStringByLength( attributes );
 
         for ( let attributeIndex: number = 0; attributeIndex < attributesLength; attributeIndex++ ) {
             const attribute: string = attributes[ attributeIndex ];
@@ -738,8 +739,8 @@ type RenderElementResult = {
             let regExFlags: string = caseSensitive ? "g" : "gi";
             const regEx: RegExp = new RegExp( getWordRegEx( attribute, language ), regExFlags );
 
-            if ( syntaxOptions.highlightAttributes ) {
-                if ( Is.definedFunction( syntaxOptions.events!.onAttributeClicked ) ) {
+            if ( bindingOptions.highlightAttributes ) {
+                if ( Is.definedFunction( bindingOptions.events!.onAttributeClicked ) ) {
                     attributeReplacement = `<span class=\"attribute-clickable\">${attribute}</span>`;
                     innerHTML = innerHTML.replace( regEx, attributeVariable );
                 } else {
@@ -748,7 +749,7 @@ type RenderElementResult = {
                 }
 
             } else {
-                if ( Is.definedFunction( syntaxOptions.events!.onAttributeClicked ) ) {
+                if ( Is.definedFunction( bindingOptions.events!.onAttributeClicked ) ) {
                     attributeReplacement = `<span class=\"no-highlight-attribute-clickable\">${attribute}</span>`;
                     innerHTML = innerHTML.replace( regEx, attributeVariable );
                 }
@@ -757,7 +758,7 @@ type RenderElementResult = {
             _cached_Attributes[ attributeVariable ] = attributeReplacement;
             _cached_Attributes_Count++;
 
-            fireCustomTriggerEvent( syntaxOptions.events!.onAttributeRender!, attribute );
+            Trigger.customEvent( bindingOptions.events!.onAttributeRender!, attribute );
         }
 
         return innerHTML;
@@ -779,8 +780,8 @@ type RenderElementResult = {
         let end: string = null!;
 
         if ( Is.definedArray( multiLineComment ) && multiLineComment.length === 2 ) {
-            start = Data.String.encodeMarkUpCharacters( multiLineComment[ 0 ] );
-            end = Data.String.encodeMarkUpCharacters( multiLineComment[ 1 ] );
+            start = Str.encodeMarkUpCharacters( multiLineComment[ 0 ] );
+            end = Str.encodeMarkUpCharacters( multiLineComment[ 1 ] );
         }
 
         for ( let commentVariable in _cached_Comments ) {
@@ -811,7 +812,7 @@ type RenderElementResult = {
         return innerHTML;
     }
 
-    function renderElementCompletedHTML( description: HTMLElement, numbers: HTMLElement, syntax: HTMLElement, innerHTML: string, syntaxOptions: BindingOptions, isPreFormatted: boolean ) : void {
+    function renderElementCompletedHTML( description: HTMLElement, numbers: HTMLElement, syntax: HTMLElement, innerHTML: string, bindingOptions: BindingOptions, isPreFormatted: boolean ) : void {
         const lines: string[] = innerHTML.split( Char.newLine );
         const linesLength: number = lines.length;
         const linesLengthStringLength: number = linesLength.toString().length;
@@ -831,20 +832,20 @@ type RenderElementResult = {
             }
         }
 
-        if ( syntaxOptions.doubleClickToSelectAll ) {
+        if ( bindingOptions.doubleClickToSelectAll ) {
             if ( Is.defined( description ) ) {
-                description.ondblclick = function() {
+                description.ondblclick =() => {
                     DomElement.selectTextInElement( codeContainer );
                 };
             }
 
             if ( Is.defined( numbers ) ) {
-                numbers.ondblclick = function() {
+                numbers.ondblclick =() => {
                     DomElement.selectTextInElement( codeContainer );
                 };
             }
     
-            syntax.ondblclick = function() {
+            syntax.ondblclick =() => {
                 DomElement.selectTextInElement( codeContainer );
             };
         }
@@ -857,17 +858,17 @@ type RenderElementResult = {
             }
 
             if ( ( lineIndex !== 0 && lineIndex !== linesLength - 1 ) || line.trim() !== Char.empty ) {
-                if ( line.trim() !== Char.empty || !syntaxOptions.removeBlankLines ) {
+                if ( line.trim() !== Char.empty || !bindingOptions.removeBlankLines ) {
                     const isBlank: boolean = line.trim() === Char.empty;
 
-                    if ( isBlank && !lastLineWasBlank || !syntaxOptions.removeDuplicateBlankLines || !isBlank ) {
+                    if ( isBlank && !lastLineWasBlank || !bindingOptions.removeDuplicateBlankLines || !isBlank ) {
                         lastLineWasBlank = isBlank;
 
                         if ( Is.defined( numberContainer ) ) {
                             const numberCode: HTMLElement = DomElement.create( "p" );
     
-                            if ( syntaxOptions.padLineNumbers ) {
-                                numberCode.innerText = Data.String.padNumber( lineNumber.toString(), linesLengthStringLength );
+                            if ( bindingOptions.padLineNumbers ) {
+                                numberCode.innerText = Str.padNumber( lineNumber.toString(), linesLengthStringLength );
                             } else {
                                 numberCode.innerText = lineNumber.toString();
                             }
@@ -912,7 +913,7 @@ type RenderElementResult = {
     function renderElementClickEvent( element: HTMLElement, customTrigger: Function ) : void {
         const text: string = element.innerText;
 
-        element.onclick = function() {
+        element.onclick =() => {
             customTrigger( text );
         };
     }
@@ -983,106 +984,6 @@ type RenderElementResult = {
 
     /*
      * ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-     * Binding Options
-     * ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-     */
-
-    function getBindingOptions( newOptions: any ) : BindingOptions {
-        let options: BindingOptions = Data.getDefaultObject( newOptions, {} as BindingOptions );
-
-        options = buildBindingAttributeOptions( options );
-        options = buildBindingAttributeOptionCustomTriggers( options );
-
-        return options;
-    }
-
-    function buildBindingAttributeOptions( options: BindingOptions ) : BindingOptions {
-        options.showCopyButton = Data.getDefaultBoolean( options.showCopyButton, true );
-        options.removeBlankLines = Data.getDefaultBoolean( options.removeBlankLines, false );
-        options.showLineNumbers = Data.getDefaultBoolean( options.showLineNumbers, true );
-        options.highlightKeywords = Data.getDefaultBoolean( options.highlightKeywords, true );
-        options.highlightValues = Data.getDefaultBoolean( options.highlightValues, true );
-        options.highlightAttributes = Data.getDefaultBoolean( options.highlightAttributes, true );
-        options.highlightStrings = Data.getDefaultBoolean( options.highlightStrings, true );
-        options.highlightComments = Data.getDefaultBoolean( options.highlightComments, true );
-        options.showLanguageLabel = Data.getDefaultBoolean( options.showLanguageLabel, true );
-        options.showPrintButton = Data.getDefaultBoolean( options.showPrintButton, true );
-        options.padLineNumbers = Data.getDefaultBoolean( options.padLineNumbers, false );
-        options.removeDuplicateBlankLines = Data.getDefaultBoolean( options.removeDuplicateBlankLines, true );
-        options.doubleClickToSelectAll = Data.getDefaultBoolean( options.doubleClickToSelectAll, true );
-        options.languageLabelCasing = Data.getDefaultString( options.languageLabelCasing, TextCasing.uppercase );
-        options.buttonsVisible = Data.getDefaultBoolean( options.buttonsVisible, true );
-        options.maximumButtons = Data.getDefaultNumber( options.maximumButtons, 2 );
-        
-        return options;
-    }
-
-    function buildBindingAttributeOptionCustomTriggers( options: BindingOptions ) : BindingOptions {
-        options.events = Data.getDefaultObject( options.events, {} as BindingOptionEvents );
-        options.events!.onCopy = Data.getDefaultFunction( options.events!.onCopy, null! );
-        options.events!.onRenderComplete = Data.getDefaultFunction( options.events!.onRenderComplete, null! );
-        options.events!.onKeywordClicked = Data.getDefaultFunction( options.events!.onKeywordClicked, null! );
-        options.events!.onValueClicked = Data.getDefaultFunction( options.events!.onValueClicked, null! );
-        options.events!.onAttributeClicked = Data.getDefaultFunction( options.events!.onAttributeClicked, null! );
-        options.events!.onKeywordRender = Data.getDefaultFunction( options.events!.onKeywordRender, null! );
-        options.events!.onValueRender = Data.getDefaultFunction( options.events!.onValueRender, null! );
-        options.events!.onAttributeRender = Data.getDefaultFunction( options.events!.onAttributeRender, null! );
-        options.events!.onStringRender = Data.getDefaultFunction( options.events!.onStringRender, null! );
-        options.events!.onCommentRender = Data.getDefaultFunction( options.events!.onCommentRender, null! );
-        options.events!.onPrint = Data.getDefaultFunction( options.events!.onPrint, null! );
-        options.events!.onBeforeRenderComplete = Data.getDefaultFunction( options.events!.onBeforeRenderComplete, null! );
-        options.events!.onButtonsOpened = Data.getDefaultFunction( options.events!.onButtonsOpened, null! );
-        options.events!.onButtonsClosed = Data.getDefaultFunction( options.events!.onButtonsClosed, null! );
-
-        return options;
-    }
-
-
-    /*
-     * ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-     * Binding Options - Tab Contents
-     * ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-     */
-
-    function getBindingTabContentOptions( newOptions: any ) : BindingTabContentOptions {
-        let options: BindingTabContentOptions = Data.getDefaultObject( newOptions, {} as BindingTabContentOptions );
-
-        options = buildBindingTabContentAttributeOptionStrings( options );
-        options = buildBindingTabContentAttributeOptionCustomTriggers( options );
-
-        return options;
-    }
-
-    function buildBindingTabContentAttributeOptionStrings( options: BindingTabContentOptions ) : BindingTabContentOptions {
-        options.title = Data.getDefaultString( options.title, null! );
-        options.description = Data.getDefaultString( options.description, null! );
-
-        return options;
-    }
-
-    function buildBindingTabContentAttributeOptionCustomTriggers( options: BindingTabContentOptions ) : BindingTabContentOptions {
-        options.events = Data.getDefaultFunction( options.events, {} as BindingTabContentOptionEvents );
-        options.events!.onOpen = Data.getDefaultFunction( options.events!.onOpen, null! );
-
-        return options;
-    }
-
-
-    /*
-     * ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-     * Triggering Custom Events
-     * ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-     */
-
-    function fireCustomTriggerEvent( triggerFunction: Function, ...args : any[] ) : void {
-        if ( Is.definedFunction( triggerFunction ) ) {
-            triggerFunction.apply( null, [].slice.call( args, 0 ) );
-        }
-    }
-
-
-    /*
-     * ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
      * Default Parameter/Option Handling
      * ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
      */
@@ -1128,41 +1029,6 @@ type RenderElementResult = {
         }
 
         return result;
-    }
-
-
-	/*
-	 * ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-	 * Public API Functions:  Helpers:  Configuration
-	 * ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-	 */
-
-    function buildDefaultConfiguration( newConfiguration: Configuration = null! ) : void {
-        _configuration = Data.getDefaultObject( newConfiguration, {} as Configuration );
-        _configuration.safeMode = Data.getDefaultBoolean( _configuration.safeMode, true );
-        _configuration.highlightAllDomElementTypes = Data.getDefaultStringOrArray( _configuration.highlightAllDomElementTypes, [ "div", "code" ] );
-        _configuration.allowHtmlInTextDisplay = Data.getDefaultBoolean( _configuration.allowHtmlInTextDisplay, true );
-
-        buildDefaultConfigurationStrings();
-        buildDefaultConfigurationCustomTriggers();
-    }
-
-    function buildDefaultConfigurationStrings() : void {
-        _configuration.text = Data.getDefaultObject( _configuration.text, {} as ConfigurationText )
-        _configuration.text!.buttonsOpenerText = Data.getDefaultAnyString( _configuration.text!.buttonsOpenerText, "←" );
-        _configuration.text!.buttonsCloserText = Data.getDefaultAnyString( _configuration.text!.buttonsCloserText, "→" );
-        _configuration.text!.objectErrorText = Data.getDefaultAnyString( _configuration.text!.objectErrorText, "Errors in object: {{error_1}}, {{error_2}}" );
-        _configuration.text!.attributeNotSetErrorText = Data.getDefaultAnyString( _configuration.text!.attributeNotSetErrorText, "The attribute '{{attribute_name}}' has not been set correctly." );
-        _configuration.text!.languageNotSupportedErrorText = Data.getDefaultAnyString( _configuration.text!.languageNotSupportedErrorText, "Language '{{language}}' is not supported." );
-        _configuration.text!.noCodeAvailableToRenderErrorText = Data.getDefaultAnyString( _configuration.text!.noCodeAvailableToRenderErrorText, "No code is available to render." );
-        _configuration.text!.copyButtonText = Data.getDefaultAnyString( _configuration.text!.copyButtonText, "Copy" );
-        _configuration.text!.printButtonText = Data.getDefaultAnyString( _configuration.text!.printButtonText, "Print" );
-    }
-
-    function buildDefaultConfigurationCustomTriggers() : void {
-        _configuration.events = Data.getDefaultObject( _configuration.events, {} as ConfigurationEvents )
-        _configuration.events!.onBeforeRender = Data.getDefaultFunction( _configuration.events!.onBeforeRender, null! );
-        _configuration.events!.onAfterRender = Data.getDefaultFunction( _configuration.events!.onAfterRender, null! );
     }
 
 
@@ -1307,14 +1173,14 @@ type RenderElementResult = {
             const lookup: string = name.toLowerCase();
 
             if ( _languages.hasOwnProperty( lookup ) ) {
-                details = Data.getClonedObject( lookup );
+                details = Default.getClonedObject( lookup );
             }
 
             return details;
         },
 
         getLanguages: function () : Record<string, SyntaxLanguage> {
-            return Data.getClonedObject( _languages );
+            return Default.getClonedObject( _languages );
         },
 
 
@@ -1362,7 +1228,7 @@ type RenderElementResult = {
         },
 
         getAliases: function () : Record<string, string> {
-            return Data.getClonedObject( _aliases_Rules );
+            return Default.getClonedObject( _aliases_Rules );
         },
 
 
@@ -1385,7 +1251,7 @@ type RenderElementResult = {
                 }
         
                 if ( configurationHasChanged ) {
-                    buildDefaultConfiguration( newInternalConfiguration );
+                    _configuration = Config.Options.get( newInternalConfiguration );
                 }
             }
     
@@ -1400,7 +1266,7 @@ type RenderElementResult = {
          */
 
         getVersion: function () : string {
-            return "3.0.0";
+            return "3.0.1";
         }
     };
 
@@ -1412,7 +1278,7 @@ type RenderElementResult = {
      */
 
     ( () => {
-        buildDefaultConfiguration();
+        _configuration = Config.Options.get();
 
         document.addEventListener( "DOMContentLoaded", function() {
             render();

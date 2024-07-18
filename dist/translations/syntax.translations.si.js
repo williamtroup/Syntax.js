@@ -1,4 +1,4 @@
-/*! Syntax.js v3.0.0 - Sinhalese | (c) Bunoon 2024 | MIT License */
+/*! Syntax.js v3.0.1 - Sinhalese | (c) Bunoon 2024 | MIT License */
 $syntax.setConfiguration( {
         "text": {
                 "buttonsOpenerText": "←",
