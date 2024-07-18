@@ -24,10 +24,12 @@ import {
 
 import { type PublicApi } from "./ts/api";
 import { Constant } from "./ts/constant";
-import { Data } from "./ts/data";
-import { Is } from "./ts/is";
-import { Char, Language, TextCasing } from "./ts/enum";
-import { DomElement } from "./ts/dom";
+import { Default } from "./ts/data/default";
+import { Is } from "./ts/data/is";
+import { Char, Language, TextCasing } from "./ts/data/enum";
+import { DomElement } from "./ts/dom/dom";
+import { Str } from "./ts/data/str";
+import { Trigger } from "./ts/area/trigger";
 
 
 type StringToJson = {
@@ -87,7 +89,7 @@ type RenderElementResult = {
             const elementsLength: number = elements.length;
 
             if ( elementsLength > 0 ) {
-                fireCustomTriggerEvent( _configuration.events!.onBeforeRender! );
+                Trigger.customEvent( _configuration.events!.onBeforeRender! );
             }
 
             for ( let elementIndex: number = 0; elementIndex < elementsLength; elementIndex++ ) {
@@ -133,7 +135,7 @@ type RenderElementResult = {
             }
 
             if ( elementsLength > 0 ) {
-                fireCustomTriggerEvent( _configuration.events!.onAfterRender! );
+                Trigger.customEvent( _configuration.events!.onAfterRender! );
             }
         }
     }
@@ -164,7 +166,7 @@ type RenderElementResult = {
                 renderResult.tabContents.style.display = "flex";
 
                 if ( Is.definedObject( tabBindingOptions ) ) {
-                    fireCustomTriggerEvent( tabBindingOptions.events!.onOpen!, syntaxLanguage );
+                    Trigger.customEvent( tabBindingOptions.events!.onOpen!, syntaxLanguage );
                 }
             }
         };
@@ -197,7 +199,7 @@ type RenderElementResult = {
                             let isPreFormatted: boolean = false;
                             let descriptionText: string = null!;
 
-                            fireCustomTriggerEvent( syntaxOptions.events!.onBeforeRenderComplete!, element );
+                            Trigger.customEvent( syntaxOptions.events!.onBeforeRenderComplete!, element );
 
                             if ( element.children.length > 0 && element.children[ 0 ].nodeName.toLowerCase() === "pre" ) {
                                 innerHTML = element.children[ 0 ].innerHTML;
@@ -210,7 +212,7 @@ type RenderElementResult = {
                             let elementId: string = element.id;
 
                             if ( !Is.definedString( elementId ) ) {
-                                elementId = Data.String.newGuid();
+                                elementId = Str.newGuid();
                             }
 
                             _elements_Original[ elementId ] = element.innerHTML;
@@ -267,11 +269,11 @@ type RenderElementResult = {
                             if ( result.syntaxLanguage.toLowerCase() !== Language.unknown ) {
                                 innerHTML = renderHTML( innerHTML, language, syntaxOptions );
                             } else {
-                                innerHTML = Data.String.encodeMarkUpCharacters( innerHTML );
+                                innerHTML = Str.encodeMarkUpCharacters( innerHTML );
                             }
 
                             renderElementCompletedHTML( description, numbers, syntax, innerHTML, syntaxOptions, isPreFormatted );
-                            fireCustomTriggerEvent( syntaxOptions.events!.onRenderComplete!, element );
+                            Trigger.customEvent( syntaxOptions.events!.onRenderComplete!, element );
 
                             if ( !Is.defined( result.tabContents ) ) {
                                 renderSyntaxCustomTriggers( element, syntaxOptions );
@@ -323,7 +325,7 @@ type RenderElementResult = {
 
     function renderHTML( innerHTML: string, language: SyntaxLanguage, syntaxOptions: BindingOptions ) : string {
         if ( !language.isMarkUp ) {
-            innerHTML = Data.String.encodeMarkUpCharacters( innerHTML );
+            innerHTML = Str.encodeMarkUpCharacters( innerHTML );
         }
 
         if ( syntaxOptions.highlightComments ) {
@@ -351,7 +353,7 @@ type RenderElementResult = {
             innerHTML = renderElementAttributes( innerHTML, language, syntaxOptions );
         }
 
-        innerHTML = Data.String.encodeMarkUpCharacters( innerHTML );
+        innerHTML = Str.encodeMarkUpCharacters( innerHTML );
 
         if ( syntaxOptions.highlightComments ) {
             innerHTML = renderElementCommentsFromVariables( innerHTML, language );
@@ -401,7 +403,7 @@ type RenderElementResult = {
                 copyButton.onclick =() => {
                     navigator.clipboard.writeText( innerHTMLCopy );
 
-                    fireCustomTriggerEvent( syntaxOptions.events!.onCopy!, innerHTMLCopy );
+                    Trigger.customEvent( syntaxOptions.events!.onCopy!, innerHTMLCopy );
                 };
 
                 buttonsElements.push( copyButton );
@@ -442,7 +444,7 @@ type RenderElementResult = {
                     newWindow.print();
                     newWindow.close();
 
-                    fireCustomTriggerEvent( syntaxOptions.events!.onPrint!, newElementForPrint.innerHTML );
+                    Trigger.customEvent( syntaxOptions.events!.onPrint!, newElementForPrint.innerHTML );
                 };
 
                 buttonsElements.push( printButton );
@@ -472,9 +474,9 @@ type RenderElementResult = {
                     openButton.innerText = areButtonsVisible ? _configuration.text!.buttonsOpenerText! : _configuration.text!.buttonsCloserText!;
 
                     if ( areButtonsVisible ) {
-                        fireCustomTriggerEvent( syntaxOptions.events!.onButtonsClosed! );
+                        Trigger.customEvent( syntaxOptions.events!.onButtonsClosed! );
                     } else {
-                        fireCustomTriggerEvent( syntaxOptions.events!.onButtonsOpened! );
+                        Trigger.customEvent( syntaxOptions.events!.onButtonsOpened! );
                     }
                 };
 
@@ -522,7 +524,7 @@ type RenderElementResult = {
         
                     innerHTML = innerHTML.replace( comment, commentVariable );
     
-                    fireCustomTriggerEvent( syntaxOptions.events!.onCommentRender!, comment );
+                    Trigger.customEvent( syntaxOptions.events!.onCommentRender!, comment );
                 }
             }
         }
@@ -559,7 +561,7 @@ type RenderElementResult = {
                             innerHTML = innerHTML.replace( commentLine, commentVariable );
                         }
 
-                        fireCustomTriggerEvent( syntaxOptions.events!.onCommentRender!, comment );
+                        Trigger.customEvent( syntaxOptions.events!.onCommentRender!, comment );
                     }
                 }
             }
@@ -588,7 +590,7 @@ type RenderElementResult = {
                     innerHTML = innerHTML.replace( stringLine, stringVariable );
                 }
 
-                fireCustomTriggerEvent( syntaxOptions.events!.onStringRender!, string );
+                Trigger.customEvent( syntaxOptions.events!.onStringRender!, string );
             }
         }
 
@@ -596,12 +598,12 @@ type RenderElementResult = {
     }
 
     function renderElementKeywords( innerHTML: string, language: SyntaxLanguage, syntaxOptions: BindingOptions ) : string {
-        const keywords: string[] = Data.getDefaultStringOrArray( language.keywords, [] );
+        const keywords: string[] = Default.getStringOrArray( language.keywords, [] );
         const keywordsLength: number = keywords.length;
         const caseSensitive: boolean = language.caseSensitive!;
         const keywordsCasing: string = getKeywordCasing( language.keywordsCasing! );
 
-        Data.String.sortArrayOfStringByLength( keywords );
+        Str.sortArrayOfStringByLength( keywords );
 
         for ( let keywordIndex: number = 0; keywordIndex < keywordsLength; keywordIndex++ ) {
             const keyword: string = keywords[ keywordIndex ];
@@ -630,14 +632,14 @@ type RenderElementResult = {
             _cached_Keywords[ keywordVariable ] = keywordReplacement;
             _cached_Keywords_Count++;
 
-            fireCustomTriggerEvent( syntaxOptions.events!.onKeywordRender!, keyword );
+            Trigger.customEvent( syntaxOptions.events!.onKeywordRender!, keyword );
         }
 
         return innerHTML;
     }
 
     function replaceMarkUpKeywords( innerHTML: string, language: SyntaxLanguage, syntaxOptions: BindingOptions ) : string {
-        const keywords: string[] = Data.getDefaultStringOrArray( language.keywords, [] );
+        const keywords: string[] = Default.getStringOrArray( language.keywords, [] );
         const caseSensitive: boolean = language.caseSensitive!;
         const keywordsCasing: string = getKeywordCasing( language.keywordsCasing! );
 
@@ -686,11 +688,11 @@ type RenderElementResult = {
     }
 
     function renderElementValues( innerHTML: string, language: SyntaxLanguage, syntaxOptions: BindingOptions ) : string {
-        const values: string[] = Data.getDefaultStringOrArray( language.values, [] );
+        const values: string[] = Default.getStringOrArray( language.values, [] );
         const valuesLength: number = values.length;
         const caseSensitive: boolean = language.caseSensitive!;
 
-        Data.String.sortArrayOfStringByLength( values );
+        Str.sortArrayOfStringByLength( values );
 
         for ( let valueIndex: number = 0; valueIndex < valuesLength; valueIndex++ ) {
             const value: string = values[ valueIndex ];
@@ -718,18 +720,18 @@ type RenderElementResult = {
             _cached_Values[ valueVariable ] = valueReplacement;
             _cached_Values_Count++;
 
-            fireCustomTriggerEvent( syntaxOptions.events!.onValueRender!, value );
+            Trigger.customEvent( syntaxOptions.events!.onValueRender!, value );
         }
 
         return innerHTML;
     }
 
     function renderElementAttributes( innerHTML: string, language: SyntaxLanguage, syntaxOptions: BindingOptions ) : string {
-        const attributes: string[] = Data.getDefaultStringOrArray( language.attributes, [] );
+        const attributes: string[] = Default.getStringOrArray( language.attributes, [] );
         const attributesLength: number = attributes.length;
         const caseSensitive: boolean = language.caseSensitive!;
 
-        Data.String.sortArrayOfStringByLength( attributes );
+        Str.sortArrayOfStringByLength( attributes );
 
         for ( let attributeIndex: number = 0; attributeIndex < attributesLength; attributeIndex++ ) {
             const attribute: string = attributes[ attributeIndex ];
@@ -757,7 +759,7 @@ type RenderElementResult = {
             _cached_Attributes[ attributeVariable ] = attributeReplacement;
             _cached_Attributes_Count++;
 
-            fireCustomTriggerEvent( syntaxOptions.events!.onAttributeRender!, attribute );
+            Trigger.customEvent( syntaxOptions.events!.onAttributeRender!, attribute );
         }
 
         return innerHTML;
@@ -779,8 +781,8 @@ type RenderElementResult = {
         let end: string = null!;
 
         if ( Is.definedArray( multiLineComment ) && multiLineComment.length === 2 ) {
-            start = Data.String.encodeMarkUpCharacters( multiLineComment[ 0 ] );
-            end = Data.String.encodeMarkUpCharacters( multiLineComment[ 1 ] );
+            start = Str.encodeMarkUpCharacters( multiLineComment[ 0 ] );
+            end = Str.encodeMarkUpCharacters( multiLineComment[ 1 ] );
         }
 
         for ( let commentVariable in _cached_Comments ) {
@@ -867,7 +869,7 @@ type RenderElementResult = {
                             const numberCode: HTMLElement = DomElement.create( "p" );
     
                             if ( syntaxOptions.padLineNumbers ) {
-                                numberCode.innerText = Data.String.padNumber( lineNumber.toString(), linesLengthStringLength );
+                                numberCode.innerText = Str.padNumber( lineNumber.toString(), linesLengthStringLength );
                             } else {
                                 numberCode.innerText = lineNumber.toString();
                             }
@@ -988,7 +990,7 @@ type RenderElementResult = {
      */
 
     function getBindingOptions( newOptions: any ) : BindingOptions {
-        let options: BindingOptions = Data.getDefaultObject( newOptions, {} as BindingOptions );
+        let options: BindingOptions = Default.getObject( newOptions, {} as BindingOptions );
 
         options = buildBindingAttributeOptions( options );
         options = buildBindingAttributeOptionCustomTriggers( options );
@@ -997,42 +999,42 @@ type RenderElementResult = {
     }
 
     function buildBindingAttributeOptions( options: BindingOptions ) : BindingOptions {
-        options.showCopyButton = Data.getDefaultBoolean( options.showCopyButton, true );
-        options.removeBlankLines = Data.getDefaultBoolean( options.removeBlankLines, false );
-        options.showLineNumbers = Data.getDefaultBoolean( options.showLineNumbers, true );
-        options.highlightKeywords = Data.getDefaultBoolean( options.highlightKeywords, true );
-        options.highlightValues = Data.getDefaultBoolean( options.highlightValues, true );
-        options.highlightAttributes = Data.getDefaultBoolean( options.highlightAttributes, true );
-        options.highlightStrings = Data.getDefaultBoolean( options.highlightStrings, true );
-        options.highlightComments = Data.getDefaultBoolean( options.highlightComments, true );
-        options.showLanguageLabel = Data.getDefaultBoolean( options.showLanguageLabel, true );
-        options.showPrintButton = Data.getDefaultBoolean( options.showPrintButton, true );
-        options.padLineNumbers = Data.getDefaultBoolean( options.padLineNumbers, false );
-        options.removeDuplicateBlankLines = Data.getDefaultBoolean( options.removeDuplicateBlankLines, true );
-        options.doubleClickToSelectAll = Data.getDefaultBoolean( options.doubleClickToSelectAll, true );
-        options.languageLabelCasing = Data.getDefaultString( options.languageLabelCasing, TextCasing.uppercase );
-        options.buttonsVisible = Data.getDefaultBoolean( options.buttonsVisible, true );
-        options.maximumButtons = Data.getDefaultNumber( options.maximumButtons, 2 );
+        options.showCopyButton = Default.getBoolean( options.showCopyButton, true );
+        options.removeBlankLines = Default.getBoolean( options.removeBlankLines, false );
+        options.showLineNumbers = Default.getBoolean( options.showLineNumbers, true );
+        options.highlightKeywords = Default.getBoolean( options.highlightKeywords, true );
+        options.highlightValues = Default.getBoolean( options.highlightValues, true );
+        options.highlightAttributes = Default.getBoolean( options.highlightAttributes, true );
+        options.highlightStrings = Default.getBoolean( options.highlightStrings, true );
+        options.highlightComments = Default.getBoolean( options.highlightComments, true );
+        options.showLanguageLabel = Default.getBoolean( options.showLanguageLabel, true );
+        options.showPrintButton = Default.getBoolean( options.showPrintButton, true );
+        options.padLineNumbers = Default.getBoolean( options.padLineNumbers, false );
+        options.removeDuplicateBlankLines = Default.getBoolean( options.removeDuplicateBlankLines, true );
+        options.doubleClickToSelectAll = Default.getBoolean( options.doubleClickToSelectAll, true );
+        options.languageLabelCasing = Default.getString( options.languageLabelCasing, TextCasing.uppercase );
+        options.buttonsVisible = Default.getBoolean( options.buttonsVisible, true );
+        options.maximumButtons = Default.getNumber( options.maximumButtons, 2 );
         
         return options;
     }
 
     function buildBindingAttributeOptionCustomTriggers( options: BindingOptions ) : BindingOptions {
-        options.events = Data.getDefaultObject( options.events, {} as BindingOptionEvents );
-        options.events!.onCopy = Data.getDefaultFunction( options.events!.onCopy, null! );
-        options.events!.onRenderComplete = Data.getDefaultFunction( options.events!.onRenderComplete, null! );
-        options.events!.onKeywordClicked = Data.getDefaultFunction( options.events!.onKeywordClicked, null! );
-        options.events!.onValueClicked = Data.getDefaultFunction( options.events!.onValueClicked, null! );
-        options.events!.onAttributeClicked = Data.getDefaultFunction( options.events!.onAttributeClicked, null! );
-        options.events!.onKeywordRender = Data.getDefaultFunction( options.events!.onKeywordRender, null! );
-        options.events!.onValueRender = Data.getDefaultFunction( options.events!.onValueRender, null! );
-        options.events!.onAttributeRender = Data.getDefaultFunction( options.events!.onAttributeRender, null! );
-        options.events!.onStringRender = Data.getDefaultFunction( options.events!.onStringRender, null! );
-        options.events!.onCommentRender = Data.getDefaultFunction( options.events!.onCommentRender, null! );
-        options.events!.onPrint = Data.getDefaultFunction( options.events!.onPrint, null! );
-        options.events!.onBeforeRenderComplete = Data.getDefaultFunction( options.events!.onBeforeRenderComplete, null! );
-        options.events!.onButtonsOpened = Data.getDefaultFunction( options.events!.onButtonsOpened, null! );
-        options.events!.onButtonsClosed = Data.getDefaultFunction( options.events!.onButtonsClosed, null! );
+        options.events = Default.getObject( options.events, {} as BindingOptionEvents );
+        options.events!.onCopy = Default.getFunction( options.events!.onCopy, null! );
+        options.events!.onRenderComplete = Default.getFunction( options.events!.onRenderComplete, null! );
+        options.events!.onKeywordClicked = Default.getFunction( options.events!.onKeywordClicked, null! );
+        options.events!.onValueClicked = Default.getFunction( options.events!.onValueClicked, null! );
+        options.events!.onAttributeClicked = Default.getFunction( options.events!.onAttributeClicked, null! );
+        options.events!.onKeywordRender = Default.getFunction( options.events!.onKeywordRender, null! );
+        options.events!.onValueRender = Default.getFunction( options.events!.onValueRender, null! );
+        options.events!.onAttributeRender = Default.getFunction( options.events!.onAttributeRender, null! );
+        options.events!.onStringRender = Default.getFunction( options.events!.onStringRender, null! );
+        options.events!.onCommentRender = Default.getFunction( options.events!.onCommentRender, null! );
+        options.events!.onPrint = Default.getFunction( options.events!.onPrint, null! );
+        options.events!.onBeforeRenderComplete = Default.getFunction( options.events!.onBeforeRenderComplete, null! );
+        options.events!.onButtonsOpened = Default.getFunction( options.events!.onButtonsOpened, null! );
+        options.events!.onButtonsClosed = Default.getFunction( options.events!.onButtonsClosed, null! );
 
         return options;
     }
@@ -1045,7 +1047,7 @@ type RenderElementResult = {
      */
 
     function getBindingTabContentOptions( newOptions: any ) : BindingTabContentOptions {
-        let options: BindingTabContentOptions = Data.getDefaultObject( newOptions, {} as BindingTabContentOptions );
+        let options: BindingTabContentOptions = Default.getObject( newOptions, {} as BindingTabContentOptions );
 
         options = buildBindingTabContentAttributeOptionStrings( options );
         options = buildBindingTabContentAttributeOptionCustomTriggers( options );
@@ -1054,30 +1056,17 @@ type RenderElementResult = {
     }
 
     function buildBindingTabContentAttributeOptionStrings( options: BindingTabContentOptions ) : BindingTabContentOptions {
-        options.title = Data.getDefaultString( options.title, null! );
-        options.description = Data.getDefaultString( options.description, null! );
+        options.title = Default.getString( options.title, null! );
+        options.description = Default.getString( options.description, null! );
 
         return options;
     }
 
     function buildBindingTabContentAttributeOptionCustomTriggers( options: BindingTabContentOptions ) : BindingTabContentOptions {
-        options.events = Data.getDefaultFunction( options.events, {} as BindingTabContentOptionEvents );
-        options.events!.onOpen = Data.getDefaultFunction( options.events!.onOpen, null! );
+        options.events = Default.getFunction( options.events, {} as BindingTabContentOptionEvents );
+        options.events!.onOpen = Default.getFunction( options.events!.onOpen, null! );
 
         return options;
-    }
-
-
-    /*
-     * ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-     * Triggering Custom Events
-     * ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-     */
-
-    function fireCustomTriggerEvent( triggerFunction: Function, ...args : any[] ) : void {
-        if ( Is.definedFunction( triggerFunction ) ) {
-            triggerFunction.apply( null, [].slice.call( args, 0 ) );
-        }
     }
 
 
@@ -1138,31 +1127,31 @@ type RenderElementResult = {
 	 */
 
     function buildDefaultConfiguration( newConfiguration: Configuration = null! ) : void {
-        _configuration = Data.getDefaultObject( newConfiguration, {} as Configuration );
-        _configuration.safeMode = Data.getDefaultBoolean( _configuration.safeMode, true );
-        _configuration.highlightAllDomElementTypes = Data.getDefaultStringOrArray( _configuration.highlightAllDomElementTypes, [ "div", "code" ] );
-        _configuration.allowHtmlInTextDisplay = Data.getDefaultBoolean( _configuration.allowHtmlInTextDisplay, true );
+        _configuration = Default.getObject( newConfiguration, {} as Configuration );
+        _configuration.safeMode = Default.getBoolean( _configuration.safeMode, true );
+        _configuration.highlightAllDomElementTypes = Default.getStringOrArray( _configuration.highlightAllDomElementTypes, [ "div", "code" ] );
+        _configuration.allowHtmlInTextDisplay = Default.getBoolean( _configuration.allowHtmlInTextDisplay, true );
 
         buildDefaultConfigurationStrings();
         buildDefaultConfigurationCustomTriggers();
     }
 
     function buildDefaultConfigurationStrings() : void {
-        _configuration.text = Data.getDefaultObject( _configuration.text, {} as ConfigurationText )
-        _configuration.text!.buttonsOpenerText = Data.getDefaultAnyString( _configuration.text!.buttonsOpenerText, "←" );
-        _configuration.text!.buttonsCloserText = Data.getDefaultAnyString( _configuration.text!.buttonsCloserText, "→" );
-        _configuration.text!.objectErrorText = Data.getDefaultAnyString( _configuration.text!.objectErrorText, "Errors in object: {{error_1}}, {{error_2}}" );
-        _configuration.text!.attributeNotSetErrorText = Data.getDefaultAnyString( _configuration.text!.attributeNotSetErrorText, "The attribute '{{attribute_name}}' has not been set correctly." );
-        _configuration.text!.languageNotSupportedErrorText = Data.getDefaultAnyString( _configuration.text!.languageNotSupportedErrorText, "Language '{{language}}' is not supported." );
-        _configuration.text!.noCodeAvailableToRenderErrorText = Data.getDefaultAnyString( _configuration.text!.noCodeAvailableToRenderErrorText, "No code is available to render." );
-        _configuration.text!.copyButtonText = Data.getDefaultAnyString( _configuration.text!.copyButtonText, "Copy" );
-        _configuration.text!.printButtonText = Data.getDefaultAnyString( _configuration.text!.printButtonText, "Print" );
+        _configuration.text = Default.getObject( _configuration.text, {} as ConfigurationText )
+        _configuration.text!.buttonsOpenerText = Default.getAnyString( _configuration.text!.buttonsOpenerText, "←" );
+        _configuration.text!.buttonsCloserText = Default.getAnyString( _configuration.text!.buttonsCloserText, "→" );
+        _configuration.text!.objectErrorText = Default.getAnyString( _configuration.text!.objectErrorText, "Errors in object: {{error_1}}, {{error_2}}" );
+        _configuration.text!.attributeNotSetErrorText = Default.getAnyString( _configuration.text!.attributeNotSetErrorText, "The attribute '{{attribute_name}}' has not been set correctly." );
+        _configuration.text!.languageNotSupportedErrorText = Default.getAnyString( _configuration.text!.languageNotSupportedErrorText, "Language '{{language}}' is not supported." );
+        _configuration.text!.noCodeAvailableToRenderErrorText = Default.getAnyString( _configuration.text!.noCodeAvailableToRenderErrorText, "No code is available to render." );
+        _configuration.text!.copyButtonText = Default.getAnyString( _configuration.text!.copyButtonText, "Copy" );
+        _configuration.text!.printButtonText = Default.getAnyString( _configuration.text!.printButtonText, "Print" );
     }
 
     function buildDefaultConfigurationCustomTriggers() : void {
-        _configuration.events = Data.getDefaultObject( _configuration.events, {} as ConfigurationEvents )
-        _configuration.events!.onBeforeRender = Data.getDefaultFunction( _configuration.events!.onBeforeRender, null! );
-        _configuration.events!.onAfterRender = Data.getDefaultFunction( _configuration.events!.onAfterRender, null! );
+        _configuration.events = Default.getObject( _configuration.events, {} as ConfigurationEvents )
+        _configuration.events!.onBeforeRender = Default.getFunction( _configuration.events!.onBeforeRender, null! );
+        _configuration.events!.onAfterRender = Default.getFunction( _configuration.events!.onAfterRender, null! );
     }
 
 
@@ -1307,14 +1296,14 @@ type RenderElementResult = {
             const lookup: string = name.toLowerCase();
 
             if ( _languages.hasOwnProperty( lookup ) ) {
-                details = Data.getClonedObject( lookup );
+                details = Default.getClonedObject( lookup );
             }
 
             return details;
         },
 
         getLanguages: function () : Record<string, SyntaxLanguage> {
-            return Data.getClonedObject( _languages );
+            return Default.getClonedObject( _languages );
         },
 
 
@@ -1362,7 +1351,7 @@ type RenderElementResult = {
         },
 
         getAliases: function () : Record<string, string> {
-            return Data.getClonedObject( _aliases_Rules );
+            return Default.getClonedObject( _aliases_Rules );
         },
 
 
