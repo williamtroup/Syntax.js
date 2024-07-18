@@ -214,6 +214,83 @@ var Config;
     })(t = e.Options || (e.Options = {}));
 })(Config || (Config = {}));
 
+var Binding;
+
+(e => {
+    let t;
+    (e => {
+        function t(e) {
+            let t = Default.getObject(e, {});
+            t = n(t);
+            t = r(t);
+            return t;
+        }
+        e.get = t;
+        function n(e) {
+            e.showCopyButton = Default.getBoolean(e.showCopyButton, true);
+            e.removeBlankLines = Default.getBoolean(e.removeBlankLines, false);
+            e.showLineNumbers = Default.getBoolean(e.showLineNumbers, true);
+            e.highlightKeywords = Default.getBoolean(e.highlightKeywords, true);
+            e.highlightValues = Default.getBoolean(e.highlightValues, true);
+            e.highlightAttributes = Default.getBoolean(e.highlightAttributes, true);
+            e.highlightStrings = Default.getBoolean(e.highlightStrings, true);
+            e.highlightComments = Default.getBoolean(e.highlightComments, true);
+            e.showLanguageLabel = Default.getBoolean(e.showLanguageLabel, true);
+            e.showPrintButton = Default.getBoolean(e.showPrintButton, true);
+            e.padLineNumbers = Default.getBoolean(e.padLineNumbers, false);
+            e.removeDuplicateBlankLines = Default.getBoolean(e.removeDuplicateBlankLines, true);
+            e.doubleClickToSelectAll = Default.getBoolean(e.doubleClickToSelectAll, true);
+            e.languageLabelCasing = Default.getString(e.languageLabelCasing, "uppercase");
+            e.buttonsVisible = Default.getBoolean(e.buttonsVisible, true);
+            e.maximumButtons = Default.getNumber(e.maximumButtons, 2);
+            return e;
+        }
+        function r(e) {
+            e.events = Default.getObject(e.events, {});
+            e.events.onCopy = Default.getFunction(e.events.onCopy, null);
+            e.events.onRenderComplete = Default.getFunction(e.events.onRenderComplete, null);
+            e.events.onKeywordClicked = Default.getFunction(e.events.onKeywordClicked, null);
+            e.events.onValueClicked = Default.getFunction(e.events.onValueClicked, null);
+            e.events.onAttributeClicked = Default.getFunction(e.events.onAttributeClicked, null);
+            e.events.onKeywordRender = Default.getFunction(e.events.onKeywordRender, null);
+            e.events.onValueRender = Default.getFunction(e.events.onValueRender, null);
+            e.events.onAttributeRender = Default.getFunction(e.events.onAttributeRender, null);
+            e.events.onStringRender = Default.getFunction(e.events.onStringRender, null);
+            e.events.onCommentRender = Default.getFunction(e.events.onCommentRender, null);
+            e.events.onPrint = Default.getFunction(e.events.onPrint, null);
+            e.events.onBeforeRenderComplete = Default.getFunction(e.events.onBeforeRenderComplete, null);
+            e.events.onButtonsOpened = Default.getFunction(e.events.onButtonsOpened, null);
+            e.events.onButtonsClosed = Default.getFunction(e.events.onButtonsClosed, null);
+            return e;
+        }
+    })(t = e.Options || (e.Options = {}));
+})(Binding || (Binding = {}));
+
+var Tab;
+
+(e => {
+    let t;
+    (e => {
+        function t(e) {
+            let t = Default.getObject(e, {});
+            t = n(t);
+            t = r(t);
+            return t;
+        }
+        e.get = t;
+        function n(e) {
+            e.title = Default.getString(e.title, null);
+            e.description = Default.getString(e.description, null);
+            return e;
+        }
+        function r(e) {
+            e.events = Default.getFunction(e.events, {});
+            e.events.onOpen = Default.getFunction(e.events.onOpen, null);
+            return e;
+        }
+    })(t = e.Options || (e.Options = {}));
+})(Tab || (Tab = {}));
+
 (() => {
     let _configuration = {};
     let _aliases_Rules = {};
@@ -319,7 +396,7 @@ var Config;
                     if (o.parsed) {
                         if (e.innerHTML.trim() !== "") {
                             let l = e.innerHTML;
-                            const s = getBindingOptions(o.object);
+                            const s = Binding.Options.get(o.object);
                             let a = false;
                             let c = null;
                             Trigger.customEvent(s.events.onBeforeRenderComplete, e);
@@ -347,7 +424,7 @@ var Config;
                                 if (e.hasAttribute(Constant.SYNTAX_JS_ATTRIBUTE_NAME_TAB_CONTENTS) && e.getAttribute(Constant.SYNTAX_JS_ATTRIBUTE_NAME_TAB_CONTENTS).toLowerCase() !== "true") {
                                     const t = getObjectFromString(e.getAttribute(Constant.SYNTAX_JS_ATTRIBUTE_NAME_TAB_CONTENTS));
                                     if (t.parsed && Is.definedObject(t.object)) {
-                                        n.tabBindingOptions = getBindingTabContentOptions(t.object);
+                                        n.tabBindingOptions = Tab.Options.get(t.object);
                                         c = n.tabBindingOptions.description;
                                         if (Is.definedString(n.tabBindingOptions.title)) {
                                             n.tabTitle = n.tabBindingOptions.title;
@@ -922,65 +999,6 @@ var Config;
             n = t.wordRegEx.replace("%word%", e);
         }
         return n;
-    }
-    function getBindingOptions(e) {
-        let t = Default.getObject(e, {});
-        t = buildBindingAttributeOptions(t);
-        t = buildBindingAttributeOptionCustomTriggers(t);
-        return t;
-    }
-    function buildBindingAttributeOptions(e) {
-        e.showCopyButton = Default.getBoolean(e.showCopyButton, true);
-        e.removeBlankLines = Default.getBoolean(e.removeBlankLines, false);
-        e.showLineNumbers = Default.getBoolean(e.showLineNumbers, true);
-        e.highlightKeywords = Default.getBoolean(e.highlightKeywords, true);
-        e.highlightValues = Default.getBoolean(e.highlightValues, true);
-        e.highlightAttributes = Default.getBoolean(e.highlightAttributes, true);
-        e.highlightStrings = Default.getBoolean(e.highlightStrings, true);
-        e.highlightComments = Default.getBoolean(e.highlightComments, true);
-        e.showLanguageLabel = Default.getBoolean(e.showLanguageLabel, true);
-        e.showPrintButton = Default.getBoolean(e.showPrintButton, true);
-        e.padLineNumbers = Default.getBoolean(e.padLineNumbers, false);
-        e.removeDuplicateBlankLines = Default.getBoolean(e.removeDuplicateBlankLines, true);
-        e.doubleClickToSelectAll = Default.getBoolean(e.doubleClickToSelectAll, true);
-        e.languageLabelCasing = Default.getString(e.languageLabelCasing, "uppercase");
-        e.buttonsVisible = Default.getBoolean(e.buttonsVisible, true);
-        e.maximumButtons = Default.getNumber(e.maximumButtons, 2);
-        return e;
-    }
-    function buildBindingAttributeOptionCustomTriggers(e) {
-        e.events = Default.getObject(e.events, {});
-        e.events.onCopy = Default.getFunction(e.events.onCopy, null);
-        e.events.onRenderComplete = Default.getFunction(e.events.onRenderComplete, null);
-        e.events.onKeywordClicked = Default.getFunction(e.events.onKeywordClicked, null);
-        e.events.onValueClicked = Default.getFunction(e.events.onValueClicked, null);
-        e.events.onAttributeClicked = Default.getFunction(e.events.onAttributeClicked, null);
-        e.events.onKeywordRender = Default.getFunction(e.events.onKeywordRender, null);
-        e.events.onValueRender = Default.getFunction(e.events.onValueRender, null);
-        e.events.onAttributeRender = Default.getFunction(e.events.onAttributeRender, null);
-        e.events.onStringRender = Default.getFunction(e.events.onStringRender, null);
-        e.events.onCommentRender = Default.getFunction(e.events.onCommentRender, null);
-        e.events.onPrint = Default.getFunction(e.events.onPrint, null);
-        e.events.onBeforeRenderComplete = Default.getFunction(e.events.onBeforeRenderComplete, null);
-        e.events.onButtonsOpened = Default.getFunction(e.events.onButtonsOpened, null);
-        e.events.onButtonsClosed = Default.getFunction(e.events.onButtonsClosed, null);
-        return e;
-    }
-    function getBindingTabContentOptions(e) {
-        let t = Default.getObject(e, {});
-        t = buildBindingTabContentAttributeOptionStrings(t);
-        t = buildBindingTabContentAttributeOptionCustomTriggers(t);
-        return t;
-    }
-    function buildBindingTabContentAttributeOptionStrings(e) {
-        e.title = Default.getString(e.title, null);
-        e.description = Default.getString(e.description, null);
-        return e;
-    }
-    function buildBindingTabContentAttributeOptionCustomTriggers(e) {
-        e.events = Default.getFunction(e.events, {});
-        e.events.onOpen = Default.getFunction(e.events.onOpen, null);
-        return e;
     }
     function getObjectFromString(objectString) {
         const result = {

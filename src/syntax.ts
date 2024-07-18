@@ -14,13 +14,9 @@
 import {
     type BindingOptions,
     type CustomButton,
-    type BindingTabContentOptionEvents,
     type BindingTabContentOptions,
     type Configuration,
-    type SyntaxLanguage, 
-    type ConfigurationText,
-    type ConfigurationEvents,
-    type BindingOptionEvents} from "./ts/type";
+    type SyntaxLanguage } from "./ts/type";
 
 import { type PublicApi } from "./ts/api";
 import { Constant } from "./ts/constant";
@@ -31,6 +27,8 @@ import { DomElement } from "./ts/dom/dom";
 import { Str } from "./ts/data/str";
 import { Trigger } from "./ts/area/trigger";
 import { Config } from "./ts/options/config";
+import { Binding } from "./ts/options/binding";
+import { Tab } from "./ts/options/tab";
 
 
 type StringToJson = {
@@ -196,7 +194,7 @@ type RenderElementResult = {
                     if ( bindingOptionsParsed.parsed ) {
                         if ( element.innerHTML.trim() !== Char.empty ) {
                             let innerHTML: string = element.innerHTML;
-                            const bindingOptions: BindingOptions = getBindingOptions( bindingOptionsParsed.object );
+                            const bindingOptions: BindingOptions = Binding.Options.get( bindingOptionsParsed.object );
                             let isPreFormatted: boolean = false;
                             let descriptionText: string = null!;
 
@@ -234,7 +232,7 @@ type RenderElementResult = {
                                     const syntaxTabOptions: StringToJson = getObjectFromString( element.getAttribute( Constant.SYNTAX_JS_ATTRIBUTE_NAME_TAB_CONTENTS ) );
 
                                     if ( syntaxTabOptions.parsed && Is.definedObject( syntaxTabOptions.object ) ) {
-                                        result.tabBindingOptions = getBindingTabContentOptions( syntaxTabOptions.object );
+                                        result.tabBindingOptions = Tab.Options.get( syntaxTabOptions.object );
                                         descriptionText = result.tabBindingOptions.description!;
 
                                         if ( Is.definedString( result.tabBindingOptions.title ) ) {
@@ -981,93 +979,6 @@ type RenderElementResult = {
         }
 
         return result;
-    }
-
-
-    /*
-     * ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-     * Binding Options
-     * ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-     */
-
-    function getBindingOptions( newOptions: any ) : BindingOptions {
-        let options: BindingOptions = Default.getObject( newOptions, {} as BindingOptions );
-
-        options = buildBindingAttributeOptions( options );
-        options = buildBindingAttributeOptionCustomTriggers( options );
-
-        return options;
-    }
-
-    function buildBindingAttributeOptions( options: BindingOptions ) : BindingOptions {
-        options.showCopyButton = Default.getBoolean( options.showCopyButton, true );
-        options.removeBlankLines = Default.getBoolean( options.removeBlankLines, false );
-        options.showLineNumbers = Default.getBoolean( options.showLineNumbers, true );
-        options.highlightKeywords = Default.getBoolean( options.highlightKeywords, true );
-        options.highlightValues = Default.getBoolean( options.highlightValues, true );
-        options.highlightAttributes = Default.getBoolean( options.highlightAttributes, true );
-        options.highlightStrings = Default.getBoolean( options.highlightStrings, true );
-        options.highlightComments = Default.getBoolean( options.highlightComments, true );
-        options.showLanguageLabel = Default.getBoolean( options.showLanguageLabel, true );
-        options.showPrintButton = Default.getBoolean( options.showPrintButton, true );
-        options.padLineNumbers = Default.getBoolean( options.padLineNumbers, false );
-        options.removeDuplicateBlankLines = Default.getBoolean( options.removeDuplicateBlankLines, true );
-        options.doubleClickToSelectAll = Default.getBoolean( options.doubleClickToSelectAll, true );
-        options.languageLabelCasing = Default.getString( options.languageLabelCasing, TextCasing.uppercase );
-        options.buttonsVisible = Default.getBoolean( options.buttonsVisible, true );
-        options.maximumButtons = Default.getNumber( options.maximumButtons, 2 );
-        
-        return options;
-    }
-
-    function buildBindingAttributeOptionCustomTriggers( options: BindingOptions ) : BindingOptions {
-        options.events = Default.getObject( options.events, {} as BindingOptionEvents );
-        options.events!.onCopy = Default.getFunction( options.events!.onCopy, null! );
-        options.events!.onRenderComplete = Default.getFunction( options.events!.onRenderComplete, null! );
-        options.events!.onKeywordClicked = Default.getFunction( options.events!.onKeywordClicked, null! );
-        options.events!.onValueClicked = Default.getFunction( options.events!.onValueClicked, null! );
-        options.events!.onAttributeClicked = Default.getFunction( options.events!.onAttributeClicked, null! );
-        options.events!.onKeywordRender = Default.getFunction( options.events!.onKeywordRender, null! );
-        options.events!.onValueRender = Default.getFunction( options.events!.onValueRender, null! );
-        options.events!.onAttributeRender = Default.getFunction( options.events!.onAttributeRender, null! );
-        options.events!.onStringRender = Default.getFunction( options.events!.onStringRender, null! );
-        options.events!.onCommentRender = Default.getFunction( options.events!.onCommentRender, null! );
-        options.events!.onPrint = Default.getFunction( options.events!.onPrint, null! );
-        options.events!.onBeforeRenderComplete = Default.getFunction( options.events!.onBeforeRenderComplete, null! );
-        options.events!.onButtonsOpened = Default.getFunction( options.events!.onButtonsOpened, null! );
-        options.events!.onButtonsClosed = Default.getFunction( options.events!.onButtonsClosed, null! );
-
-        return options;
-    }
-
-
-    /*
-     * ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-     * Binding Options - Tab Contents
-     * ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-     */
-
-    function getBindingTabContentOptions( newOptions: any ) : BindingTabContentOptions {
-        let options: BindingTabContentOptions = Default.getObject( newOptions, {} as BindingTabContentOptions );
-
-        options = buildBindingTabContentAttributeOptionStrings( options );
-        options = buildBindingTabContentAttributeOptionCustomTriggers( options );
-
-        return options;
-    }
-
-    function buildBindingTabContentAttributeOptionStrings( options: BindingTabContentOptions ) : BindingTabContentOptions {
-        options.title = Default.getString( options.title, null! );
-        options.description = Default.getString( options.description, null! );
-
-        return options;
-    }
-
-    function buildBindingTabContentAttributeOptionCustomTriggers( options: BindingTabContentOptions ) : BindingTabContentOptions {
-        options.events = Default.getFunction( options.events, {} as BindingTabContentOptionEvents );
-        options.events!.onOpen = Default.getFunction( options.events!.onOpen, null! );
-
-        return options;
     }
 
 
