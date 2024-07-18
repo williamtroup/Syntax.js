@@ -229,10 +229,10 @@ type RenderElementResult = {
 
                             } else {
                                 if ( element.hasAttribute( Constant.SYNTAX_JS_ATTRIBUTE_NAME_TAB_CONTENTS ) && element.getAttribute( Constant.SYNTAX_JS_ATTRIBUTE_NAME_TAB_CONTENTS )!.toLowerCase() !== "true" ) {
-                                    const syntaxTabOptions: StringToJson = getObjectFromString( element.getAttribute( Constant.SYNTAX_JS_ATTRIBUTE_NAME_TAB_CONTENTS ) );
+                                    const tabOptions: StringToJson = getObjectFromString( element.getAttribute( Constant.SYNTAX_JS_ATTRIBUTE_NAME_TAB_CONTENTS ) );
 
-                                    if ( syntaxTabOptions.parsed && Is.definedObject( syntaxTabOptions.object ) ) {
-                                        result.tabBindingOptions = Tab.Options.get( syntaxTabOptions.object );
+                                    if ( tabOptions.parsed && Is.definedObject( tabOptions.object ) ) {
+                                        result.tabBindingOptions = Tab.Options.get( tabOptions.object );
                                         descriptionText = result.tabBindingOptions.description!;
 
                                         if ( Is.definedString( result.tabBindingOptions.title ) ) {
