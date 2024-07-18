@@ -30,6 +30,7 @@ import { Char, Language, TextCasing } from "./ts/data/enum";
 import { DomElement } from "./ts/dom/dom";
 import { Str } from "./ts/data/str";
 import { Trigger } from "./ts/area/trigger";
+import { Config } from "./ts/options/config";
 
 
 type StringToJson = {
@@ -189,17 +190,17 @@ type RenderElementResult = {
                 const language: SyntaxLanguage = getLanguage( result.syntaxLanguage );
 
                 if ( Is.defined( language ) || result.syntaxLanguage.toLowerCase() === Language.unknown ) {
-                    const syntaxOptionsParsed: StringToJson = getObjectFromString( element.getAttribute( Constant.SYNTAX_JS_ATTRIBUTE_NAME_OPTIONS ) );
+                    const bindingOptionsParsed: StringToJson = getObjectFromString( element.getAttribute( Constant.SYNTAX_JS_ATTRIBUTE_NAME_OPTIONS ) );
                     const syntaxButtonsParsed: StringToJson = getObjectFromString( element.getAttribute( Constant.SYNTAX_JS_ATTRIBUTE_NAME_BUTTONS ) );
 
-                    if ( syntaxOptionsParsed.parsed ) {
+                    if ( bindingOptionsParsed.parsed ) {
                         if ( element.innerHTML.trim() !== Char.empty ) {
                             let innerHTML: string = element.innerHTML;
-                            const syntaxOptions: BindingOptions = getBindingOptions( syntaxOptionsParsed.object );
+                            const bindingOptions: BindingOptions = getBindingOptions( bindingOptionsParsed.object );
                             let isPreFormatted: boolean = false;
                             let descriptionText: string = null!;
 
-                            Trigger.customEvent( syntaxOptions.events!.onBeforeRenderComplete!, element );
+                            Trigger.customEvent( bindingOptions.events!.onBeforeRenderComplete!, element );
 
                             if ( element.children.length > 0 && element.children[ 0 ].nodeName.toLowerCase() === "pre" ) {
                                 innerHTML = element.children[ 0 ].innerHTML;
@@ -256,7 +257,7 @@ type RenderElementResult = {
                                 DomElement.setNodeText( description, descriptionText, _configuration );
                             }
 
-                            if ( syntaxOptions.showLineNumbers ) {
+                            if ( bindingOptions.showLineNumbers ) {
                                 numbers = DomElement.create( "div", "numbers" );
                                 result.tabContents.appendChild( numbers );
                             }
@@ -264,21 +265,21 @@ type RenderElementResult = {
                             const syntax: HTMLElement = DomElement.create( "div", "syntax" );
                             result.tabContents.appendChild( syntax );
 
-                            renderElementButtons( syntax, syntaxOptions, result.syntaxLanguage, syntaxButtonsParsed, innerHTMLCopy );
+                            renderElementButtons( syntax, bindingOptions, result.syntaxLanguage, syntaxButtonsParsed, innerHTMLCopy );
 
                             if ( result.syntaxLanguage.toLowerCase() !== Language.unknown ) {
-                                innerHTML = renderHTML( innerHTML, language, syntaxOptions );
+                                innerHTML = renderHTML( innerHTML, language, bindingOptions );
                             } else {
                                 innerHTML = Str.encodeMarkUpCharacters( innerHTML );
                             }
 
-                            renderElementCompletedHTML( description, numbers, syntax, innerHTML, syntaxOptions, isPreFormatted );
-                            Trigger.customEvent( syntaxOptions.events!.onRenderComplete!, element );
+                            renderElementCompletedHTML( description, numbers, syntax, innerHTML, bindingOptions, isPreFormatted );
+                            Trigger.customEvent( bindingOptions.events!.onRenderComplete!, element );
 
                             if ( !Is.defined( result.tabContents ) ) {
-                                renderSyntaxCustomTriggers( element, syntaxOptions );
+                                renderSyntaxCustomTriggers( element, bindingOptions );
                             } else {
-                                renderSyntaxCustomTriggers( result.tabContents, syntaxOptions );
+                                renderSyntaxCustomTriggers( result.tabContents, bindingOptions );
                             }
 
                             _elements.push( element );
@@ -314,52 +315,52 @@ type RenderElementResult = {
         return result;
     }
 
-    function renderSyntaxCustomTriggers( element: HTMLElement, syntaxOptions: BindingOptions ) : void {
-        renderElementClickEvents( element, syntaxOptions.events!.onKeywordClicked!, "keyword-clickable" );
-        renderElementClickEvents( element, syntaxOptions.events!.onKeywordClicked!, "no-highlight-keyword-clickable" );
-        renderElementClickEvents( element, syntaxOptions.events!.onValueClicked!, "value-clickable" );
-        renderElementClickEvents( element, syntaxOptions.events!.onValueClicked!, "no-highlight-value-clickable" );
-        renderElementClickEvents( element, syntaxOptions.events!.onAttributeClicked!, "attribute-clickable" );
-        renderElementClickEvents( element, syntaxOptions.events!.onAttributeClicked!, "no-highlight-attribute-clickable" );
+    function renderSyntaxCustomTriggers( element: HTMLElement, bindingOptions: BindingOptions ) : void {
+        renderElementClickEvents( element, bindingOptions.events!.onKeywordClicked!, "keyword-clickable" );
+        renderElementClickEvents( element, bindingOptions.events!.onKeywordClicked!, "no-highlight-keyword-clickable" );
+        renderElementClickEvents( element, bindingOptions.events!.onValueClicked!, "value-clickable" );
+        renderElementClickEvents( element, bindingOptions.events!.onValueClicked!, "no-highlight-value-clickable" );
+        renderElementClickEvents( element, bindingOptions.events!.onAttributeClicked!, "attribute-clickable" );
+        renderElementClickEvents( element, bindingOptions.events!.onAttributeClicked!, "no-highlight-attribute-clickable" );
     }
 
-    function renderHTML( innerHTML: string, language: SyntaxLanguage, syntaxOptions: BindingOptions ) : string {
+    function renderHTML( innerHTML: string, language: SyntaxLanguage, bindingOptions: BindingOptions ) : string {
         if ( !language.isMarkUp ) {
             innerHTML = Str.encodeMarkUpCharacters( innerHTML );
         }
 
-        if ( syntaxOptions.highlightComments ) {
-            innerHTML = renderElementMultiLineCommentVariables( innerHTML, language, syntaxOptions );
-            innerHTML = renderElementCommentVariables( innerHTML, language, syntaxOptions );
+        if ( bindingOptions.highlightComments ) {
+            innerHTML = renderElementMultiLineCommentVariables( innerHTML, language, bindingOptions );
+            innerHTML = renderElementCommentVariables( innerHTML, language, bindingOptions );
         }
 
-        if ( syntaxOptions.highlightStrings ) {
-            innerHTML = renderElementStringPatternVariables( innerHTML, innerHTML.match( /"((?:\\.|[^"\\])*)"/g )!, syntaxOptions );
+        if ( bindingOptions.highlightStrings ) {
+            innerHTML = renderElementStringPatternVariables( innerHTML, innerHTML.match( /"((?:\\.|[^"\\])*)"/g )!, bindingOptions );
 
             if ( language.comment !== "'" ) {
-                innerHTML = renderElementStringPatternVariables( innerHTML, innerHTML.match( /'((?:\\.|[^"\\])*)'/g )!, syntaxOptions );
+                innerHTML = renderElementStringPatternVariables( innerHTML, innerHTML.match( /'((?:\\.|[^"\\])*)'/g )!, bindingOptions );
             }
         }
 
         if ( !language.isMarkUp ) {
-            innerHTML = renderElementKeywords( innerHTML, language, syntaxOptions );
+            innerHTML = renderElementKeywords( innerHTML, language, bindingOptions );
         } else {
-            innerHTML = replaceMarkUpKeywords( innerHTML, language, syntaxOptions );
+            innerHTML = replaceMarkUpKeywords( innerHTML, language, bindingOptions );
         }
         
-        innerHTML = renderElementValues( innerHTML, language, syntaxOptions );
+        innerHTML = renderElementValues( innerHTML, language, bindingOptions );
 
         if ( language.isMarkUp ) {
-            innerHTML = renderElementAttributes( innerHTML, language, syntaxOptions );
+            innerHTML = renderElementAttributes( innerHTML, language, bindingOptions );
         }
 
         innerHTML = Str.encodeMarkUpCharacters( innerHTML );
 
-        if ( syntaxOptions.highlightComments ) {
+        if ( bindingOptions.highlightComments ) {
             innerHTML = renderElementCommentsFromVariables( innerHTML, language );
         }
         
-        if ( syntaxOptions.highlightStrings ) {
+        if ( bindingOptions.highlightStrings ) {
             innerHTML = renderElementStringQuotesFromVariables( innerHTML );
         }
 
@@ -373,8 +374,8 @@ type RenderElementResult = {
         return innerHTML;
     }
 
-    function renderElementButtons( syntax: HTMLElement, syntaxOptions: BindingOptions, syntaxLanguage: string, syntaxButtonsParsed: StringToJson, innerHTMLCopy: string ) : void {
-        if ( syntaxOptions.showLanguageLabel || syntaxOptions.showCopyButton || syntaxOptions.showPrintButton || syntaxButtonsParsed.parsed ) {
+    function renderElementButtons( syntax: HTMLElement, bindingOptions: BindingOptions, syntaxLanguage: string, syntaxButtonsParsed: StringToJson, innerHTMLCopy: string ) : void {
+        if ( bindingOptions.showLanguageLabel || bindingOptions.showCopyButton || bindingOptions.showPrintButton || syntaxButtonsParsed.parsed ) {
             const buttons: HTMLElement = DomElement.create( "div", "buttons" );
             const buttonsElements: HTMLElement[] = [];
 
@@ -388,14 +389,14 @@ type RenderElementResult = {
                     const customButton: CustomButton = customButtons[ customButtonsIndex ];
 
                     if ( Is.defined( customButton.text ) && Is.definedFunction( customButton.events!.onClick! ) ) {
-                        renderElementButton( customButton, buttonsElements, buttons, innerHTMLCopy, syntaxOptions );
+                        renderElementButton( customButton, buttonsElements, buttons, innerHTMLCopy, bindingOptions );
                     }
                 }
             }
 
-            if ( syntaxOptions.showCopyButton ) {
+            if ( bindingOptions.showCopyButton ) {
                 const copyButton: HTMLButtonElement = DomElement.create( "button", "button" ) as HTMLButtonElement;
-                copyButton.style.display = syntaxOptions.buttonsVisible ? "inline-block" : "none";
+                copyButton.style.display = bindingOptions.buttonsVisible ? "inline-block" : "none";
                 buttons.appendChild( copyButton );
 
                 DomElement.setNodeText( copyButton, _configuration.text!.copyButtonText!, _configuration );
@@ -403,15 +404,15 @@ type RenderElementResult = {
                 copyButton.onclick =() => {
                     navigator.clipboard.writeText( innerHTMLCopy );
 
-                    Trigger.customEvent( syntaxOptions.events!.onCopy!, innerHTMLCopy );
+                    Trigger.customEvent( bindingOptions.events!.onCopy!, innerHTMLCopy );
                 };
 
                 buttonsElements.push( copyButton );
             }
 
-            if ( syntaxOptions.showPrintButton ) {
+            if ( bindingOptions.showPrintButton ) {
                 const printButton: HTMLButtonElement = DomElement.create( "button", "button" ) as HTMLButtonElement;
-                printButton.style.display = syntaxOptions.buttonsVisible ? "inline-block" : "none";
+                printButton.style.display = bindingOptions.buttonsVisible ? "inline-block" : "none";
                 buttons.appendChild( printButton );
 
                 DomElement.setNodeText( printButton, _configuration.text!.printButtonText!, _configuration );
@@ -444,24 +445,24 @@ type RenderElementResult = {
                     newWindow.print();
                     newWindow.close();
 
-                    Trigger.customEvent( syntaxOptions.events!.onPrint!, newElementForPrint.innerHTML );
+                    Trigger.customEvent( bindingOptions.events!.onPrint!, newElementForPrint.innerHTML );
                 };
 
                 buttonsElements.push( printButton );
             }
 
-            if ( syntaxOptions.showLanguageLabel ) {
+            if ( bindingOptions.showLanguageLabel ) {
                 const languageLabel: HTMLElement = DomElement.create( "div", "language-label" );
                 buttons.appendChild( languageLabel );
 
-                DomElement.setNodeText( languageLabel, getFriendlyLanguageName( syntaxLanguage, syntaxOptions.languageLabelCasing! ), _configuration );
+                DomElement.setNodeText( languageLabel, getFriendlyLanguageName( syntaxLanguage, bindingOptions.languageLabelCasing! ), _configuration );
             }
 
             const buttonsElementsLength: number = buttonsElements.length;
 
-            if ( buttonsElementsLength > syntaxOptions.maximumButtons! ) {
+            if ( buttonsElementsLength > bindingOptions.maximumButtons! ) {
                 const openButton: HTMLButtonElement = DomElement.create( "button", "button button-opener" ) as HTMLButtonElement;
-                openButton.innerText = syntaxOptions.buttonsVisible ? _configuration.text!.buttonsCloserText! : _configuration.text!.buttonsOpenerText!;
+                openButton.innerText = bindingOptions.buttonsVisible ? _configuration.text!.buttonsCloserText! : _configuration.text!.buttonsOpenerText!;
                 buttons.insertBefore( openButton, buttons.children[ 0 ] );
 
                 openButton.onclick =() => {
@@ -474,13 +475,13 @@ type RenderElementResult = {
                     openButton.innerText = areButtonsVisible ? _configuration.text!.buttonsOpenerText! : _configuration.text!.buttonsCloserText!;
 
                     if ( areButtonsVisible ) {
-                        Trigger.customEvent( syntaxOptions.events!.onButtonsClosed! );
+                        Trigger.customEvent( bindingOptions.events!.onButtonsClosed! );
                     } else {
-                        Trigger.customEvent( syntaxOptions.events!.onButtonsOpened! );
+                        Trigger.customEvent( bindingOptions.events!.onButtonsOpened! );
                     }
                 };
 
-            } else if ( !syntaxOptions.buttonsVisible && buttonsElementsLength <= syntaxOptions.maximumButtons! ) {
+            } else if ( !bindingOptions.buttonsVisible && buttonsElementsLength <= bindingOptions.maximumButtons! ) {
                 for ( let buttonsElementIndex: number = 0; buttonsElementIndex < buttonsElementsLength; buttonsElementIndex++ ) {
                     buttonsElements[ buttonsElementIndex ].style.display = "inline-block";
                 }
@@ -488,9 +489,9 @@ type RenderElementResult = {
         }
     }
 
-    function renderElementButton( customButton: CustomButton, buttonsElements: HTMLElement[], buttons: HTMLElement, innerHTMLCopy: string, syntaxOptions: BindingOptions ) : void {
+    function renderElementButton( customButton: CustomButton, buttonsElements: HTMLElement[], buttons: HTMLElement, innerHTMLCopy: string, bindingOptions: BindingOptions ) : void {
         const newCustomButton: HTMLButtonElement = DomElement.create( "button", "button" ) as HTMLButtonElement;
-        newCustomButton.style.display = syntaxOptions.buttonsVisible ? "inline-block" : "none";
+        newCustomButton.style.display = bindingOptions.buttonsVisible ? "inline-block" : "none";
         buttons.appendChild( newCustomButton );
 
         DomElement.setNodeText( newCustomButton, customButton.text!, _configuration );
@@ -506,7 +507,7 @@ type RenderElementResult = {
         buttonsElements.push( newCustomButton );
     }
 
-    function renderElementCommentVariables( innerHTML: string, language: SyntaxLanguage, syntaxOptions: BindingOptions ) : string {
+    function renderElementCommentVariables( innerHTML: string, language: SyntaxLanguage, bindingOptions: BindingOptions ) : string {
         const lookup: string = language.comment!;
 
         if ( Is.definedString( lookup ) ) {
@@ -524,7 +525,7 @@ type RenderElementResult = {
         
                     innerHTML = innerHTML.replace( comment, commentVariable );
     
-                    Trigger.customEvent( syntaxOptions.events!.onCommentRender!, comment );
+                    Trigger.customEvent( bindingOptions.events!.onCommentRender!, comment );
                 }
             }
         }
@@ -532,7 +533,7 @@ type RenderElementResult = {
         return innerHTML;
     }
 
-    function renderElementMultiLineCommentVariables( innerHTML: string, language: SyntaxLanguage, syntaxOptions: BindingOptions ) : string {
+    function renderElementMultiLineCommentVariables( innerHTML: string, language: SyntaxLanguage, bindingOptions: BindingOptions ) : string {
         const multiLineComment: string[] = language.multiLineComment as string[];
 
         if ( Is.definedArray( multiLineComment ) && multiLineComment.length === 2 ) {
@@ -561,7 +562,7 @@ type RenderElementResult = {
                             innerHTML = innerHTML.replace( commentLine, commentVariable );
                         }
 
-                        Trigger.customEvent( syntaxOptions.events!.onCommentRender!, comment );
+                        Trigger.customEvent( bindingOptions.events!.onCommentRender!, comment );
                     }
                 }
             }
@@ -570,7 +571,7 @@ type RenderElementResult = {
         return innerHTML;
     }
 
-    function renderElementStringPatternVariables( innerHTML: string, patternItems: string[], syntaxOptions: BindingOptions ) : string {
+    function renderElementStringPatternVariables( innerHTML: string, patternItems: string[], bindingOptions: BindingOptions ) : string {
         if ( patternItems !== null ) {
             const patternItemsLength: number = patternItems.length;
         
@@ -590,14 +591,14 @@ type RenderElementResult = {
                     innerHTML = innerHTML.replace( stringLine, stringVariable );
                 }
 
-                Trigger.customEvent( syntaxOptions.events!.onStringRender!, string );
+                Trigger.customEvent( bindingOptions.events!.onStringRender!, string );
             }
         }
 
         return innerHTML;
     }
 
-    function renderElementKeywords( innerHTML: string, language: SyntaxLanguage, syntaxOptions: BindingOptions ) : string {
+    function renderElementKeywords( innerHTML: string, language: SyntaxLanguage, bindingOptions: BindingOptions ) : string {
         const keywords: string[] = Default.getStringOrArray( language.keywords, [] );
         const keywordsLength: number = keywords.length;
         const caseSensitive: boolean = language.caseSensitive!;
@@ -613,8 +614,8 @@ type RenderElementResult = {
             const regExFlags: string = caseSensitive ? "g" : "gi";
             const regEx: RegExp = new RegExp( getWordRegEx( keyword, language ), regExFlags );
 
-            if ( syntaxOptions.highlightKeywords ) {
-                if ( Is.definedFunction( syntaxOptions.events!.onKeywordClicked ) ) {
+            if ( bindingOptions.highlightKeywords ) {
+                if ( Is.definedFunction( bindingOptions.events!.onKeywordClicked ) ) {
                     keywordReplacement = `<span class=\"keyword-clickable\">${keywordDisplay}</span>`;
                     innerHTML = innerHTML.replace( regEx, keywordVariable );
                 } else {
@@ -623,7 +624,7 @@ type RenderElementResult = {
                 }
 
             } else {
-                if ( Is.definedFunction( syntaxOptions.events!.onKeywordClicked ) ) {
+                if ( Is.definedFunction( bindingOptions.events!.onKeywordClicked ) ) {
                     keywordReplacement = `<span class=\"no-highlight-keyword-clickable\">${keywordDisplay}</span>`;
                     innerHTML = innerHTML.replace( regEx, keywordVariable );
                 }
@@ -632,13 +633,13 @@ type RenderElementResult = {
             _cached_Keywords[ keywordVariable ] = keywordReplacement;
             _cached_Keywords_Count++;
 
-            Trigger.customEvent( syntaxOptions.events!.onKeywordRender!, keyword );
+            Trigger.customEvent( bindingOptions.events!.onKeywordRender!, keyword );
         }
 
         return innerHTML;
     }
 
-    function replaceMarkUpKeywords( innerHTML: string, language: SyntaxLanguage, syntaxOptions: BindingOptions ) : string {
+    function replaceMarkUpKeywords( innerHTML: string, language: SyntaxLanguage, bindingOptions: BindingOptions ) : string {
         const keywords: string[] = Default.getStringOrArray( language.keywords, [] );
         const caseSensitive: boolean = language.caseSensitive!;
         const keywordsCasing: string = getKeywordCasing( language.keywordsCasing! );
@@ -662,15 +663,15 @@ type RenderElementResult = {
                 let keywordReplacement: string = null!;
                 let replacementTagDisplay: string = getDisplayTextTestCasing( tag, keywordsCasing );
 
-                if ( syntaxOptions.highlightKeywords ) {
-                    if ( Is.definedFunction( syntaxOptions.events!.onKeywordClicked ) ) {
+                if ( bindingOptions.highlightKeywords ) {
+                    if ( Is.definedFunction( bindingOptions.events!.onKeywordClicked ) ) {
                         keywordReplacement = `<span class=\"keyword-clickable\">${replacementTagDisplay}</span>`;
                     } else {
                         keywordReplacement = `<span class=\"keyword\">${replacementTagDisplay}</span>`;
                     }
     
                 } else {
-                    if ( Is.definedFunction( syntaxOptions.events!.onKeywordClicked ) ) {
+                    if ( Is.definedFunction( bindingOptions.events!.onKeywordClicked ) ) {
                         keywordReplacement = `<span class=\"no-highlight-keyword-clickable\">${replacementTagDisplay}</span>`;
                     }
                 }
@@ -687,7 +688,7 @@ type RenderElementResult = {
         return innerHTML;
     }
 
-    function renderElementValues( innerHTML: string, language: SyntaxLanguage, syntaxOptions: BindingOptions ) : string {
+    function renderElementValues( innerHTML: string, language: SyntaxLanguage, bindingOptions: BindingOptions ) : string {
         const values: string[] = Default.getStringOrArray( language.values, [] );
         const valuesLength: number = values.length;
         const caseSensitive: boolean = language.caseSensitive!;
@@ -701,8 +702,8 @@ type RenderElementResult = {
             const regExFlags: string = caseSensitive ? "g" : "gi";
             const regEx: RegExp = new RegExp( getWordRegEx( value, language ), regExFlags );
 
-            if ( syntaxOptions.highlightValues ) {
-                if ( Is.definedFunction( syntaxOptions.events!.onValueClicked! ) ) {
+            if ( bindingOptions.highlightValues ) {
+                if ( Is.definedFunction( bindingOptions.events!.onValueClicked! ) ) {
                     valueReplacement = `<span class=\"value-clickable\">${value}</span>`;
                     innerHTML = innerHTML.replace( regEx, valueVariable );
                 } else {
@@ -711,7 +712,7 @@ type RenderElementResult = {
                 }
 
             } else {
-                if ( Is.definedFunction( syntaxOptions.events!.onValueClicked! ) ) {
+                if ( Is.definedFunction( bindingOptions.events!.onValueClicked! ) ) {
                     valueReplacement = `<span class=\"no-highlight-value-clickable\">${value}</span>`;
                     innerHTML = innerHTML.replace( regEx, valueVariable );
                 }
@@ -720,13 +721,13 @@ type RenderElementResult = {
             _cached_Values[ valueVariable ] = valueReplacement;
             _cached_Values_Count++;
 
-            Trigger.customEvent( syntaxOptions.events!.onValueRender!, value );
+            Trigger.customEvent( bindingOptions.events!.onValueRender!, value );
         }
 
         return innerHTML;
     }
 
-    function renderElementAttributes( innerHTML: string, language: SyntaxLanguage, syntaxOptions: BindingOptions ) : string {
+    function renderElementAttributes( innerHTML: string, language: SyntaxLanguage, bindingOptions: BindingOptions ) : string {
         const attributes: string[] = Default.getStringOrArray( language.attributes, [] );
         const attributesLength: number = attributes.length;
         const caseSensitive: boolean = language.caseSensitive!;
@@ -740,8 +741,8 @@ type RenderElementResult = {
             let regExFlags: string = caseSensitive ? "g" : "gi";
             const regEx: RegExp = new RegExp( getWordRegEx( attribute, language ), regExFlags );
 
-            if ( syntaxOptions.highlightAttributes ) {
-                if ( Is.definedFunction( syntaxOptions.events!.onAttributeClicked ) ) {
+            if ( bindingOptions.highlightAttributes ) {
+                if ( Is.definedFunction( bindingOptions.events!.onAttributeClicked ) ) {
                     attributeReplacement = `<span class=\"attribute-clickable\">${attribute}</span>`;
                     innerHTML = innerHTML.replace( regEx, attributeVariable );
                 } else {
@@ -750,7 +751,7 @@ type RenderElementResult = {
                 }
 
             } else {
-                if ( Is.definedFunction( syntaxOptions.events!.onAttributeClicked ) ) {
+                if ( Is.definedFunction( bindingOptions.events!.onAttributeClicked ) ) {
                     attributeReplacement = `<span class=\"no-highlight-attribute-clickable\">${attribute}</span>`;
                     innerHTML = innerHTML.replace( regEx, attributeVariable );
                 }
@@ -759,7 +760,7 @@ type RenderElementResult = {
             _cached_Attributes[ attributeVariable ] = attributeReplacement;
             _cached_Attributes_Count++;
 
-            Trigger.customEvent( syntaxOptions.events!.onAttributeRender!, attribute );
+            Trigger.customEvent( bindingOptions.events!.onAttributeRender!, attribute );
         }
 
         return innerHTML;
@@ -813,7 +814,7 @@ type RenderElementResult = {
         return innerHTML;
     }
 
-    function renderElementCompletedHTML( description: HTMLElement, numbers: HTMLElement, syntax: HTMLElement, innerHTML: string, syntaxOptions: BindingOptions, isPreFormatted: boolean ) : void {
+    function renderElementCompletedHTML( description: HTMLElement, numbers: HTMLElement, syntax: HTMLElement, innerHTML: string, bindingOptions: BindingOptions, isPreFormatted: boolean ) : void {
         const lines: string[] = innerHTML.split( Char.newLine );
         const linesLength: number = lines.length;
         const linesLengthStringLength: number = linesLength.toString().length;
@@ -833,7 +834,7 @@ type RenderElementResult = {
             }
         }
 
-        if ( syntaxOptions.doubleClickToSelectAll ) {
+        if ( bindingOptions.doubleClickToSelectAll ) {
             if ( Is.defined( description ) ) {
                 description.ondblclick =() => {
                     DomElement.selectTextInElement( codeContainer );
@@ -859,16 +860,16 @@ type RenderElementResult = {
             }
 
             if ( ( lineIndex !== 0 && lineIndex !== linesLength - 1 ) || line.trim() !== Char.empty ) {
-                if ( line.trim() !== Char.empty || !syntaxOptions.removeBlankLines ) {
+                if ( line.trim() !== Char.empty || !bindingOptions.removeBlankLines ) {
                     const isBlank: boolean = line.trim() === Char.empty;
 
-                    if ( isBlank && !lastLineWasBlank || !syntaxOptions.removeDuplicateBlankLines || !isBlank ) {
+                    if ( isBlank && !lastLineWasBlank || !bindingOptions.removeDuplicateBlankLines || !isBlank ) {
                         lastLineWasBlank = isBlank;
 
                         if ( Is.defined( numberContainer ) ) {
                             const numberCode: HTMLElement = DomElement.create( "p" );
     
-                            if ( syntaxOptions.padLineNumbers ) {
+                            if ( bindingOptions.padLineNumbers ) {
                                 numberCode.innerText = Str.padNumber( lineNumber.toString(), linesLengthStringLength );
                             } else {
                                 numberCode.innerText = lineNumber.toString();
@@ -1122,41 +1123,6 @@ type RenderElementResult = {
 
 	/*
 	 * ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-	 * Public API Functions:  Helpers:  Configuration
-	 * ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-	 */
-
-    function buildDefaultConfiguration( newConfiguration: Configuration = null! ) : void {
-        _configuration = Default.getObject( newConfiguration, {} as Configuration );
-        _configuration.safeMode = Default.getBoolean( _configuration.safeMode, true );
-        _configuration.highlightAllDomElementTypes = Default.getStringOrArray( _configuration.highlightAllDomElementTypes, [ "div", "code" ] );
-        _configuration.allowHtmlInTextDisplay = Default.getBoolean( _configuration.allowHtmlInTextDisplay, true );
-
-        buildDefaultConfigurationStrings();
-        buildDefaultConfigurationCustomTriggers();
-    }
-
-    function buildDefaultConfigurationStrings() : void {
-        _configuration.text = Default.getObject( _configuration.text, {} as ConfigurationText )
-        _configuration.text!.buttonsOpenerText = Default.getAnyString( _configuration.text!.buttonsOpenerText, "←" );
-        _configuration.text!.buttonsCloserText = Default.getAnyString( _configuration.text!.buttonsCloserText, "→" );
-        _configuration.text!.objectErrorText = Default.getAnyString( _configuration.text!.objectErrorText, "Errors in object: {{error_1}}, {{error_2}}" );
-        _configuration.text!.attributeNotSetErrorText = Default.getAnyString( _configuration.text!.attributeNotSetErrorText, "The attribute '{{attribute_name}}' has not been set correctly." );
-        _configuration.text!.languageNotSupportedErrorText = Default.getAnyString( _configuration.text!.languageNotSupportedErrorText, "Language '{{language}}' is not supported." );
-        _configuration.text!.noCodeAvailableToRenderErrorText = Default.getAnyString( _configuration.text!.noCodeAvailableToRenderErrorText, "No code is available to render." );
-        _configuration.text!.copyButtonText = Default.getAnyString( _configuration.text!.copyButtonText, "Copy" );
-        _configuration.text!.printButtonText = Default.getAnyString( _configuration.text!.printButtonText, "Print" );
-    }
-
-    function buildDefaultConfigurationCustomTriggers() : void {
-        _configuration.events = Default.getObject( _configuration.events, {} as ConfigurationEvents )
-        _configuration.events!.onBeforeRender = Default.getFunction( _configuration.events!.onBeforeRender, null! );
-        _configuration.events!.onAfterRender = Default.getFunction( _configuration.events!.onAfterRender, null! );
-    }
-
-
-	/*
-	 * ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 	 * Public API Functions:
 	 * ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 	 */
@@ -1374,7 +1340,7 @@ type RenderElementResult = {
                 }
         
                 if ( configurationHasChanged ) {
-                    buildDefaultConfiguration( newInternalConfiguration );
+                    _configuration = Config.Options.get( newInternalConfiguration );
                 }
             }
     
@@ -1401,7 +1367,7 @@ type RenderElementResult = {
      */
 
     ( () => {
-        buildDefaultConfiguration();
+        _configuration = Config.Options.get();
 
         document.addEventListener( "DOMContentLoaded", function() {
             render();
