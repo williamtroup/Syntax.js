@@ -708,9 +708,7 @@ var require_syntax = __commonJS({
                 o.style.display = i.buttonsVisible ? "inline-block" : "none";
                 n.appendChild(o);
                 DomElement.setNodeText(o, e.text, _configuration);
-                o.onclick = () => {
-                    e.events.onClick(r);
-                };
+                o.onclick = () => e.events.onClick(r);
                 if (Is.defined(e.className)) {
                     o.classList.add(e.className);
                 }
@@ -1032,10 +1030,7 @@ var require_syntax = __commonJS({
                 }
             }
             function renderElementClickEvent(e, t) {
-                const n = e.innerText;
-                e.onclick = () => {
-                    t(n);
-                };
+                e.onclick = () => t(e.innerText);
             }
             function getFriendlyLanguageName(e, t = null) {
                 let n = null;
@@ -1260,9 +1255,7 @@ var require_syntax = __commonJS({
             };
             (() => {
                 _configuration = Config.Options.get();
-                document.addEventListener("DOMContentLoaded", (function() {
-                    render();
-                }));
+                document.addEventListener("DOMContentLoaded", (() => render()));
                 if (!Is.defined(window.$syntax)) {
                     window.$syntax = _public;
                 }

@@ -624,9 +624,7 @@ var Tab;
         i.style.display = o.buttonsVisible ? "inline-block" : "none";
         n.appendChild(i);
         DomElement.setNodeText(i, e.text, _configuration);
-        i.onclick = () => {
-            e.events.onClick(r);
-        };
+        i.onclick = () => e.events.onClick(r);
         if (Is.defined(e.className)) {
             i.classList.add(e.className);
         }
@@ -948,10 +946,7 @@ var Tab;
         }
     }
     function renderElementClickEvent(e, t) {
-        const n = e.innerText;
-        e.onclick = () => {
-            t(n);
-        };
+        e.onclick = () => t(e.innerText);
     }
     function getFriendlyLanguageName(e, t = null) {
         let n = null;
@@ -1176,9 +1171,7 @@ var Tab;
     };
     (() => {
         _configuration = Config.Options.get();
-        document.addEventListener("DOMContentLoaded", (function() {
-            render();
-        }));
+        document.addEventListener("DOMContentLoaded", (() => render()));
         if (!Is.defined(window.$syntax)) {
             window.$syntax = _public;
         }

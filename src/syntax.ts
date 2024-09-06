@@ -494,9 +494,7 @@ type RenderElementResult = {
 
         DomElement.setNodeText( newCustomButton, customButton.text!, _configuration );
 
-        newCustomButton.onclick =() => {
-            customButton.events!.onClick!( innerHTMLCopy );
-        };
+        newCustomButton.onclick = () => customButton.events!.onClick!( innerHTMLCopy );
 
         if ( Is.defined( customButton.className ) ) {
             newCustomButton.classList.add( customButton.className! );
@@ -911,11 +909,7 @@ type RenderElementResult = {
     }
 
     function renderElementClickEvent( element: HTMLElement, customTrigger: Function ) : void {
-        const text: string = element.innerText;
-
-        element.onclick =() => {
-            customTrigger( text );
-        };
+        element.onclick = () => customTrigger( element.innerText );
     }
 
     function getFriendlyLanguageName( syntaxLanguage: string, languageLabelCasing: string = null! ) : string {
@@ -1280,9 +1274,7 @@ type RenderElementResult = {
     ( () => {
         _configuration = Config.Options.get();
 
-        document.addEventListener( "DOMContentLoaded", function() {
-            render();
-        } );
+        document.addEventListener( "DOMContentLoaded", () => render() );
 
         if ( !Is.defined( window.$syntax ) ) {
             window.$syntax = _public;
