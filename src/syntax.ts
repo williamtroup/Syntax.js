@@ -4,7 +4,7 @@
  * A lightweight, and easy-to-use, JavaScript library for code syntax highlighting!
  * 
  * @file        syntax.ts
- * @version     v3.0.2
+ * @version     v3.1.0
  * @author      Bunoon
  * @license     MIT License
  * @copyright   Bunoon 2024
@@ -1260,7 +1260,7 @@ type RenderElementResult = {
          */
 
         getVersion: function () : string {
-            return "3.0.2";
+            return "3.1.0";
         }
     };
 
