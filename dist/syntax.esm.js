@@ -288,24 +288,29 @@ var init_binding = __esm({
                     t = n(t);
                     t = r(t);
                     t = i(t);
+                    t = o(t);
                     return t;
                 }
                 e.get = t;
                 function n(e) {
-                    e.showCopyButton = Default.getBoolean(e.showCopyButton, true);
                     e.removeBlankLines = Default.getBoolean(e.removeBlankLines, false);
                     e.showLineNumbers = Default.getBoolean(e.showLineNumbers, true);
                     e.showLanguageLabel = Default.getBoolean(e.showLanguageLabel, true);
-                    e.showPrintButton = Default.getBoolean(e.showPrintButton, true);
                     e.padLineNumbers = Default.getBoolean(e.padLineNumbers, false);
                     e.removeDuplicateBlankLines = Default.getBoolean(e.removeDuplicateBlankLines, true);
                     e.doubleClickToSelectAll = Default.getBoolean(e.doubleClickToSelectAll, true);
                     e.languageLabelCasing = Default.getString(e.languageLabelCasing, "uppercase");
-                    e.buttonsVisible = Default.getBoolean(e.buttonsVisible, true);
-                    e.maximumButtons = Default.getNumber(e.maximumButtons, 2);
                     return e;
                 }
                 function r(e) {
+                    e.buttons = Default.getObject(e.buttons, {});
+                    e.buttons.showCopy = Default.getBoolean(e.buttons.showCopy, true);
+                    e.buttons.showPrint = Default.getBoolean(e.buttons.showPrint, true);
+                    e.buttons.visible = Default.getBoolean(e.buttons.visible, true);
+                    e.buttons.maximum = Default.getNumber(e.buttons.maximum, 2);
+                    return e;
+                }
+                function i(e) {
                     e.highlight = Default.getObject(e.highlight, {});
                     e.highlight.keywords = Default.getBoolean(e.highlight.keywords, true);
                     e.highlight.values = Default.getBoolean(e.highlight.values, true);
@@ -314,7 +319,7 @@ var init_binding = __esm({
                     e.highlight.comments = Default.getBoolean(e.highlight.comments, true);
                     return e;
                 }
-                function i(e) {
+                function o(e) {
                     e.events = Default.getObject(e.events, {});
                     e.events.onCopy = Default.getFunction(e.events.onCopy, null);
                     e.events.onRenderComplete = Default.getFunction(e.events.onRenderComplete, null);
@@ -621,7 +626,7 @@ var require_syntax = __commonJS({
                 return e;
             }
             function renderElementButtons(e, t, n, r, i) {
-                if (t.showLanguageLabel || t.showCopyButton || t.showPrintButton || r.parsed) {
+                if (t.showLanguageLabel || t.buttons.showCopy || t.buttons.showPrint || r.parsed) {
                     const o = DomElement.create("div", "buttons");
                     const s = [];
                     e.appendChild(o);
@@ -635,9 +640,9 @@ var require_syntax = __commonJS({
                             }
                         }
                     }
-                    if (t.showCopyButton) {
+                    if (t.buttons.showCopy) {
                         const e = DomElement.create("button", "button");
-                        e.style.display = t.buttonsVisible ? "inline-block" : "none";
+                        e.style.display = t.buttons.visible ? "inline-block" : "none";
                         o.appendChild(e);
                         DomElement.setNodeText(e, _configuration.text.copyButtonText, _configuration);
                         e.onclick = () => {
@@ -646,9 +651,9 @@ var require_syntax = __commonJS({
                         };
                         s.push(e);
                     }
-                    if (t.showPrintButton) {
+                    if (t.buttons.showPrint) {
                         const r = DomElement.create("button", "button");
-                        r.style.display = t.buttonsVisible ? "inline-block" : "none";
+                        r.style.display = t.buttons.visible ? "inline-block" : "none";
                         o.appendChild(r);
                         DomElement.setNodeText(r, _configuration.text.printButtonText, _configuration);
                         r.onclick = () => {
@@ -685,9 +690,9 @@ var require_syntax = __commonJS({
                         DomElement.setNodeText(e, getFriendlyLanguageName(n, t.languageLabelCasing), _configuration);
                     }
                     const l = s.length;
-                    if (l >= t.maximumButtons) {
+                    if (l >= t.buttons.maximum) {
                         const e = DomElement.create("button", "button button-opener");
-                        e.innerText = t.buttonsVisible ? _configuration.text.buttonsCloserText : _configuration.text.buttonsOpenerText;
+                        e.innerText = t.buttons.visible ? _configuration.text.buttonsCloserText : _configuration.text.buttonsOpenerText;
                         o.insertBefore(e, o.children[0]);
                         e.onclick = () => {
                             const n = e.innerText === _configuration.text.buttonsCloserText;
@@ -701,7 +706,7 @@ var require_syntax = __commonJS({
                                 Trigger.customEvent(t.events.onButtonsOpened);
                             }
                         };
-                    } else if (!t.buttonsVisible && l <= t.maximumButtons) {
+                    } else if (!t.buttons.visible && l <= t.buttons.maximum) {
                         for (let e = 0; e < l; e++) {
                             s[e].style.display = "inline-block";
                         }
@@ -710,7 +715,7 @@ var require_syntax = __commonJS({
             }
             function renderElementButton(e, t, n, r, i) {
                 const o = DomElement.create("button", "button");
-                o.style.display = i.buttonsVisible ? "inline-block" : "none";
+                o.style.display = i.buttons.visible ? "inline-block" : "none";
                 n.appendChild(o);
                 DomElement.setNodeText(o, e.text, _configuration);
                 o.onclick = () => e.events.onClick(r);

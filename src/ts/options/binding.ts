@@ -11,7 +11,7 @@
  */
 
 
-import { type BindingOptionsHighlight, type BindingOptionEvents, type BindingOptions } from "../type";
+import { type BindingOptionsHighlight, type BindingOptionEvents, type BindingOptions, BindingOptionsButtons } from "../type";
 import { Default } from "../data/default";
 import { TextCasing } from "../data/enum";
 
@@ -22,6 +22,7 @@ export namespace Binding {
             let options: BindingOptions = Default.getObject( newOptions, {} as BindingOptions );
     
             options = getOptions( options );
+            options = getButtons( options );
             options = getHighlight( options );
             options = getCustomTriggers( options );
     
@@ -29,18 +30,24 @@ export namespace Binding {
         }
     
         function getOptions( options: BindingOptions ) : BindingOptions {
-            options.showCopyButton = Default.getBoolean( options.showCopyButton, true );
             options.removeBlankLines = Default.getBoolean( options.removeBlankLines, false );
             options.showLineNumbers = Default.getBoolean( options.showLineNumbers, true );
             options.showLanguageLabel = Default.getBoolean( options.showLanguageLabel, true );
-            options.showPrintButton = Default.getBoolean( options.showPrintButton, true );
             options.padLineNumbers = Default.getBoolean( options.padLineNumbers, false );
             options.removeDuplicateBlankLines = Default.getBoolean( options.removeDuplicateBlankLines, true );
             options.doubleClickToSelectAll = Default.getBoolean( options.doubleClickToSelectAll, true );
             options.languageLabelCasing = Default.getString( options.languageLabelCasing, TextCasing.uppercase );
-            options.buttonsVisible = Default.getBoolean( options.buttonsVisible, true );
-            options.maximumButtons = Default.getNumber( options.maximumButtons, 2 );
             
+            return options;
+        }
+
+        function getButtons( options: BindingOptions ) : BindingOptions {
+            options.buttons = Default.getObject( options.buttons, {} as BindingOptionsButtons );
+            options.buttons!.showCopy = Default.getBoolean( options.buttons!.showCopy, true );
+            options.buttons!.showPrint = Default.getBoolean( options.buttons!.showPrint, true );
+            options.buttons!.visible = Default.getBoolean( options.buttons!.visible, true );
+            options.buttons!.maximum = Default.getNumber( options.buttons!.maximum, 2 );
+
             return options;
         }
 

@@ -36,19 +36,23 @@ export type ConfigurationText = {
 };
 
 export type BindingOptions = {
-    showCopyButton?: boolean;
     removeBlankLines?: boolean;
     showLineNumbers?: boolean;
     showLanguageLabel?: boolean;
-    showPrintButton?: boolean;
     padLineNumbers?: boolean;
     removeDuplicateBlankLines?: boolean;
     doubleClickToSelectAll?: boolean;
     languageLabelCasing?: string;
-    buttonsVisible?: boolean;
-    maximumButtons?: number;
+    buttons?: BindingOptionsButtons;
     highlight?: BindingOptionsHighlight;
     events?: BindingOptionEvents;
+};
+
+export type BindingOptionsButtons = {
+    showCopy?: boolean;
+    showPrint?: boolean;
+    visible?: boolean;
+    maximum?: number;
 };
 
 export type BindingOptionsHighlight = {

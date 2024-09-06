@@ -373,7 +373,7 @@ type RenderElementResult = {
     }
 
     function renderElementButtons( syntax: HTMLElement, bindingOptions: BindingOptions, syntaxLanguage: string, syntaxButtonsParsed: StringToJson, innerHTMLCopy: string ) : void {
-        if ( bindingOptions.showLanguageLabel || bindingOptions.showCopyButton || bindingOptions.showPrintButton || syntaxButtonsParsed.parsed ) {
+        if ( bindingOptions.showLanguageLabel || bindingOptions.buttons!.showCopy || bindingOptions.buttons!.showPrint || syntaxButtonsParsed.parsed ) {
             const buttons: HTMLElement = DomElement.create( "div", "buttons" );
             const buttonsElements: HTMLElement[] = [];
 
@@ -392,9 +392,9 @@ type RenderElementResult = {
                 }
             }
 
-            if ( bindingOptions.showCopyButton ) {
+            if ( bindingOptions.buttons!.showCopy ) {
                 const copyButton: HTMLButtonElement = DomElement.create( "button", "button" ) as HTMLButtonElement;
-                copyButton.style.display = bindingOptions.buttonsVisible ? "inline-block" : "none";
+                copyButton.style.display = bindingOptions.buttons!.visible ? "inline-block" : "none";
                 buttons.appendChild( copyButton );
 
                 DomElement.setNodeText( copyButton, _configuration.text!.copyButtonText!, _configuration );
@@ -408,9 +408,9 @@ type RenderElementResult = {
                 buttonsElements.push( copyButton );
             }
 
-            if ( bindingOptions.showPrintButton ) {
+            if ( bindingOptions.buttons!.showPrint ) {
                 const printButton: HTMLButtonElement = DomElement.create( "button", "button" ) as HTMLButtonElement;
-                printButton.style.display = bindingOptions.buttonsVisible ? "inline-block" : "none";
+                printButton.style.display = bindingOptions.buttons!.visible ? "inline-block" : "none";
                 buttons.appendChild( printButton );
 
                 DomElement.setNodeText( printButton, _configuration.text!.printButtonText!, _configuration );
@@ -458,9 +458,9 @@ type RenderElementResult = {
 
             const buttonsElementsLength: number = buttonsElements.length;
 
-            if ( buttonsElementsLength >= bindingOptions.maximumButtons! ) {
+            if ( buttonsElementsLength >= bindingOptions.buttons!.maximum! ) {
                 const openButton: HTMLButtonElement = DomElement.create( "button", "button button-opener" ) as HTMLButtonElement;
-                openButton.innerText = bindingOptions.buttonsVisible ? _configuration.text!.buttonsCloserText! : _configuration.text!.buttonsOpenerText!;
+                openButton.innerText = bindingOptions.buttons!.visible ? _configuration.text!.buttonsCloserText! : _configuration.text!.buttonsOpenerText!;
                 buttons.insertBefore( openButton, buttons.children[ 0 ] );
 
                 openButton.onclick =() => {
@@ -479,7 +479,7 @@ type RenderElementResult = {
                     }
                 };
 
-            } else if ( !bindingOptions.buttonsVisible && buttonsElementsLength <= bindingOptions.maximumButtons! ) {
+            } else if ( !bindingOptions.buttons!.visible && buttonsElementsLength <= bindingOptions.buttons!.maximum! ) {
                 for ( let buttonsElementIndex: number = 0; buttonsElementIndex < buttonsElementsLength; buttonsElementIndex++ ) {
                     buttonsElements[ buttonsElementIndex ].style.display = "inline-block";
                 }
@@ -489,7 +489,7 @@ type RenderElementResult = {
 
     function renderElementButton( customButton: CustomButton, buttonsElements: HTMLElement[], buttons: HTMLElement, innerHTMLCopy: string, bindingOptions: BindingOptions ) : void {
         const newCustomButton: HTMLButtonElement = DomElement.create( "button", "button" ) as HTMLButtonElement;
-        newCustomButton.style.display = bindingOptions.buttonsVisible ? "inline-block" : "none";
+        newCustomButton.style.display = bindingOptions.buttons!.visible ? "inline-block" : "none";
         buttons.appendChild( newCustomButton );
 
         DomElement.setNodeText( newCustomButton, customButton.text!, _configuration );

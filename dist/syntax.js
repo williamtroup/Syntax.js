@@ -224,24 +224,29 @@ var Binding;
             t = n(t);
             t = r(t);
             t = o(t);
+            t = i(t);
             return t;
         }
         e.get = t;
         function n(e) {
-            e.showCopyButton = Default.getBoolean(e.showCopyButton, true);
             e.removeBlankLines = Default.getBoolean(e.removeBlankLines, false);
             e.showLineNumbers = Default.getBoolean(e.showLineNumbers, true);
             e.showLanguageLabel = Default.getBoolean(e.showLanguageLabel, true);
-            e.showPrintButton = Default.getBoolean(e.showPrintButton, true);
             e.padLineNumbers = Default.getBoolean(e.padLineNumbers, false);
             e.removeDuplicateBlankLines = Default.getBoolean(e.removeDuplicateBlankLines, true);
             e.doubleClickToSelectAll = Default.getBoolean(e.doubleClickToSelectAll, true);
             e.languageLabelCasing = Default.getString(e.languageLabelCasing, "uppercase");
-            e.buttonsVisible = Default.getBoolean(e.buttonsVisible, true);
-            e.maximumButtons = Default.getNumber(e.maximumButtons, 2);
             return e;
         }
         function r(e) {
+            e.buttons = Default.getObject(e.buttons, {});
+            e.buttons.showCopy = Default.getBoolean(e.buttons.showCopy, true);
+            e.buttons.showPrint = Default.getBoolean(e.buttons.showPrint, true);
+            e.buttons.visible = Default.getBoolean(e.buttons.visible, true);
+            e.buttons.maximum = Default.getNumber(e.buttons.maximum, 2);
+            return e;
+        }
+        function o(e) {
             e.highlight = Default.getObject(e.highlight, {});
             e.highlight.keywords = Default.getBoolean(e.highlight.keywords, true);
             e.highlight.values = Default.getBoolean(e.highlight.values, true);
@@ -250,7 +255,7 @@ var Binding;
             e.highlight.comments = Default.getBoolean(e.highlight.comments, true);
             return e;
         }
-        function o(e) {
+        function i(e) {
             e.events = Default.getObject(e.events, {});
             e.events.onCopy = Default.getFunction(e.events.onCopy, null);
             e.events.onRenderComplete = Default.getFunction(e.events.onRenderComplete, null);
@@ -537,7 +542,7 @@ var Tab;
         return e;
     }
     function renderElementButtons(e, t, n, r, o) {
-        if (t.showLanguageLabel || t.showCopyButton || t.showPrintButton || r.parsed) {
+        if (t.showLanguageLabel || t.buttons.showCopy || t.buttons.showPrint || r.parsed) {
             const i = DomElement.create("div", "buttons");
             const l = [];
             e.appendChild(i);
@@ -551,9 +556,9 @@ var Tab;
                     }
                 }
             }
-            if (t.showCopyButton) {
+            if (t.buttons.showCopy) {
                 const e = DomElement.create("button", "button");
-                e.style.display = t.buttonsVisible ? "inline-block" : "none";
+                e.style.display = t.buttons.visible ? "inline-block" : "none";
                 i.appendChild(e);
                 DomElement.setNodeText(e, _configuration.text.copyButtonText, _configuration);
                 e.onclick = () => {
@@ -562,9 +567,9 @@ var Tab;
                 };
                 l.push(e);
             }
-            if (t.showPrintButton) {
+            if (t.buttons.showPrint) {
                 const r = DomElement.create("button", "button");
-                r.style.display = t.buttonsVisible ? "inline-block" : "none";
+                r.style.display = t.buttons.visible ? "inline-block" : "none";
                 i.appendChild(r);
                 DomElement.setNodeText(r, _configuration.text.printButtonText, _configuration);
                 r.onclick = () => {
@@ -601,9 +606,9 @@ var Tab;
                 DomElement.setNodeText(e, getFriendlyLanguageName(n, t.languageLabelCasing), _configuration);
             }
             const s = l.length;
-            if (s >= t.maximumButtons) {
+            if (s >= t.buttons.maximum) {
                 const e = DomElement.create("button", "button button-opener");
-                e.innerText = t.buttonsVisible ? _configuration.text.buttonsCloserText : _configuration.text.buttonsOpenerText;
+                e.innerText = t.buttons.visible ? _configuration.text.buttonsCloserText : _configuration.text.buttonsOpenerText;
                 i.insertBefore(e, i.children[0]);
                 e.onclick = () => {
                     const n = e.innerText === _configuration.text.buttonsCloserText;
@@ -617,7 +622,7 @@ var Tab;
                         Trigger.customEvent(t.events.onButtonsOpened);
                     }
                 };
-            } else if (!t.buttonsVisible && s <= t.maximumButtons) {
+            } else if (!t.buttons.visible && s <= t.buttons.maximum) {
                 for (let e = 0; e < s; e++) {
                     l[e].style.display = "inline-block";
                 }
@@ -626,7 +631,7 @@ var Tab;
     }
     function renderElementButton(e, t, n, r, o) {
         const i = DomElement.create("button", "button");
-        i.style.display = o.buttonsVisible ? "inline-block" : "none";
+        i.style.display = o.buttons.visible ? "inline-block" : "none";
         n.appendChild(i);
         DomElement.setNodeText(i, e.text, _configuration);
         i.onclick = () => e.events.onClick(r);

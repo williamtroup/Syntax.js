@@ -182,7 +182,7 @@ Make sure you include the "DOCTYPE html" tag at the top of your HTML, as follows
     }
 </div>
 
-<code data-syntax-language="javascript" data-syntax-options="{ 'showCopyButton': false }" data-syntax-buttons="[ { 'text': 'Button 1', 'onClick': yourJsFunction } ]">
+<code data-syntax-language="javascript" data-syntax-options="{ 'buttons': { 'showCopy': false } }" data-syntax-buttons="[ { 'text': 'Button 1', 'onClick': yourJsFunction } ]">
     <pre>
         var something = true;
 
