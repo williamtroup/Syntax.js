@@ -69,6 +69,11 @@ div.syntax-highlight {
   font-family: var(--syntax-js-default-font);
   font-size: 0.8rem;
 }
+code.syntax-highlight button,
+div.syntax-highlight button {
+  font-family: var(--syntax-js-default-font);
+  font-size: 0.8rem;
+}
 code.syntax-highlight div.code,
 div.syntax-highlight div.code {
   background-color: var(--syntax-js-container-background-color);

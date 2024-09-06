@@ -458,7 +458,7 @@ type RenderElementResult = {
 
             const buttonsElementsLength: number = buttonsElements.length;
 
-            if ( buttonsElementsLength > bindingOptions.maximumButtons! ) {
+            if ( buttonsElementsLength >= bindingOptions.maximumButtons! ) {
                 const openButton: HTMLButtonElement = DomElement.create( "button", "button button-opener" ) as HTMLButtonElement;
                 openButton.innerText = bindingOptions.buttonsVisible ? _configuration.text!.buttonsCloserText! : _configuration.text!.buttonsOpenerText!;
                 buttons.insertBefore( openButton, buttons.children[ 0 ] );

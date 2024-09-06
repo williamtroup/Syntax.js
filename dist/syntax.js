@@ -596,7 +596,7 @@ var Tab;
                 DomElement.setNodeText(e, getFriendlyLanguageName(n, t.languageLabelCasing), _configuration);
             }
             const s = l.length;
-            if (s > t.maximumButtons) {
+            if (s >= t.maximumButtons) {
                 const e = DomElement.create("button", "button button-opener");
                 e.innerText = t.buttonsVisible ? _configuration.text.buttonsCloserText : _configuration.text.buttonsOpenerText;
                 i.insertBefore(e, i.children[0]);

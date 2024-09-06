@@ -88,6 +88,11 @@ div.syntax-highlight {
     font-family: var(--syntax-js-default-font);
     font-size: 0.8rem;
 
+    button {
+        font-family: var(--syntax-js-default-font);
+        font-size: 0.8rem;
+    }
+
     div.code {
         background-color: var(--syntax-js-container-background-color);
         border-radius: var(--syntax-js-border-radius);

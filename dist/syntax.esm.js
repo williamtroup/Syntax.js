@@ -680,7 +680,7 @@ var require_syntax = __commonJS({
                         DomElement.setNodeText(e, getFriendlyLanguageName(n, t.languageLabelCasing), _configuration);
                     }
                     const l = s.length;
-                    if (l > t.maximumButtons) {
+                    if (l >= t.maximumButtons) {
                         const e = DomElement.create("button", "button button-opener");
                         e.innerText = t.buttonsVisible ? _configuration.text.buttonsCloserText : _configuration.text.buttonsOpenerText;
                         o.insertBefore(e, o.children[0]);
