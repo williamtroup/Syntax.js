@@ -39,11 +39,6 @@ export type BindingOptions = {
     showCopyButton?: boolean;
     removeBlankLines?: boolean;
     showLineNumbers?: boolean;
-    highlightKeywords?: boolean;
-    highlightValues?: boolean;
-    highlightAttributes?: boolean;
-    highlightStrings?: boolean;
-    highlightComments?: boolean;
     showLanguageLabel?: boolean;
     showPrintButton?: boolean;
     padLineNumbers?: boolean;
@@ -52,7 +47,16 @@ export type BindingOptions = {
     languageLabelCasing?: string;
     buttonsVisible?: boolean;
     maximumButtons?: number;
+    highlight?: BindingOptionsHighlight;
     events?: BindingOptionEvents;
+};
+
+export type BindingOptionsHighlight = {
+    keywords?: boolean;
+    values?: boolean;
+    attributes?: boolean;
+    strings?: boolean;
+    comments?: boolean;
 };
 
 export type BindingOptionEvents = {

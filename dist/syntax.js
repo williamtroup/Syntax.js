@@ -223,6 +223,7 @@ var Binding;
             let t = Default.getObject(e, {});
             t = n(t);
             t = r(t);
+            t = o(t);
             return t;
         }
         e.get = t;
@@ -230,11 +231,6 @@ var Binding;
             e.showCopyButton = Default.getBoolean(e.showCopyButton, true);
             e.removeBlankLines = Default.getBoolean(e.removeBlankLines, false);
             e.showLineNumbers = Default.getBoolean(e.showLineNumbers, true);
-            e.highlightKeywords = Default.getBoolean(e.highlightKeywords, true);
-            e.highlightValues = Default.getBoolean(e.highlightValues, true);
-            e.highlightAttributes = Default.getBoolean(e.highlightAttributes, true);
-            e.highlightStrings = Default.getBoolean(e.highlightStrings, true);
-            e.highlightComments = Default.getBoolean(e.highlightComments, true);
             e.showLanguageLabel = Default.getBoolean(e.showLanguageLabel, true);
             e.showPrintButton = Default.getBoolean(e.showPrintButton, true);
             e.padLineNumbers = Default.getBoolean(e.padLineNumbers, false);
@@ -246,6 +242,15 @@ var Binding;
             return e;
         }
         function r(e) {
+            e.highlight = Default.getObject(e.highlight, {});
+            e.highlight.keywords = Default.getBoolean(e.highlight.keywords, true);
+            e.highlight.values = Default.getBoolean(e.highlight.values, true);
+            e.highlight.attributes = Default.getBoolean(e.highlight.attributes, true);
+            e.highlight.strings = Default.getBoolean(e.highlight.strings, true);
+            e.highlight.comments = Default.getBoolean(e.highlight.comments, true);
+            return e;
+        }
+        function o(e) {
             e.events = Default.getObject(e.events, {});
             e.events.onCopy = Default.getFunction(e.events.onCopy, null);
             e.events.onRenderComplete = Default.getFunction(e.events.onRenderComplete, null);
@@ -498,11 +503,11 @@ var Tab;
         if (!t.isMarkUp) {
             e = Str.encodeMarkUpCharacters(e);
         }
-        if (n.highlightComments) {
+        if (n.highlight.comments) {
             e = renderElementMultiLineCommentVariables(e, t, n);
             e = renderElementCommentVariables(e, t, n);
         }
-        if (n.highlightStrings) {
+        if (n.highlight.strings) {
             e = renderElementStringPatternVariables(e, e.match(/"((?:\\.|[^"\\])*)"/g), n);
             if (t.comment !== "'") {
                 e = renderElementStringPatternVariables(e, e.match(/'((?:\\.|[^"\\])*)'/g), n);
@@ -518,10 +523,10 @@ var Tab;
             e = renderElementAttributes(e, t, n);
         }
         e = Str.encodeMarkUpCharacters(e);
-        if (n.highlightComments) {
+        if (n.highlight.comments) {
             e = renderElementCommentsFromVariables(e, t);
         }
-        if (n.highlightStrings) {
+        if (n.highlight.strings) {
             e = renderElementStringQuotesFromVariables(e);
         }
         e = renderElementVariables(e, _cached_Keywords);
@@ -709,7 +714,7 @@ var Tab;
             let u = null;
             const d = i ? "g" : "gi";
             const g = new RegExp(getWordRegEx(o, t), d);
-            if (n.highlightKeywords) {
+            if (n.highlight.keywords) {
                 if (Is.definedFunction(n.events.onKeywordClicked)) {
                     u = `<span class="keyword-clickable">${a}</span>`;
                     e = e.replace(g, c);
@@ -748,7 +753,7 @@ var Tab;
                 const l = new RegExp(getWordRegEx(o, t), s);
                 let a = null;
                 let c = getDisplayTextTestCasing(o, i);
-                if (n.highlightKeywords) {
+                if (n.highlight.keywords) {
                     if (Is.definedFunction(n.events.onKeywordClicked)) {
                         a = `<span class="keyword-clickable">${c}</span>`;
                     } else {
@@ -778,7 +783,7 @@ var Tab;
             let a = null;
             const c = i ? "g" : "gi";
             const u = new RegExp(getWordRegEx(o, t), c);
-            if (n.highlightValues) {
+            if (n.highlight.values) {
                 if (Is.definedFunction(n.events.onValueClicked)) {
                     a = `<span class="value-clickable">${o}</span>`;
                     e = e.replace(u, s);
@@ -809,7 +814,7 @@ var Tab;
             let a = null;
             let c = i ? "g" : "gi";
             const u = new RegExp(getWordRegEx(o, t), c);
-            if (n.highlightAttributes) {
+            if (n.highlight.attributes) {
                 if (Is.definedFunction(n.events.onAttributeClicked)) {
                     a = `<span class="attribute-clickable">${o}</span>`;
                     e = e.replace(u, s);

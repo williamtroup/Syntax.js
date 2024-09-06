@@ -287,6 +287,7 @@ var init_binding = __esm({
                     let t = Default.getObject(e, {});
                     t = n(t);
                     t = r(t);
+                    t = i(t);
                     return t;
                 }
                 e.get = t;
@@ -294,11 +295,6 @@ var init_binding = __esm({
                     e.showCopyButton = Default.getBoolean(e.showCopyButton, true);
                     e.removeBlankLines = Default.getBoolean(e.removeBlankLines, false);
                     e.showLineNumbers = Default.getBoolean(e.showLineNumbers, true);
-                    e.highlightKeywords = Default.getBoolean(e.highlightKeywords, true);
-                    e.highlightValues = Default.getBoolean(e.highlightValues, true);
-                    e.highlightAttributes = Default.getBoolean(e.highlightAttributes, true);
-                    e.highlightStrings = Default.getBoolean(e.highlightStrings, true);
-                    e.highlightComments = Default.getBoolean(e.highlightComments, true);
                     e.showLanguageLabel = Default.getBoolean(e.showLanguageLabel, true);
                     e.showPrintButton = Default.getBoolean(e.showPrintButton, true);
                     e.padLineNumbers = Default.getBoolean(e.padLineNumbers, false);
@@ -310,6 +306,15 @@ var init_binding = __esm({
                     return e;
                 }
                 function r(e) {
+                    e.highlight = Default.getObject(e.highlight, {});
+                    e.highlight.keywords = Default.getBoolean(e.highlight.keywords, true);
+                    e.highlight.values = Default.getBoolean(e.highlight.values, true);
+                    e.highlight.attributes = Default.getBoolean(e.highlight.attributes, true);
+                    e.highlight.strings = Default.getBoolean(e.highlight.strings, true);
+                    e.highlight.comments = Default.getBoolean(e.highlight.comments, true);
+                    return e;
+                }
+                function i(e) {
                     e.events = Default.getObject(e.events, {});
                     e.events.onCopy = Default.getFunction(e.events.onCopy, null);
                     e.events.onRenderComplete = Default.getFunction(e.events.onRenderComplete, null);
@@ -582,11 +587,11 @@ var require_syntax = __commonJS({
                 if (!t.isMarkUp) {
                     e = Str.encodeMarkUpCharacters(e);
                 }
-                if (n.highlightComments) {
+                if (n.highlight.comments) {
                     e = renderElementMultiLineCommentVariables(e, t, n);
                     e = renderElementCommentVariables(e, t, n);
                 }
-                if (n.highlightStrings) {
+                if (n.highlight.strings) {
                     e = renderElementStringPatternVariables(e, e.match(/"((?:\\.|[^"\\])*)"/g), n);
                     if (t.comment !== "'") {
                         e = renderElementStringPatternVariables(e, e.match(/'((?:\\.|[^"\\])*)'/g), n);
@@ -602,10 +607,10 @@ var require_syntax = __commonJS({
                     e = renderElementAttributes(e, t, n);
                 }
                 e = Str.encodeMarkUpCharacters(e);
-                if (n.highlightComments) {
+                if (n.highlight.comments) {
                     e = renderElementCommentsFromVariables(e, t);
                 }
-                if (n.highlightStrings) {
+                if (n.highlight.strings) {
                     e = renderElementStringQuotesFromVariables(e);
                 }
                 e = renderElementVariables(e, _cached_Keywords);
@@ -793,7 +798,7 @@ var require_syntax = __commonJS({
                     let u = null;
                     const d = o ? "g" : "gi";
                     const g = new RegExp(getWordRegEx(i, t), d);
-                    if (n.highlightKeywords) {
+                    if (n.highlight.keywords) {
                         if (Is.definedFunction(n.events.onKeywordClicked)) {
                             u = `<span class="keyword-clickable">${a}</span>`;
                             e = e.replace(g, c);
@@ -832,7 +837,7 @@ var require_syntax = __commonJS({
                         const s = new RegExp(getWordRegEx(i, t), l);
                         let a = null;
                         let c = getDisplayTextTestCasing(i, o);
-                        if (n.highlightKeywords) {
+                        if (n.highlight.keywords) {
                             if (Is.definedFunction(n.events.onKeywordClicked)) {
                                 a = `<span class="keyword-clickable">${c}</span>`;
                             } else {
@@ -862,7 +867,7 @@ var require_syntax = __commonJS({
                     let a = null;
                     const c = o ? "g" : "gi";
                     const u = new RegExp(getWordRegEx(i, t), c);
-                    if (n.highlightValues) {
+                    if (n.highlight.values) {
                         if (Is.definedFunction(n.events.onValueClicked)) {
                             a = `<span class="value-clickable">${i}</span>`;
                             e = e.replace(u, l);
@@ -893,7 +898,7 @@ var require_syntax = __commonJS({
                     let a = null;
                     let c = o ? "g" : "gi";
                     const u = new RegExp(getWordRegEx(i, t), c);
-                    if (n.highlightAttributes) {
+                    if (n.highlight.attributes) {
                         if (Is.definedFunction(n.events.onAttributeClicked)) {
                             a = `<span class="attribute-clickable">${i}</span>`;
                             e = e.replace(u, l);

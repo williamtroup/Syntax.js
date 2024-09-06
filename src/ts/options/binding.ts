@@ -11,7 +11,7 @@
  */
 
 
-import { type BindingOptionEvents, type BindingOptions } from "../type";
+import { type BindingOptionsHighlight, type BindingOptionEvents, type BindingOptions } from "../type";
 import { Default } from "../data/default";
 import { TextCasing } from "../data/enum";
 
@@ -22,6 +22,7 @@ export namespace Binding {
             let options: BindingOptions = Default.getObject( newOptions, {} as BindingOptions );
     
             options = getOptions( options );
+            options = getHighlight( options );
             options = getCustomTriggers( options );
     
             return options;
@@ -31,11 +32,6 @@ export namespace Binding {
             options.showCopyButton = Default.getBoolean( options.showCopyButton, true );
             options.removeBlankLines = Default.getBoolean( options.removeBlankLines, false );
             options.showLineNumbers = Default.getBoolean( options.showLineNumbers, true );
-            options.highlightKeywords = Default.getBoolean( options.highlightKeywords, true );
-            options.highlightValues = Default.getBoolean( options.highlightValues, true );
-            options.highlightAttributes = Default.getBoolean( options.highlightAttributes, true );
-            options.highlightStrings = Default.getBoolean( options.highlightStrings, true );
-            options.highlightComments = Default.getBoolean( options.highlightComments, true );
             options.showLanguageLabel = Default.getBoolean( options.showLanguageLabel, true );
             options.showPrintButton = Default.getBoolean( options.showPrintButton, true );
             options.padLineNumbers = Default.getBoolean( options.padLineNumbers, false );
@@ -45,6 +41,17 @@ export namespace Binding {
             options.buttonsVisible = Default.getBoolean( options.buttonsVisible, true );
             options.maximumButtons = Default.getNumber( options.maximumButtons, 2 );
             
+            return options;
+        }
+
+        function getHighlight( options: BindingOptions ) : BindingOptions {
+            options.highlight = Default.getObject( options.highlight, {} as BindingOptionsHighlight );
+            options.highlight!.keywords = Default.getBoolean( options.highlight!.keywords, true );
+            options.highlight!.values = Default.getBoolean( options.highlight!.values, true );
+            options.highlight!.attributes = Default.getBoolean( options.highlight!.attributes, true );
+            options.highlight!.strings = Default.getBoolean( options.highlight!.strings, true );
+            options.highlight!.comments = Default.getBoolean( options.highlight!.comments, true );
+    
             return options;
         }
     

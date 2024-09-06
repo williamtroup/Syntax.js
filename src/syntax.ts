@@ -327,12 +327,12 @@ type RenderElementResult = {
             innerHTML = Str.encodeMarkUpCharacters( innerHTML );
         }
 
-        if ( bindingOptions.highlightComments ) {
+        if ( bindingOptions.highlight!.comments ) {
             innerHTML = renderElementMultiLineCommentVariables( innerHTML, language, bindingOptions );
             innerHTML = renderElementCommentVariables( innerHTML, language, bindingOptions );
         }
 
-        if ( bindingOptions.highlightStrings ) {
+        if ( bindingOptions.highlight!.strings ) {
             innerHTML = renderElementStringPatternVariables( innerHTML, innerHTML.match( /"((?:\\.|[^"\\])*)"/g )!, bindingOptions );
 
             if ( language.comment !== "'" ) {
@@ -354,11 +354,11 @@ type RenderElementResult = {
 
         innerHTML = Str.encodeMarkUpCharacters( innerHTML );
 
-        if ( bindingOptions.highlightComments ) {
+        if ( bindingOptions.highlight!.comments ) {
             innerHTML = renderElementCommentsFromVariables( innerHTML, language );
         }
         
-        if ( bindingOptions.highlightStrings ) {
+        if ( bindingOptions.highlight!.strings ) {
             innerHTML = renderElementStringQuotesFromVariables( innerHTML );
         }
 
@@ -610,7 +610,7 @@ type RenderElementResult = {
             const regExFlags: string = caseSensitive ? "g" : "gi";
             const regEx: RegExp = new RegExp( getWordRegEx( keyword, language ), regExFlags );
 
-            if ( bindingOptions.highlightKeywords ) {
+            if ( bindingOptions.highlight!.keywords ) {
                 if ( Is.definedFunction( bindingOptions.events!.onKeywordClicked ) ) {
                     keywordReplacement = `<span class=\"keyword-clickable\">${keywordDisplay}</span>`;
                     innerHTML = innerHTML.replace( regEx, keywordVariable );
@@ -659,7 +659,7 @@ type RenderElementResult = {
                 let keywordReplacement: string = null!;
                 let replacementTagDisplay: string = getDisplayTextTestCasing( tag, keywordsCasing );
 
-                if ( bindingOptions.highlightKeywords ) {
+                if ( bindingOptions.highlight!.keywords ) {
                     if ( Is.definedFunction( bindingOptions.events!.onKeywordClicked ) ) {
                         keywordReplacement = `<span class=\"keyword-clickable\">${replacementTagDisplay}</span>`;
                     } else {
@@ -698,7 +698,7 @@ type RenderElementResult = {
             const regExFlags: string = caseSensitive ? "g" : "gi";
             const regEx: RegExp = new RegExp( getWordRegEx( value, language ), regExFlags );
 
-            if ( bindingOptions.highlightValues ) {
+            if ( bindingOptions.highlight!.values ) {
                 if ( Is.definedFunction( bindingOptions.events!.onValueClicked! ) ) {
                     valueReplacement = `<span class=\"value-clickable\">${value}</span>`;
                     innerHTML = innerHTML.replace( regEx, valueVariable );
@@ -737,7 +737,7 @@ type RenderElementResult = {
             let regExFlags: string = caseSensitive ? "g" : "gi";
             const regEx: RegExp = new RegExp( getWordRegEx( attribute, language ), regExFlags );
 
-            if ( bindingOptions.highlightAttributes ) {
+            if ( bindingOptions.highlight!.attributes ) {
                 if ( Is.definedFunction( bindingOptions.events!.onAttributeClicked ) ) {
                     attributeReplacement = `<span class=\"attribute-clickable\">${attribute}</span>`;
                     innerHTML = innerHTML.replace( regEx, attributeVariable );
