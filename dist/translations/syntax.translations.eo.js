@@ -1,4 +1,4 @@
-/*! Syntax.js v3.0.1 - Esperanto | (c) Bunoon 2024 | MIT License */
+/*! Syntax.js v3.1.0 - Esperanto | (c) Bunoon 2024 | MIT License */
 $syntax.setConfiguration( {
         "text": {
                 "buttonsOpenerText": "←",

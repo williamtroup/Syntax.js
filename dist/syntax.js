@@ -32,14 +32,14 @@ var Is;
         return t(e) && typeof e === "function";
     }
     e.definedFunction = i;
-    function l(e) {
+    function s(e) {
         return t(e) && typeof e === "number";
     }
-    e.definedNumber = l;
-    function s(e) {
+    e.definedNumber = s;
+    function l(e) {
         return n(e) && e instanceof Array;
     }
-    e.definedArray = s;
+    e.definedArray = l;
 })(Is || (Is = {}));
 
 var Default;
@@ -65,14 +65,14 @@ var Default;
         return Is.definedFunction(e) ? e : t;
     }
     e.getFunction = i;
-    function l(e, t) {
+    function s(e, t) {
         return Is.definedArray(e) ? e : t;
     }
-    e.getArray = l;
-    function s(e, t) {
+    e.getArray = s;
+    function l(e, t) {
         return Is.definedObject(e) ? e : t;
     }
-    e.getObject = s;
+    e.getObject = l;
     function a(e, t) {
         let n = t;
         if (Is.definedString(e)) {
@@ -83,7 +83,7 @@ var Default;
                 n = r;
             }
         } else {
-            n = l(e, t);
+            n = s(e, t);
         }
         return n;
     }
@@ -223,29 +223,39 @@ var Binding;
             let t = Default.getObject(e, {});
             t = n(t);
             t = r(t);
+            t = o(t);
+            t = i(t);
             return t;
         }
         e.get = t;
         function n(e) {
-            e.showCopyButton = Default.getBoolean(e.showCopyButton, true);
             e.removeBlankLines = Default.getBoolean(e.removeBlankLines, false);
             e.showLineNumbers = Default.getBoolean(e.showLineNumbers, true);
-            e.highlightKeywords = Default.getBoolean(e.highlightKeywords, true);
-            e.highlightValues = Default.getBoolean(e.highlightValues, true);
-            e.highlightAttributes = Default.getBoolean(e.highlightAttributes, true);
-            e.highlightStrings = Default.getBoolean(e.highlightStrings, true);
-            e.highlightComments = Default.getBoolean(e.highlightComments, true);
             e.showLanguageLabel = Default.getBoolean(e.showLanguageLabel, true);
-            e.showPrintButton = Default.getBoolean(e.showPrintButton, true);
             e.padLineNumbers = Default.getBoolean(e.padLineNumbers, false);
             e.removeDuplicateBlankLines = Default.getBoolean(e.removeDuplicateBlankLines, true);
             e.doubleClickToSelectAll = Default.getBoolean(e.doubleClickToSelectAll, true);
             e.languageLabelCasing = Default.getString(e.languageLabelCasing, "uppercase");
-            e.buttonsVisible = Default.getBoolean(e.buttonsVisible, true);
-            e.maximumButtons = Default.getNumber(e.maximumButtons, 2);
             return e;
         }
         function r(e) {
+            e.buttons = Default.getObject(e.buttons, {});
+            e.buttons.showCopy = Default.getBoolean(e.buttons.showCopy, true);
+            e.buttons.showPrint = Default.getBoolean(e.buttons.showPrint, true);
+            e.buttons.visible = Default.getBoolean(e.buttons.visible, true);
+            e.buttons.maximum = Default.getNumber(e.buttons.maximum, 2);
+            return e;
+        }
+        function o(e) {
+            e.highlight = Default.getObject(e.highlight, {});
+            e.highlight.keywords = Default.getBoolean(e.highlight.keywords, true);
+            e.highlight.values = Default.getBoolean(e.highlight.values, true);
+            e.highlight.attributes = Default.getBoolean(e.highlight.attributes, true);
+            e.highlight.strings = Default.getBoolean(e.highlight.strings, true);
+            e.highlight.comments = Default.getBoolean(e.highlight.comments, true);
+            return e;
+        }
+        function i(e) {
             e.events = Default.getObject(e.events, {});
             e.events.onCopy = Default.getFunction(e.events.onCopy, null);
             e.events.onRenderComplete = Default.getFunction(e.events.onRenderComplete, null);
@@ -328,16 +338,16 @@ var Tab;
                     t.removeAttribute(Constant.SYNTAX_JS_ATTRIBUTE_NAME_LANGUAGE);
                     t.className = t.className === "" ? "syntax-highlight" : `${t.className} syntax-highlight`;
                     t.innerHTML = "";
-                    const l = DomElement.create("div", "code custom-scroll-bars");
-                    t.appendChild(l);
-                    const s = DomElement.create("div", "tabs");
-                    l.appendChild(s);
+                    const s = DomElement.create("div", "code custom-scroll-bars");
+                    t.appendChild(s);
+                    const l = DomElement.create("div", "tabs");
+                    s.appendChild(l);
                     for (let t = 0; t < r; t++) {
-                        const r = renderElement(e[t], l);
+                        const r = renderElement(e[t], s);
                         if (!r.rendered) {
                             n = true;
                         } else {
-                            renderTab(s, o, i, r, t, r.tabBindingOptions, r.syntaxLanguage);
+                            renderTab(l, o, i, r, t, r.tabBindingOptions, r.syntaxLanguage);
                         }
                     }
                 } else {
@@ -354,14 +364,14 @@ var Tab;
             }
         }
     }
-    function renderTab(e, t, n, r, o, i, l) {
-        const s = DomElement.create("button", "tab");
-        e.appendChild(s);
-        DomElement.setNodeText(s, r.tabTitle, _configuration);
-        t.push(s);
+    function renderTab(e, t, n, r, o, i, s) {
+        const l = DomElement.create("button", "tab");
+        e.appendChild(l);
+        DomElement.setNodeText(l, r.tabTitle, _configuration);
+        t.push(l);
         n.push(r.tabContents);
-        s.onclick = () => {
-            if (s.className !== "tab-active") {
+        l.onclick = () => {
+            if (l.className !== "tab-active") {
                 const e = t.length;
                 const o = n.length;
                 for (let n = 0; n < e; n++) {
@@ -369,18 +379,20 @@ var Tab;
                 }
                 for (let e = 0; e < o; e++) {
                     n[e].style.display = "none";
+                    n[e].classList.remove("tab-switch");
                 }
-                s.className = "tab-active";
+                l.className = "tab-active";
                 r.tabContents.style.display = "flex";
+                r.tabContents.classList.add("tab-switch");
                 if (Is.definedObject(i)) {
-                    Trigger.customEvent(i.events.onOpen, l);
+                    Trigger.customEvent(i.events.onOpen, s);
                 }
             }
         };
         if (o > 0) {
             r.tabContents.style.display = "none";
         } else {
-            s.className = "tab-active";
+            l.className = "tab-active";
         }
     }
     function renderElement(e, t = null) {
@@ -395,16 +407,16 @@ var Tab;
                     const i = getObjectFromString(e.getAttribute(Constant.SYNTAX_JS_ATTRIBUTE_NAME_BUTTONS));
                     if (o.parsed) {
                         if (e.innerHTML.trim() !== "") {
-                            let l = e.innerHTML;
-                            const s = Binding.Options.get(o.object);
+                            let s = e.innerHTML;
+                            const l = Binding.Options.get(o.object);
                             let a = false;
                             let c = null;
-                            Trigger.customEvent(s.events.onBeforeRenderComplete, e);
+                            Trigger.customEvent(l.events.onBeforeRenderComplete, e);
                             if (e.children.length > 0 && e.children[0].nodeName.toLowerCase() === "pre") {
-                                l = e.children[0].innerHTML;
+                                s = e.children[0].innerHTML;
                                 a = true;
                             }
-                            const u = l.trim();
+                            const u = s.trim();
                             let d = null;
                             let g = null;
                             let f = e.id;
@@ -441,24 +453,24 @@ var Tab;
                                 n.tabContents.appendChild(g);
                                 DomElement.setNodeText(g, c, _configuration);
                             }
-                            if (s.showLineNumbers) {
+                            if (l.showLineNumbers) {
                                 d = DomElement.create("div", "numbers");
                                 n.tabContents.appendChild(d);
                             }
                             const m = DomElement.create("div", "syntax");
                             n.tabContents.appendChild(m);
-                            renderElementButtons(m, s, n.syntaxLanguage, i, u);
+                            renderElementButtons(m, l, n.syntaxLanguage, i, u);
                             if (n.syntaxLanguage.toLowerCase() !== "unknown") {
-                                l = renderHTML(l, r, s);
+                                s = renderHTML(s, r, l);
                             } else {
-                                l = Str.encodeMarkUpCharacters(l);
+                                s = Str.encodeMarkUpCharacters(s);
                             }
-                            renderElementCompletedHTML(g, d, m, l, s, a);
-                            Trigger.customEvent(s.events.onRenderComplete, e);
+                            renderElementCompletedHTML(g, d, m, s, l, a);
+                            Trigger.customEvent(l.events.onRenderComplete, e);
                             if (!Is.defined(n.tabContents)) {
-                                renderSyntaxCustomTriggers(e, s);
+                                renderSyntaxCustomTriggers(e, l);
                             } else {
-                                renderSyntaxCustomTriggers(n.tabContents, s);
+                                renderSyntaxCustomTriggers(n.tabContents, l);
                             }
                             _elements.push(e);
                             _cached_Keywords = {};
@@ -498,11 +510,11 @@ var Tab;
         if (!t.isMarkUp) {
             e = Str.encodeMarkUpCharacters(e);
         }
-        if (n.highlightComments) {
+        if (n.highlight.comments) {
             e = renderElementMultiLineCommentVariables(e, t, n);
             e = renderElementCommentVariables(e, t, n);
         }
-        if (n.highlightStrings) {
+        if (n.highlight.strings) {
             e = renderElementStringPatternVariables(e, e.match(/"((?:\\.|[^"\\])*)"/g), n);
             if (t.comment !== "'") {
                 e = renderElementStringPatternVariables(e, e.match(/'((?:\\.|[^"\\])*)'/g), n);
@@ -518,10 +530,10 @@ var Tab;
             e = renderElementAttributes(e, t, n);
         }
         e = Str.encodeMarkUpCharacters(e);
-        if (n.highlightComments) {
+        if (n.highlight.comments) {
             e = renderElementCommentsFromVariables(e, t);
         }
-        if (n.highlightStrings) {
+        if (n.highlight.strings) {
             e = renderElementStringQuotesFromVariables(e);
         }
         e = renderElementVariables(e, _cached_Keywords);
@@ -532,9 +544,9 @@ var Tab;
         return e;
     }
     function renderElementButtons(e, t, n, r, o) {
-        if (t.showLanguageLabel || t.showCopyButton || t.showPrintButton || r.parsed) {
+        if (t.showLanguageLabel || t.buttons.showCopy || t.buttons.showPrint || r.parsed) {
             const i = DomElement.create("div", "buttons");
-            const l = [];
+            const s = [];
             e.appendChild(i);
             if (r.parsed && Is.definedArray(r.object)) {
                 const e = r.object;
@@ -542,24 +554,24 @@ var Tab;
                 for (let r = 0; r < n; r++) {
                     const n = e[r];
                     if (Is.defined(n.text) && Is.definedFunction(n.events.onClick)) {
-                        renderElementButton(n, l, i, o, t);
+                        renderElementButton(n, s, i, o, t);
                     }
                 }
             }
-            if (t.showCopyButton) {
+            if (t.buttons.showCopy) {
                 const e = DomElement.create("button", "button");
-                e.style.display = t.buttonsVisible ? "inline-block" : "none";
+                e.style.display = t.buttons.visible ? "inline-block" : "none";
                 i.appendChild(e);
                 DomElement.setNodeText(e, _configuration.text.copyButtonText, _configuration);
                 e.onclick = () => {
                     navigator.clipboard.writeText(o);
                     Trigger.customEvent(t.events.onCopy, o);
                 };
-                l.push(e);
+                s.push(e);
             }
-            if (t.showPrintButton) {
+            if (t.buttons.showPrint) {
                 const r = DomElement.create("button", "button");
-                r.style.display = t.buttonsVisible ? "inline-block" : "none";
+                r.style.display = t.buttons.visible ? "inline-block" : "none";
                 i.appendChild(r);
                 DomElement.setNodeText(r, _configuration.text.printButtonText, _configuration);
                 r.onclick = () => {
@@ -588,22 +600,22 @@ var Tab;
                     r.close();
                     Trigger.customEvent(t.events.onPrint, o.innerHTML);
                 };
-                l.push(r);
+                s.push(r);
             }
             if (t.showLanguageLabel) {
                 const e = DomElement.create("div", "language-label");
                 i.appendChild(e);
                 DomElement.setNodeText(e, getFriendlyLanguageName(n, t.languageLabelCasing), _configuration);
             }
-            const s = l.length;
-            if (s > t.maximumButtons) {
+            const l = s.length;
+            if (l >= t.buttons.maximum) {
                 const e = DomElement.create("button", "button button-opener");
-                e.innerText = t.buttonsVisible ? _configuration.text.buttonsCloserText : _configuration.text.buttonsOpenerText;
+                e.innerText = t.buttons.visible ? _configuration.text.buttonsCloserText : _configuration.text.buttonsOpenerText;
                 i.insertBefore(e, i.children[0]);
                 e.onclick = () => {
                     const n = e.innerText === _configuration.text.buttonsCloserText;
-                    for (let e = 0; e < s; e++) {
-                        l[e].style.display = n ? "none" : "inline-block";
+                    for (let e = 0; e < l; e++) {
+                        s[e].style.display = n ? "none" : "inline-block";
                     }
                     e.innerText = n ? _configuration.text.buttonsOpenerText : _configuration.text.buttonsCloserText;
                     if (n) {
@@ -612,23 +624,21 @@ var Tab;
                         Trigger.customEvent(t.events.onButtonsOpened);
                     }
                 };
-            } else if (!t.buttonsVisible && s <= t.maximumButtons) {
-                for (let e = 0; e < s; e++) {
-                    l[e].style.display = "inline-block";
+            } else if (!t.buttons.visible && l <= t.buttons.maximum) {
+                for (let e = 0; e < l; e++) {
+                    s[e].style.display = "inline-block";
                 }
             }
         }
     }
     function renderElementButton(e, t, n, r, o) {
         const i = DomElement.create("button", "button");
-        i.style.display = o.buttonsVisible ? "inline-block" : "none";
+        i.style.display = o.buttons.visible ? "inline-block" : "none";
         n.appendChild(i);
         DomElement.setNodeText(i, e.text, _configuration);
-        i.onclick = () => {
-            e.events.onClick(r);
-        };
+        i.onclick = () => e.events.onClick(r);
         if (Is.defined(e.className)) {
-            i.className += " " + e.className;
+            i.classList.add(e.className);
         }
         t.push(i);
     }
@@ -661,12 +671,12 @@ var Tab;
                     o = e.indexOf(r[1], t + r[0].length);
                     if (o > -1) {
                         const i = e.substring(t, o + r[1].length);
-                        const l = i.split("\n");
-                        const s = l.length;
-                        const a = s === 1 ? "comment" : "multi-line-comment";
-                        for (let t = 0; t < s; t++) {
+                        const s = i.split("\n");
+                        const l = s.length;
+                        const a = l === 1 ? "comment" : "multi-line-comment";
+                        for (let t = 0; t < l; t++) {
                             const n = `$C{${_cached_Comments_Count.toString()}}`;
-                            const r = l[t];
+                            const r = s[t];
                             _cached_Comments[n] = `<span class="${a}">${r}</span>`;
                             _cached_Comments_Count++;
                             e = e.replace(r, n);
@@ -684,12 +694,12 @@ var Tab;
             for (let o = 0; o < r; o++) {
                 const r = t[o];
                 const i = r.split("\n");
-                const l = i.length;
-                const s = l === 1 ? "string" : "multi-line-string";
-                for (let t = 0; t < l; t++) {
+                const s = i.length;
+                const l = s === 1 ? "string" : "multi-line-string";
+                for (let t = 0; t < s; t++) {
                     const n = i[t];
                     const r = `$S{${_cached_Strings_Count.toString()}}`;
-                    _cached_Strings[r] = `<span class="${s}">${n}</span>`;
+                    _cached_Strings[r] = `<span class="${l}">${n}</span>`;
                     _cached_Strings_Count++;
                     e = e.replace(n, r);
                 }
@@ -702,16 +712,16 @@ var Tab;
         const r = Default.getStringOrArray(t.keywords, []);
         const o = r.length;
         const i = t.caseSensitive;
-        const l = getKeywordCasing(t.keywordsCasing);
+        const s = getKeywordCasing(t.keywordsCasing);
         Str.sortArrayOfStringByLength(r);
-        for (let s = 0; s < o; s++) {
-            const o = r[s];
-            const a = getDisplayTextTestCasing(o, l);
+        for (let l = 0; l < o; l++) {
+            const o = r[l];
+            const a = getDisplayTextTestCasing(o, s);
             const c = `KW${_cached_Keywords_Count.toString()};`;
             let u = null;
             const d = i ? "g" : "gi";
             const g = new RegExp(getWordRegEx(o, t), d);
-            if (n.highlightKeywords) {
+            if (n.highlight.keywords) {
                 if (Is.definedFunction(n.events.onKeywordClicked)) {
                     u = `<span class="keyword-clickable">${a}</span>`;
                     e = e.replace(g, c);
@@ -735,22 +745,22 @@ var Tab;
         const r = Default.getStringOrArray(t.keywords, []);
         const o = t.caseSensitive;
         const i = getKeywordCasing(t.keywordsCasing);
-        const l = /(<([^>]+)>)/gi;
-        const s = o ? "g" : "gi";
-        let a = l.exec(e);
+        const s = /(<([^>]+)>)/gi;
+        const l = o ? "g" : "gi";
+        let a = s.exec(e);
         while (a) {
-            if (a.index === l.lastIndex) {
-                l.lastIndex++;
+            if (a.index === s.lastIndex) {
+                s.lastIndex++;
             }
             let o = a[0];
             o = o.replace("</", "").replace("<", "").replace(">", "");
             o = o.split(" ")[0];
             if (r.indexOf(o) > -1) {
                 const r = `KW${_cached_Keywords_Count.toString()};`;
-                const l = new RegExp(getWordRegEx(o, t), s);
+                const s = new RegExp(getWordRegEx(o, t), l);
                 let a = null;
                 let c = getDisplayTextTestCasing(o, i);
-                if (n.highlightKeywords) {
+                if (n.highlight.keywords) {
                     if (Is.definedFunction(n.events.onKeywordClicked)) {
                         a = `<span class="keyword-clickable">${c}</span>`;
                     } else {
@@ -761,11 +771,11 @@ var Tab;
                         a = `<span class="no-highlight-keyword-clickable">${c}</span>`;
                     }
                 }
-                e = e.replace(l, r);
+                e = e.replace(s, r);
                 _cached_Keywords[r] = a;
                 _cached_Keywords_Count++;
             }
-            a = l.exec(e);
+            a = s.exec(e);
         }
         return e;
     }
@@ -774,27 +784,27 @@ var Tab;
         const o = r.length;
         const i = t.caseSensitive;
         Str.sortArrayOfStringByLength(r);
-        for (let l = 0; l < o; l++) {
-            const o = r[l];
-            const s = `VAL${_cached_Values_Count.toString()};`;
+        for (let s = 0; s < o; s++) {
+            const o = r[s];
+            const l = `VAL${_cached_Values_Count.toString()};`;
             let a = null;
             const c = i ? "g" : "gi";
             const u = new RegExp(getWordRegEx(o, t), c);
-            if (n.highlightValues) {
+            if (n.highlight.values) {
                 if (Is.definedFunction(n.events.onValueClicked)) {
                     a = `<span class="value-clickable">${o}</span>`;
-                    e = e.replace(u, s);
+                    e = e.replace(u, l);
                 } else {
                     a = `<span class="value">${o}</span>`;
-                    e = e.replace(u, s);
+                    e = e.replace(u, l);
                 }
             } else {
                 if (Is.definedFunction(n.events.onValueClicked)) {
                     a = `<span class="no-highlight-value-clickable">${o}</span>`;
-                    e = e.replace(u, s);
+                    e = e.replace(u, l);
                 }
             }
-            _cached_Values[s] = a;
+            _cached_Values[l] = a;
             _cached_Values_Count++;
             Trigger.customEvent(n.events.onValueRender, o);
         }
@@ -805,27 +815,27 @@ var Tab;
         const o = r.length;
         const i = t.caseSensitive;
         Str.sortArrayOfStringByLength(r);
-        for (let l = 0; l < o; l++) {
-            const o = r[l];
-            const s = `ATTR${_cached_Attributes_Count.toString()};`;
+        for (let s = 0; s < o; s++) {
+            const o = r[s];
+            const l = `ATTR${_cached_Attributes_Count.toString()};`;
             let a = null;
             let c = i ? "g" : "gi";
             const u = new RegExp(getWordRegEx(o, t), c);
-            if (n.highlightAttributes) {
+            if (n.highlight.attributes) {
                 if (Is.definedFunction(n.events.onAttributeClicked)) {
                     a = `<span class="attribute-clickable">${o}</span>`;
-                    e = e.replace(u, s);
+                    e = e.replace(u, l);
                 } else {
                     a = `<span class="attribute">${o}</span>`;
-                    e = e.replace(u, s);
+                    e = e.replace(u, l);
                 }
             } else {
                 if (Is.definedFunction(n.events.onAttributeClicked)) {
                     a = `<span class="no-highlight-attribute-clickable">${o}</span>`;
-                    e = e.replace(u, s);
+                    e = e.replace(u, l);
                 }
             }
-            _cached_Attributes[s] = a;
+            _cached_Attributes[l] = a;
             _cached_Attributes_Count++;
             Trigger.customEvent(n.events.onAttributeRender, o);
         }
@@ -849,12 +859,12 @@ var Tab;
         }
         for (let i in _cached_Comments) {
             if (_cached_Comments.hasOwnProperty(i)) {
-                let l = _cached_Comments[i];
+                let s = _cached_Comments[i];
                 if (t.isMarkUp && Is.definedString(r) && Is.definedString(o)) {
-                    l = l.replace(n[0], r);
-                    l = l.replace(n[1], o);
+                    s = s.replace(n[0], r);
+                    s = s.replace(n[1], o);
                 }
-                e = e.replace(i, l);
+                e = e.replace(i, s);
             }
         }
         return e;
@@ -869,9 +879,9 @@ var Tab;
         return e;
     }
     function renderElementCompletedHTML(e, t, n, r, o, i) {
-        const l = r.split("\n");
-        const s = l.length;
-        const a = s.toString().length;
+        const s = r.split("\n");
+        const l = s.length;
+        const a = l.toString().length;
         let c = t;
         let u = n;
         let d = null;
@@ -900,12 +910,12 @@ var Tab;
                 DomElement.selectTextInElement(u);
             };
         }
-        for (let e = 0; e < s; e++) {
-            let t = l[e];
+        for (let e = 0; e < l; e++) {
+            let t = s[e];
             if (t.trim() !== "" && d === null) {
                 d = t.substring(0, t.match(/^\s*/)[0].length);
             }
-            if (e !== 0 && e !== s - 1 || t.trim() !== "") {
+            if (e !== 0 && e !== l - 1 || t.trim() !== "") {
                 if (t.trim() !== "" || !o.removeBlankLines) {
                     const e = t.trim() === "";
                     if (e && !f || !o.removeDuplicateBlankLines || !e) {
@@ -948,10 +958,7 @@ var Tab;
         }
     }
     function renderElementClickEvent(e, t) {
-        const n = e.innerText;
-        e.onclick = () => {
-            t(n);
-        };
+        e.onclick = () => t(e.innerText);
     }
     function getFriendlyLanguageName(e, t = null) {
         let n = null;
@@ -1171,14 +1178,12 @@ var Tab;
             return _public;
         },
         getVersion: function() {
-            return "3.0.1";
+            return "3.1.0";
         }
     };
     (() => {
         _configuration = Config.Options.get();
-        document.addEventListener("DOMContentLoaded", (function() {
-            render();
-        }));
+        document.addEventListener("DOMContentLoaded", (() => render()));
         if (!Is.defined(window.$syntax)) {
             window.$syntax = _public;
         }

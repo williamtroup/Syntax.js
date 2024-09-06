@@ -4,14 +4,14 @@
  * A lightweight, and easy-to-use, JavaScript library for code syntax highlighting!
  * 
  * @file        binding.ts
- * @version     v3.0.1
+ * @version     v3.1.0
  * @author      Bunoon
  * @license     MIT License
  * @copyright   Bunoon 2024
  */
 
 
-import { type BindingOptionEvents, type BindingOptions } from "../type";
+import { type BindingOptionsHighlight, type BindingOptionEvents, type BindingOptions, BindingOptionsButtons } from "../type";
 import { Default } from "../data/default";
 import { TextCasing } from "../data/enum";
 
@@ -22,29 +22,43 @@ export namespace Binding {
             let options: BindingOptions = Default.getObject( newOptions, {} as BindingOptions );
     
             options = getOptions( options );
+            options = getButtons( options );
+            options = getHighlight( options );
             options = getCustomTriggers( options );
     
             return options;
         }
     
         function getOptions( options: BindingOptions ) : BindingOptions {
-            options.showCopyButton = Default.getBoolean( options.showCopyButton, true );
             options.removeBlankLines = Default.getBoolean( options.removeBlankLines, false );
             options.showLineNumbers = Default.getBoolean( options.showLineNumbers, true );
-            options.highlightKeywords = Default.getBoolean( options.highlightKeywords, true );
-            options.highlightValues = Default.getBoolean( options.highlightValues, true );
-            options.highlightAttributes = Default.getBoolean( options.highlightAttributes, true );
-            options.highlightStrings = Default.getBoolean( options.highlightStrings, true );
-            options.highlightComments = Default.getBoolean( options.highlightComments, true );
             options.showLanguageLabel = Default.getBoolean( options.showLanguageLabel, true );
-            options.showPrintButton = Default.getBoolean( options.showPrintButton, true );
             options.padLineNumbers = Default.getBoolean( options.padLineNumbers, false );
             options.removeDuplicateBlankLines = Default.getBoolean( options.removeDuplicateBlankLines, true );
             options.doubleClickToSelectAll = Default.getBoolean( options.doubleClickToSelectAll, true );
             options.languageLabelCasing = Default.getString( options.languageLabelCasing, TextCasing.uppercase );
-            options.buttonsVisible = Default.getBoolean( options.buttonsVisible, true );
-            options.maximumButtons = Default.getNumber( options.maximumButtons, 2 );
             
+            return options;
+        }
+
+        function getButtons( options: BindingOptions ) : BindingOptions {
+            options.buttons = Default.getObject( options.buttons, {} as BindingOptionsButtons );
+            options.buttons!.showCopy = Default.getBoolean( options.buttons!.showCopy, true );
+            options.buttons!.showPrint = Default.getBoolean( options.buttons!.showPrint, true );
+            options.buttons!.visible = Default.getBoolean( options.buttons!.visible, true );
+            options.buttons!.maximum = Default.getNumber( options.buttons!.maximum, 2 );
+
+            return options;
+        }
+
+        function getHighlight( options: BindingOptions ) : BindingOptions {
+            options.highlight = Default.getObject( options.highlight, {} as BindingOptionsHighlight );
+            options.highlight!.keywords = Default.getBoolean( options.highlight!.keywords, true );
+            options.highlight!.values = Default.getBoolean( options.highlight!.values, true );
+            options.highlight!.attributes = Default.getBoolean( options.highlight!.attributes, true );
+            options.highlight!.strings = Default.getBoolean( options.highlight!.strings, true );
+            options.highlight!.comments = Default.getBoolean( options.highlight!.comments, true );
+    
             return options;
         }
     

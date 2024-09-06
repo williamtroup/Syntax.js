@@ -51,7 +51,7 @@
             </code>
             <br />
     
-            <div data-syntax-language="c-sharp" data-syntax-options="{ 'showCopyButton': false, 'removeBlankLines': false, 'showLineNumbers': false, 'showPrintButton': false }" data-syntax-buttons="[ { 'text': 'Custom Button 1', 'className': 'customButtonClass', 'events': { 'onClick': customButtonAction1 } }, { 'text': 'Custom Button 2', 'events': { 'onClick': customButtonAction2 } }, { 'text': 'Custom Button 3', 'events': { 'onClick': customButtonAction3 } } ]">
+            <div data-syntax-language="c-sharp" data-syntax-options="{ 'buttons': { 'showCopy': false, 'showPrint': false }, 'removeBlankLines': false, 'showLineNumbers': false }" data-syntax-buttons="[ { 'text': 'Custom Button 1', 'className': 'customButtonClass', 'events': { 'onClick': customButtonAction1 } }, { 'text': 'Custom Button 2', 'events': { 'onClick': customButtonAction2 } }, { 'text': 'Custom Button 3', 'events': { 'onClick': customButtonAction3 } } ]">
                 int something = 1;
 
                 if ( something >= 1 ) {
@@ -150,7 +150,9 @@
             return { 
                 'showLanguageLabel': false,
                 'padLineNumbers': true,
-                'buttonsVisible': false,
+                'buttons': {
+                    'visible': false,
+                },
                 'events': {
                     'onCopy': onCopyCustomTrigger,
                     'onKeywordClicked': onKeywordClickedCustomTrigger,

@@ -2,7 +2,7 @@
   "name": "jsyntax.js",
   "title": "Syntax.js",
   "description": "A lightweight, and easy-to-use, JavaScript library for code syntax highlighting!",
-  "version": "3.0.1",
+  "version": "3.1.0",
   "homepage": "https://www.william-troup.com/syntax-js/",
   "author": {
     "name": "Bunoon"
@@ -39,10 +39,10 @@
     "build-sass-minimized": "sass src/syntax.js.scss dist/syntax.js.min.css --style=compressed --no-source-map"
   },
   "devDependencies": {
-    "@swc/core": "^1.7.0",
-    "sass": "^1.77.8",
-    "terser": "^5.31.3",
-    "tsup": "^8.1.2",
-    "typescript": "^5.5.3"
+    "@swc/core": "^1.7.23",
+    "sass": "^1.78.0",
+    "terser": "^5.31.6",
+    "tsup": "^8.2.4",
+    "typescript": "^5.5.4"
   }
 }

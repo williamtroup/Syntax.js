@@ -4,7 +4,7 @@
  * A lightweight, and easy-to-use, JavaScript library for code syntax highlighting!
  * 
  * @file        syntax.ts
- * @version     v3.0.1
+ * @version     v3.1.0
  * @author      Bunoon
  * @license     MIT License
  * @copyright   Bunoon 2024
@@ -159,10 +159,12 @@ type RenderElementResult = {
 
                 for ( let tabContentElementsIndex: number = 0; tabContentElementsIndex < tabContentElementsLength; tabContentElementsIndex++ ) {
                     tabContentElements[ tabContentElementsIndex ].style.display = "none";
+                    tabContentElements[ tabContentElementsIndex ].classList.remove( "tab-switch" );
                 }
 
                 tab.className = "tab-active";
                 renderResult.tabContents.style.display = "flex";
+                renderResult.tabContents.classList.add( "tab-switch" );
 
                 if ( Is.definedObject( tabBindingOptions ) ) {
                     Trigger.customEvent( tabBindingOptions.events!.onOpen!, syntaxLanguage );
@@ -327,12 +329,12 @@ type RenderElementResult = {
             innerHTML = Str.encodeMarkUpCharacters( innerHTML );
         }
 
-        if ( bindingOptions.highlightComments ) {
+        if ( bindingOptions.highlight!.comments ) {
             innerHTML = renderElementMultiLineCommentVariables( innerHTML, language, bindingOptions );
             innerHTML = renderElementCommentVariables( innerHTML, language, bindingOptions );
         }
 
-        if ( bindingOptions.highlightStrings ) {
+        if ( bindingOptions.highlight!.strings ) {
             innerHTML = renderElementStringPatternVariables( innerHTML, innerHTML.match( /"((?:\\.|[^"\\])*)"/g )!, bindingOptions );
 
             if ( language.comment !== "'" ) {
@@ -354,11 +356,11 @@ type RenderElementResult = {
 
         innerHTML = Str.encodeMarkUpCharacters( innerHTML );
 
-        if ( bindingOptions.highlightComments ) {
+        if ( bindingOptions.highlight!.comments ) {
             innerHTML = renderElementCommentsFromVariables( innerHTML, language );
         }
         
-        if ( bindingOptions.highlightStrings ) {
+        if ( bindingOptions.highlight!.strings ) {
             innerHTML = renderElementStringQuotesFromVariables( innerHTML );
         }
 
@@ -373,7 +375,7 @@ type RenderElementResult = {
     }
 
     function renderElementButtons( syntax: HTMLElement, bindingOptions: BindingOptions, syntaxLanguage: string, syntaxButtonsParsed: StringToJson, innerHTMLCopy: string ) : void {
-        if ( bindingOptions.showLanguageLabel || bindingOptions.showCopyButton || bindingOptions.showPrintButton || syntaxButtonsParsed.parsed ) {
+        if ( bindingOptions.showLanguageLabel || bindingOptions.buttons!.showCopy || bindingOptions.buttons!.showPrint || syntaxButtonsParsed.parsed ) {
             const buttons: HTMLElement = DomElement.create( "div", "buttons" );
             const buttonsElements: HTMLElement[] = [];
 
@@ -392,9 +394,9 @@ type RenderElementResult = {
                 }
             }
 
-            if ( bindingOptions.showCopyButton ) {
+            if ( bindingOptions.buttons!.showCopy ) {
                 const copyButton: HTMLButtonElement = DomElement.create( "button", "button" ) as HTMLButtonElement;
-                copyButton.style.display = bindingOptions.buttonsVisible ? "inline-block" : "none";
+                copyButton.style.display = bindingOptions.buttons!.visible ? "inline-block" : "none";
                 buttons.appendChild( copyButton );
 
                 DomElement.setNodeText( copyButton, _configuration.text!.copyButtonText!, _configuration );
@@ -408,9 +410,9 @@ type RenderElementResult = {
                 buttonsElements.push( copyButton );
             }
 
-            if ( bindingOptions.showPrintButton ) {
+            if ( bindingOptions.buttons!.showPrint ) {
                 const printButton: HTMLButtonElement = DomElement.create( "button", "button" ) as HTMLButtonElement;
-                printButton.style.display = bindingOptions.buttonsVisible ? "inline-block" : "none";
+                printButton.style.display = bindingOptions.buttons!.visible ? "inline-block" : "none";
                 buttons.appendChild( printButton );
 
                 DomElement.setNodeText( printButton, _configuration.text!.printButtonText!, _configuration );
@@ -458,9 +460,9 @@ type RenderElementResult = {
 
             const buttonsElementsLength: number = buttonsElements.length;
 
-            if ( buttonsElementsLength > bindingOptions.maximumButtons! ) {
+            if ( buttonsElementsLength >= bindingOptions.buttons!.maximum! ) {
                 const openButton: HTMLButtonElement = DomElement.create( "button", "button button-opener" ) as HTMLButtonElement;
-                openButton.innerText = bindingOptions.buttonsVisible ? _configuration.text!.buttonsCloserText! : _configuration.text!.buttonsOpenerText!;
+                openButton.innerText = bindingOptions.buttons!.visible ? _configuration.text!.buttonsCloserText! : _configuration.text!.buttonsOpenerText!;
                 buttons.insertBefore( openButton, buttons.children[ 0 ] );
 
                 openButton.onclick =() => {
@@ -479,7 +481,7 @@ type RenderElementResult = {
                     }
                 };
 
-            } else if ( !bindingOptions.buttonsVisible && buttonsElementsLength <= bindingOptions.maximumButtons! ) {
+            } else if ( !bindingOptions.buttons!.visible && buttonsElementsLength <= bindingOptions.buttons!.maximum! ) {
                 for ( let buttonsElementIndex: number = 0; buttonsElementIndex < buttonsElementsLength; buttonsElementIndex++ ) {
                     buttonsElements[ buttonsElementIndex ].style.display = "inline-block";
                 }
@@ -489,17 +491,15 @@ type RenderElementResult = {
 
     function renderElementButton( customButton: CustomButton, buttonsElements: HTMLElement[], buttons: HTMLElement, innerHTMLCopy: string, bindingOptions: BindingOptions ) : void {
         const newCustomButton: HTMLButtonElement = DomElement.create( "button", "button" ) as HTMLButtonElement;
-        newCustomButton.style.display = bindingOptions.buttonsVisible ? "inline-block" : "none";
+        newCustomButton.style.display = bindingOptions.buttons!.visible ? "inline-block" : "none";
         buttons.appendChild( newCustomButton );
 
         DomElement.setNodeText( newCustomButton, customButton.text!, _configuration );
 
-        newCustomButton.onclick =() => {
-            customButton.events!.onClick!( innerHTMLCopy );
-        };
+        newCustomButton.onclick = () => customButton.events!.onClick!( innerHTMLCopy );
 
         if ( Is.defined( customButton.className ) ) {
-            newCustomButton.className += Char.space + customButton.className;
+            newCustomButton.classList.add( customButton.className! );
         }
 
         buttonsElements.push( newCustomButton );
@@ -612,7 +612,7 @@ type RenderElementResult = {
             const regExFlags: string = caseSensitive ? "g" : "gi";
             const regEx: RegExp = new RegExp( getWordRegEx( keyword, language ), regExFlags );
 
-            if ( bindingOptions.highlightKeywords ) {
+            if ( bindingOptions.highlight!.keywords ) {
                 if ( Is.definedFunction( bindingOptions.events!.onKeywordClicked ) ) {
                     keywordReplacement = `<span class=\"keyword-clickable\">${keywordDisplay}</span>`;
                     innerHTML = innerHTML.replace( regEx, keywordVariable );
@@ -661,7 +661,7 @@ type RenderElementResult = {
                 let keywordReplacement: string = null!;
                 let replacementTagDisplay: string = getDisplayTextTestCasing( tag, keywordsCasing );
 
-                if ( bindingOptions.highlightKeywords ) {
+                if ( bindingOptions.highlight!.keywords ) {
                     if ( Is.definedFunction( bindingOptions.events!.onKeywordClicked ) ) {
                         keywordReplacement = `<span class=\"keyword-clickable\">${replacementTagDisplay}</span>`;
                     } else {
@@ -700,7 +700,7 @@ type RenderElementResult = {
             const regExFlags: string = caseSensitive ? "g" : "gi";
             const regEx: RegExp = new RegExp( getWordRegEx( value, language ), regExFlags );
 
-            if ( bindingOptions.highlightValues ) {
+            if ( bindingOptions.highlight!.values ) {
                 if ( Is.definedFunction( bindingOptions.events!.onValueClicked! ) ) {
                     valueReplacement = `<span class=\"value-clickable\">${value}</span>`;
                     innerHTML = innerHTML.replace( regEx, valueVariable );
@@ -739,7 +739,7 @@ type RenderElementResult = {
             let regExFlags: string = caseSensitive ? "g" : "gi";
             const regEx: RegExp = new RegExp( getWordRegEx( attribute, language ), regExFlags );
 
-            if ( bindingOptions.highlightAttributes ) {
+            if ( bindingOptions.highlight!.attributes ) {
                 if ( Is.definedFunction( bindingOptions.events!.onAttributeClicked ) ) {
                     attributeReplacement = `<span class=\"attribute-clickable\">${attribute}</span>`;
                     innerHTML = innerHTML.replace( regEx, attributeVariable );
@@ -911,11 +911,7 @@ type RenderElementResult = {
     }
 
     function renderElementClickEvent( element: HTMLElement, customTrigger: Function ) : void {
-        const text: string = element.innerText;
-
-        element.onclick =() => {
-            customTrigger( text );
-        };
+        element.onclick = () => customTrigger( element.innerText );
     }
 
     function getFriendlyLanguageName( syntaxLanguage: string, languageLabelCasing: string = null! ) : string {
@@ -1266,7 +1262,7 @@ type RenderElementResult = {
          */
 
         getVersion: function () : string {
-            return "3.0.1";
+            return "3.1.0";
         }
     };
 
@@ -1280,9 +1276,7 @@ type RenderElementResult = {
     ( () => {
         _configuration = Config.Options.get();
 
-        document.addEventListener( "DOMContentLoaded", function() {
-            render();
-        } );
+        document.addEventListener( "DOMContentLoaded", () => render() );
 
         if ( !Is.defined( window.$syntax ) ) {
             window.$syntax = _public;

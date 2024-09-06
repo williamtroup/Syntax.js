@@ -4,7 +4,7 @@
  * A lightweight, and easy-to-use, JavaScript library for code syntax highlighting!
  * 
  * @file        type.ts
- * @version     v3.0.1
+ * @version     v3.1.0
  * @author      Bunoon
  * @license     MIT License
  * @copyright   Bunoon 2024
@@ -36,23 +36,31 @@ export type ConfigurationText = {
 };
 
 export type BindingOptions = {
-    showCopyButton?: boolean;
     removeBlankLines?: boolean;
     showLineNumbers?: boolean;
-    highlightKeywords?: boolean;
-    highlightValues?: boolean;
-    highlightAttributes?: boolean;
-    highlightStrings?: boolean;
-    highlightComments?: boolean;
     showLanguageLabel?: boolean;
-    showPrintButton?: boolean;
     padLineNumbers?: boolean;
     removeDuplicateBlankLines?: boolean;
     doubleClickToSelectAll?: boolean;
     languageLabelCasing?: string;
-    buttonsVisible?: boolean;
-    maximumButtons?: number;
+    buttons?: BindingOptionsButtons;
+    highlight?: BindingOptionsHighlight;
     events?: BindingOptionEvents;
+};
+
+export type BindingOptionsButtons = {
+    showCopy?: boolean;
+    showPrint?: boolean;
+    visible?: boolean;
+    maximum?: number;
+};
+
+export type BindingOptionsHighlight = {
+    keywords?: boolean;
+    values?: boolean;
+    attributes?: boolean;
+    strings?: boolean;
+    comments?: boolean;
 };
 
 export type BindingOptionEvents = {
