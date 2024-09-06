@@ -463,9 +463,11 @@ var require_syntax = __commonJS({
                         }
                         for (let e = 0; e < i; e++) {
                             n[e].style.display = "none";
+                            n[e].classList.remove("tab-switch");
                         }
                         l.className = "tab-active";
                         r.tabContents.style.display = "flex";
+                        r.tabContents.classList.add("tab-switch");
                         if (Is.definedObject(o)) {
                             Trigger.customEvent(o.events.onOpen, s);
                         }

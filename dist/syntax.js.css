@@ -57,6 +57,7 @@
   --syntax-js-border-style-scrollbar: inset 0 0 6px var(--syntax-js-color-dark-gray);
   --syntax-js-border-size: 0.5px;
   --syntax-js-transition: all .3s;
+  --syntax-js-js-animation-length: 0.5s;
 }
 
 /*
@@ -73,6 +74,10 @@ code.syntax-highlight button,
 div.syntax-highlight button {
   font-family: var(--syntax-js-default-font);
   font-size: 0.8rem;
+}
+code.syntax-highlight div.tab-switch,
+div.syntax-highlight div.tab-switch {
+  animation: fade-in-animation var(--syntax-js-js-animation-length);
 }
 code.syntax-highlight div.code,
 div.syntax-highlight div.code {
@@ -390,6 +395,20 @@ div.syntax-highlight div.code div.tab-contents div.syntax p span.multi-line-stri
 }
 .custom-scroll-bars::-webkit-scrollbar-thumb:active {
   background-color: var(--syntax-js-color-lighter-gray);
+}
+
+/*
+    -------------------------------------------------------------------------
+    Syntax.js - Animations
+    -------------------------------------------------------------------------
+*/
+@keyframes fade-in-animation {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
 }
 
 /*# sourceMappingURL=syntax.js.css.map */

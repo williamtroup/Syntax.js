@@ -74,6 +74,7 @@
 
     // Transitions
     --syntax-js-transition: all .3s;
+    --syntax-js-js-animation-length: 0.5s;
 }
 
 
@@ -91,6 +92,10 @@ div.syntax-highlight {
     button {
         font-family: var(--syntax-js-default-font);
         font-size: 0.8rem;
+    }
+
+    div.tab-switch {
+        animation: fade-in-animation var(--syntax-js-js-animation-length);
     }
 
     div.code {
@@ -374,5 +379,21 @@ div.syntax-highlight {
         &:active {
             background-color: var(--syntax-js-color-lighter-gray);
         }
+    }
+}
+
+
+/*
+    -------------------------------------------------------------------------
+    Syntax.js - Animations
+    -------------------------------------------------------------------------
+*/
+
+@keyframes fade-in-animation {
+    0% { 
+        opacity: 0;
+    }
+    100% { 
+        opacity: 1;
     }
 }

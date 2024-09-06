@@ -159,10 +159,12 @@ type RenderElementResult = {
 
                 for ( let tabContentElementsIndex: number = 0; tabContentElementsIndex < tabContentElementsLength; tabContentElementsIndex++ ) {
                     tabContentElements[ tabContentElementsIndex ].style.display = "none";
+                    tabContentElements[ tabContentElementsIndex ].classList.remove( "tab-switch" );
                 }
 
                 tab.className = "tab-active";
                 renderResult.tabContents.style.display = "flex";
+                renderResult.tabContents.classList.add( "tab-switch" );
 
                 if ( Is.definedObject( tabBindingOptions ) ) {
                     Trigger.customEvent( tabBindingOptions.events!.onOpen!, syntaxLanguage );
