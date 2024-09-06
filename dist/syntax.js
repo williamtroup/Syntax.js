@@ -628,7 +628,7 @@ var Tab;
             e.events.onClick(r);
         };
         if (Is.defined(e.className)) {
-            i.className += " " + e.className;
+            i.classList.add(e.className);
         }
         t.push(i);
     }

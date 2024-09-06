@@ -712,7 +712,7 @@ var require_syntax = __commonJS({
                     e.events.onClick(r);
                 };
                 if (Is.defined(e.className)) {
-                    o.className += " " + e.className;
+                    o.classList.add(e.className);
                 }
                 t.push(o);
             }

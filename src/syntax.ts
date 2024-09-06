@@ -499,7 +499,7 @@ type RenderElementResult = {
         };
 
         if ( Is.defined( customButton.className ) ) {
-            newCustomButton.className += Char.space + customButton.className;
+            newCustomButton.classList.add( customButton.className! );
         }
 
         buttonsElements.push( newCustomButton );
